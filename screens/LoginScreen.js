@@ -25,15 +25,11 @@ export default function LoginScreen({ navigation }) {
               {/* Title portion of the page */}
               <KeyboardAvoidingView behavior='padding'>
               <View style={[stylesBase.topBorder, stylesPortrait.topBorder]}>
-                  <Text style={stylesBase.titleText}> SparkWorship </Text>
+                  <Text style={stylesBase.headText}> SparkWarship </Text>
               </View>
 
               {/* Container for everything between the buttons panel and the title */}
               <View style={stylesPortrait.contentContainer}>
-           
-                <View style={stylesPortrait.logoContainter}>
-                  <Image source={require('../assets/icon.png')} style={stylesPortrait.logo}/>
-                </View>
                 
                 <Text style={[stylesBase.titleText, stylesPortrait.centerText]}>Username:</Text>
                 <TextInput style={[stylesPortrait.inputBox, stylesPortrait.centerText]} placeholder="Enter Username Here"/>
@@ -283,6 +279,11 @@ const stylesBase = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center"
     
+  },
+  headText:{
+    fontSize: 30,
+    fontFamily: "sans-serif-medium",
+    color: "white"
   },
   titleText:
   {
