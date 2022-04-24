@@ -9,15 +9,15 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest",
-    "test:e2e":"npm run test",
-    "test:e2e:build":"npm run build"
+    "test:e2e": "npm run test",
+    "test:e2e:build": "npm run build"
   },
   "dependencies": {
     "@react-native-community/hooks": "^2.8.1",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.1",
-    "expo": "~44.0.0",
+    "expo": "^1.0.0",
     "expo-linear-gradient": "^11.0.3",
     "expo-status-bar": "~1.2.0",
     "react": "17.0.1",
