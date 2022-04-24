@@ -9,6 +9,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest"
+	"test2": "jest2"
   },
   "dependencies": {
     "@react-native-community/hooks": "^2.8.1",
