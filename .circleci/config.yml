@@ -29,7 +29,8 @@ jobs:
       - run:
           name: Deploy Main to Expo
           command: |
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git main
+            EXPO_TOKEN = "333OA32xbrEzZPWTy9HCUJCucW4PthhxO5Tah09t"
+            npx expo publish --non-interactive
 
 workflows:
   version: 2
