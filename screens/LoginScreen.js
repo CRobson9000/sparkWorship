@@ -26,7 +26,7 @@ export default function LoginScreen({ navigation }) {
               {/* Title portion of the page */}
               <KeyboardAvoidingView behavior='padding'>
               <View style={[stylesBase.topBorder, stylesPortrait.topBorder]}>
-                  <Text style={stylesBase.headText}> SparkWorship </Text>
+                  <Text style={stylesBase.headText}> SparkWarship </Text>
               </View>
 
               {/* Container for everything between the buttons panel and the title */}
