@@ -29,11 +29,11 @@ jobs:
       - run:
           name: Login to Expo
           command: |
-            npx expo login -u $USERNAME -p $PASSWORD
+            expo login -u $USERNAME -p $PASSWORD
       - run:
           name: Publish to Expo
           command: |
-            npx expo publish --non-interactive
+            expo publish --non-interactive
 
 workflows:
   version: 2
