@@ -27,6 +27,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "EXPO_TOKEN": "333OA32xbrEzZPWTy9HCUJCucW4PthhxO5Tah09t"
   }
 }
