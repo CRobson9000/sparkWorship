@@ -28,7 +28,10 @@ jobs:
       - checkout
       - run:
           name: Trigger build
-          command: npx eas-cli build --platform all --non-interactive
+          command: npx expo publish --non-interactive
+      #- run:
+          #name: Trigger build
+          #command: npx eas-cli build --platform all --non-interactive
 
 workflows:
   version: 2
