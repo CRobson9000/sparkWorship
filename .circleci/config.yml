@@ -27,9 +27,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install dependencies
-          command: npm ci
-      - run:
           name: Trigger build
           command: npx eas-cli build --platform all --non-interactive
 
