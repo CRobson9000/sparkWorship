@@ -25,6 +25,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Force expo-cli
+          command: npm install expo-cli --force  
+      - run:
           name: Trigger build
           command: expo publish --non-interactive
 
