@@ -22,23 +22,20 @@ export default function LoginScreen({ navigation }) {
       return (
         <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
           <View style={[stylesBase.container, stylesPortrait.container]}>
-              <LinearGradient 
-              colors={['rgba(0,0,0,0.8)', 'transparent']}
-              style={stylesBase.background}
-              />
+
               {/* Title portion of the page */}
-              
+              <KeyboardAvoidingView behavior='padding'>
               <View style={[stylesBase.topBorder, stylesPortrait.topBorder]}>
-                  <Text style={stylesBase.headText}> SparkWarship </Text>
+                  <Text style={stylesBase.headText}> SparkWorship </Text>
               </View>
 
               {/* Container for everything between the buttons panel and the title */}
               <View style={stylesPortrait.contentContainer}>
                 
-                {/*<Text style={[stylesBase.titleText, stylesPortrait.centerText]}>Username</Text>*/}
-                <TextInput style={[stylesPortrait.inputBox, stylesPortrait.centerText]} placeholder="Username"/>
-                {/*<Text style={[stylesBase.titleText, stylesPortrait.centerText]}>Password</Text> */}
-                <TextInput secureTextEntry={true} style={[stylesPortrait.inputBox, stylesPortrait.centerText]} placeholder="Password"/>
+                <Text style={[stylesBase.titleText, stylesPortrait.centerText]}>Username:</Text>
+                <TextInput style={[stylesPortrait.inputBox, stylesPortrait.centerText]} placeholder="Enter Username Here"/>
+                <Text style={[stylesBase.titleText, stylesPortrait.centerText]}>Password:</Text>
+                <TextInput secureTextEntry={true} style={[stylesPortrait.inputBox, stylesPortrait.centerText]} placeholder="Enter Password Here"/>
                 
                 <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate('LoginScreen')} style={[stylesPortrait.button]}>
                   <View><Text style={{color: "white"}}>Login</Text></View>
@@ -48,6 +45,7 @@ export default function LoginScreen({ navigation }) {
                   <Text style={[stylesPortrait.centerText]}>Register New User</Text>
                 </TouchableOpacity>
               </View>
+              </KeyboardAvoidingView> 
           </View>
           </TouchableWithoutFeedback>
       );
@@ -130,9 +128,8 @@ const stylesPortrait = StyleSheet.create({
     marginBottom: "10%",
     borderWidth: 1,
     borderColor: "black",
-    backgroundColor: "rgba(256, 256, 256, 0.6)",
-    paddingLeft: "1%",
-    borderRadius: 8
+    backgroundColor: "white",
+    paddingLeft: "1%"
   },
   centerText:
   {
@@ -154,7 +151,7 @@ const stylesPortrait = StyleSheet.create({
   },
   topBorder:
   {
-    height: "40%"
+    height: "20%"
   },
   buttonsContainer:
   {
@@ -270,14 +267,6 @@ const stylesLandscape = StyleSheet.create({
 
 //everything that's the same for both portrait and landscape modes
 const stylesBase = StyleSheet.create({
-  background:
-  {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    height: 500,
-  },
   container: 
   {
     flex: 1,
@@ -287,9 +276,10 @@ const stylesBase = StyleSheet.create({
   topBorder:
   {
     width: "100%",
-    backgroundColor: "rgba(52, 52, 52, 0.0)",
+    backgroundColor: colors.primary,
     alignItems: "center",
     justifyContent: "center"
+    
   },
   headText:{
     fontSize: 40,
