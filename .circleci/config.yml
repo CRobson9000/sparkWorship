@@ -6,7 +6,7 @@ jobs:
     steps:
       - checkout
 
-      # Download and cache dependencies
+      # Download and cache dependencies#
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "package.json" }}
@@ -19,16 +19,17 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-        
-      # run tests!
   deploy:
     docker:
       - image: circleci/node:12
     steps:
       - checkout
       - run:
+          name: Force expo-cli
+          command: npm install expo-cli
+      - run:
           name: Trigger build
-          command: npx eas-cli build --platform all --non-interactive
+          command: npx eas-cli build --platform android --non-interactive
 
 workflows:
   version: 2
@@ -38,6 +39,6 @@ workflows:
       - deploy:
           requires:
             - build
-          filters:
-            branches:
-              only: main
+          # filters:
+          #   branches:
+          #     only: main

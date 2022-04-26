@@ -29,8 +29,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "USERNAME": "crobster9000",
-    "PASSWORD": "31508cjr"
+    }
   }
 }
