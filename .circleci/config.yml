@@ -13,6 +13,8 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
+      - run: npm install
+
       - save_cache:
           paths:
             - node_modules
@@ -22,12 +24,6 @@ jobs:
       - image: circleci/node:12
     steps:
       - checkout
-      - run:
-          name: npm install
-          command: npm install     
-      - run:
-          name: Force expo-cli
-          command: npm install expo-cli  
       - run:
           name: Trigger build
           command: npx eas-cli build --platform android --non-interactive
