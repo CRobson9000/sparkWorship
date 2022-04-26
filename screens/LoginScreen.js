@@ -4,7 +4,6 @@ import ImageBackground from 'react-native/Libraries/Image/ImageBackground';
 import { isRequired } from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedColorPropType';
 import colors from '../config/colors.js'
 import { useDeviceOrientation } from '@react-native-community/hooks';
-import { LinearGradient } from 'expo-linear-gradient';
 
 
 export default function LoginScreen({ navigation }) {
@@ -151,7 +150,7 @@ const stylesPortrait = StyleSheet.create({
   },
   topBorder:
   {
-    height: "20%"
+    height: "15%"
   },
   buttonsContainer:
   {
@@ -282,7 +281,7 @@ const stylesBase = StyleSheet.create({
     
   },
   headText:{
-    fontSize: 40,
+    fontSize: 30,
     fontFamily: "sans-serif-medium",
     color: "white"
   },

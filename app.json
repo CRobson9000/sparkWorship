@@ -17,20 +17,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "supercid87.sparkworshipios"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      },
-      "package": "supercid87.sparkworship"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "USERNAME": "crobster9000",
-    "PASSWORD": "31508cjr"
+    }
   }
 }
