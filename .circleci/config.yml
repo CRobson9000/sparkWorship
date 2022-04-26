@@ -27,13 +27,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Login to Expo
-          command: |
-            expo login -u $USERNAME -p $PASSWORD
+          name: Install dependencies
+          command: npm ci
       - run:
-          name: Publish to Expo
-          command: |
-            expo publish --non-interactive
+          name: Trigger build
+          command: npx eas-cli build --platform all --non-interactive
 
 workflows:
   version: 2
