@@ -24,7 +24,8 @@
     "react-navigation-stack": "^2.10.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "expo-cli": "^5.4.0"
   },
   "private": true
 }
