@@ -1,5 +1,5 @@
 /**
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -15,7 +15,9 @@ import AnimatedTransform from './AnimatedTransform';
 import AnimatedWithChildren from './AnimatedWithChildren';
 import NativeAnimatedHelper from '../NativeAnimatedHelper';
 
-import flattenStyle from '../../../../exports/StyleSheet/flattenStyle';
+import StyleSheet from '../../../../exports/StyleSheet';
+
+const flattenStyle = StyleSheet.flatten;
 
 class AnimatedStyle extends AnimatedWithChildren {
   _style: Object;

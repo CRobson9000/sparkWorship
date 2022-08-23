@@ -1,5 +1,5 @@
 /**
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -12,7 +12,10 @@ import useLayoutEffect from '../useLayoutEffect';
 import useStable from '../useStable';
 
 type Callback = null | ((any) => void);
-type AddListener = (target: EventTarget, listener: null | ((any) => void)) => () => void;
+type AddListener = (
+  target: EventTarget,
+  listener: null | ((any) => void)
+) => () => void;
 
 /**
  * This can be used with any event type include custom events.
@@ -55,7 +58,7 @@ export default function useEvent(
       });
       targetListeners.clear();
     };
-  }, []);
+  }, [targetListeners]);
 
   return addListener;
 }

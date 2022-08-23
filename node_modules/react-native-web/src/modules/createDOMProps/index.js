@@ -8,10 +8,7 @@
  */
 
 import AccessibilityUtil from '../AccessibilityUtil';
-import css from '../../exports/StyleSheet/css';
 import StyleSheet from '../../exports/StyleSheet';
-import styleResolver from '../../exports/StyleSheet/styleResolver';
-import { STYLE_GROUPS } from '../../exports/StyleSheet/constants';
 
 const emptyObject = {};
 const hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -28,25 +25,6 @@ function processIDRefList(idRefList: string | Array<string>): string {
   return isArray(idRefList) ? idRefList.join(' ') : idRefList;
 }
 
-// Reset styles for heading, link, and list DOM elements
-const classes = css.create(
-  {
-    reset: {
-      backgroundColor: 'transparent',
-      color: 'inherit',
-      font: 'inherit',
-      listStyle: 'none',
-      margin: 0,
-      textAlign: 'inherit',
-      textDecoration: 'none'
-    },
-    cursor: {
-      cursor: 'pointer'
-    }
-  },
-  STYLE_GROUPS.classicReset
-);
-
 const pointerEventsStyles = StyleSheet.create({
   auto: {
     pointerEvents: 'auto'
@@ -62,7 +40,7 @@ const pointerEventsStyles = StyleSheet.create({
   }
 });
 
-const createDOMProps = (elementType, props) => {
+const createDOMProps = (elementType, props, options) => {
   if (!props) {
     props = emptyObject;
   }
@@ -116,51 +94,19 @@ const createDOMProps = (elementType, props) => {
     accessibilityValueMin,
     accessibilityValueNow,
     accessibilityValueText,
-    classList,
     dataSet,
     focusable,
     nativeID,
     pointerEvents,
-    style: providedStyle,
+    style,
     testID,
-    // Deprecated
-    accessible,
-    accessibilityState,
-    accessibilityValue,
     // Rest
     ...domProps
   } = props;
 
-  const disabled =
-    (accessibilityState != null && accessibilityState.disabled === true) || accessibilityDisabled;
+  const disabled = accessibilityDisabled;
 
   const role = AccessibilityUtil.propsToAriaRole(props);
-
-  // DEPRECATED
-  if (accessibilityState != null) {
-    for (const prop in accessibilityState) {
-      const value = accessibilityState[prop];
-      if (value != null) {
-        if (prop === 'disabled' || prop === 'hidden') {
-          if (value === true) {
-            domProps[`aria-${prop}`] = value;
-            // also set prop directly to pick up host elementType behaviour
-            domProps[prop] = value;
-          }
-        } else {
-          domProps[`aria-${prop}`] = value;
-        }
-      }
-    }
-  }
-  if (accessibilityValue != null) {
-    for (const prop in accessibilityValue) {
-      const value = accessibilityValue[prop];
-      if (value != null) {
-        domProps[`aria-value${prop}`] = value;
-      }
-    }
-  }
 
   // ACCESSIBILITY
   if (accessibilityActiveDescendant != null) {
@@ -230,7 +176,10 @@ const createDOMProps = (elementType, props) => {
   if (accessibilityInvalid != null) {
     domProps['aria-invalid'] = accessibilityInvalid;
   }
-  if (accessibilityKeyShortcuts != null && Array.isArray(accessibilityKeyShortcuts)) {
+  if (
+    accessibilityKeyShortcuts != null &&
+    Array.isArray(accessibilityKeyShortcuts)
+  ) {
     domProps['aria-keyshortcuts'] = accessibilityKeyShortcuts.join(' ');
   }
   if (accessibilityLabel != null) {
@@ -243,7 +192,8 @@ const createDOMProps = (elementType, props) => {
     domProps['aria-level'] = accessibilityLevel;
   }
   if (accessibilityLiveRegion != null) {
-    domProps['aria-live'] = accessibilityLiveRegion === 'none' ? 'off' : accessibilityLiveRegion;
+    domProps['aria-live'] =
+      accessibilityLiveRegion === 'none' ? 'off' : accessibilityLiveRegion;
   }
   if (accessibilityModal != null) {
     domProps['aria-modal'] = accessibilityModal;
@@ -272,14 +222,22 @@ const createDOMProps = (elementType, props) => {
   if (accessibilityReadOnly != null) {
     domProps['aria-readonly'] = accessibilityReadOnly;
     // Enhance with native semantics
-    if (elementType === 'input' || elementType === 'select' || elementType === 'textarea') {
+    if (
+      elementType === 'input' ||
+      elementType === 'select' ||
+      elementType === 'textarea'
+    ) {
       domProps.readOnly = true;
     }
   }
   if (accessibilityRequired != null) {
     domProps['aria-required'] = accessibilityRequired;
     // Enhance with native semantics
-    if (elementType === 'input' || elementType === 'select' || elementType === 'textarea') {
+    if (
+      elementType === 'input' ||
+      elementType === 'select' ||
+      elementType === 'textarea'
+    ) {
       domProps.required = true;
     }
   }
@@ -336,23 +294,22 @@ const createDOMProps = (elementType, props) => {
 
   // FOCUS
   // "focusable" indicates that an element may be a keyboard tab-stop.
-  const _focusable = focusable != null ? focusable : accessible;
-  if (_focusable === false) {
+  if (focusable === false) {
     domProps.tabIndex = '-1';
   }
   if (
-    // These native elements are focusable by default
+    // These native elements are keyboard focusable by default
     elementType === 'a' ||
     elementType === 'button' ||
     elementType === 'input' ||
     elementType === 'select' ||
     elementType === 'textarea'
   ) {
-    if (_focusable === false || accessibilityDisabled === true) {
+    if (focusable === false || accessibilityDisabled === true) {
       domProps.tabIndex = '-1';
     }
   } else if (
-    // These roles are made focusable by default
+    // These roles are made keyboard focusable by default
     role === 'button' ||
     role === 'checkbox' ||
     role === 'link' ||
@@ -360,42 +317,26 @@ const createDOMProps = (elementType, props) => {
     role === 'textbox' ||
     role === 'switch'
   ) {
-    if (_focusable !== false) {
+    if (focusable !== false) {
       domProps.tabIndex = '0';
     }
   } else {
     // Everything else must explicitly set the prop
-    if (_focusable === true) {
+    if (focusable === true) {
       domProps.tabIndex = '0';
     }
   }
 
-  // STYLE
-  const reactNativeStyle = StyleSheet.compose(
-    pointerEvents && pointerEventsStyles[pointerEvents],
-    providedStyle
-  );
-
-  // Additional style resets for interactive elements
-  const needsCursor = (role === 'button' || role === 'link') && !disabled;
-  const needsReset =
-    elementType === 'a' ||
-    elementType === 'button' ||
-    elementType === 'li' ||
-    elementType === 'ul' ||
-    role === 'heading';
-  // Classic CSS styles
-  const finalClassList = [needsReset && classes.reset, needsCursor && classes.cursor, classList];
-
   // Resolve styles
-  const { className, style } = styleResolver.resolve(reactNativeStyle, finalClassList);
-
-  if (className != null && className !== '') {
+  const [className, inlineStyle] = StyleSheet(
+    [style, pointerEvents && pointerEventsStyles[pointerEvents]],
+    { writingDirection: options ? options.writingDirection : 'ltr' }
+  );
+  if (className) {
     domProps.className = className;
   }
-
-  if (style) {
-    domProps.style = style;
+  if (inlineStyle) {
+    domProps.style = inlineStyle;
   }
 
   // OTHER

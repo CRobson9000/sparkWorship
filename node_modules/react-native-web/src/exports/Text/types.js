@@ -1,6 +1,6 @@
 /**
  * Copyright (c) Nicolas Gallagher.
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -35,23 +35,49 @@ export type TextStyle = {
   fontStyle?: 'italic' | 'normal',
   fontWeight?: ?FontWeightValue,
   fontVariant?: $ReadOnlyArray<
-    'small-caps' | 'oldstyle-nums' | 'lining-nums' | 'tabular-nums' | 'proportional-nums'
+    | 'small-caps'
+    | 'oldstyle-nums'
+    | 'lining-nums'
+    | 'tabular-nums'
+    | 'proportional-nums'
   >,
   letterSpacing?: ?NumberOrString,
   lineHeight?: ?NumberOrString,
-  textAlign?: 'center' | 'end' | 'inherit' | 'justify' | 'justify-all' | 'left' | 'right' | 'start',
+  textAlign?:
+    | 'center'
+    | 'end'
+    | 'inherit'
+    | 'justify'
+    | 'justify-all'
+    | 'left'
+    | 'right'
+    | 'start',
   textAlignVertical?: ?string,
   textDecorationColor?: ?ColorValue,
-  textDecorationLine?: 'none' | 'underline' | 'line-through' | 'underline line-through',
+  textDecorationLine?:
+    | 'none'
+    | 'underline'
+    | 'line-through'
+    | 'underline line-through',
   textDecorationStyle?: 'solid' | 'double' | 'dotted' | 'dashed',
   textIndent?: ?NumberOrString,
   textOverflow?: ?string,
-  textRendering?: 'auto' | 'geometricPrecision' | 'optimizeLegibility' | 'optimizeSpeed',
+  textRendering?:
+    | 'auto'
+    | 'geometricPrecision'
+    | 'optimizeLegibility'
+    | 'optimizeSpeed',
   textShadowColor?: ?ColorValue,
   textShadowOffset?: {| width?: number, height?: number |},
   textShadowRadius?: ?number,
   textTransform?: 'capitalize' | 'lowercase' | 'none' | 'uppercase',
-  unicodeBidi?: 'normal' | 'bidi-override' | 'embed' | 'isolate' | 'isolate-override' | 'plaintext',
+  unicodeBidi?:
+    | 'normal'
+    | 'bidi-override'
+    | 'embed'
+    | 'isolate'
+    | 'isolate-override'
+    | 'plaintext',
   whiteSpace?: ?string,
   wordBreak?: 'normal' | 'break-all' | 'break-word' | 'keep-all',
   wordWrap?: ?string,
@@ -72,20 +98,8 @@ export type TextProps = {
     | 'listitem'
     | 'none'
     | 'text',
-  accessibilityState?: {
-    busy?: ?boolean,
-    checked?: ?boolean | 'mixed',
-    disabled?: ?boolean,
-    expanded?: ?boolean,
-    grabbed?: ?boolean,
-    hidden?: ?boolean,
-    invalid?: ?boolean,
-    pressed?: ?boolean,
-    readonly?: ?boolean,
-    required?: ?boolean,
-    selected?: ?boolean
-  },
   dir?: 'auto' | 'ltr' | 'rtl',
+  lang?: string,
   numberOfLines?: ?number,
   onPress?: (e: any) => void,
   selectable?: boolean,

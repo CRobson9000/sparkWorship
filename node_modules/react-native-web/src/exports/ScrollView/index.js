@@ -1,6 +1,6 @@
 /**
  * Copyright (c) Nicolas Gallagher.
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -22,6 +22,7 @@ import React from 'react';
 
 type ScrollViewProps = {
   ...ViewProps,
+  centerContent?: boolean,
   contentContainerStyle?: ViewStyle,
   horizontal?: boolean,
   keyboardDismissMode?: 'none' | 'interactive' | 'on-drag',
@@ -117,7 +118,8 @@ const ScrollView = ((createReactClass({
     const animated = (options && options.animated) !== false;
     const { horizontal } = this.props;
     const scrollResponder = this.getScrollResponder();
-    const scrollResponderNode = scrollResponder.scrollResponderGetScrollableNode();
+    const scrollResponderNode =
+      scrollResponder.scrollResponderGetScrollableNode();
     const x = horizontal ? scrollResponderNode.scrollWidth : 0;
     const y = horizontal ? 0 : scrollResponderNode.scrollHeight;
     scrollResponder.scrollResponderScrollTo({ x, y, animated });
@@ -135,6 +137,7 @@ const ScrollView = ((createReactClass({
       forwardedRef,
       keyboardDismissMode,
       onScroll,
+      centerContent,
       /* eslint-enable */
       ...other
     } = this.props;
@@ -158,11 +161,13 @@ const ScrollView = ((createReactClass({
       };
     }
 
-    const hasStickyHeaderIndices = !horizontal && Array.isArray(stickyHeaderIndices);
+    const hasStickyHeaderIndices =
+      !horizontal && Array.isArray(stickyHeaderIndices);
     const children =
       hasStickyHeaderIndices || pagingEnabled
         ? React.Children.map(this.props.children, (child, i) => {
-            const isSticky = hasStickyHeaderIndices && stickyHeaderIndices.indexOf(i) > -1;
+            const isSticky =
+              hasStickyHeaderIndices && stickyHeaderIndices.indexOf(i) > -1;
             if (child != null && (isSticky || pagingEnabled)) {
               return (
                 <View
@@ -186,10 +191,11 @@ const ScrollView = ((createReactClass({
         children={children}
         collapsable={false}
         ref={this._setInnerViewRef}
-        style={StyleSheet.compose(
+        style={[
           horizontal && styles.contentContainerHorizontal,
+          centerContent && styles.contentContainerCenterContent,
           contentContainerStyle
-        )}
+        ]}
       />
     );
 
@@ -208,12 +214,16 @@ const ScrollView = ((createReactClass({
       onScrollEndDrag: this.scrollResponderHandleScrollEndDrag,
       onMomentumScrollBegin: this.scrollResponderHandleMomentumScrollBegin,
       onMomentumScrollEnd: this.scrollResponderHandleMomentumScrollEnd,
-      onStartShouldSetResponder: this.scrollResponderHandleStartShouldSetResponder,
-      onStartShouldSetResponderCapture: this.scrollResponderHandleStartShouldSetResponderCapture,
-      onScrollShouldSetResponder: this.scrollResponderHandleScrollShouldSetResponder,
+      onStartShouldSetResponder:
+        this.scrollResponderHandleStartShouldSetResponder,
+      onStartShouldSetResponderCapture:
+        this.scrollResponderHandleStartShouldSetResponderCapture,
+      onScrollShouldSetResponder:
+        this.scrollResponderHandleScrollShouldSetResponder,
       onScroll: this._handleScroll,
       onResponderGrant: this.scrollResponderHandleResponderGrant,
-      onResponderTerminationRequest: this.scrollResponderHandleTerminationRequest,
+      onResponderTerminationRequest:
+        this.scrollResponderHandleTerminationRequest,
       onResponderTerminate: this.scrollResponderHandleTerminate,
       onResponderRelease: this.scrollResponderHandleResponderRelease,
       onResponderReject: this.scrollResponderHandleResponderReject
@@ -221,7 +231,10 @@ const ScrollView = ((createReactClass({
 
     const ScrollViewClass = ScrollViewBase;
 
-    invariant(ScrollViewClass !== undefined, 'ScrollViewClass must not be undefined');
+    invariant(
+      ScrollViewClass !== undefined,
+      'ScrollViewClass must not be undefined'
+    );
 
     const scrollView = (
       <ScrollViewClass {...props} ref={this._setScrollNodeRef}>
@@ -230,7 +243,11 @@ const ScrollView = ((createReactClass({
     );
 
     if (refreshControl) {
-      return React.cloneElement(refreshControl, { style: props.style }, scrollView);
+      return React.cloneElement(
+        refreshControl,
+        { style: props.style },
+        scrollView
+      );
     }
 
     return scrollView;
@@ -280,7 +297,8 @@ const ScrollView = ((createReactClass({
       node.scrollToEnd = this.scrollToEnd;
       node.flashScrollIndicators = this.flashScrollIndicators;
       node.scrollResponderZoomTo = this.scrollResponderZoomTo;
-      node.scrollResponderScrollNativeHandleToKeyboard = this.scrollResponderScrollNativeHandleToKeyboard;
+      node.scrollResponderScrollNativeHandleToKeyboard =
+        this.scrollResponderScrollNativeHandleToKeyboard;
     }
     const ref = mergeRefs(this.props.forwardedRef);
     ref(node);
@@ -313,6 +331,10 @@ const styles = StyleSheet.create({
   },
   contentContainerHorizontal: {
     flexDirection: 'row'
+  },
+  contentContainerCenterContent: {
+    justifyContent: 'center',
+    flexGrow: 1
   },
   stickyHeader: {
     position: 'sticky',

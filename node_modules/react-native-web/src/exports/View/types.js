@@ -1,6 +1,6 @@
 /**
  * Copyright (c) Nicolas Gallagher.
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -34,14 +34,28 @@ export type AccessibilityProps = {|
   accessibilityColumnIndex?: ?number,
   accessibilityColumnSpan?: ?number,
   accessibilityControls?: ?idRefList,
-  accessibilityCurrent?: ?(boolean | 'page' | 'step' | 'location' | 'date' | 'time'),
+  accessibilityCurrent?: ?(
+    | boolean
+    | 'page'
+    | 'step'
+    | 'location'
+    | 'date'
+    | 'time'
+  ),
   accessibilityDescribedBy?: ?idRefList,
   accessibilityDetails?: ?idRef,
   accessibilityDisabled?: ?boolean,
   accessibilityErrorMessage?: ?idRef,
   accessibilityExpanded?: ?boolean,
   accessibilityFlowTo?: ?idRefList,
-  accessibilityHasPopup?: ?('dialog' | 'grid' | 'listbox' | 'menu' | 'tree' | false),
+  accessibilityHasPopup?: ?(
+    | 'dialog'
+    | 'grid'
+    | 'listbox'
+    | 'menu'
+    | 'tree'
+    | false
+  ),
   accessibilityHidden?: ?boolean,
   accessibilityInvalid?: ?boolean,
   accessibilityKeyShortcuts?: ?Array<string>,
@@ -113,28 +127,10 @@ export type ViewStyle = {
 
 export type ViewProps = {
   ...AccessibilityProps,
-  accessibilityState?: {
-    busy?: ?boolean,
-    checked?: ?boolean | 'mixed',
-    disabled?: ?boolean,
-    expanded?: ?boolean,
-    grabbed?: ?boolean,
-    hidden?: ?boolean,
-    invalid?: ?boolean,
-    modal?: ?boolean,
-    pressed?: ?boolean,
-    readonly?: ?boolean,
-    required?: ?boolean,
-    selected?: ?boolean
-  },
-  accessibilityValue?: {
-    max?: ?number,
-    min?: ?number,
-    now?: ?number,
-    text?: ?string
-  },
   children?: ?any,
+  dir?: 'ltr' | 'rtl',
   focusable?: ?boolean,
+  lang?: string,
   nativeID?: ?string,
   onBlur?: (e: any) => void,
   onClick?: (e: any) => void,

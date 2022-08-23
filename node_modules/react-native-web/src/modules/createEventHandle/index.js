@@ -1,5 +1,5 @@
 /**
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -8,8 +8,7 @@
  */
 
 'use strict';
-
-import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
+import canUseDOM from '../canUseDom';
 
 type Listener = (e: any) => void;
 
@@ -73,7 +72,10 @@ function normalizeEvent(event: any) {
 /**
  *
  */
-export default function createEventHandle(type: string, options: ?EventOptions): EventHandle {
+export default function createEventHandle(
+  type: string,
+  options: ?EventOptions
+): EventHandle {
   const opts = getOptions(options);
 
   return function (target: EventTarget, listener: ?Listener) {

@@ -398,6 +398,10 @@ The search field background color.
 
 By default bar tint color is translucent.
 
+#### `tintColor`
+
+The color for the cursor caret and cancel button text.
+
 #### `cancelButtonText`
 
 The text to be used instead of default `Cancel` button text.
@@ -463,6 +467,18 @@ Defaults to an empty string.
 #### `textColor`
 
 The search field text color.
+
+#### `hintTextColor`
+
+The search hint text color. (Android only)
+
+#### `headerIconColor`
+
+The search and close icon color shown in the header. (Android only)
+
+#### `shouldShowHintSearchIcon`
+
+Show the search hint icon when search bar is focused. (Android only)
 
 ### Helpers
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) Nicolas Gallagher.
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -8,14 +8,17 @@
  * @flow
  */
 
-import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
 import invariant from 'fbjs/lib/invariant';
+import canUseDOM from '../../modules/canUseDom';
 
 const initialURL = canUseDOM ? window.location.href : '';
 
 type Callback = (...args: any) => void;
 
-type OnOpenCallback = (event: 'onOpen', callback: (url: string) => void) => void;
+type OnOpenCallback = (
+  event: 'onOpen',
+  callback: (url: string) => void
+) => void;
 type GenericCallback = (event: string, callback: Callback) => void;
 
 class Linking {
@@ -38,7 +41,10 @@ class Linking {
    * Adds a event listener for the specified event. The callback will be called when the
    * said event is dispatched.
    */
-  addEventListener: OnOpenCallback | GenericCallback = (event: string, callback: Callback) => {
+  addEventListener: OnOpenCallback | GenericCallback = (
+    event: string,
+    callback: Callback
+  ) => {
     if (!this._eventCallbacks[event]) {
       this._eventCallbacks[event] = [callback];
       return;
@@ -50,9 +56,14 @@ class Linking {
    * Removes a previously added event listener for the specified event. The callback must
    * be the same object as the one passed to `addEventListener`.
    */
-  removeEventListener: OnOpenCallback | GenericCallback = (event: string, callback: Callback) => {
+  removeEventListener: OnOpenCallback | GenericCallback = (
+    event: string,
+    callback: Callback
+  ) => {
     const callbacks = this._eventCallbacks[event];
-    const filteredCallbacks = callbacks.filter((c) => c.toString() !== callback.toString());
+    const filteredCallbacks = callbacks.filter(
+      (c) => c.toString() !== callback.toString()
+    );
     this._eventCallbacks[event] = filteredCallbacks;
   };
 
@@ -66,12 +77,16 @@ class Linking {
 
   /**
    * Try to open the given url in a secure fashion. The method returns a Promise object.
+   * If a target is passed (including undefined) that target will be used, otherwise '_blank'.
    * If the url opens, the promise is resolved. If not, the promise is rejected.
-   * Dispatches the `onOpen` event if `url` is opened successfully
+   * Dispatches the `onOpen` event if `url` is opened successfully.
    */
-  openURL(url: string): Promise<Object | void> {
+  openURL(url: string, target?: string): Promise<Object | void> {
+    if (arguments.length === 1) {
+      target = '_blank';
+    }
     try {
-      open(url);
+      open(url, target);
       this._dispatchEvent('onOpen', url);
       return Promise.resolve();
     } catch (e) {
@@ -80,15 +95,22 @@ class Linking {
   }
 
   _validateURL(url: string) {
-    invariant(typeof url === 'string', 'Invalid URL: should be a string. Was: ' + url);
+    invariant(
+      typeof url === 'string',
+      'Invalid URL: should be a string. Was: ' + url
+    );
     invariant(url, 'Invalid URL: cannot be empty');
   }
 }
 
-const open = (url) => {
+const open = (url, target) => {
   if (canUseDOM) {
     const urlToOpen = new URL(url, window.location).toString();
-    window.open(urlToOpen, '_blank', 'noopener');
+    if (urlToOpen.indexOf('tel:') === 0) {
+      window.location = urlToOpen;
+    } else {
+      window.open(urlToOpen, target, 'noopener');
+    }
   }
 };
 

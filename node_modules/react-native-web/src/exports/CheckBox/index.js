@@ -1,6 +1,6 @@
 /**
  * Copyright (c) Nicolas Gallagher.
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -29,7 +29,8 @@ const CheckBox: React.AbstractComponent<
   CheckBoxProps,
   React.ElementRef<typeof View>
 > = React.forwardRef((props, forwardedRef) => {
-  const { color, disabled, onChange, onValueChange, style, value, ...other } = props;
+  const { color, disabled, onChange, onValueChange, style, value, ...other } =
+    props;
 
   function handleChange(event: Object) {
     const value = event.nativeEvent.target.checked;
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     height: '100%',
     margin: 0,
-    opacity: 0,
+    appearance: 'none',
     padding: 0,
     width: '100%'
   }
