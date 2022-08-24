@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "sparkWorship",
+    "owner": "crobster9000",
     "slug": "sparkWorship",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -29,6 +30,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "abb6e87c-ab46-42cf-9175-7a56756abef4"
+      }
     }
   }
 }
