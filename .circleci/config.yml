@@ -24,9 +24,9 @@ jobs:
       - image: circleci/node:14
     steps:
       - checkout
-      - run:
-          name: Force expo-cli
-          command: npm install expo-cli@6.0.5
+      # - run:
+      #     name: Force expo-cli
+      #     command: npm install expo-cli@6.0.5 --force
       - run:
           name: Trigger build
           command: npx eas-cli build --platform android --non-interactive
