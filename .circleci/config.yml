@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:  
     docker:
-      - image: circleci/node:14.15
+      - image: circleci/node:14
     steps:
       - checkout
 
@@ -21,12 +21,12 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
   deploy:
     docker:
-      - image: circleci/node:14.15
+      - image: circleci/node:14
     steps:
       - checkout
       - run:
           name: Force expo-cli
-          command: npm install expo-cli
+          command: npm install expo-cli --force
       - run:
           name: Trigger build
           command: npx eas-cli build --platform android --non-interactive
