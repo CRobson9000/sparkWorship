@@ -24,6 +24,7 @@ jobs:
       - image: circleci/node:14
     steps:
       - checkout
+      - run: npm install
       - run:
           name: Force expo-cli
           command: npm install expo-cli --force
