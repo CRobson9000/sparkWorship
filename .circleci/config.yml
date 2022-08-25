@@ -25,8 +25,11 @@ jobs:
     steps:
       - checkout
       - run: 
+          name: Clear the cache
+          command: npm cache clean -f
+      - run: 
           name: Install dependencies to this docker image
-          command: npm install --force
+          command: npm install -f
       # - run:
       #     name: Force expo-cli
       #     command: npm install expo-cli@6.0.5 --force
