@@ -20,8 +20,13 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
   deploy:
+    docker:
+        - image: circleci/node:14
     steps:
       - checkout
+      - run: 
+          name: Install dependencies to this docker image
+          command: npm install --force
       # - run:
       #     name: Force expo-cli
       #     command: npm install expo-cli@6.0.5 --force
