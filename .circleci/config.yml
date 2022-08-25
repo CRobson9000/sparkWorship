@@ -26,7 +26,7 @@ jobs:
       - checkout
       - run:
           name: Force expo-cli
-          command: npm install expo-cli
+          command: npm install expo-cli@6.0.5
       - run:
           name: Trigger build
           command: npx eas-cli build --platform android --non-interactive
