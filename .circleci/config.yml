@@ -24,10 +24,10 @@ jobs:
       - image: circleci/node:14
     steps:
       - checkout
-      - run: npm cache clean
+      - run: npm cache clean --force
       - run:
           name: Force expo-cli
-          command: npm install expo-cli --force
+          command: npm install expo-cli
       - run:
           name: Trigger build
           command: npx eas-cli build --platform android --non-interactive
