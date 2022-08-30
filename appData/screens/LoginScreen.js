@@ -3,11 +3,64 @@ import React from 'react';
 import colors from '../../config/colors.js'
 import { useDeviceOrientation } from '@react-native-community/hooks';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "@firebase/auth";
+import { ServerContainer } from '@react-navigation/native';
 
 export default function LoginScreen({ navigation }) {
-    //makes the text boxes have "phantom" text in them by default
-    const [text, onChangeText] = React.useState("Useless Text");
+    /*------------------------------------------------*/
+    /*----------BACK-END APP CODE ----------*/
+    /*------------------------------------------------*/
+
+    //global variables
+    let username;
+    let userPassword;
+
+    function signUp(email, password) {
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          console.log(user);      
+        }).catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+        });
+    }
+
+    function signIn(navigation) {
+      const auth = getAuth();
+      signInWithEmailAndPassword(auth, username, userPassword).then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          console.log("User", user.uid);
+          // navigation.navigate('DatabaseTest');
+          // ...
+      }).catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode);
+          console.log(errorMessage);
+      });
+    }
+
+    //element for input
+    const Input = (props) => {
+      const [text, onChangeText] = React.useState("");
+      props.func(text);
+      return (
+          <TextInput
+            style={props.inputStyle}
+            onChangeText={onChangeText}
+            value={text}
+            placeholder={props.placeHolderText}
+            secureTextEntry={props.secure}
+          />
+      );
+    };
+
+    /*------------------------------------------------*/
+    /*----------FRONT-END APP CODE ----------*/
+    /*------------------------------------------------*/
 
     //used to detect device orientation.  If the device is in portrait mode, portrait will be true, else it will be false
     let {portrait} = useDeviceOrientation();  
@@ -31,13 +84,12 @@ export default function LoginScreen({ navigation }) {
 
               {/* Container for everything between the buttons panel and the title */}
               <View style={stylesPortrait.contentContainer}>
-                
-                {/*<Text style={[stylesBase.titleText, stylesPortrait.centerText]}>Username</Text>*/}
-                <TextInput style={[stylesPortrait.inputBox, stylesPortrait.centerText]} placeholder="Username"/>
-                {/*<Text style={[stylesBase.titleText, stylesPortrait.centerText]}>Password</Text> */}
-                <TextInput secureTextEntry={true} style={[stylesPortrait.inputBox, stylesPortrait.centerText]} placeholder="Password"/>
-                
-                <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate('DatabaseTest')} style={[stylesPortrait.button]}>
+                {/* <TextInput style={[stylesPortrait.inputBox, stylesPortrait.centerText]} placeholder="Username"/> */}
+                {/* <TextInput secureTextEntry={true} style={[stylesPortrait.inputBox, stylesPortrait.centerText]} placeholder="Password"/> */}
+                <Input placeHolderText={"Username"} secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox, stylesPortrait.centerText]}/>
+                <Input placeHolderText={"Password"} secure={true} func={(val) => userPassword = val} inputStyle={[stylesPortrait.inputBox, stylesPortrait.centerText]}/>
+
+                <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
                   <View><Text style={{color: "white"}}>Login</Text></View>
                 </TouchableOpacity>
 
@@ -56,7 +108,6 @@ export default function LoginScreen({ navigation }) {
       return ( 
         <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
           <View style={[stylesBase.container, stylesLandscape.container]}>
-
               {/* Title portion of the page */}
               <KeyboardAvoidingView behavior='height'>
               <View style={[stylesBase.topBorder, stylesLandscape.topBorder]}>
@@ -65,27 +116,20 @@ export default function LoginScreen({ navigation }) {
 
               {/* Container for everything between the buttons panel and the title */}
               <View style={stylesLandscape.contentContainer}>
-            
-                
-               
                 {/* 1/3rd columns columns */}
                 <View style={{ flexDirection: 'column', flex:1, margin: 10 }}>
-                  
                   <View style={{ flexDirection: 'row', flex:1, margin: 1 }}>
                       <Text style={[stylesBase.titleText, stylesLandscape.centerText]}>Username:</Text>
                       <TextInput style={[stylesLandscape.inputBox, stylesPortrait.centerText]} placeholder="Enter Username Here"/>
                       <View style={stylesLandscape.logoContainter}>
-                      <Image source={require('../../assets/logo.png')} style={stylesLandscape.logo}/>
-                    </View>
+                        <Image source={require('../../assets/logo.png')} style={stylesLandscape.logo}/>
                       </View>
+                  </View>
 
-
-                    <View style={{ flexDirection: 'row', flex:1, margin: 1 }}>
-                    
+                  <View style={{ flexDirection: 'row', flex:1, margin: 1 }}>
                     <Text style={[stylesBase.titleText, stylesLandscape.centerText]}>Password:</Text>
                     <TextInput secureTextEntry={true} style={[stylesLandscape.inputBoxLong, stylesPortrait.centerText]} placeholder="Enter Password Here"/>
-                    
-                    </View>
+                  </View>
 
                   <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate('DatabaseTest')} style={[stylesLandscape.button]}>
                     <View><Text style={{color: "white"}}>Login</Text></View>
