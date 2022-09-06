@@ -12,7 +12,7 @@ const stylesPortrait = StyleSheet.create({
         height: "75%",
     },
     inputBox: {
-        height: "7.5%",
+        height: "20%",
         marginHorizontal: "10%",
         marginBottom: "10%",
         borderWidth: "1",
@@ -28,11 +28,7 @@ const stylesPortrait = StyleSheet.create({
         textAlign: 'center',
         color: "white"
     },
-    register: 
-    {
-        textAlign: 'center',
-        color: "white"
-    },
+
     button:
     {
         backgroundColor: colors.buttonColor,

@@ -87,6 +87,7 @@ export default function ProfileScreen({ navigation }) {
                 <Input placeHolderText={"Username"} secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
                 <Input placeHolderText={"Password"} secure={true} func={(val) => userPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
 
+
                 <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
                   <View><Text style={{color: "white"}}>Login</Text></View>
                 </TouchableOpacity>
