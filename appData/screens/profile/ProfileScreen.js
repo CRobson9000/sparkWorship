@@ -28,10 +28,46 @@ export default function ProfileScreen({ navigation }) {
       return (
         <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
           <View style={[stylesBase.container, stylesPortrait.container]}>
-              colors={['rgb(219,233,236)', 'transparent']}
+              <LinearGradient 
+              colors={['rgba(0,0,0,0.8)', 'transparent']}
               style={stylesBase.background}
+              />
+
+              {/* Logo code */}
+              <View style={[stylesBase.topBorder, stylesPortrait.topBorder]}>
+                  <Image style={{width: "150%", height: "150%"}} source={require("../../../assets/logo.png")}></Image>
               </View>
+
+              {/* Container for everything below the logo */}
+              <View style={stylesPortrait.contentContainer}>
+                <Input placeHolderText={"Username"} secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+                <Input placeHolderText={"Password"} secure={true} func={(val) => userPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+
+                <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
+                  <View><Text style={{color: "white"}}>Login</Text></View>
+                </TouchableOpacity>
+
+                <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate('LoginScreen')}>
+                  <Text style={[stylesPortrait.centerText]}>Register New User</Text>
+                </TouchableOpacity>
+              </View>
+          </View>
+        </TouchableWithoutFeedback>
+      );
+    }
+
+    //defines layout for landscape mode 
+    else
+    {
+      return ( 
+        <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
+          {/* Content container */}
+          <View style={[stylesBase.container, stylesLandscape.container]}>
+            {/* To be completed */}
+          </View>
         </TouchableWithoutFeedback>
       );
     }
 }
+
+
