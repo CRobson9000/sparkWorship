@@ -35,11 +35,8 @@ const stylesPortrait = StyleSheet.create({
         marginHorizontal: "10%",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 15,
-        borderColor: "black",
         height: "7.5%",
         marginBottom: "10%",
-        borderWidth: 3
     }
 
 });
