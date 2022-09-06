@@ -19,6 +19,19 @@ export default function ProfileScreen({ navigation }) {
     /*--------------FRONT-END APP CODE ---------------*/
     /*------------------------------------------------*/
 
+    //used to detect device orientation.  If the device is in portrait mode, portrait will be true, else it will be false
+    let {portrait} = useDeviceOrientation();  
 
-    
+    //defines layout for portrait mode 
+    if (portrait == true)
+    { 
+      return (
+        <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
+          <View style={[stylesBase.container, stylesPortrait.container]}>
+              colors={['rgb(219,233,236)', 'transparent']}
+              style={stylesBase.background}
+              </View>
+        </TouchableWithoutFeedback>
+      );
+    }
 }
