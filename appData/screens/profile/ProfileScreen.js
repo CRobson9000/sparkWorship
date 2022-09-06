@@ -79,7 +79,7 @@ export default function ProfileScreen({ navigation }) {
 
               {/* Logo code */}
               <View style={[stylesBase.topBorder, stylesPortrait.topBorder]}>
-                  <Image style={{width: "100%", height: "100%"}} source={require("../../../assets/resume.png")}></Image>
+                  <Image style={{width: "100%", height: "100%"}} source={require("../../../assets/resume.jpg")}></Image>
               </View>
 
               {/* Container for everything below the logo */}
