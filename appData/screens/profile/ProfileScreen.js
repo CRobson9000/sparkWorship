@@ -76,7 +76,7 @@ export default function ProfileScreen({ navigation }) {
         <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
           <View style={[stylesBase.container, stylesPortrait.container]}>
               <LinearGradient 
-              colors={['rgba(0,0,0,0.8)', 'transparent']}
+              colors={['rgb(219,233,236)', 'transparent']}
               style={stylesBase.background}
               />
 
