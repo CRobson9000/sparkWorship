@@ -75,7 +75,6 @@ export default function ProfileScreen({ navigation }) {
       return (
         <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
           <View style={[stylesBase.container, stylesPortrait.container]}>
-              style={stylesBase.background}
 
 
               {/* Logo code */}
