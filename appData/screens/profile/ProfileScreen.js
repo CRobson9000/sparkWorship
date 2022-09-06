@@ -79,7 +79,7 @@ export default function ProfileScreen({ navigation }) {
 
               {/* Logo code */}
               <View style={[stylesBase.topBorder, stylesPortrait.topBorder]}>
-                  <Image style={{width: "50%", height: "50%"}} source={require("../../../assets/resume.jpg")}></Image>
+                  <Image style={{width: "50%", height: "75%"}} source={require("../../../assets/resume.jpg")}></Image>
               </View>
 
               {/* Container for everything below the logo */}
@@ -89,7 +89,7 @@ export default function ProfileScreen({ navigation }) {
 
 
                 <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
-                  <View><Text style={{color:"white"}}>Login</Text></View>
+                  <View><Text style={{color:"white"}}>Edit Profile</Text></View>
                 </TouchableOpacity>
 
                 <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate('LoginScreen')}>
