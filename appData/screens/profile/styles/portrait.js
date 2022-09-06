@@ -37,6 +37,7 @@ const stylesPortrait = StyleSheet.create({
         alignItems: "center",
         height: "7.5%",
         marginBottom: "10%",
+        borderRadius: "10",
     }
 
 });
