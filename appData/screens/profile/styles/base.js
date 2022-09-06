@@ -14,7 +14,7 @@ const stylesBase = StyleSheet.create({
     {
       flex: 1,
       flexDirection: "column",
-      backgroundColor: colors.secondary
+      backgroundColor: "rgb(255, 255, 255)"
     },
     topBorder:
     {
