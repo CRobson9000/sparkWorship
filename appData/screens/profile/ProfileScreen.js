@@ -15,6 +15,53 @@ export default function ProfileScreen({ navigation }) {
     /*---------------BACK-END APP CODE ---------------*/
     /*------------------------------------------------*/
 
+    //global variables
+    let username;
+    let userPassword;
+
+    function signUp(email, password) {
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          console.log(user);      
+        }).catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+        });
+    }
+
+    function signIn(navigation) {
+      const auth = getAuth();
+      signInWithEmailAndPassword(auth, username, userPassword).then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          console.log("User", user.uid);
+          // navigation.navigate('DatabaseTest');
+          // ...
+      }).catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode);
+          console.log(errorMessage);
+      });
+    }
+
+    //element for input
+    const Input = (props) => {
+      const [text, onChangeText] = React.useState("");
+      props.func(text);
+      return (
+          <TextInput
+            style={props.inputStyle}
+            onChangeText={onChangeText}
+            value={text}
+            placeholder={props.placeHolderText}
+            secureTextEntry={props.secure}
+          />
+      );
+    };
+
     /*------------------------------------------------*/
     /*--------------FRONT-END APP CODE ---------------*/
     /*------------------------------------------------*/
