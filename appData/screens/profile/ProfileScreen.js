@@ -89,7 +89,7 @@ export default function ProfileScreen({ navigation }) {
 
 
                 <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
-                  <View><Text style={{color: "rgb(0, 97, 117)"}}>Login</Text></View>
+                  <View><Text style={{color:"white"}}>Login</Text></View>
                 </TouchableOpacity>
 
                 <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate('LoginScreen')}>

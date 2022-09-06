@@ -31,7 +31,7 @@ const stylesPortrait = StyleSheet.create({
 
     button:
     {
-        backgroundColor: colors.buttonColor,
+        backgroundColor: "rgb(0, 97, 117)",
         marginHorizontal: "10%",
         justifyContent: "center",
         alignItems: "center",
