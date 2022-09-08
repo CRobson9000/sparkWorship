@@ -1,23 +1,23 @@
-import {Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import {Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import React from 'react';
 
 import { stylesPortrait } from "./styles/portrait";
 import { stylesBase} from "./styles/base";
 
 export default function SparkView({ navigation }) {
-<View style={[stylesBase.container]}>
+return(<View style={[stylesBase.container]}>
     <View style={[stylesPortrait.topBorder]}>
         <Text style={{color: "white"}}>Spark Worship</Text>
     </View>
     <View style={[stylesPortrait.sparkContainer]}>
         <View>
-            Egg
+
         </View>
         <View>
-            B
+            
         </View>
         <View>
-            C     
+              
         </View>
     </View>
     <View style={[stylesPortrait.bottomContainer]}>
@@ -31,5 +31,5 @@ export default function SparkView({ navigation }) {
 
         </Image>
     </View>
-</View>
+</View>);
 }

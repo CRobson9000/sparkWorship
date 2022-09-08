@@ -5,7 +5,7 @@ const stylesPortrait = StyleSheet.create({
     topBorder:
     {
         height: "9%",
-        color: "rgba(236,96,20,1)",
+        backgroundColor: "rgba(236,96,20,0.25)",
     },
     contentContainer:
     {
@@ -14,12 +14,14 @@ const stylesPortrait = StyleSheet.create({
     },
     sparkContainer:{
         width:"100%",
-        height:"76%",
+        height:"81%",
         justifyContent: "space-between",
+        backgroundColor: "rgba(255,255,255,1)"
     },
     bottomContainer:{
         width:"100%",
-        height:"15%",
+        height:"10%",
+        backgroundColor: "rgba(217, 217, 217, 1)"
     },
     inputBox: {
         height: "7.5%",
