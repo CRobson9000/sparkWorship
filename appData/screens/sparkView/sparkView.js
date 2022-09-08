@@ -19,4 +19,9 @@ import { stylesBase} from "./styles/portrait";
             
         </View>
     </View>
+    <View style={[stylesPortrait.bottomContainer]}>
+        <Image></Image>
+        <Image></Image>
+        <Image></Image>
+    </View>
 </View>
