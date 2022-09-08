@@ -5,12 +5,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "@firebase/auth";
 
 //import statements for styles
-import { stylesBase } from "../../global/styles/base2.js";
+import { stylesBase } from "../../global/styles/base2";
 import { stylesPortrait } from "../../global/styles/portrait.js";
-import { stylesLandscape } from "../../global/styles/landscape.js";
+// import { stylesLandscape } from "./styles/landscape.js";
 import { Dimensions, TouchableHighlight } from 'react-native';
 
-export default function LoginScreen({ navigation }) {
+export default function RegisterScreen({ navigation }) {
 
     /*------------------------------------------------*/
     /*----------BACK-END APP CODE ----------*/
@@ -98,7 +98,7 @@ export default function LoginScreen({ navigation }) {
                   top: 100
                 }}
               >
-                <Text style={{color: "white"}}> Login </Text>
+                <Text style={{color: "white"}}> Register </Text>
               </TouchableHighlight>
 
               {/* Mini circles */}
@@ -129,7 +129,7 @@ export default function LoginScreen({ navigation }) {
                   borderRadius: '50%',
                   right: -325,
                   bottom: 260,
-                  backgroundColor: '#E07415',
+                  backgroundColor: '#EE9344',
                 }}></View>
 
               <View
@@ -154,15 +154,12 @@ export default function LoginScreen({ navigation }) {
 
               {/* Container for everything below the logo */}
               <View style={stylesPortrait.contentContainer}>
-              <Text style={[stylesPortrait.username]}>Username</Text>
-                <Input secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+                <Input placeHolderText={"Username"} secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+                <Input placeHolderText={"Password"} secure={true} func={(val) => userPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
 
-                <Text style={[stylesPortrait.password]}>Password</Text>
-                <Input secure={true} func={(val) => userPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
-
-                <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate('LoginScreen')}>
-                  <Text style={[stylesPortrait.forgotPassword]}>Forgot password?</Text>
-                </TouchableOpacity>
+                {/* <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate('LoginScreen')}>
+                  <Text style={[stylesPortrait.centerText]}>Forgot password?</Text>
+                </TouchableOpacity> */}
 
 
                 <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
