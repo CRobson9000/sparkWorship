@@ -2,26 +2,34 @@ import {Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, Touchable
 import React from 'react';
 
 import { stylesPortrait } from "./styles/portrait";
-import { stylesBase} from "./styles/portrait";
+import { stylesBase} from "./styles/base";
 
+export default function SparkView({ navigation }) {
 <View style={[stylesBase.container]}>
     <View style={[stylesPortrait.topBorder]}>
         <Text style={{color: "white"}}>Spark Worship</Text>
     </View>
     <View style={[stylesPortrait.sparkContainer]}>
         <View>
-
+            Egg
         </View>
         <View>
-
+            B
         </View>
         <View>
-            
+            C     
         </View>
     </View>
     <View style={[stylesPortrait.bottomContainer]}>
-        <Image></Image>
-        <Image></Image>
-        <Image></Image>
+        <Image>
+
+        </Image>
+        <Image>
+
+        </Image>
+        <Image>
+
+        </Image>
     </View>
 </View>
+}
