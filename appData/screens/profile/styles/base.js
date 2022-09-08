@@ -18,7 +18,7 @@ const stylesBase = StyleSheet.create({
     },
     topBorder:
     {
-      width: "175%",
+      width: "100%",
       backgroundColor: "rgb(219, 233, 236)",
       alignItems: "center",
       justifyContent: "center"

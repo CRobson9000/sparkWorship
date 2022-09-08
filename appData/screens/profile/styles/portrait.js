@@ -4,14 +4,15 @@ import colors from '../../../../config/colors';
 const stylesPortrait = StyleSheet.create({
     topBorder:
     {
-        height: "40%"
+        height: "45%"
     },
     contentContainer:
     {
         width: "100%",
         height: "75%",
     },
-    inputBox: {
+    textBox: 
+    {
         height: "20%",
         marginHorizontal: "10%",
         marginBottom: "10%",
@@ -35,8 +36,10 @@ const stylesPortrait = StyleSheet.create({
         marginHorizontal: "10%",
         justifyContent: "center",
         alignItems: "center",
-        height: "7.5%",
-        marginBottom: "10%",
+        height: "10%",
+        width: "75%",
+        marginTop: "3%",
+        marginBottom: "5%",
         borderRadius: "10",
     }
 

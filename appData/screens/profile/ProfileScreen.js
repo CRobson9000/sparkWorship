@@ -1,4 +1,4 @@
-import { Image, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Image, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, TextInputComponent, TextComponent } from 'react-native';
 import React from 'react';
 import { useDeviceOrientation } from '@react-native-community/hooks';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -76,25 +76,21 @@ export default function ProfileScreen({ navigation }) {
         <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
           <View style={[stylesBase.container, stylesPortrait.container]}>
 
-
-              {/* Logo code */}
+              {/* Profile Picture Code */}
               <View style={[stylesBase.topBorder, stylesPortrait.topBorder]}>
-                  <Image style={{width: "50%", height: "75%"}} source={require("../../../assets/resume.jpg")}></Image>
+                  <Image style={{width: "45%", height: "45%"}} source={require("../../../assets/resume.jpg")}></Image>
+                  {/*"Edit Profile" Button*/}
+                  <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
+                      <View><Text style={{color:"white"}}>Edit Profile</Text></View>
+                  </TouchableOpacity>
               </View>
+ 
 
               {/* Container for everything below the logo */}
               <View style={stylesPortrait.contentContainer}>
-                <Input placeHolderText={"Username"} secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
-                <Input placeHolderText={"Password"} secure={true} func={(val) => userPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+                <Text>About Me</Text>
+                <Input placeHolderText={"About Me"} secure={true} func={(val) => userPassword = val} inputStyle={[stylesPortrait.textBox/*, stylesPortrait.centerText*/]}/>
 
-
-                <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
-                  <View><Text style={{color:"white"}}>Edit Profile</Text></View>
-                </TouchableOpacity>
-
-                <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate('LoginScreen')}>
-                  <Text style={[stylesPortrait.centerText]}>Register New User</Text>
-                </TouchableOpacity>
               </View>
           </View>
         </TouchableWithoutFeedback>
