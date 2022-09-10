@@ -2,14 +2,12 @@ import { StyleSheet } from 'react-native';
 
 const mainStyles = StyleSheet.create({
     mainContainer: {
-        backgroundColor: "red",
+        backgroundColor: "white",
         flexDirection: "row",
         justifyContent: "center",
-        alignItems: "center",
-        flex: 1
+        alignItems: "center"
     },
     infoStyles: {
-        backgroundColor: "white",
         flexDirection: "column",
         width: "100%",
         height: "40%",
@@ -19,18 +17,17 @@ const mainStyles = StyleSheet.create({
         margin: "10%"
     },
     button: {
-        backgroundColor: "green",
-        width: "100%",
+        width: "50%",
         height: "20%",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        margin: 10
     },
-    button2: {
-        backgroundColor: "purple",
+    header: {
         width: "100%",
-        height: "20%",
-        justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        padding: 15,
+        marginTop: 20
     }
 });
 
