@@ -15,7 +15,7 @@ import { getDatabase, ref, set } from 'firebase/database';
 //import components
 import { Input } from '../../global/components.js'
 
-export default function LoginScreen({ navigation }) {
+export default function RegistrationScreen({ navigation }) {
 
     /*------------------------------------------------*/
     /*----------BACK-END APP CODE ----------*/

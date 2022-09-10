@@ -17,10 +17,10 @@ export default function DatabaseTest({ navigation }) {
 
     function getNameListener() {
         const db = getDatabase();
-        const reference = ref(db, "data");
+        const reference = ref(db, "Data/funnyData");
         get(reference).then((snapshot) => {
-            const name = snapshot.val();
-            setDataText(`${name.firstName} ${name.lastName}`);
+            const myData = snapshot.val();
+            setDataText(`${myData}`);
         });
     }
 
@@ -36,15 +36,26 @@ export default function DatabaseTest({ navigation }) {
     return (
         <View style={mainStyles.mainContainer}>
             <View style={mainStyles.infoStyles}>
+                {/* Database Stuff */}
+                <View style={[mainStyles.header, {backgroundColor: "indigo"}]}><Text style={{color: "white"}}> Current Navigation Router </Text></View>
                 <Text style={mainStyles.text}> {dataText} </Text>
-                <Text style={mainStyles.text}> More Text </Text>
-                <Text style={mainStyles.text}> Even more Text </Text>
-                <TouchableHighlight style={mainStyles.button} onPress={() => getNameListener()}>
+                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "purple"}]} onPress={() => getNameListener()}>
                     <Text style={{color: "white"}}>Get Data</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={mainStyles.button2} onPress={() => setName("Rob", "Bush")}>
-                    <Text style={{color: "white"}}>Set Data</Text>
+                {/* Database Stuff */}
+                <View style={[mainStyles.header, {backgroundColor: "yellow"}]}><Text> Current Navigation Router </Text></View>
+
+                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "red"}]} onPress={() => navigation.navigate()}>
+                    <Text style={{color: "white"}}> Profile Page </Text>
+                </TouchableHighlight>
+
+                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "orange"}]} onPress={() => navigation.navigate()}>
+                    <Text style={{color: "white"}}> Location Data Test </Text>
+                </TouchableHighlight>
+
+                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "blue"}]} onPress={() => navigation.navigate()}>
+                    <Text style={{color: "white"}}> Sparks Search </Text>
                 </TouchableHighlight>
             </View>
         </View>
