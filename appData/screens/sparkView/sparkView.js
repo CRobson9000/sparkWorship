@@ -7,7 +7,7 @@ import { stylesBase} from "./styles/base";
 export default function SparkView({ navigation }) {
 return(<View style={[stylesBase.container]}>
     <View style={[stylesPortrait.topBorder]}>
-        <Text style={{color: "white"}}>Spark Worship</Text>
+        <Text style={{color: "white", textAlign:"center", fontSize:29, paddingTop: 28}}>Spark Worship</Text>
     </View>
     <View style={[stylesPortrait.sparkContainer]}>
         <View>
@@ -21,15 +21,17 @@ return(<View style={[stylesBase.container]}>
         </View>
     </View>
     <View style={[stylesPortrait.bottomContainer]}>
-        <Image>
-
-        </Image>
-        <Image>
-
-        </Image>
-        <Image>
-
-        </Image>
+    
+            <Image style={{width: "10%", height: "50%", marginLeft: 25}} source={require("../../../assets/ProfileNavIcon.png")}> 
+            
+            </Image>
+        
+            <Image style={{width: "10%", height: "50%"}} source={require("../../../assets/ProfileNavIcon.png")}> 
+            
+            </Image>
+            <Image style={{width: "10%", height: "50%", marginRight: 25}} source={require("../../../assets/ProfileNavIcon.png")}> 
+            
+            </Image>
     </View>
 </View>);
 }

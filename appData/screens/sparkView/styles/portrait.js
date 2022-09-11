@@ -4,7 +4,7 @@ import colors from '../../../../config/colors';
 const stylesPortrait = StyleSheet.create({
     topBorder:
     {
-        height: "9%",
+        height: "10%",
         backgroundColor: "rgba(236,96,20,0.25)",
     },
     contentContainer:
@@ -14,14 +14,17 @@ const stylesPortrait = StyleSheet.create({
     },
     sparkContainer:{
         width:"100%",
-        height:"81%",
+        height:"82%",
         justifyContent: "space-between",
         backgroundColor: "rgba(255,255,255,1)"
     },
     bottomContainer:{
         width:"100%",
-        height:"10%",
-        backgroundColor: "rgba(217, 217, 217, 1)"
+        height:"8%",
+        backgroundColor: "rgba(217, 217, 217, 1)",
+        flexDirection: "row", 
+        justifyContent: "space-between", 
+        alignItems: "center"
     },
     inputBox: {
         height: "7.5%",
