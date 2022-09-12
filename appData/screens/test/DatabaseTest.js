@@ -50,7 +50,7 @@ export default function DatabaseTest({ navigation }) {
                     <Text style={{color: "white"}}> Profile Page </Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "orange"}]} onPress={() => navigation.navigate()}>
+                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "orange"}]} onPress={() => navigation.navigate("LocationData")}>
                     <Text style={{color: "white"}}> Location Data Test </Text>
                 </TouchableHighlight>
 
