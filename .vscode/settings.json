@@ -2,5 +2,6 @@
     "git.ignoreLimitWarning": true,
     "githubPullRequests.ignoredPullRequestBranches": [
         "main"
-    ]
+    ],
+    "powershell.enableProfileLoading": false
 }
