@@ -1,114 +1,110 @@
-import { Image, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, TextInputComponent, TextComponent } from 'react-native';
 import React from 'react';
-import { useDeviceOrientation } from '@react-native-community/hooks';
-import { LinearGradient } from 'expo-linear-gradient';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "@firebase/auth";
+import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from "react-native";
 
-//import statements for styles
-import { stylesPortrait } from "./styles/portrait.js";
-import { stylesBase } from "./styles/base.js";
-import { stylesLandscape } from "./styles/landscape.js";
+export default function ProfileScreen() {
 
-export default function ProfileScreen({ navigation }) {
+  /*------------------------------------------------*/
+  /*--------------FRONT-END APP CODE ---------------*/
+  /*------------------------------------------------*/
 
-    /*------------------------------------------------*/
-    /*---------------BACK-END APP CODE ---------------*/
-    /*------------------------------------------------*/
-
-    //global variables
-    let username;
-    let userPassword;
-
-    function signUp(email, password) {
-      const auth = getAuth();
-      createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-          // Signed in 
-          const user = userCredential.user;
-          console.log(user);      
-        }).catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-        });
-    }
-
-    function signIn(navigation) {
-      const auth = getAuth();
-      signInWithEmailAndPassword(auth, username, userPassword).then((userCredential) => {
-          // Signed in 
-          const user = userCredential.user;
-          console.log("User", user.uid);
-          // navigation.navigate('DatabaseTest');
-          // ...
-      }).catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorCode);
-          console.log(errorMessage);
-      });
-    }
-
-    //element for input
-    const Input = (props) => {
-      const [text, onChangeText] = React.useState("");
-      props.func(text);
-      return (
-          <TextInput
-            style={props.inputStyle}
-            onChangeText={onChangeText}
-            value={text}
-            placeholder={props.placeHolderText}
-            secureTextEntry={props.secure}
-          />
-      );
-    };
-
-    /*------------------------------------------------*/
-    /*--------------FRONT-END APP CODE ---------------*/
-    /*------------------------------------------------*/
-
-    //used to detect device orientation.  If the device is in portrait mode, portrait will be true, else it will be false
-    let {portrait} = useDeviceOrientation();  
-
-    //defines layout for portrait mode 
-    if (portrait == true)
-    { 
-      return (
-        <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
-          <View style={[stylesBase.container, stylesPortrait.container]}>
-
-              {/* Profile Picture Code */}
-              <View style={[stylesBase.topBorder, stylesPortrait.topBorder]}>
-                  <Image style={{width: "45%", height: "45%"}} source={require("../../../assets/resume.jpg")}></Image>
-                  {/*"Edit Profile" Button*/}
-                  <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
-                      <View><Text style={{color:"white"}}>Edit Profile</Text></View>
-                  </TouchableOpacity>
-              </View>
- 
-
-              {/* Container for everything below the logo */}
-              <View style={stylesPortrait.contentContainer}>
-                <Text>About Me</Text>
-                <Input placeHolderText={"About Me"} secure={true} func={(val) => userPassword = val} inputStyle={[stylesPortrait.textBox/*, stylesPortrait.centerText*/]}/>
-
-              </View>
-          </View>
-        </TouchableWithoutFeedback>
-      );
-    }
-
-    //defines layout for landscape mode 
-    else
-    {
-      return ( 
-        <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
-          {/* Content container */}
-          <View style={[stylesBase.container, stylesLandscape.container]}>
-            {/* To be completed */}
-          </View>
-        </TouchableWithoutFeedback>
-      );
-    }
+  return (
+    <View style={styleSheet.MainContainer}>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent:'space-around' }} >
+        <View style={styleSheet.topBorder}>
+            <Image style={styleSheet.Photo} source={require("../../../assets/profilepicture.png")}></Image>
+            <Text style={styleSheet.NameText}>FirstName LastName</Text>
+            <Text style={styleSheet.LocationText}>Location</Text>
+            <TouchableOpacity style={styleSheet.EditProfileButton}><Text style={styleSheet.EditProfileText}>Edit Profile</Text></TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styleSheet.button}><Image source={require("../../../assets/messageicon.png")} resizeMode="contain" style={{flex:.6 }}></Image></TouchableOpacity>
+        <TouchableOpacity style={styleSheet.button}><Image source={require("../../../assets/mailicon.png")} resizeMode="contain" style={{flex:.6 }}></Image></TouchableOpacity>
+        <TouchableOpacity style={styleSheet.button}><Image source={require("../../../assets/phoneicon.png")} resizeMode="contain" style={{flex:.6 }}></Image></TouchableOpacity>
+        <Text style={styleSheet.AboutMeText}>About Me</Text>
+        <View style={styleSheet.AboutMeSquare}/>
+        <Text style={styleSheet.UpcomingEventsText}>Upcoming Events</Text>
+        <View style={styleSheet.UpcomingEventsSquare}/>
+      </View>
+    </View>
+  );
 }
 
+const styleSheet = StyleSheet.create({
 
+  MainContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  Photo: {
+    top: 45,
+    left: 100,
+    width: "50%",
+    height: "50%"
+  },
+  NameText: {
+    color: "black",
+    fontSize: "25",
+    textAlign: "center",
+    top: 60
+  },
+  LocationText: {
+    color: "black",
+    fontSize: "15",
+    textAlign: "center",
+    top: 70
+  },  
+  EditProfileButton:{
+    backgroundColor: "rgb(0, 97, 117)",
+    marginHorizontal: "5%",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "12%",
+    width: "90%",
+    marginTop: "3%",
+    marginBottom: 10,
+    borderRadius: 10,
+    top: "18%"
+  },
+  topBorder:{
+    height: 400,
+    width: "100%",
+    backgroundColor: "rgb(219, 233, 236)"
+  },
+  button: {
+    backgroundColor: 'rgb(242, 144, 91)',
+    width: 100,
+    height: 75,
+    margin: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: "20",
+  },
+  AboutMeText: {
+    paddingTop: 15,
+    paddingBottom: 15,
+    fontSize: 20,
+    right: 140,
+  },
+  EditProfileText: {
+    color: "white",
+    fontSize: "15"
+  },
+  UpcomingEventsText: {
+    paddingTop: 20,
+    paddingBottom: 15,
+    fontSize: 20,
+    right: 110,
+  },
+  AboutMeSquare: {
+    width: 380,
+    height: 100, 
+    backgroundColor: "rgb(249, 203, 177)",
+    borderRadius: "20",
+  },
+  UpcomingEventsSquare: {
+    width: 380,
+    height: 150, 
+    backgroundColor: "rgb(249, 203, 177)",
+    borderRadius: "20",
+  }
+
+});
