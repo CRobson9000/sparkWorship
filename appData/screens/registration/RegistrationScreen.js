@@ -2,32 +2,30 @@ import { Image, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, T
 import React from 'react';
 import { useDeviceOrientation } from '@react-native-community/hooks';
 import { LinearGradient } from 'expo-linear-gradient';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "@firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "@firebase/auth";
 
 //import statements for styles
-import { stylesPortrait } from "./styles/portrait.js";
-import { stylesBase } from "./styles/base.js";
-import { stylesLandscape } from "./styles/landscape.js";
+import { stylesBase } from "../../global/styles/base2";
+import { stylesPortrait } from "../../global/styles/portrait.js";
 
-//database processing import statements
-import { getDatabase, ref, set } from 'firebase/database';
+// import { stylesLandscape } from "./styles/landscape.js";
+import { Dimensions, TouchableHighlight } from 'react-native';
 
 //import components
 import { Input } from '../../global/components.js'
 
-export default function RegistrationScreen({ navigation }) {
+//database processing import statements
+import { getDatabase, ref, set } from 'firebase/database';
+
+export default function RegisterScreen({ navigation }) {
 
     /*------------------------------------------------*/
     /*----------BACK-END APP CODE ----------*/
     /*------------------------------------------------*/
-
-    //global variables
-    let username;
-    let userPassword;
-
-    //global values for now!
-    let newUserEmail = "test@gmail.com";
-    let newUserPassword = "123456";
+    let inputtedEmail = "";
+    let inputtedPassword = "";
+    let confirmPassword = "";
+    let location = "";
 
     //userId
     let userId = {
@@ -48,36 +46,28 @@ export default function RegistrationScreen({ navigation }) {
     function signUp(navigation) {
       const auth = getAuth();
       //creates a new user in "authentication" of firebase
-      createUserWithEmailAndPassword(auth, newUserEmail, newUserPassword).then((userCredential) => {
-        console.log("User created Successly!");
-          const user = userCredential.user;
-          //set the global userId, which will call an observer
-          userId.setVal(user.uid);   
-      }).catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage);
-      });
-    }
-
-    function signIn(navigation) {
-      const auth = getAuth();
-      signInWithEmailAndPassword(auth, username, userPassword).then((userCredential) => {
-          // Signed in with a valid username and password 
-          const user = userCredential.user;
-          console.log("User", user.uid);
-          navigation.navigate('DatabaseTest');
-      }).catch((error) => {
+      if (inputtedPassword == confirmPassword) {
+        createUserWithEmailAndPassword(auth, inputtedEmail, inputtedPassword).then((userCredential) => {
+          console.log("User created successfully!");
+            const user = userCredential.user;
+            //set the global userId, which will call an observer
+            userId.setVal(user.uid);
+            navigation.navigate("DatabaseTest");   
+        }).catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(errorCode);
           console.log(errorMessage);
-      });
+        });
+      }
+      else {
+        console.log("Error: passwords do not match");
+      }
     }
 
     //--------------------
     //   OBSERVERS
     //--------------------
+
     const createUserSpace = () => {
       //verify that the new user has an id
       console.log("User", userId.getVal());
@@ -87,9 +77,10 @@ export default function RegistrationScreen({ navigation }) {
       const db = getDatabase();
       const reference = ref(db, `Users/${uid}`);
       set(reference, {
-          created: true
+          location: location
       });
     }
+
 
     /*------------------------------------------------*/
     /*----------FRONT-END APP CODE ----------*/
@@ -98,8 +89,8 @@ export default function RegistrationScreen({ navigation }) {
     //used to detect device orientation.  If the device is in portrait mode, portrait will be true, else it will be false
     let {portrait} = useDeviceOrientation();
     
-    //register a listener for when a uid is set
-    userId.registerListener(createUserSpace);
+     //register a listener for when a uid is set
+     userId.registerListener(createUserSpace);
     
     //defines layout for portrait mode 
     if (portrait == true)
@@ -107,29 +98,83 @@ export default function RegistrationScreen({ navigation }) {
       return (
         <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
           <View style={[stylesBase.container, stylesPortrait.container]}>
-              <LinearGradient 
-              colors={['rgba(0,0,0,0.8)', 'transparent']}
-              style={stylesBase.background}
-              />
+            <TouchableHighlight
+              style = {{
+                borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
+                width: Dimensions.get('window').width * 0.5,
+                height: Dimensions.get('window').width * 0.5,
+                backgroundColor:'#DBE9EC',
+                justifyContent: 'center',
+                alignItems: 'center',
+                left: 110,
+                top: 100
+              }}
+            >
+              <Text style={{color: "white"}}> Register </Text>
+            </TouchableHighlight>
 
-              {/* Logo code */}
-              <View style={[stylesBase.topBorder, stylesPortrait.topBorder]}>
-                  <Image style={{width: "150%", height: "150%"}} source={require("../../../assets/logo.png")}></Image>
-              </View>
+            {/* Mini circles */}
+            <View
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: Math.round(Dimensions.get('window').width / 2),
+                left: 20,
+                top: 60,
+                backgroundColor: Math.round(Dimensions.get('window').width / 2),
+              }}></View>
 
-              {/* Container for everything below the logo */}
-              <View style={stylesPortrait.contentContainer}>
-                <Input placeHolderText={"Username"} secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
-                <Input placeHolderText={"Password"} secure={true} func={(val) => userPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+            <View
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: Math.round(Dimensions.get('window').width / 2),
+                right: -320,
+                top: 50,
+                backgroundColor: '#006175',
+              }}></View>
 
-                <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
-                  <View><Text style={{color: "white"}}>Login</Text></View>
-                </TouchableOpacity>
+            <View
+              style={{
+                width: 85,
+                height: 85,
+                borderRadius: Math.round(Dimensions.get('window').width / 2),
+                right: -325,
+                bottom: 260,
+                backgroundColor: '#EE9344',
+              }}></View>
 
-                <TouchableOpacity activeOpacity={1} onPress = {() => signUp(navigation)}>
-                  <Text style={[stylesPortrait.centerText]}>Register New User</Text>
-                </TouchableOpacity>
-              </View>
+            <View
+              style={{
+                width: 25,
+                height: 25,
+                borderRadius: Math.round(Dimensions.get('window').width / 2),
+                left: 50,
+                bottom: 300,
+                backgroundColor: '#006175',
+              }}></View>
+
+            <View
+              style={{
+                width: 25,
+                height: 25,
+                borderRadius: Math.round(Dimensions.get('window').width / 2),
+                left: 135,
+                bottom: 68,
+                backgroundColor: '#EE9344',
+              }}></View>
+
+            {/* Container for everything below the logo */}
+            <View style={stylesPortrait.contentContainer}>
+              <Input placeHolderText={"Email"} secure={false} func= {(val) => inputtedEmail = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+              <Input placeHolderText={"Password"} secure={false} func={(val) => inputtedPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+              <Input placeHolderText={"Confirm Password"} secure={false} func={(val) => confirmPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+              <Input placeHolderText={"Location"} secure={false} func={(val) => location = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+
+              <TouchableOpacity activeOpacity={1} onPress = {() => signUp(navigation)} style={[stylesPortrait.button]}>
+                <View><Text style={{color: "white"}}>Create new User</Text></View>
+              </TouchableOpacity>
+            </View>
           </View>
         </TouchableWithoutFeedback>
       );

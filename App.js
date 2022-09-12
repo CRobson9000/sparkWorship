@@ -7,13 +7,15 @@ import LocationData from './appData/screens/LocationData.js';
 // import {enableLatestRenderer} from 'react-native-maps';
 
 // enableLatestRenderer();
+import RegistrationScreen from './appData/screens/registration/RegistrationScreen.js';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   return (
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="LocationData">
+        <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="LoginScreen">
+          <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="DatabaseTest" component={DatabaseTest} />
           <Stack.Screen name="LocationData" component={LocationData} />
