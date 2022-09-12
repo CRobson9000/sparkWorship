@@ -54,7 +54,7 @@ export default function DatabaseTest({ navigation }) {
                     <Text style={{color: "white"}}> Location Data Test </Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "blue"}]} onPress={() => navigation.navigate()}>
+                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "blue"}]} onPress={() => navigation.navigate("SparkView")}>
                     <Text style={{color: "white"}}> Sparks Search </Text>
                 </TouchableHighlight>
             </View>
