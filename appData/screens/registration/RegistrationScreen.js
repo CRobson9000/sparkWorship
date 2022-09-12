@@ -156,6 +156,9 @@ export default function RegisterScreen({ navigation }) {
               <View style={stylesPortrait.contentContainer}>
                 <Input placeHolderText={"Username"} secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
                 <Input placeHolderText={"Password"} secure={true} func={(val) => userPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+                <Input placeHolderText={"Confirm Password"} secure={true} func={(val) => userPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+                <Input placeHolderText={"Location"} secure={true} func={(val) => userPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+                
 
                 {/* <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate('LoginScreen')}>
                   <Text style={[stylesPortrait.centerText]}>Forgot password?</Text>
@@ -163,7 +166,7 @@ export default function RegisterScreen({ navigation }) {
 
 
                 <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
-                  <View><Text style={{color: "white"}}>Login</Text></View>
+                  <View><Text style={{color: "white"}}>Register</Text></View>
                 </TouchableOpacity>
 
                 <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate('LoginScreen')}>
