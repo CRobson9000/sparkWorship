@@ -46,7 +46,7 @@ export default function DatabaseTest({ navigation }) {
                 {/* Database Stuff */}
                 <View style={[mainStyles.header, {backgroundColor: "yellow"}]}><Text> Current Navigation Router </Text></View>
 
-                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "red"}]} onPress={() => navigation.navigate()}>
+                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "red"}]} onPress={() => navigation.navigate("ProfileScreen")}>
                     <Text style={{color: "white"}}> Profile Page </Text>
                 </TouchableHighlight>
 

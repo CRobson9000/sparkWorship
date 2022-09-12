@@ -10,11 +10,14 @@ export default function ProfileScreen() {
   return (
     <View style={styleSheet.MainContainer}>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent:'space-around' }} >
+        {/* <Text> Hi </Text> */}
         <View style={styleSheet.topBorder}>
-            <Image style={styleSheet.Photo} source={require("../../../assets/profilepicture.png")}></Image>
-            <Text style={styleSheet.NameText}>FirstName LastName</Text>
-            <Text style={styleSheet.LocationText}>Location</Text>
-            <TouchableOpacity style={styleSheet.EditProfileButton}><Text style={styleSheet.EditProfileText}>Edit Profile</Text></TouchableOpacity>
+          <Image style={styleSheet.Photo} source={require("../../../assets/profilepicture.png")}></Image>
+          <Text style={styleSheet.NameText}>FirstName LastName</Text>
+          <Text style={styleSheet.LocationText}>Location</Text> 
+          <TouchableOpacity style={styleSheet.EditProfileButton}>
+            <Text style={styleSheet.EditProfileText}>Edit Profile</Text>
+          </TouchableOpacity>
         </View>
         <TouchableOpacity style={styleSheet.button}><Image source={require("../../../assets/messageicon.png")} resizeMode="contain" style={{flex:.6 }}></Image></TouchableOpacity>
         <TouchableOpacity style={styleSheet.button}><Image source={require("../../../assets/mailicon.png")} resizeMode="contain" style={{flex:.6 }}></Image></TouchableOpacity>
@@ -42,13 +45,13 @@ const styleSheet = StyleSheet.create({
   },
   NameText: {
     color: "black",
-    fontSize: "25",
+    fontSize: 25,
     textAlign: "center",
     top: 60
   },
   LocationText: {
     color: "black",
-    fontSize: "15",
+    fontSize: 15,
     textAlign: "center",
     top: 70
   },  
@@ -76,35 +79,35 @@ const styleSheet = StyleSheet.create({
     margin: 5,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: "20",
+    borderRadius: 20,
   },
   AboutMeText: {
     paddingTop: 15,
     paddingBottom: 15,
     fontSize: 20,
-    right: 140,
+    right: "15%",
   },
   EditProfileText: {
     color: "white",
-    fontSize: "15"
+    fontSize: 15
   },
   UpcomingEventsText: {
     paddingTop: 20,
     paddingBottom: 15,
     fontSize: 20,
-    right: 110,
+    right: "10%",
   },
   AboutMeSquare: {
-    width: 380,
+    width: "90%",
     height: 100, 
     backgroundColor: "rgb(249, 203, 177)",
-    borderRadius: "20",
+    borderRadius: 20,
   },
   UpcomingEventsSquare: {
-    width: 380,
-    height: 150, 
+    width: "90%",
+    height: "15%", 
     backgroundColor: "rgb(249, 203, 177)",
-    borderRadius: "20",
+    borderRadius: 20,
   }
 
 });
