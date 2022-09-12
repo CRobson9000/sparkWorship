@@ -12,11 +12,46 @@ const stylesPortrait = StyleSheet.create({
         width: "100%",
         height: "100%",
     },
-    sparkContainer:{
+    sparkContainer:
+    {
         width:"100%",
         height:"82%",
+        backgroundColor: "rgba(255,255,255,1)",
+        flexDirection: "column", 
+        justifyContent: "space-between", 
+        alignItems: "center"
+    },
+    veryTopBox:{
+        marginTop: "5%",
+    },
+    veryBottomBox:{
+        marginBottom: "5%",
+    },
+    boxOne:
+    {
+        backgroundColor: "#DBE9EC",
+        height: "16%",
+        width: "80%",
+        borderRadius: 30,
+        flexDirection: "row",
         justifyContent: "space-between",
-        backgroundColor: "rgba(255,255,255,1)"
+        alignItems: "center",
+    },
+    boxTwo:
+    {
+        backgroundColor: "#B3D0D6",
+        height: "16%",
+        width: "80%",
+        borderRadius: 30,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    boxText:{
+        width: "58%", 
+        marginLeft:"10%",
+        marginTop: "2%",
+        marginBottom: "2%",
     },
     bottomContainer:{
         width:"100%",
