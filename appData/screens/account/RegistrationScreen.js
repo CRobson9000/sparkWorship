@@ -5,8 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, createUserWithEmailAndPassword } from "@firebase/auth";
 
 //import statements for styles
-import { stylesBase } from "../../styles/base";
-import { stylesPortrait } from "../../styles/portrait.js";
+import { stylesPortrait } from "../../styles/portrait";
 
 // import { stylesLandscape } from "./styles/landscape.js";
 import { Dimensions, TouchableHighlight } from 'react-native';
@@ -94,7 +93,7 @@ export default function RegisterScreen({ navigation }) {
     
   return (
     <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
-      <View style={[stylesBase.container, stylesPortrait.container]}>
+      <View style={stylesPortrait.container}>
         <TouchableHighlight
           style = {{
             borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,

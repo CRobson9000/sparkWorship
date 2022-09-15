@@ -1,13 +1,9 @@
 import { Image, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import React from 'react';
-import { useDeviceOrientation } from '@react-native-community/hooks';
-import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
 
 //import statements for styles
-import { stylesBase } from "../../styles/base.js";
 import { stylesPortrait } from "../../styles/portrait.js";
-import { stylesLandscape } from "../../styles/landscape.js";
 import { Dimensions, TouchableHighlight } from 'react-native';
 
 //import components
@@ -15,160 +11,134 @@ import { Input } from '../../components/components.js'
 
 export default function LoginScreen({ navigation }) {
 
-    /*------------------------------------------------*/
-    /*----------BACK-END APP CODE ----------*/
-    /*------------------------------------------------*/
+  /*------------------------------------------------*/
+  /*----------BACK-END APP CODE ----------*/
+  /*------------------------------------------------*/
 
-    //global variables
-    let username;
-    let userPassword;
+  //global variables
+  let username;
+  let userPassword;
 
-    function signIn(navigation) {
-      const auth = getAuth();
-      signInWithEmailAndPassword(auth, username, userPassword).then((userCredential) => {
-          // Signed in with a valid username and password 
-          const user = userCredential.user;
-          console.log("User", user.uid);
-          navigation.navigate('DatabaseTest');
-      }).catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorCode);
-          console.log(errorMessage);
-      });
-    }
+  function signIn(navigation) {
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, username, userPassword).then((userCredential) => {
+        // Signed in with a valid username and password 
+        const user = userCredential.user;
+        console.log("User", user.uid);
+        navigation.navigate('DatabaseTest');
+    }).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+    });
+  }
 
-    //--------------------
-    //   OBSERVERS
-    //--------------------
+  //--------------------
+  //   OBSERVERS
+  //--------------------
     
+  //--------------------
+  //   LISTENERS
+  //--------------------
 
-    /*------------------------------------------------*/
-    /*----------FRONT-END APP CODE ----------*/
-    /*------------------------------------------------*/
+  /*------------------------------------------------*/
+  /*----------FRONT-END APP CODE ----------*/
+  /*------------------------------------------------*/
+ 
+  return (
+    <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
+      <View style={stylesPortrait.container}>
+        <TouchableHighlight
+          style = {{
+            borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
+            width: Dimensions.get('window').width * 0.5,
+            height: Dimensions.get('window').width * 0.5,
+            backgroundColor:'#DBE9EC',
+            justifyContent: 'center',
+            alignItems: 'center',
+            left: 110,
+            top: 100
+          }}
+        >
+          <Text style={{color: "white"}}> Login </Text>
+        </TouchableHighlight>
 
-    //used to detect device orientation.  If the device is in portrait mode, portrait will be true, else it will be false
-    let {portrait} = useDeviceOrientation();
-    
-    //defines layout for portrait mode 
-    if (portrait == true)
-    { 
-      return (
-        <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
-          <View style={[stylesBase.container, stylesPortrait.container]}>
-              {/* <LinearGradient 
-              colors={['rgba(0,0,0,0.8)', 'transparent']}
-              style={stylesBase.background}
-              /> */}
-    
-              {/* Logo code */}
-              {/* <View style={[stylesBase.topBorder, stylesPortrait.topBorder,]}>
-              <Text style={{color: "white"}}>Login</Text>
-              </View> */}
-              
-              <TouchableHighlight
-                style = {{
-                  borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
-                  width: Dimensions.get('window').width * 0.5,
-                  height: Dimensions.get('window').width * 0.5,
-                  backgroundColor:'#DBE9EC',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  left: 110,
-                  top: 100
-                }}
-              >
-                <Text style={{color: "white"}}> Login </Text>
-              </TouchableHighlight>
+        {/* Mini circles */}
+        <View
+          style={{
+            width: 50,
+            height: 50,
+            borderRadius: Math.round(Dimensions.get('window').width / 2),
+            left: 20,
+            top: 60,
+            backgroundColor: '#006175',
+          }}></View>
 
-              {/* Mini circles */}
-              <View
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: Math.round(Dimensions.get('window').width / 2),
-                  left: 20,
-                  top: 60,
-                  backgroundColor: '#006175',
-                }}></View>
+        <View
+          style={{
+            width: 50,
+            height: 50,
+            borderRadius: Math.round(Dimensions.get('window').width / 2),
+            right: -320,
+            top: 50,
+            backgroundColor: '#006175',
+          }}></View>
 
-              <View
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: Math.round(Dimensions.get('window').width / 2),
-                  right: -320,
-                  top: 50,
-                  backgroundColor: '#006175',
-                }}></View>
+        <View
+          style={{
+            width: 85,
+            height: 85,
+            borderRadius: Math.round(Dimensions.get('window').width / 2),
+            right: -325,
+            bottom: 260,
+            backgroundColor: '#E07415',
+          }}></View>
 
-              <View
-                style={{
-                  width: 85,
-                  height: 85,
-                  borderRadius: Math.round(Dimensions.get('window').width / 2),
-                  right: -325,
-                  bottom: 260,
-                  backgroundColor: '#E07415',
-                }}></View>
+        <View
+          style={{
+            width: 25,
+            height: 25,
+            borderRadius: Math.round(Dimensions.get('window').width / 2),
+            left: 50,
+            bottom: 300,
+            backgroundColor: '#006175',
+          }}></View>
 
-              <View
-                style={{
-                  width: 25,
-                  height: 25,
-                  borderRadius: Math.round(Dimensions.get('window').width / 2),
-                  left: 50,
-                  bottom: 300,
-                  backgroundColor: '#006175',
-                }}></View>
+        <View
+          style={{
+            width: 25,
+            height: 25,
+            borderRadius: Math.round(Dimensions.get('window').width / 2),
+            left: 135,
+            bottom: 68,
+            backgroundColor: '#EE9344',
+          }}></View>
 
-              <View
-                style={{
-                  width: 25,
-                  height: 25,
-                  borderRadius: Math.round(Dimensions.get('window').width / 2),
-                  left: 135,
-                  bottom: 68,
-                  backgroundColor: '#EE9344',
-                }}></View>
+        {/* Container for everything below the logo */}
+        <View style={stylesPortrait.contentContainer}>
+        <Text style={[stylesPortrait.username]}>Email</Text>
+          <Input secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
 
-              {/* Container for everything below the logo */}
-              <View style={stylesPortrait.contentContainer}>
-              <Text style={[stylesPortrait.username]}>Email</Text>
-                <Input secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+          <Text style={[stylesPortrait.password]}>Password</Text>
+          <Input secure={true} func={(val) => userPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
 
-                <Text style={[stylesPortrait.password]}>Password</Text>
-                <Input secure={true} func={(val) => userPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
-
-                <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate('LoginScreen')}>
-                  <Text style={[stylesPortrait.forgotPassword]}>Forgot password?</Text>
-                </TouchableOpacity>
+          <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate('LoginScreen')}>
+            <Text style={[stylesPortrait.forgotPassword]}>Forgot password?</Text>
+          </TouchableOpacity>
 
 
-                <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
-                  <View><Text style={{color: "white"}}>Login</Text></View>
-                </TouchableOpacity>
+          <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
+            <View><Text style={{color: "white"}}>Login</Text></View>
+          </TouchableOpacity>
 
-                <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
-                  <Text style={[stylesPortrait.centerText]}>Register New User</Text>
-                </TouchableOpacity>
-              </View>
-          </View>
-        </TouchableWithoutFeedback>
-      );
-    }
-
-    //defines layout for landscape mode 
-    else
-    {
-      return ( 
-        <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
-          {/* Content container */}
-          <View style={[stylesBase.container, stylesLandscape.container]}>
-            {/* To be completed */}
-          </View>
-        </TouchableWithoutFeedback>
-      );
-    }
+          <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+            <Text style={[stylesPortrait.centerText]}>Register New User</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </TouchableWithoutFeedback>
+  );
 }
+
 
