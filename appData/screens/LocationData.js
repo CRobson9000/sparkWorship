@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import React from 'react';
-import { Input } from '../global/components';
+import { Input } from '../components/components';
 import Geocoder from 'react-native-geocoding';
 
 export default function LocationData({ navigation }) {

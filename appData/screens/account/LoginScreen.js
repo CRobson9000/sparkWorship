@@ -5,13 +5,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
 
 //import statements for styles
-import { stylesBase } from "../../global/styles/base2.js";
-import { stylesPortrait } from "../../global/styles/portrait.js";
-import { stylesLandscape } from "../../global/styles/landscape.js";
+import { stylesBase } from "../../styles/base.js";
+import { stylesPortrait } from "../../styles/portrait.js";
+import { stylesLandscape } from "../../styles/landscape.js";
 import { Dimensions, TouchableHighlight } from 'react-native';
 
 //import components
-import { Input } from '../../global/components.js'
+import { Input } from '../../components/components.js'
 
 export default function LoginScreen({ navigation }) {
 

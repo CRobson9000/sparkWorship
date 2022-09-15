@@ -1,8 +1,7 @@
 import {Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import React from 'react';
 
-import { stylesPortrait } from "./styles/portrait";
-import { stylesBase} from "./styles/base";
+import { stylesPortrait } from "./sparkView/styles/portrait";
 
 export default function SparkView({ navigation }) {
 return(<View style={[stylesBase.container]}>
