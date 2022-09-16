@@ -73,8 +73,7 @@ const stylesPortrait = StyleSheet.create({
         height: "7.5%",
         marginBottom: "10%",
         borderWidth: 3
-    }
-
+    },
 });
 
 export { stylesPortrait }
