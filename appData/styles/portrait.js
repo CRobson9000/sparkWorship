@@ -1,8 +1,14 @@
 import { StyleSheet } from 'react-native';
-import colors from '../../../config/colors';
+import colors from '../../config/colors';
 
 
 const stylesPortrait = StyleSheet.create({
+    container: 
+    {
+      flex: 1,
+      flexDirection: "column",
+      backgroundColor: colors.secondary
+    },
     topBorder:
     {
         height: "40%"
@@ -67,8 +73,7 @@ const stylesPortrait = StyleSheet.create({
         height: "7.5%",
         marginBottom: "10%",
         borderWidth: 3
-    }
-
+    },
 });
 
 export { stylesPortrait }
