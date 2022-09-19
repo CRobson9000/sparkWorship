@@ -9,6 +9,7 @@ export default function ProfileScreen() {
 
   return (
     <View style={styleSheet.MainContainer}>
+<<<<<<< HEAD
         <View style={styleSheet.topBorder}>
             <Image style={styleSheet.profilePicture} source={require("../../../assets/exampleprofilepic.jpg")}></Image>
             <Text style={styleSheet.nameText}>Austin Smith</Text>
@@ -25,6 +26,17 @@ export default function ProfileScreen() {
               <TouchableOpacity style={styleSheet.button}><Image source={require("../../../assets/phoneicon.png")} resizeMode="contain" style={{flex:.6 }}></Image></TouchableOpacity>
             </View>
             <TouchableOpacity style={styleSheet.EditProfileButton}><Text style={styleSheet.EditProfileText}>Edit Profile</Text></TouchableOpacity>
+=======
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent:'space-around' }} >
+        {/* <Text> Hi </Text> */}
+        <View style={styleSheet.topBorder}>
+          <Image style={styleSheet.Photo} source={require("../../../assets/profilepicture.png")}></Image>
+          <Text style={styleSheet.NameText}>FirstName LastName</Text>
+          <Text style={styleSheet.LocationText}>Location</Text> 
+          <TouchableOpacity style={styleSheet.EditProfileButton}>
+            <Text style={styleSheet.EditProfileText}>Edit Profile</Text>
+          </TouchableOpacity>
+>>>>>>> 4ebc2777550c7f5f5301d36e83ffc606bb6e3606
         </View>
         <Text style={styleSheet.Text}>About Me</Text>
         <View style={styleSheet.AboutMeSquare}/>
@@ -68,9 +80,15 @@ const styleSheet = StyleSheet.create({
   },
   title: {
     color: "black",
+<<<<<<< HEAD
     fontSize: "20",
     left: "55%",
     bottom: "8%"
+=======
+    fontSize: 25,
+    textAlign: "center",
+    top: 60
+>>>>>>> 4ebc2777550c7f5f5301d36e83ffc606bb6e3606
   },
   nameText: {
     color: "black",
@@ -80,9 +98,15 @@ const styleSheet = StyleSheet.create({
   },
   locationText: {
     color: "black",
+<<<<<<< HEAD
     fontSize: "15",
     left: "50%",
     bottom: "5%"
+=======
+    fontSize: 15,
+    textAlign: "center",
+    top: 70
+>>>>>>> 4ebc2777550c7f5f5301d36e83ffc606bb6e3606
   },  
   EditProfileButton:{
     backgroundColor: "rgb(0, 97, 117)",
@@ -106,31 +130,58 @@ const styleSheet = StyleSheet.create({
     height: 60,
     justifyContent: "center",
     alignItems: "center",
+<<<<<<< HEAD
     borderRadius: 25,
+=======
+    borderRadius: 20,
+>>>>>>> 4ebc2777550c7f5f5301d36e83ffc606bb6e3606
   },
   Text: {
     paddingTop: "5%",
     paddingBottom: "3%",
     fontSize: 20,
+<<<<<<< HEAD
     left: "5%"
+=======
+    right: "15%",
+>>>>>>> 4ebc2777550c7f5f5301d36e83ffc606bb6e3606
   },
   EditProfileText: {
     color: "white",
-    fontSize: "15"
+    fontSize: 15
   },
+<<<<<<< HEAD
   AboutMeSquare: {
     width: "90%",
     height: "10%",
     left: "4%", 
     backgroundColor: "rgb(249, 203, 177)",
     borderRadius: "20%",
+=======
+  UpcomingEventsText: {
+    paddingTop: 20,
+    paddingBottom: 15,
+    fontSize: 20,
+    right: "10%",
+  },
+  AboutMeSquare: {
+    width: "90%",
+    height: 100, 
+    backgroundColor: "rgb(249, 203, 177)",
+    borderRadius: 20,
+>>>>>>> 4ebc2777550c7f5f5301d36e83ffc606bb6e3606
   },
   UpcomingEventsSquare: {
     width: "90%",
     height: "15%", 
+<<<<<<< HEAD
     left: "4%",
     backgroundColor: "rgb(249, 203, 177)",
     borderRadius: "20%",
+=======
+    backgroundColor: "rgb(249, 203, 177)",
+    borderRadius: 20,
+>>>>>>> 4ebc2777550c7f5f5301d36e83ffc606bb6e3606
   }
 
 });
