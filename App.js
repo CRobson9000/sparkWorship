@@ -7,25 +7,22 @@ import DatabaseTest from './appData/screens/DatabaseTest.js';
 import SparkView from './appData/screens/sparks/sparkView.js';
 import ProfileScreen from './appData/screens/profile/ProfileScreen';
 import LocationData from './appData/screens/LocationData.js';
+import ProfileCreation from './appData/screens/profile/ProfileCreation'
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   return (
-      <NavigationContainer>
-<<<<<<< HEAD
-        <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="ProfileScreen">
-=======
-        <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="LoginScreen">
-          <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
->>>>>>> 4ebc2777550c7f5f5301d36e83ffc606bb6e3606
-          <Stack.Screen name="LoginScreen" component={LoginScreen} />
-          <Stack.Screen name="DatabaseTest" component={DatabaseTest} />
-          <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-          <Stack.Screen name="LocationData" component={LocationData} />
-          <Stack.Screen name="SparkView" component={SparkView}/>
-        </Stack.Navigator>
-      </NavigationContainer>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="ProfileCreation">
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        <Stack.Screen name="DatabaseTest" component={DatabaseTest} />
+        <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+        <Stack.Screen name="ProfileCreation" component={ProfileCreation}/>
+        <Stack.Screen name="LocationData" component={LocationData} />
+        <Stack.Screen name="SparkView" component={SparkView}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
