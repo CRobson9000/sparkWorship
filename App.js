@@ -8,6 +8,7 @@ import SparkView from './appData/screens/sparks/sparkView.js';
 import ProfileScreen from './appData/screens/profile/ProfileScreen';
 import LocationData from './appData/screens/LocationData.js';
 import ProfileCreation from './appData/screens/profile/ProfileCreation'
+import MyTest from './appData/screens/MyTest.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ function App() {
         <Stack.Screen name="ProfileCreation" component={ProfileCreation}/>
         <Stack.Screen name="LocationData" component={LocationData} />
         <Stack.Screen name="SparkView" component={SparkView}/>
+        <Stack.Screen name="Test" component={MyTest}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
