@@ -63,7 +63,7 @@ export default function ProfileScreen() {
     <Screen1 />, <Screen2 />, <Screen3 />, <Screen4 />
   ];
 
-  let [currentIndex, setCurrentIndex] = React.useState(1);
+  let [currentIndex, setCurrentIndex] = React.useState(0);
 
   function limitScroll(){
     if (currentIndex < 0) {
@@ -88,38 +88,8 @@ export default function ProfileScreen() {
   return (
     <View style={styleSheet.MainContainer}> 
         <View style={styleSheet.topBorder}></View> 
-        {/* <View style={styleSheet.content}> */}
-            <Slider currentIndex = {currentIndex} screens = {myScreens} />
-        {/* </View> */}
-        {/* <Text style={styleSheet.text}>Name</Text>
-            <TextInput style={[styleSheet.inputBox]}/>
-            <Text style={styleSheet.text}>Email</Text>
-            <TextInput style={[styleSheet.inputBox]}/>
-            <Text style={styleSheet.text}>Password</Text>
-            <TextInput style={[styleSheet.inputBox]}/>
-            <Text style={styleSheet.text}>Phone Number</Text>
-            <TextInput style={[styleSheet.inputBox]}/>
-            <Text style={styleSheet.text}>Location</Text>
-            <TextInput style={[styleSheet.inputBox]}/> */}
+        <Slider currentIndex = {currentIndex} screens = {myScreens} />
 
-        {/* <Text style={styleSheet.text}>Church Name</Text>
-            <TextInput style={[styleSheet.inputBox]}/>
-            <Text style={styleSheet.text}>Denomination</Text>
-            <TextInput style={[styleSheet.inputBox]}/>
-            <Text style={styleSheet.text}>Church Location</Text>
-            <TextInput style={[styleSheet.inputBox]}/> */}
-
-        {/* <Text style={styleSheet.text}>Instrument</Text>
-        <TextInput style={[styleSheet.inputBox]}/>
-        <Text style={styleSheet.text}>Total Years of Experience</Text>
-        <TextInput style={[styleSheet.inputBox]}/>
-        <Text style={styleSheet.text}>Years of Praise Brand Experience (Optional)</Text>
-        <TextInput style={[styleSheet.inputBox]}/>
-        <TouchableOpacity style={styleSheet.addInstrumentButton}><Text style={styleSheet.buttonText}>+ Add Instrument</Text></TouchableOpacity> */}
-
-        {/* <Text style={styleSheet.text}>Biography (Optional)</Text>
-            <Text style={styleSheet.italicText}>Tell attendees more about you!</Text>
-            <View style={styleSheet.BiographySquare}/> */}
         <View style={styleSheet.row}>
             <TouchableOpacity style={styleSheet.button} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Previous</Text></TouchableOpacity>
             <TouchableOpacity style={styleSheet.button} onPress = {() => setCurrentIndex(currentIndex + 1)}><Text style={styleSheet.buttonText}>Next</Text></TouchableOpacity>
