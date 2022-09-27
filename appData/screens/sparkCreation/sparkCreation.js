@@ -2,20 +2,24 @@ import {StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoi
 import React from 'react';
 
 import { stylesPortrait } from "../../styles/portrait";
-import colors from '../../../config/colors'
+import colors from '../../../config/colors';
 
-export default function sparkCreation({ navigation }) {
+export default function SparkCreation({ navigation }) {
     return(
-        <View style={stylesPortrait.container}>
+    <View style={stylesPortrait.container}>
         <View style={[sparkViewStyles.sparkViewTopBorder]}>
             <Text style={{textAlign:"center", fontSize:29, paddingTop: 28}}>Spark Worship</Text>
         </View>
         <View style={[sparkViewStyles.sparkContainer]}>
-            <TextInput placeholder="useless placeholder"></TextInput>
+            <TextInput style={[sparkViewStyles.inputBox]}placeholder="useless placeholder"></TextInput>
         </View>
         <View style={[sparkViewStyles.bottomContainer]}>
-            <button>Egg</button>
-            <button>Man</button>
+            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Previous</Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Next</Text>
+            </TouchableOpacity>
         </View>
     </View>  
 
@@ -38,7 +42,7 @@ const sparkViewStyles = StyleSheet.create({
         height:"82%",
         backgroundColor: "rgba(255,255,255,1)",
         flexDirection: "column", 
-        justifyContent: "space-between", 
+        justifyContent: "center", 
         alignItems: "center"
     },
     veryTopBox:{
@@ -78,7 +82,7 @@ const sparkViewStyles = StyleSheet.create({
         height:"8%",
         backgroundColor: "rgba(217, 217, 217, 1)",
         flexDirection: "row", 
-        justifyContent: "space-between", 
+        justifyContent: "center", 
         alignItems: "center"
     },
     inputBox: {
@@ -95,20 +99,19 @@ const sparkViewStyles = StyleSheet.create({
     },
     centerText:
     {
-        textAlign: 'center',
-        color: "white"
+        textAlign: 'center'
     },
 
     button:
     {
-        backgroundColor: colors.buttonColor,
+        backgroundColor: "#B3D0D6",
         marginHorizontal: "10%",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 15,
-        borderColor: "black",
-        height: "7.5%",
-        marginBottom: "10%",
-        borderWidth: 3
+        borderRadius: 5,
+        height: "100%",
+        paddingTop: "5%",
+        borderWidth: 0,
+        marginBottom: "15%"
     }
 });
