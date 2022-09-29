@@ -14,10 +14,10 @@ export default function SparkCreation({ navigation }) {
             <TextInput style={[sparkViewStyles.inputBox]}placeholder="useless placeholder"></TextInput>
         </View>
         <View style={[sparkViewStyles.bottomContainer]}>
-            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
                 <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Previous</Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
                 <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Next</Text>
             </TouchableOpacity>
         </View>
@@ -80,7 +80,6 @@ const sparkViewStyles = StyleSheet.create({
     bottomContainer:{
         width:"100%",
         height:"8%",
-        backgroundColor: "rgba(217, 217, 217, 1)",
         flexDirection: "row", 
         justifyContent: "center", 
         alignItems: "center"
@@ -89,13 +88,15 @@ const sparkViewStyles = StyleSheet.create({
         height: "7.5%",
         marginHorizontal: "10%",
         marginBottom: "10%",
-        borderWidth: 1,
+        borderWidth: 0,
         borderColor: "black",
-        backgroundColor: "rgba(256, 256, 256, 0.6)",
+        backgroundColor: "#F9CBB1",
         paddingLeft: "1%",
         borderRadius: 8,
         textAlign: 'center',
-        color: "white"
+        color: "white",
+        width: "85%",
+        alignContent: "flex-start"
     },
     centerText:
     {
@@ -104,14 +105,80 @@ const sparkViewStyles = StyleSheet.create({
 
     button:
     {
-        backgroundColor: "#B3D0D6",
-        marginHorizontal: "10%",
+        backgroundColor: "#006175",
+        marginHorizontal: "17%",
+        color: "#FFFFFF",
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 5,
-        height: "100%",
         paddingTop: "5%",
-        borderWidth: 0,
-        marginBottom: "15%"
+        paddingBottom: "5%",
+        borderWidth: 0
+    },
+    testyTouchable:
+    {
+        marginBottom: "10%",
+        height: "80%",
+        width: "40%"
     }
 });
+
+/*
+    Start of Profile Adding
+
+    <View style={stylesPortrait.container}>
+        <View style={[sparkViewStyles.sparkViewTopBorder]}>
+            <Text style={{textAlign:"center", fontSize:29, paddingTop: 28}}>Spark Worship</Text>
+        </View>
+        <View style={[sparkViewStyles.sparkContainer]}>
+            <TextInput style={[sparkViewStyles.inputBox]}placeholder="useless placeholder"></TextInput>
+        </View>
+        <View style={[sparkViewStyles.bottomContainer]}>
+            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Previous</Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Next</Text>
+            </TouchableOpacity>
+        </View>
+    </View>  
+
+    Start of Date Entry
+
+    <View style={stylesPortrait.container}>
+        <View style={[sparkViewStyles.sparkViewTopBorder]}>
+            <Text style={{textAlign:"center", fontSize:29, paddingTop: 28}}>Spark Worship</Text>
+        </View>
+        <View style={[sparkViewStyles.sparkContainer]}>
+            <TextInput style={[sparkViewStyles.inputBox]}placeholder="useless placeholder"></TextInput>
+        </View>
+        <View style={[sparkViewStyles.bottomContainer]}>
+            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Previous</Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Next</Text>
+            </TouchableOpacity>
+        </View>
+    </View>  
+
+    Start of Time Entry
+
+    <View style={stylesPortrait.container}>
+        <View style={[sparkViewStyles.sparkViewTopBorder]}>
+            <Text style={{textAlign:"center", fontSize:29, paddingTop: 28}}>Spark Worship</Text>
+        </View>
+        <View style={[sparkViewStyles.sparkContainer]}>
+            <TextInput style={[sparkViewStyles.inputBox]}placeholder="useless placeholder"></TextInput>
+        </View>
+        <View style={[sparkViewStyles.bottomContainer]}>
+            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Previous</Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Next</Text>
+            </TouchableOpacity>
+        </View>
+    </View>  
+
+*/
