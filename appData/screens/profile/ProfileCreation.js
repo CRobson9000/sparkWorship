@@ -1,23 +1,68 @@
 import React from 'react';
 import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from "react-native";
 import { Input, Slider } from '../../components/components';
+import { Observable } from '../../components/classes';
+import { getDatabase, ref, set, get } from 'firebase/database';
 
 export default function ProfileScreen() {
+  //all kinds of inputs
+  //first screen variables
+  let name = new Observable("", () => updatePayload(name.getVal(), "name"));
+  let email = new Observable("", () => updatePayload(email.getVal(), "email"));
+  let password = new Observable("", () => updatePayload(password.getVal(), "password"));
+  let phoneNumber = new Observable("", () => updatePayload(phoneNumber.getVal(), "phoneNumber"));
+  let location = new Observable("", () => updatePayload(location.getVal(), "location"));
+  //second variable screens
+  let churchName = new Observable("", () => updatePayload(churchName.getVal(), "churchName"));
+  let denomination = new Observable("", () => updatePayload(denomination.getVal(), "denomination"));
+  let churchLocation = new Observable("", () => updatePayload(churchLocation.getVal(), "churchLocation"));
+  //third variable screens
+  let instrument = new Observable("", () => updatePayload(instrument.getVal(), "instrument"));
+  let experience = new Observable("", () => updatePayload(experience.getVal(), "experience"));
+  let praiseExperience = new Observable("", () => updatePayload(praiseExperience.getVal(), "praiseExperience"));
+  //forth variable screens
+  let bio = new Observable("", () => updatePayload(bio.getVal(), "bio"));
 
-//code for slider
+  let update = {};
+  let userId = "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+
+  const updatePayload = (updateVal, updateName) =>
+  {
+    update[updateName] = updateVal;
+  }
+
+  function sendPayload() {
+    //loop through all of the key, value pairs in the object update and set the data in firebase based upon the keys and values
+    for (let i = 0; i < Object.keys(update).length; i++)
+    {
+      //get keys and values out of update object, which houses everything that was changed
+      let updateVal = update[Object.keys(update)[i]];
+      let updateKey = Object.keys(update)[i];
+      if (updateVal != "") {
+        //send an single update to the database, which changes the value at the key to the new value under whatever the current user is
+        const db = getDatabase();
+        const reference = ref(db, `Users/${userId}/info/${updateKey}`);
+        set(reference, updateVal);
+      }
+    }
+    //console.log(update); 
+  }
+
+
+//code for sliders and screens
   const Screen1 = (props) => {
     return (
         <View style={styleSheet.content}>
             <Text style={styleSheet.text}>Name</Text>
-            <TextInput style={[styleSheet.inputBox]}/>
+            <Input inputStyle = {styleSheet.inputBox} func = {(val) => name.setVal(val)}/>
             <Text style={styleSheet.text}>Email</Text>
-            <TextInput style={[styleSheet.inputBox]}/>
+            <Input inputStyle = {styleSheet.inputBox} func = {(val) => email.setVal(val)}/>
             <Text style={styleSheet.text}>Password</Text>
-            <TextInput style={[styleSheet.inputBox]}/>
+            <Input inputStyle = {styleSheet.inputBox} func = {(val) => password.setVal(val)}/>
             <Text style={styleSheet.text}>Phone Number</Text>
-            <TextInput style={[styleSheet.inputBox]}/>
+            <Input inputStyle = {styleSheet.inputBox} func = {(val) => phoneNumber.setVal(val)}/>
             <Text style={styleSheet.text}>Location</Text>
-            <TextInput style={[styleSheet.inputBox]}/>
+            <Input inputStyle = {styleSheet.inputBox} func = {(val) => location.setVal(val)}/>
         </View>
     );
   }
@@ -26,11 +71,11 @@ export default function ProfileScreen() {
     return (
         <View style={styleSheet.content}>
             <Text style={styleSheet2.text}>Church Name</Text>
-            <TextInput style={[styleSheet2.inputBox]}/>
+            <Input inputStyle = {styleSheet.inputBox} func = {(val) => churchName.setVal(val)}/>
             <Text style={styleSheet2.text}>Denomination</Text>
-            <TextInput style={[styleSheet2.inputBox]}/>
+            <Input inputStyle = {styleSheet.inputBox} func = {(val) => denomination.setVal(val)}/>
             <Text style={styleSheet2.text}>Church Location</Text>
-            <TextInput style={[styleSheet2.inputBox]}/>
+            <Input inputStyle = {styleSheet.inputBox} func = {(val) => churchLocation.setVal(val)}/>
         </View>
     );
   }
@@ -39,11 +84,11 @@ export default function ProfileScreen() {
     return (
       <View style={styleSheet.content}>
         <Text style={styleSheet.text}>Instrument</Text>
-        <TextInput style={[styleSheet.inputBox]}/>
+        <Input inputStyle = {styleSheet.inputBox} func = {(val) => instrument.setVal(val)}/>
         <Text style={styleSheet.text}>Total Years of Experience</Text>
-        <TextInput style={[styleSheet.inputBox]}/>
+        <Input inputStyle = {styleSheet.inputBox} func = {(val) => experience.setVal(val)}/>
         <Text style={styleSheet.text}>Years of Praise Brand Experience (Optional)</Text>
-        <TextInput style={[styleSheet.inputBox]}/>
+        <Input inputStyle = {styleSheet.inputBox} func = {(val) => praiseExperience.setVal(val)}/>
         <TouchableOpacity style={styleSheet.addInstrumentButton}><Text style={styleSheet.buttonText}>+ Add Instrument</Text></TouchableOpacity>
       </View>
     );
@@ -54,7 +99,7 @@ export default function ProfileScreen() {
       <View style={styleSheet.content}>
         <Text style={styleSheet.text}>Biography (Optional)</Text>
         <Text style={styleSheet.italicText}>Tell attendees more about you!</Text>
-        <View style={styleSheet.BiographySquare}/>
+        <Input inputStyle = {styleSheet.BiographySquare} func = {(val) => bio.setVal(val)}/>
       </View>
     );
   }
@@ -93,6 +138,9 @@ export default function ProfileScreen() {
         <View style={styleSheet.row}>
             <TouchableOpacity style={styleSheet.button} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Previous</Text></TouchableOpacity>
             <TouchableOpacity style={styleSheet.button} onPress = {() => setCurrentIndex(currentIndex + 1)}><Text style={styleSheet.buttonText}>Next</Text></TouchableOpacity>
+        </View>
+        <View style={styleSheet.row}>
+            <TouchableOpacity style={styleSheet.button} onPress = {() => sendPayload()}><Text style={styleSheet.buttonText}>Submit</Text></TouchableOpacity>
         </View>
     </View>
   );
@@ -146,7 +194,7 @@ const styleSheet = StyleSheet.create({
         marginHorizontal: "5%",
         justifyContent: "center",
         alignItems: "center",
-        height: "26%",
+        height: "35%",
         width: "37%",
         marginTop: "5%",
         marginBottom: "3%",
@@ -155,7 +203,9 @@ const styleSheet = StyleSheet.create({
 
     row: {
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        height: "10%",
+        width: '100%'
     },
 
     buttonText: {
@@ -170,7 +220,7 @@ const styleSheet = StyleSheet.create({
         alignSelf: "center",
         justifyContent: "center",
         alignItems: "center",
-        height: "5%",
+        height: "10%",
         width: "85%",
         marginTop: "5%",
         marginBottom: "3%",
