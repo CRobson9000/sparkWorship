@@ -124,6 +124,25 @@ const sparkViewStyles = StyleSheet.create({
 });
 
 /*
+    Start of Location Entry
+
+    <View style={stylesPortrait.container}>
+        <View style={[sparkViewStyles.sparkViewTopBorder]}>
+            <Text style={{textAlign:"center", fontSize:29, paddingTop: 28}}>Spark Worship</Text>
+        </View>
+        <View style={[sparkViewStyles.sparkContainer]}>
+            <TextInput style={[sparkViewStyles.inputBox]}placeholder="useless placeholder"></TextInput>
+        </View>
+        <View style={[sparkViewStyles.bottomContainer]}>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Previous</Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Next</Text>
+            </TouchableOpacity>
+        </View>
+    </View>  
+
     Start of Profile Adding
 
     <View style={stylesPortrait.container}>
@@ -134,10 +153,10 @@ const sparkViewStyles = StyleSheet.create({
             <TextInput style={[sparkViewStyles.inputBox]}placeholder="useless placeholder"></TextInput>
         </View>
         <View style={[sparkViewStyles.bottomContainer]}>
-            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
                 <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Previous</Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
                 <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Next</Text>
             </TouchableOpacity>
         </View>
@@ -153,10 +172,10 @@ const sparkViewStyles = StyleSheet.create({
             <TextInput style={[sparkViewStyles.inputBox]}placeholder="useless placeholder"></TextInput>
         </View>
         <View style={[sparkViewStyles.bottomContainer]}>
-            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
                 <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Previous</Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
                 <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Next</Text>
             </TouchableOpacity>
         </View>
@@ -172,10 +191,10 @@ const sparkViewStyles = StyleSheet.create({
             <TextInput style={[sparkViewStyles.inputBox]}placeholder="useless placeholder"></TextInput>
         </View>
         <View style={[sparkViewStyles.bottomContainer]}>
-            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
                 <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Previous</Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
                 <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Next</Text>
             </TouchableOpacity>
         </View>
