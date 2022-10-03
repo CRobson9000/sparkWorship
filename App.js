@@ -19,11 +19,7 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-<<<<<<< HEAD
-      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="userDashboard">
-=======
-      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="ProfileScreenIPublic">
->>>>>>> aa397331cccc0db1cd460e7796426e7db1886382
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="ProfileScreenIPersonal">
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="DatabaseTest" component={DatabaseTest} />
         <Stack.Screen name="ProfileScreenIPublic" component={ProfileScreenIPublic} />

@@ -57,7 +57,7 @@ const styleSheet = StyleSheet.create({
     left: "7%",
     width: "40%",
     height: "45%",
-    borderRadius: "80%"
+    borderRadius: 20
   },
   locationPin: {
     width: 20,
@@ -75,20 +75,20 @@ const styleSheet = StyleSheet.create({
     width: "90%"
   },
   title: {
-    fontSize: "21",
+    fontSize: 21,
     left: "57%",
     bottom: "5%",
     fontFamily: "Gill Sans"
   },
   nameText: {
-    fontSize: "30",
+    fontSize: 30,
     left: "52%",
     bottom: "9%",
     fontFamily: "Gill Sans",
     fontWeight: "500"
   },
   locationText: {
-    fontSize: "17",
+    fontSize: 17,
     left: "60%",
     fontFamily: "Gill Sans",
     fontWeight: "300"
@@ -118,7 +118,7 @@ const styleSheet = StyleSheet.create({
     width: "85%",
     height: "60%", 
     backgroundColor: "rgb(249, 203, 177)",
-    borderRadius: "20%",
+    borderRadius: 20,
     alignSelf: "center",
   },
   EditProfileButton:{
@@ -131,7 +131,7 @@ const styleSheet = StyleSheet.create({
     width: "85%",
     marginTop: "10%",
     marginBottom: "3%",
-    borderRadius: "10%"
+    borderRadius: 10
   },
   friendsButton:{
     backgroundColor: "rgb(242, 144, 91)",
@@ -140,7 +140,7 @@ const styleSheet = StyleSheet.create({
     alignItems: "center",
     height: "60%",
     width: "40%",
-    borderRadius: "10%",
+    borderRadius: 10,
   },
   buttonText1: {
     color: "white",

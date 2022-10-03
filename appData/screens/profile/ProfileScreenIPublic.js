@@ -60,7 +60,7 @@ const styleSheet = StyleSheet.create({
     left: "7%",
     width: "40%",
     height: "45%",
-    borderRadius: "80%"
+    borderRadius: 20
   },
   locationPin: {
     width: 20,
@@ -76,20 +76,20 @@ const styleSheet = StyleSheet.create({
     justifyContent: "space-evenly"
   },
   title: {
-    fontSize: "21",
+    fontSize: 21,
     left: "57%",
     bottom: "5%",
     fontFamily: "Gill Sans"
   },
   nameText: {
-    fontSize: "30",
+    fontSize: 30,
     left: "52%",
     bottom: "9%",
     fontFamily: "Gill Sans",
     fontWeight: "500"
   },
   locationText: {
-    fontSize: "17",
+    fontSize: 17,
     left: "60%",
     fontFamily: "Gill Sans",
     fontWeight: "300"
@@ -119,7 +119,7 @@ const styleSheet = StyleSheet.create({
     width: "85%",
     height: "75%", 
     backgroundColor: "rgb(249, 203, 177)",
-    borderRadius: "20%",
+    borderRadius: 20,
     alignSelf: "center"
   },
 
