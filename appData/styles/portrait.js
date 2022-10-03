@@ -39,7 +39,7 @@ const stylesPortrait = StyleSheet.create({
         color: "#006175",
         top: 65,
         fontWeight: "bold",
-        fontSize:"25%"
+        fontSize: 25
     },
     username :
     {
@@ -103,7 +103,7 @@ const stylesPortrait = StyleSheet.create({
         backgroundColor: "#CDDFE3",
         marginHorizontal: "10%",
         justifyContent: "center",
-        alignItems: "left",
+        alignItems: "flex-start",
         borderRadius: 15,
         borderColor: "#CDDFE3",
         height: "15%",

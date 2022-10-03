@@ -21,20 +21,12 @@ import { Calendar, CalendarUtils } from 'react-native-calendars';
 import {StyleSheet} from 'react-native';
 
 // import for Bottom Nav Bar
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-
-
-
-
-
-
-
 export default function HostingDashboard({ navigation }) {
   return (
-<TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
+   <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}}>
  
       <View style={stylesPortrait.container}>
 
@@ -46,7 +38,7 @@ export default function HostingDashboard({ navigation }) {
         <View style={stylesPortrait.contentDashContainer}>
         
         <ScrollView>
-          <TouchableOpacity activeOpacity={1} onPress = {() => signUp(navigation)} style={[stylesPortrait.dashboardButton]}>
+          <TouchableOpacity activeOpacity={1} style={[stylesPortrait.dashboardButton]}>
             <View><Text style={{lineHeight: 30, color: "#006175"}}>September 12, 2022
             {'\n'}
             Time: 6:00 pm
@@ -88,6 +80,8 @@ export default function HostingDashboard({ navigation }) {
             {'\n'}
             Harrisburg, PA</Text></View>
           </TouchableOpacity>
+
+
           {/* <TouchableOpacity activeOpacity={1} onPress = {() => signUp(navigation)} style={[stylesPortrait.dashboardButton]}>
             <View><Text style={{lineHeight: 30, color: "#006175"}}>November 14, 2022
             {'\n'}
@@ -101,13 +95,13 @@ export default function HostingDashboard({ navigation }) {
             Singing Disciples
             {'\n'}
             Harrisburg, PA</Text></View>
-          </TouchableOpacity> */}
+    </TouchableOpacity> */}
           
           </ScrollView>
 
 
         </View>
       </View>
-    </TouchableWithoutFeedback>
+     </TouchableWithoutFeedback> 
   );
 }
