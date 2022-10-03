@@ -4,7 +4,11 @@ import { Input, Slider } from '../../components/components';
 import { Observable } from '../../components/classes';
 import { getDatabase, ref, set, get } from 'firebase/database';
 
-export default function ProfileScreen() {
+export default function ProfileScreen({route, navigation}) {
+  //set environment variables
+  let props = route.params;
+  let userId = props.userId;
+
   //all kinds of inputs
   //first screen variables
   let name = new Observable("", () => updatePayload(name.getVal(), "name"));
@@ -23,8 +27,8 @@ export default function ProfileScreen() {
   //forth variable screens
   let bio = new Observable("", () => updatePayload(bio.getVal(), "bio"));
 
-  let update = {};
-  let userId = "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+  let update = useRef({});
+  // let userId = "pgFfrUx2ryd7h7iE00fD09RAJyG3";
 
   const updatePayload = (updateVal, updateName) =>
   {
