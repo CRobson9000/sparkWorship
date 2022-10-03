@@ -18,6 +18,29 @@ const stylesPortrait = StyleSheet.create({
         width: "100%",
         height: "75%",
     },
+    contentDashContainer:
+    {
+        width: "100%",
+        height: "50%",
+        position: "absolute",
+        bottom:30
+    },
+    calendar: {
+        flex: 1,
+        width: "80%",
+        height: "20%",
+        resizeMode: 'contain',
+        marginLeft: "10%",
+        overflow: "hidden",
+        bottom: "23%"
+      },
+    topText: {
+        textAlign: 'center',
+        color: "#006175",
+        top: 65,
+        fontWeight: "bold",
+        fontSize:"25%"
+    },
     username :
     {
         color: "#006175", 
@@ -72,6 +95,20 @@ const stylesPortrait = StyleSheet.create({
         borderColor: "#006175",
         height: "7.5%",
         marginBottom: "10%",
+        borderWidth: 3
+    },
+
+    dashboardButton:
+    {
+        backgroundColor: "#CDDFE3",
+        marginHorizontal: "10%",
+        justifyContent: "center",
+        alignItems: "left",
+        borderRadius: 15,
+        borderColor: "#CDDFE3",
+        height: "15%",
+        marginBottom: "5%",
+        paddingLeft: "2%",
         borderWidth: 3
     },
 });

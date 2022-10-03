@@ -9,13 +9,15 @@ import ProfileScreen from './appData/screens/profile/ProfileScreen';
 import LocationData from './appData/screens/LocationData.js';
 import ProfileCreation from './appData/screens/profile/ProfileCreation'
 import MyTest from './appData/screens/MyTest.js';
+import UserDashboard from './appData/screens/dashboard/UserDashboard';
+import HostingDashboard from './appData/screens/dashboard/HostingDashboard';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="ProfileCreation">
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="HostingDashboard">
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="DatabaseTest" component={DatabaseTest} />
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
@@ -23,6 +25,8 @@ function App() {
         <Stack.Screen name="LocationData" component={LocationData} />
         <Stack.Screen name="SparkView" component={SparkView}/>
         <Stack.Screen name="Test" component={MyTest}/>
+        <Stack.Screen name="userDashboard" component={UserDashboard}/>
+        <Stack.Screen name="HostingDashboard" component={HostingDashboard}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
