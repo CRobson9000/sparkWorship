@@ -136,7 +136,12 @@ export default function ProfileScreen({route, navigation}) {
 
   return (
     <View style={styleSheet.MainContainer}> 
-        <View style={styleSheet.topBorder}></View> 
+        <View style={styleSheet.topBorder}>
+        {/* <Text style={styleSheet.phaseText}>Phase 1</Text> */}
+        {/* <Text style={styleSheet.phaseText}>Phase 2</Text> */}
+            <Text style={styleSheet.phaseText}>Phase 3</Text>
+        {/* <Text style={styleSheet.phaseText}>Phase 4</Text> */}
+        </View>
         <Slider currentIndex = {currentIndex} screens = {myScreens} />
 
         <View style={styleSheet.row}>
@@ -248,12 +253,20 @@ const styleSheet2 = StyleSheet.create({
         backgroundColor: "white",
         height: "100%",
     },
-
+    row: {
+        flexDirection: "row",
+        left: "57%",
+    },
     topBorder:{
         height: "30%",
         width: "100%",
         backgroundColor: "rgb(219, 233, 236)",
         marginBottom: "5%"
+    },
+    
+    profilePicture: {
+        width: "50%",
+        height: "70%",
     },
 
     content: {
@@ -261,14 +274,20 @@ const styleSheet2 = StyleSheet.create({
         width: "100%",
         justifyContent: "center",
     },
-
     text: {
         paddingBottom: "3%",
         fontSize: 10,
         left: "9%",
         //fontFamily: "Gill Sans"
     },
-
+    phaseText: {
+        paddingBottom: "3%",
+        fontSize: "50%",
+        fontFamily: "Gill Sans",
+        alignSelf: "center",
+        top: "50%",
+        fontWeight: "500"
+    },
     italicText: {
         paddingBottom: "3%",
         fontSize: 9,
@@ -296,7 +315,6 @@ const styleSheet2 = StyleSheet.create({
         marginBottom: "3%",
         borderRadius: 10
     },
-
     row: {
         flexDirection: "row",
         justifyContent: "center"
