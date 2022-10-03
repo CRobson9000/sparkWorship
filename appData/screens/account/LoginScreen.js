@@ -24,8 +24,7 @@ export default function LoginScreen({ navigation }) {
     signInWithEmailAndPassword(auth, username, userPassword).then((userCredential) => {
         // Signed in with a valid username and password 
         const user = userCredential.user;
-        console.log("User", user.uid);
-        navigation.navigate('DatabaseTest');
+        navigation.navigate("ProfileCreation", {userId: user.uid});
     }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
