@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from "react-native";
 import { Input, Slider } from '../../components/components';
 import { Observable } from '../../components/classes';
@@ -7,28 +7,41 @@ import { getDatabase, ref, set, get } from 'firebase/database';
 export default function ProfileScreen({route, navigation}) {
   //set environment variables
   let props = route.params;
-  let userId = props.userId;
+  //let userId = props.userId;
 
   //all kinds of inputs
-  //first screen variables
-  let name = new Observable("", () => updatePayload(name.getVal(), "name"));
-  let email = new Observable("", () => updatePayload(email.getVal(), "email"));
-  let password = new Observable("", () => updatePayload(password.getVal(), "password"));
-  let phoneNumber = new Observable("", () => updatePayload(phoneNumber.getVal(), "phoneNumber"));
-  let location = new Observable("", () => updatePayload(location.getVal(), "location"));
-  //second variable screens
-  let churchName = new Observable("", () => updatePayload(churchName.getVal(), "churchName"));
-  let denomination = new Observable("", () => updatePayload(denomination.getVal(), "denomination"));
-  let churchLocation = new Observable("", () => updatePayload(churchLocation.getVal(), "churchLocation"));
-  //third variable screens
-  let instrument = new Observable("", () => updatePayload(instrument.getVal(), "instrument"));
-  let experience = new Observable("", () => updatePayload(experience.getVal(), "experience"));
-  let praiseExperience = new Observable("", () => updatePayload(praiseExperience.getVal(), "praiseExperience"));
-  //forth variable screens
-  let bio = new Observable("", () => updatePayload(bio.getVal(), "bio"));
+  let inputs = {
+    //first screen variables
+    name: new Observable("", () => updatePayload(inputs.name.getVal(), "name")),
+    email: new Observable("", () => updatePayload(inputs.email.getVal(), "email")),
+    password: new Observable("", () => updatePayload(inputs.password.getVal(), "password")),
+    phoneNumber: new Observable("", () => updatePayload(inputs.phoneNumber.getVal(), "phoneNumber")),
+    location: new Observable("", () => updatePayload(inputs.location.getVal(), "location")),
+    //second variable screens
+    churchName: new Observable("", () => updatePayload(inputs.churchName.getVal(), "churchName")),
+    denomination: new Observable("", () => updatePayload(inputs.denomination.getVal(), "denomination")),
+    churchLocation: new Observable("", () => updatePayload(inputs.churchLocation.getVal(), "churchLocation")),
+    //third variable screens
+    instrument: new Observable("", () => updatePayload(inputs.instrument.getVal(), "instrument")),
+    experience: new Observable("", () => updatePayload(inputs.experience.getVal(), "experience")),
+    praiseExperience: new Observable("", () => updatePayload(inputs.praiseExperience.getVal(), "praiseExperience")),
+    //forth variable screens
+    bio: new Observable("", () => updatePayload(inputs.bio.getVal(), "bio"))
+  } 
 
   let update = useRef({});
-  // let userId = "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+  let userId = "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+
+  const updateToStart = () => {
+    //console.log("update", update);
+    for (let key in inputs) {
+        let updateVal = update[key];
+        if (updateVal) {
+            let obj = inputs[key];
+            obj.setVal(updateVal);
+        }
+    }
+}
 
   const updatePayload = (updateVal, updateName) =>
   {
@@ -49,7 +62,7 @@ export default function ProfileScreen({route, navigation}) {
         set(reference, updateVal);
       }
     }
-    //console.log(update); 
+    navigation.navigate("DatabaseTest");
   }
 
 
@@ -58,15 +71,15 @@ export default function ProfileScreen({route, navigation}) {
     return (
         <View style={styleSheet.content}>
             <Text style={styleSheet.text}>Name</Text>
-            <Input inputStyle = {styleSheet.inputBox} func = {(val) => name.setVal(val)}/>
+            <Input start = {inputs.name.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.name.setVal(val)}/>
             <Text style={styleSheet.text}>Email</Text>
-            <Input inputStyle = {styleSheet.inputBox} func = {(val) => email.setVal(val)}/>
+            <Input start = {inputs.email.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.email.setVal(val)}/>
             <Text style={styleSheet.text}>Password</Text>
-            <Input inputStyle = {styleSheet.inputBox} func = {(val) => password.setVal(val)}/>
+            <Input start = {inputs.password.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.password.setVal(val)}/>
             <Text style={styleSheet.text}>Phone Number</Text>
-            <Input inputStyle = {styleSheet.inputBox} func = {(val) => phoneNumber.setVal(val)}/>
+            <Input start = {inputs.phoneNumber.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.phoneNumber.setVal(val)}/>
             <Text style={styleSheet.text}>Location</Text>
-            <Input inputStyle = {styleSheet.inputBox} func = {(val) => location.setVal(val)}/>
+            <Input start = {inputs.location.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.location.setVal(val)}/>
         </View>
     );
   }
@@ -75,11 +88,11 @@ export default function ProfileScreen({route, navigation}) {
     return (
         <View style={styleSheet.content}>
             <Text style={styleSheet2.text}>Church Name</Text>
-            <Input inputStyle = {styleSheet.inputBox} func = {(val) => churchName.setVal(val)}/>
+            <Input start = {inputs.churchName.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.churchName.setVal(val)}/>
             <Text style={styleSheet2.text}>Denomination</Text>
-            <Input inputStyle = {styleSheet.inputBox} func = {(val) => denomination.setVal(val)}/>
+            <Input start = {inputs.denomination.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.denomination.setVal(val)}/>
             <Text style={styleSheet2.text}>Church Location</Text>
-            <Input inputStyle = {styleSheet.inputBox} func = {(val) => churchLocation.setVal(val)}/>
+            <Input start = {inputs.churchLocation.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.churchLocation.setVal(val)}/>
         </View>
     );
   }
@@ -88,11 +101,11 @@ export default function ProfileScreen({route, navigation}) {
     return (
       <View style={styleSheet.content}>
         <Text style={styleSheet.text}>Instrument</Text>
-        <Input inputStyle = {styleSheet.inputBox} func = {(val) => instrument.setVal(val)}/>
+        <Input start = {inputs.instrument.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.instrument.setVal(val)}/>
         <Text style={styleSheet.text}>Total Years of Experience</Text>
-        <Input inputStyle = {styleSheet.inputBox} func = {(val) => experience.setVal(val)}/>
+        <Input start = {inputs.experience.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.experience.setVal(val)}/>
         <Text style={styleSheet.text}>Years of Praise Brand Experience (Optional)</Text>
-        <Input inputStyle = {styleSheet.inputBox} func = {(val) => praiseExperience.setVal(val)}/>
+        <Input start = {inputs.praiseExperience.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.praiseExperience.setVal(val)}/>
         <TouchableOpacity style={styleSheet.addInstrumentButton}><Text style={styleSheet.buttonText}>+ Add Instrument</Text></TouchableOpacity>
       </View>
     );
@@ -103,7 +116,7 @@ export default function ProfileScreen({route, navigation}) {
       <View style={styleSheet.content}>
         <Text style={styleSheet.text}>Biography (Optional)</Text>
         <Text style={styleSheet.italicText}>Tell attendees more about you!</Text>
-        <Input inputStyle = {styleSheet.BiographySquare} func = {(val) => bio.setVal(val)}/>
+        <Input start = {inputs.bio.getVal()} inputStyle = {styleSheet.BiographySquare} func = {(val) => inputs.bio.setVal(val)}/>
       </View>
     );
   }
@@ -130,6 +143,7 @@ export default function ProfileScreen({route, navigation}) {
   //loops the index back around on the other end when 
   limitScroll();
 
+  updateToStart();
   /*------------------------------------------------*/
   /*--------------FRONT-END APP CODE ---------------*/
   /*------------------------------------------------*/

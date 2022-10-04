@@ -51,26 +51,7 @@ export default function LocationData({ navigation }) {
     let location1 = await searchByAddress(address);
     let location2 = await searchByAddress(address2);
     console.log(location1, location2);
-    // searchByAddress(address).then((val) => {
-    //   console.log(val);
-    // })
-    // .catch((val) => {
-    //   console.log(val);
-    // });
-    //let location2 = searchByAddress2(address2);
   }
-  
-  // var distance = require('react-native-google-matrix');
- 
-  // distance.get(
-  //   {
-  //     origin: '-7.841879,110.409193',
-  //     destination: '-7.741194,110.342588'
-  //   },
-  //   function(err, data) {
-  //     if (err) return console.log(err);
-  //     console.log(data);
-  // });
 
   return (
     <View style = {{flex: 1, justifyContent: "center", alignItems: "center"}}>

@@ -5,8 +5,8 @@ import { StyleSheet, Text } from 'react-native';
 
 //element for input
 const Input = (props) => {
-    const [text, onChangeText] = React.useState("");
-    if (props.func) {
+    const [text, onChangeText] = React.useState(props.start || "");
+    if (props.func && text != "") {
       props.func(text);
     }
     let myStyle = props.inputStyle

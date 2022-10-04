@@ -31,7 +31,7 @@ export default function ProfileScreenIPublic() {
           <TouchableOpacity style={styleSheet.button}><Image source={require("../../../assets/phoneicon.png")} resizeMode="contain" style={{flex:.6 }}></Image></TouchableOpacity>
         </View>
       </View>
-      <ScrollView>
+      <View>
         {/* "About Me" Section */}
         <Text style={styleSheet.Text}>Biography</Text>
         <View style={styleSheet.Square}/>
@@ -39,12 +39,12 @@ export default function ProfileScreenIPublic() {
         <Text style={styleSheet.Text}>Musical Background</Text>
         <View style={styleSheet.Square}/>
         {/* Church Experience */}
-        <Text style={styleSheet.Text}>Church Experience</Text>
-        <View style={styleSheet.Square}/>
+        {/* <Text style={styleSheet.Text}>Church Experience</Text> */}
+        {/* <View style={styleSheet.Square}/> */}
         {/* "Upcoming Events" Section */}
-        <Text style={styleSheet.Text}>Upcoming Events</Text>
-        <View style={styleSheet.Square}/>
-      </ScrollView>
+        {/* <Text style={styleSheet.Text}>Upcoming Events</Text> */}
+        {/* <View style={styleSheet.Square}/> */}
+      </View>
     </View>
   );
 }
@@ -64,7 +64,7 @@ const styleSheet = StyleSheet.create({
   },
   locationPin: {
     width: 20,
-    height: 20
+    height: 20,
   },
   row: {
     flexDirection: "row",
@@ -76,20 +76,20 @@ const styleSheet = StyleSheet.create({
     justifyContent: "space-evenly"
   },
   title: {
-    fontSize: 21,
+    fontSize: 15,
     left: "57%",
     bottom: "5%",
     fontFamily: "Gill Sans"
   },
   nameText: {
-    fontSize: 30,
+    fontSize: 25,
     left: "52%",
     bottom: "9%",
     fontFamily: "Gill Sans",
     fontWeight: "500"
   },
   locationText: {
-    fontSize: 17,
+    fontSize: 12,
     left: "60%",
     fontFamily: "Gill Sans",
     fontWeight: "300"
@@ -117,7 +117,7 @@ const styleSheet = StyleSheet.create({
   },
   Square: {
     width: "85%",
-    height: "75%", 
+    height: "30%", 
     backgroundColor: "rgb(249, 203, 177)",
     borderRadius: 20,
     alignSelf: "center"

@@ -25,7 +25,6 @@ export default function SparkCreation({ navigation }) {
 
     const updatePayload = (updateVal, updateName) =>
     {
-        //console.log("update!");
         update[updateName] = updateVal;
     }
 
@@ -35,31 +34,43 @@ export default function SparkCreation({ navigation }) {
             let updateVal = update[key];
             if (updateVal) {
                 let obj = inputs[key];
-                obj.unwatchedSet(updateVal);
-                //console.log(key, obj);
+                obj.setVal(updateVal);
             }
         }
     }
 
     function sendPayload() {
-        const db = getDatabase();
-        //create a new id for a spark, which makes a new space for info to go in
-        //const reference = ref(db, "Sparks");
-        //let sparkId = push(reference, {status: "proposed"});
+        //delete current variable, which is created when using "useRef()"
+        delete update.current;
 
-        // //loop through all of the key, value pairs in the object update and set the data in firebase based upon the keys and values
-        // for (let i = 0; i < Object.keys(update).length; i++)
-        // {
-        //   //get keys and values out of update object, which houses everything that was changed
-        //   let updateVal = update[Object.keys(update)[i]];
-        //   let updateKey = Object.keys(update)[i];
-        //   if (updateVal != "") {
-        //     //send an single update to the database, which changes the value at the key to the new value under whatever the current user is
-        //     const reference = ref(db, `Sparks/${sparkId}/info/${updateKey}`);
-        //     set(reference, updateVal);
-        //   }
-        // }
-        console.log(update); 
+        //"set-up" variables
+        const db = getDatabase();
+
+        //create a new id for this spark, which gives it a place in memory to store all its data
+        const reference1 = ref(db, "Sparks");
+        let sparkIdStart = push(reference1, {status: "proposed"});
+        let sparkIdArray = sparkIdStart.toString().split("/");
+        let sparkId = sparkIdArray[sparkIdArray.length - 1];
+        console.log(sparkId);
+        //popluate database with values from update
+        const reference2 = ref(db, `Sparks/${sparkId}/info/location`);
+        set(reference2, update["location"]);
+
+        //set TDO: date
+        const reference3 = ref(db, `Sparks/${sparkId}/info/publishedTDO/date/day`);
+        set(reference3, parseInt(update["day"]));
+        const reference4 = ref(db, `Sparks/${sparkId}/info/publishedTDO/date/month`);
+        set(reference4, parseInt(update["month"]));
+        const reference5 = ref(db, `Sparks/${sparkId}/info/publishedTDO/date/year`);
+        set(reference5, parseInt(update["year"]));
+
+        //set TDO: time
+        const reference6 = ref(db, `Sparks/${sparkId}/info/publishedTDO/time/hours`);
+        set(reference6, parseInt(update["hours"]));
+        const reference7 = ref(db, `Sparks/${sparkId}/info/publishedTDO/time/minutes`);
+        set(reference7, parseInt(update["minutes"]));
+
+        navigation.navigate("DatabaseTest");
     }
 
 
@@ -69,7 +80,7 @@ export default function SparkCreation({ navigation }) {
     const Screen1 = () => {
         return(
             <View style={[sparkViewStyles.sparkContainer]}>
-                <Input inputStyle={[sparkViewStyles.inputBox, sparkViewStyles.locationInputBox]} placeHolderText="Enter Location" func = {(val) => inputs.location.setVal(val)} />
+                <Input start = {inputs.location.getVal()} inputStyle={[sparkViewStyles.inputBox, sparkViewStyles.locationInputBox]} placeHolderText="Enter Location" func = {(val) => inputs.location.setVal(val)} />
             </View>
         )
     }
@@ -118,15 +129,15 @@ export default function SparkCreation({ navigation }) {
         return (
             <View style={[sparkViewStyles.sparkContainer]}>
                 <View style={[sparkViewStyles.dateInputContainer]}>
-                    <Input inputStyle={[sparkViewStyles.dateInputBox]} placeHolderText="10" func = {(val) => inputs.month.setVal(val)} />
+                    <Input start = {inputs.month.getVal()} inputStyle={[sparkViewStyles.dateInputBox]} placeHolderText="10" func = {(val) => inputs.month.setVal(val)} />
                     <Text style={[sparkViewStyles.labelUnderneath]}>Month</Text>
                 </View>
                 <View style={[sparkViewStyles.dateInputContainer]}>
-                    <Input inputStyle={[sparkViewStyles.dateInputBox]} placeHolderText="4" func = {(val) => inputs.day.setVal(val)} />
+                    <Input start = {inputs.day.getVal()} inputStyle={[sparkViewStyles.dateInputBox]} placeHolderText="4" func = {(val) => inputs.day.setVal(val)} />
                     <Text style={[sparkViewStyles.labelUnderneath]}>Day</Text>
                 </View>
                 <View style={[sparkViewStyles.dateInputContainer]}>
-                    <Input inputStyle={[sparkViewStyles.dateInputBox]} placeHolderText="2022" func = {(val) => inputs.year.setVal(val)} />
+                    <Input start = {inputs.year.getVal()} inputStyle={[sparkViewStyles.dateInputBox]} placeHolderText="2022" func = {(val) => inputs.year.setVal(val)} />
                     <Text style={[sparkViewStyles.labelUnderneath]}>Year</Text>
                 </View>
             </View>
@@ -136,9 +147,9 @@ export default function SparkCreation({ navigation }) {
     const Screen4 = () => {
         return (
             <View style={[sparkViewStyles.sparkContainer]}>
-                <Input inputStyle={[sparkViewStyles.hourInputBox]} placeHolderText="6" func = {(val) => inputs.hours.setVal(val)} />
+                <Input start = {inputs.hours.getVal()} inputStyle={[sparkViewStyles.hourInputBox]} placeHolderText="6" func = {(val) => inputs.hours.setVal(val)} />
                 <Text style={{fontSize:36, marginBottom:"1.5%"}}>:</Text>
-                <Input inputStyle={[sparkViewStyles.minuteInputBox]} placeHolderText="20" func = {(val) => inputs.minutes.setVal(val)} />
+                <Input start = {inputs.minutes.getVal()} inputStyle={[sparkViewStyles.minuteInputBox]} placeHolderText="20" func = {(val) => inputs.minutes.setVal(val)} />
                 <Text style={{fontSize:36}}>PM</Text>
             </View>
         );

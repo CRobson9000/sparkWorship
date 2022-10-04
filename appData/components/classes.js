@@ -11,11 +11,7 @@ class Observable {
     setVal(val) {
         this.value = val;
         this.myObserver();
-        console.log("Observer", val);
-    }
-
-    unwatchedSet(val) {
-        this.value = val;
+        //console.log("Observer", val);
     }
 
     getVal(){

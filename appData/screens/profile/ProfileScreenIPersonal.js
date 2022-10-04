@@ -24,7 +24,7 @@ export default function ProfileScreenIPersonal() {
         {/* Contact Buttons */}
         <TouchableOpacity style={styleSheet.EditProfileButton}><Text style={styleSheet.buttonText1}>Edit Profile</Text></TouchableOpacity>
       </View>
-      <ScrollView>
+      <View>
         <View style={styleSheet.buttonsRow}>
           <TouchableOpacity style={styleSheet.friendsButton}><Text style={styleSheet.buttonText2}>Friends</Text></TouchableOpacity>
           <TouchableOpacity style={styleSheet.friendsButton}><Text style={styleSheet.buttonText2}>Messages</Text></TouchableOpacity>
@@ -36,12 +36,12 @@ export default function ProfileScreenIPersonal() {
         <Text style={styleSheet.Text}>Musical Background</Text>
         <View style={styleSheet.Square}/>
         {/* Church Experience */}
-        <Text style={styleSheet.Text}>Church Experience</Text>
-        <View style={styleSheet.Square}/>
+        {/* <Text style={styleSheet.Text}>Church Experience</Text> */}
+        {/* <View style={styleSheet.Square}/> */}
         {/* "Upcoming Events" Section */}
-        <Text style={styleSheet.Text}>Upcoming Events</Text>
-        <View style={styleSheet.Square}/>
-      </ScrollView>
+        {/* <Text style={styleSheet.Text}>Upcoming Events</Text> */}
+        {/* <View style={styleSheet.Square}/> */}
+      </View>
     </View>
   );
 }
@@ -72,23 +72,24 @@ const styleSheet = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignSelf: "center",
-    width: "90%"
+    width: "90%",
+    height: "15%"
   },
   title: {
-    fontSize: 21,
+    fontSize: 15,
     left: "57%",
     bottom: "5%",
     fontFamily: "Gill Sans"
   },
   nameText: {
-    fontSize: 30,
+    fontSize: 25,
     left: "52%",
     bottom: "9%",
     fontFamily: "Gill Sans",
     fontWeight: "500"
   },
   locationText: {
-    fontSize: 17,
+    fontSize: 12,
     left: "60%",
     fontFamily: "Gill Sans",
     fontWeight: "300"
@@ -107,8 +108,8 @@ const styleSheet = StyleSheet.create({
     borderRadius: 25,
   },
   Text: {
-    paddingTop: "5%",
-    paddingBottom: "3%",
+    paddingTop: "3%",
+    paddingBottom: "5%",
     fontSize: 18,
     left: "9%",
     fontFamily: "Gill Sans",
@@ -116,7 +117,7 @@ const styleSheet = StyleSheet.create({
   },
   Square: {
     width: "85%",
-    height: "60%", 
+    height: "20%", 
     backgroundColor: "rgb(249, 203, 177)",
     borderRadius: 20,
     alignSelf: "center",
