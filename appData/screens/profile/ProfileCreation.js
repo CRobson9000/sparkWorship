@@ -125,6 +125,13 @@ export default function ProfileScreen({route, navigation}) {
     <Screen1 />, <Screen2 />, <Screen3 />, <Screen4 />
   ];
 
+  let myTitles = [
+    <Text style={styleSheet2.phaseText}>Phase 1</Text>, 
+    <Text style={styleSheet2.phaseText}>Phase 2</Text>,
+    <Text style={styleSheet2.phaseText}>Phase 3</Text>,
+    <Text style={styleSheet2.phaseText}>Phase 4</Text>
+  ];
+
   let [currentIndex, setCurrentIndex] = React.useState(0);
 
   function limitScroll(){
@@ -151,10 +158,7 @@ export default function ProfileScreen({route, navigation}) {
   return (
     <View style={styleSheet.MainContainer}> 
         <View style={styleSheet.topBorder}>
-        {/* <Text style={styleSheet.phaseText}>Phase 1</Text> */}
-        {/* <Text style={styleSheet.phaseText}>Phase 2</Text> */}
-            <Text style={styleSheet.phaseText}>Phase 3</Text>
-        {/* <Text style={styleSheet.phaseText}>Phase 4</Text> */}
+          <Slider currentIndex = {currentIndex} screens = {myTitles}/>
         </View>
         <Slider currentIndex = {currentIndex} screens = {myScreens} />
 
@@ -296,7 +300,7 @@ const styleSheet2 = StyleSheet.create({
     },
     phaseText: {
         paddingBottom: "3%",
-        fontSize: "50%",
+        fontSize: 20,
         fontFamily: "Gill Sans",
         alignSelf: "center",
         top: "50%",
