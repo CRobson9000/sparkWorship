@@ -8,10 +8,30 @@ export default function SparkCreation({ navigation }) {
     return(
     <View style={stylesPortrait.container}>
         <View style={[sparkViewStyles.sparkViewTopBorder]}>
-            <Text style={{textAlign:"center", fontSize:29, paddingTop: 28}}>Spark Worship</Text>
+            <Text style={{textAlign:"center", fontSize:29, paddingTop: 28}}>Location</Text>
         </View>
-        <View style={[sparkViewStyles.sparkContainer]}>
-            <TextInput style={[sparkViewStyles.inputBox, sparkViewStyles.locationInputBox]}placeholder="Enter Location"></TextInput>
+        <View style={[sparkViewStyles.sparkVerticalContainer]}>
+            <View style={[sparkViewStyles.locationContainer]}>
+                <Text style={{paddingLeft:"4%"}}>Address</Text>
+                <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
+            </View>
+            <View style={[sparkViewStyles.locationContainer]}>
+                <Text style={{paddingLeft:"4%"}}>City</Text>
+                <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
+            </View>
+            <View style={[sparkViewStyles.locationContainer]}>
+                <Text style={{paddingLeft:"4%"}}>Zip</Text>
+                <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
+            </View>
+            <View style={[sparkViewStyles.locationContainer]}>
+                <Text style={{paddingLeft:"4%"}}>State</Text>
+                <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
+            </View>
+            <Text style={{paddingBottom:"4%"}}>- Or -</Text>
+            <View style={[sparkViewStyles.locationContainer]}>
+                <Text style={{paddingLeft:"5%"}}>Previous Location</Text>
+                <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
+            </View>
         </View>
         <View style={[sparkViewStyles.bottomContainer]}>
             <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
@@ -45,6 +65,12 @@ const sparkViewStyles = StyleSheet.create({
         justifyContent: "center", 
         alignItems: "center"
     },
+    locationContainer:
+    {
+        width:"90%",
+        flexDirection:"column", 
+        height:"14%"
+    },
     sparkVerticalContainer:
     {
         width:"100%",
@@ -54,7 +80,21 @@ const sparkViewStyles = StyleSheet.create({
         justifyContent: "center", 
         alignItems: "center"
     },
-    veryTopBox:{
+    roleVeryTopBox:{
+        marginTop: "5%",
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20
+    },
+    roleVeryBottomBox:{
+        marginBottom: "5%",
+        justifyContent: "center",
+        backgroundColor: "#F1884F",
+        height: "8%",
+        borderBottomLeftRadius: 20,
+        borderRightRadius: 20
+    },
+
+    inviteVeryTopBox:{
         marginTop: "5%",
         justifyContent: "center",
         backgroundColor: "#F1884F",
@@ -62,7 +102,7 @@ const sparkViewStyles = StyleSheet.create({
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20
     },
-    veryBottomBox:{
+    inviteVeryBottomBox:{
         marginBottom: "5%",
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20
@@ -110,6 +150,17 @@ const sparkViewStyles = StyleSheet.create({
         textAlign: 'center',
         color: "white",
         width: "85%",
+    },
+    newInputBox:{
+        height:"50%",
+        borderWidth: 0,
+        borderColor: "black",
+        backgroundColor: "#F9CBB1",
+        paddingLeft: "1%",
+        borderRadius: 8,
+        textAlign: 'center',
+        color: "white",
+        width: "100%",
     },
     locationInputBox:{
         textAlign: 'left',
@@ -195,14 +246,37 @@ const sparkViewStyles = StyleSheet.create({
 /*
     Start of Location Entry
 
-        <View style={[sparkViewStyles.sparkContainer]}>
-            <TextInput style={[sparkViewStyles.inputBox, sparkViewStyles.locationInputBox]}placeholder="Enter Location"></TextInput>
+       <View style={[sparkViewStyles.sparkViewTopBorder]}>
+            <Text style={{textAlign:"center", fontSize:29, paddingTop: 28}}>Location</Text>
+        </View>
+        <View style={[sparkViewStyles.sparkVerticalContainer]}>
+            <View style={[sparkViewStyles.locationContainer]}>
+                <Text style={{paddingLeft:"4%"}}>Address</Text>
+                <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
+            </View>
+            <View style={[sparkViewStyles.locationContainer]}>
+                <Text style={{paddingLeft:"4%"}}>City</Text>
+                <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
+            </View>
+            <View style={[sparkViewStyles.locationContainer]}>
+                <Text style={{paddingLeft:"4%"}}>Zip</Text>
+                <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
+            </View>
+            <View style={[sparkViewStyles.locationContainer]}>
+                <Text style={{paddingLeft:"4%"}}>State</Text>
+                <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
+            </View>
+            <Text style={{paddingBottom:"4%"}}>- Or -</Text>
+            <View style={[sparkViewStyles.locationContainer]}>
+                <Text style={{paddingLeft:"5%"}}>Previous Location</Text>
+                <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
+            </View>
         </View>
 
     Start of Profile Adding
 
         <View style={[sparkViewStyles.sparkVerticalContainer]}>
-             <View style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
+             <View style={[sparkViewStyles.boxOne, sparkViewStyles.inviteVeryTopBox]}>
                     <TextInput placeholder='Enter Volunteer Name' style={{fontSize: 18}}></TextInput>
                 </View>
                 <View style={[sparkViewStyles.boxOne]}>
@@ -229,7 +303,7 @@ const sparkViewStyles = StyleSheet.create({
 
                     </Image>
                 </View>
-                <View style={[sparkViewStyles.boxOne, sparkViewStyles.veryBottomBox]}>
+                <View style={[sparkViewStyles.boxOne, sparkViewStyles.inviteVeryBottomBox]}>
                     <Text style={[sparkViewStyles.boxText]}>Profile Name</Text>
                     <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
 
@@ -265,4 +339,41 @@ const sparkViewStyles = StyleSheet.create({
             <Text style={{fontSize:36}}>PM</Text>
         </View>
 
+    Start of Role Adding
+
+
+        <View style={[sparkViewStyles.sparkViewTopBorder]}>
+            <Text style={{textAlign:"center", fontSize:29, paddingTop: 28}}>Create Roles</Text>
+        </View>
+        <View style={[sparkViewStyles.sparkVerticalContainer]}>
+                <View style={[sparkViewStyles.boxOne, sparkViewStyles.roleVeryTopBox]}>
+                    <Text style={[sparkViewStyles.boxText]}>Spark Leader: You</Text>
+                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+
+                    </Image>
+                </View>
+                <View style={[sparkViewStyles.boxOne]}>
+                    <Text style={[sparkViewStyles.boxText]}>Pastry Maker: None</Text>
+                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/circularX.png")}>
+
+                    </Image>
+                </View>
+                <View style={[sparkViewStyles.boxTwo]}>
+                    <Text style={[sparkViewStyles.boxText]}>Wad Thrower: None</Text>
+                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/circularX.png")}>
+
+                    </Image>
+                </View>
+                <View style={[sparkViewStyles.boxOne]}>
+                    <Text style={[sparkViewStyles.boxText]}>Glue Eater: None</Text>
+                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/circularX.png")}>
+
+                    </Image>
+                </View>
+                <View style={[sparkViewStyles.boxTwo]}>
+                </View>
+                <View style={[sparkViewStyles.boxOne, sparkViewStyles.roleVeryBottomBox]}>
+                    <TextInput placeholder='Enter Role' style={{fontSize: 18}}></TextInput>
+                </View>
+        </View>
 */
