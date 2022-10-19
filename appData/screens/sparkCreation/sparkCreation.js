@@ -11,26 +11,53 @@ export default function SparkCreation({ navigation }) {
             <Text style={{textAlign:"center", fontSize:29, paddingTop: 28}}>Location</Text>
         </View>
         <View style={[sparkViewStyles.sparkVerticalContainer]}>
-            <View style={[sparkViewStyles.locationContainer]}>
-                <Text style={{paddingLeft:"4%"}}>Address</Text>
-                <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
+            <View style={[sparkViewStyles.centerContents]}>
+                <Text style={[sparkViewStyles.inbetweenText]}>Spark Begins On</Text>
+                <View style={[sparkViewStyles.timeContainer]}>
+                    <TextInput placeholder='MM' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+                    <TextInput placeholder='DD' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+                    <TextInput placeholder='YY' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
+                    <TextInput placeholder='12' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
+                    <TextInput placeholder='30' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
+                    <TextInput placeholder='PM' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                </View>
             </View>
-            <View style={[sparkViewStyles.locationContainer]}>
-                <Text style={{paddingLeft:"4%"}}>City</Text>
-                <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
+            <View style={[sparkViewStyles.centerContents, sparkViewStyles.middleMan]}>
+                <Text style={[sparkViewStyles.inbetweenText]}>First Rehearsal On</Text>
+                <View style={[sparkViewStyles.timeContainer]}>
+                    <TextInput placeholder='MM' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+                    <TextInput placeholder='DD' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+                    <TextInput placeholder='YY' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
+                    <TextInput placeholder='12' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
+                    <TextInput placeholder='30' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
+                    <TextInput placeholder='PM' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                </View>
             </View>
-            <View style={[sparkViewStyles.locationContainer]}>
-                <Text style={{paddingLeft:"4%"}}>Zip</Text>
-                <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
-            </View>
-            <View style={[sparkViewStyles.locationContainer]}>
-                <Text style={{paddingLeft:"4%"}}>State</Text>
-                <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
-            </View>
-            <Text style={{paddingBottom:"4%"}}>- Or -</Text>
-            <View style={[sparkViewStyles.locationContainer]}>
-                <Text style={{paddingLeft:"5%"}}>Previous Location</Text>
-                <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
+            <View style={[sparkViewStyles.centerContents]}>
+                <Text style={[sparkViewStyles.inbetweenText]}>Roles to be Filled By</Text>
+                <View style={[sparkViewStyles.timeContainer]}>
+                    <TextInput placeholder='MM' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+                    <TextInput placeholder='DD' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+                    <TextInput placeholder='YY' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
+                    <TextInput placeholder='12' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
+                    <TextInput placeholder='30' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
+                    <TextInput placeholder='PM' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                </View>
             </View>
         </View>
         <View style={[sparkViewStyles.bottomContainer]}>
@@ -70,6 +97,12 @@ const sparkViewStyles = StyleSheet.create({
         width:"90%",
         flexDirection:"column", 
         height:"14%"
+    },
+    timeContainer:{
+        flexDirection:"row",
+        marginBottom: "8%",
+        justifyContent: "center",
+        alignItems: "center"
     },
     sparkVerticalContainer:
     {
@@ -222,7 +255,11 @@ const sparkViewStyles = StyleSheet.create({
     {
         textAlign: 'center'
     },
-
+    centerContents:
+    {
+        justifyContent:"center", 
+        alignItems:"center"
+    },
     button:
     {
         backgroundColor: "#006175",
@@ -240,6 +277,20 @@ const sparkViewStyles = StyleSheet.create({
         marginBottom: "10%",
         height: "80%",
         width: "40%"
+    },
+    timeAndDateInput:
+    {
+        fontSize:26,
+        justifyContent:"center"
+    },
+    inbetweenText:
+    {
+        marginHorizontal:"5%", 
+        fontSize:20
+    },
+    middleMan:
+    {
+        marginVertical: "20%"
     }
 });
 
@@ -272,72 +323,82 @@ const sparkViewStyles = StyleSheet.create({
                 <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
             </View>
         </View>
-
-    Start of Profile Adding
-
-        <View style={[sparkViewStyles.sparkVerticalContainer]}>
-             <View style={[sparkViewStyles.boxOne, sparkViewStyles.inviteVeryTopBox]}>
-                    <TextInput placeholder='Enter Volunteer Name' style={{fontSize: 18}}></TextInput>
-                </View>
-                <View style={[sparkViewStyles.boxOne]}>
-                    <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
-
-                    </Image>
-                </View>
-                <View style={[sparkViewStyles.boxTwo]}>
-                    <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
-
-                    </Image>
-                </View>
-                <View style={[sparkViewStyles.boxOne]}>
-                    <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
-
-                    </Image>
-                </View>
-                <View style={[sparkViewStyles.boxTwo]}>
-                    <Text style={[sparkViewStyles.boxText]}>Profile Name</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
-
-                    </Image>
-                </View>
-                <View style={[sparkViewStyles.boxOne, sparkViewStyles.inviteVeryBottomBox]}>
-                    <Text style={[sparkViewStyles.boxText]}>Profile Name</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
-
-                    </Image>
-                </View>
+        <View style={[sparkViewStyles.bottomContainer]}>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Exit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Next</Text>
+            </TouchableOpacity>
         </View>
 
 
     Start of Date Entry
 
-        <View style={[sparkViewStyles.sparkContainer]}>
-            <View style={[sparkViewStyles.dateInputContainer]}>
-                <TextInput style={[sparkViewStyles.dateInputBox]}placeholder="10"></TextInput>
-                <Text style={[sparkViewStyles.labelUnderneath]}>Month</Text>
+        <View style={stylesPortrait.container}>
+        <View style={[sparkViewStyles.sparkViewTopBorder]}>
+            <Text style={{textAlign:"center", fontSize:29, paddingTop: 28}}>Location</Text>
+        </View>
+        <View style={[sparkViewStyles.sparkVerticalContainer]}>
+            <View style={[sparkViewStyles.centerContents]}>
+                <Text style={[sparkViewStyles.inbetweenText]}>Spark Begins On</Text>
+                <View style={[sparkViewStyles.timeContainer]}>
+                    <TextInput placeholder='MM' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+                    <TextInput placeholder='DD' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+                    <TextInput placeholder='YY' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
+                    <TextInput placeholder='12' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
+                    <TextInput placeholder='30' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
+                    <TextInput placeholder='PM' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                </View>
             </View>
-            <View style={[sparkViewStyles.dateInputContainer]}>
-                <TextInput style={[sparkViewStyles.dateInputBox]}placeholder="4"></TextInput>
-                <Text style={[sparkViewStyles.labelUnderneath]}>Day</Text>
+            <View style={[sparkViewStyles.centerContents, sparkViewStyles.middleMan]}>
+                <Text style={[sparkViewStyles.inbetweenText]}>First Rehearsal On</Text>
+                <View style={[sparkViewStyles.timeContainer]}>
+                    <TextInput placeholder='MM' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+                    <TextInput placeholder='DD' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+                    <TextInput placeholder='YY' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
+                    <TextInput placeholder='12' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
+                    <TextInput placeholder='30' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
+                    <TextInput placeholder='PM' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                </View>
             </View>
-            <View style={[sparkViewStyles.dateInputContainer]}>
-                <TextInput style={[sparkViewStyles.dateInputBox]}placeholder="2022"></TextInput>
-                <Text style={[sparkViewStyles.labelUnderneath]}>Year</Text>
+            <View style={[sparkViewStyles.centerContents]}>
+                <Text style={[sparkViewStyles.inbetweenText]}>Roles to be Filled By</Text>
+                <View style={[sparkViewStyles.timeContainer]}>
+                    <TextInput placeholder='MM' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+                    <TextInput placeholder='DD' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+                    <TextInput placeholder='YY' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
+                    <TextInput placeholder='12' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
+                    <TextInput placeholder='30' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                    <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
+                    <TextInput placeholder='PM' style={[sparkViewStyles.timeAndDateInput]}></TextInput>
+                </View>
             </View>
         </View>
-
-    Start of Time Entry
-
- 
-        <View style={[sparkViewStyles.sparkContainer]}>
-            <TextInput style={[sparkViewStyles.hourInputBox]} placeholder="6"></TextInput>
-            <Text style={{fontSize:36, marginBottom:"1.5%"}}>:</Text>
-            <TextInput style={[sparkViewStyles.minuteInputBox]} placeholder="6"></TextInput>
-            <Text style={{fontSize:36}}>PM</Text>
+        <View style={[sparkViewStyles.bottomContainer]}>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Previous</Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Next</Text>
+            </TouchableOpacity>
         </View>
+    </View>
+           
 
     Start of Role Adding
 
@@ -375,5 +436,51 @@ const sparkViewStyles = StyleSheet.create({
                 <View style={[sparkViewStyles.boxOne, sparkViewStyles.roleVeryBottomBox]}>
                     <TextInput placeholder='Enter Role' style={{fontSize: 18}}></TextInput>
                 </View>
+        </View>
+
+    Start of Profile Invite
+
+        <View style={[sparkViewStyles.sparkVerticalContainer]}>
+             <View style={[sparkViewStyles.boxOne, sparkViewStyles.inviteVeryTopBox]}>
+                    <TextInput placeholder='Enter Volunteer Name' style={{fontSize: 18}}></TextInput>
+                </View>
+                <View style={[sparkViewStyles.boxOne]}>
+                    <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
+                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+
+                    </Image>
+                </View>
+                <View style={[sparkViewStyles.boxTwo]}>
+                    <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
+                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+
+                    </Image>
+                </View>
+                <View style={[sparkViewStyles.boxOne]}>
+                    <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
+                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+
+                    </Image>
+                </View>
+                <View style={[sparkViewStyles.boxTwo]}>
+                    <Text style={[sparkViewStyles.boxText]}>Profile Name</Text>
+                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+
+                    </Image>
+                </View>
+                <View style={[sparkViewStyles.boxOne, sparkViewStyles.inviteVeryBottomBox]}>
+                    <Text style={[sparkViewStyles.boxText]}>Profile Name</Text>
+                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+
+                    </Image>
+                </View>
+        </View>
+        <View style={[sparkViewStyles.bottomContainer]}>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Previous</Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => navigation.navigate("RegistrationScreen")}>
+                <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Next</Text>
+            </TouchableOpacity>
         </View>
 */
