@@ -22,7 +22,7 @@ import {StyleSheet} from 'react-native';
 
 // import for Bottom Nav Bar
 
-import Icon from 'react-native-ico-material-design';
+//import Icon from 'react-native-ico-material-design';
 
 
 
