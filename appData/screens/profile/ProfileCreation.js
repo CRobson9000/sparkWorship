@@ -30,7 +30,8 @@ export default function ProfileScreen({route, navigation}) {
   } 
 
   let update = useRef({});
-  let userId = "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+  // let userId = "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+  let userId = "wVgW65Og51OCuC7lD8LtRJBWuUC2"
 
   const updateToStart = () => {
     //console.log("update", update);
@@ -62,7 +63,7 @@ export default function ProfileScreen({route, navigation}) {
         set(reference, updateVal);
       }
     }
-    navigation.navigate("DatabaseTest");
+    navigation.navigate("Router");
   }
 
 
@@ -168,6 +169,7 @@ export default function ProfileScreen({route, navigation}) {
         </View>
         <View style={styleSheet.row}>
             <TouchableOpacity style={styleSheet.button} onPress = {() => sendPayload()}><Text style={styleSheet.buttonText}>Submit</Text></TouchableOpacity>
+            <TouchableOpacity style={styleSheet.button} onPress = {() => setCurrentIndex(2)}><Text style={styleSheet.buttonText}>Test</Text></TouchableOpacity>        
         </View>
     </View>
   );

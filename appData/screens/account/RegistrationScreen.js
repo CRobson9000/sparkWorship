@@ -51,7 +51,7 @@ export default function RegisterScreen({ navigation }) {
           const user = userCredential.user;
           //set the global userId, which will call an observer
           userId.setVal(user.uid);
-          navigation.navigate("DatabaseTest");   
+          navigation.navigate("Router");   
       }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;

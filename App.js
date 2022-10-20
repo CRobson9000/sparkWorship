@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LoginScreen from './appData/screens/account/LoginScreen.js';
 import RegistrationScreen from './appData/screens/account/RegistrationScreen.js';
-import DatabaseTest from './appData/screens/DatabaseTest.js';
+import Router from './appData/screens/Router.js';
 import SparkView from './appData/screens/sparks/sparkView.js';
 import LocationData from './appData/screens/LocationData.js';
 import ProfileCreation from './appData/screens/profile/ProfileCreation'
@@ -13,15 +13,21 @@ import MyTest from './appData/screens/MyTest.js';
 import SparkCreation from './appData/screens/sparkCreation/sparkCreation.js';
 import UserDashboard from './appData/screens/dashboard/UserDashboard';
 import HostingDashboard from './appData/screens/dashboard/HostingDashboard';
+import ComponentTesting from './appData/screens/ComponentTesting.js';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   return (
     <NavigationContainer>
+<<<<<<< Updated upstream
       <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="SparkCreation">
+=======
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="ComponentTesting">
+>>>>>>> Stashed changes
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
-        <Stack.Screen name="DatabaseTest" component={DatabaseTest} />
+        <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
+        <Stack.Screen name="Router" component={Router} />
         <Stack.Screen name="ProfileScreenIPublic" component={ProfileScreenIPublic} />
         <Stack.Screen name="ProfileScreenIPersonal" component={ProfileScreenIPersonal} />
         <Stack.Screen name="ProfileCreation" component={ProfileCreation}/>
@@ -31,6 +37,7 @@ function App() {
         <Stack.Screen name="SparkCreation" component={SparkCreation}/>
         <Stack.Screen name="userDashboard" component={UserDashboard}/>
         <Stack.Screen name="HostingDashboard" component={HostingDashboard}/>
+        <Stack.Screen name="ComponentTesting" component={ComponentTesting}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

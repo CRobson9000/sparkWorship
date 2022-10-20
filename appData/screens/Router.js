@@ -4,7 +4,7 @@ import { mainStyles } from '../styles/dataBaseTestStyles';
 import { getDatabase, ref, onValue, set, get } from 'firebase/database';
 import '../../config/firebase.js';
 
-export default function DatabaseTest({ navigation }) {
+export default function Router({ navigation }) {
     const [dataText, setDataText] = useState("Database Text");
 
     function getNameListener() {
@@ -53,7 +53,11 @@ export default function DatabaseTest({ navigation }) {
                 </TouchableHighlight>
 
                 <TouchableHighlight style={[mainStyles.button, {backgroundColor: "blue"}]} onPress={() => navigation.navigate("HostingDashboard")}>
-                    <Text style={{color: "white"}}> Dashboard Hosting </Text>
+                    <Text style={{color: "white"}}> Conversations Testing </Text>
+                </TouchableHighlight>
+
+                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "blue"}]} onPress={() => navigation.navigate("Test")}>
+                    <Text style={{color: "white"}}> Messages Testing </Text>
                 </TouchableHighlight>
             </View>
         </View>

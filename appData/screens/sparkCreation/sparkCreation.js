@@ -70,7 +70,7 @@ export default function SparkCreation({ navigation }) {
         const reference7 = ref(db, `Sparks/${sparkId}/info/publishedTDO/time/minutes`);
         set(reference7, parseInt(update["minutes"]));
 
-        navigation.navigate("DatabaseTest");
+        navigation.navigate("Router");
     }
 
 

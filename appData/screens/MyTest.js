@@ -1,114 +1,134 @@
-import { Image, StyleSheet, TouchableHighlight, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import React from 'react';
+import { StyleSheet, TouchableHighlight, Text, View, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import React, {useRef, useEffect} from 'react';
 import { Input, Slider } from '../components/components';
-import { Observable } from '../components/classes';
-import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
+import { Observable, TDO } from '../components/classes';
 
-import { getDatabase, ref, set, get } from 'firebase/database';
+import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 import { screensEnabled } from 'react-native-screens';
 
 export default function MyTest({ navigation }) {
-  let role = new Observable("", () => updatePayload(role.getVal(), "role"));
-  let title = new Observable("", () => updatePayload(title.getVal(), "title"));
-  let bio = new Observable("", () => updatePayload(bio.getVal(), "bio"));
-
-  let update = {};
-  let userId = "pgFfrUx2ryd7h7iE00fD09RAJyG3";
-
-  const updatePayload = (updateVal, updateName) =>
-  {
-    update[updateName] = updateVal;
-  }
-
-  function sendPayload() {
-    //loop through all of the key, value pairs in the object update and set the data in firebase based upon the keys and values
-    // for (let i = 0; i < Object.keys(update).length; i++)
-    // {
-    //   //get keys and values out of update object, which houses everything that was changed
-    //   let updateVal = update[Object.keys(update)[i]];
-    //   let updateKey = Object.keys(update)[i];
-    //   if (updateVal != "") {
-    //     //send an single update to the database, which changes the value at the key to the new value under whatever the current user is
-    //     const db = getDatabase();
-    //     const reference = ref(db, `Users/${userId}/info/${updateKey}`);
-    //     set(reference, updateVal);
-    //   }
-    // }
-    console.log(update); 
-  }
-
-  //code for slider
-  const Screen1 = (props) => {
-    return (
-      <View style = {{flexDirection: "column"}}>
-        <Text> Hi There! </Text>
-        <Text> How Are You? </Text>
+  const renderMessage = (object, index, separators) => {
+    //convert firebase obj to TDO
+    let TDOobject = object.item.sentTDO.TDO;
+    let tdo = new TDO(
+      TDOobject.hours, 
+      TDOobject.minutes,
+      TDOobject.seconds,
+      TDOobject.month,
+      TDOobject.day,
+      TDOobject.year
+    );
+    return(
+      <View style = {styles.message}>
+        <View style={{flexDirection:"row", justifyContent: "flex-start"}}>
+          <View style = {styles.sender}><Text>{object.item.sender}</Text></View>
+          <View style = {styles.textMessage}><Text>{object.item.message}</Text></View>
+        </View>
+        <View style = {styles.time}>
+          <Text style = {{margin: "2%"}}>{tdo.getFormattedTime()}</Text>
+          <Text style = {{margin: "2%"}}>{tdo.getFormattedDate()}</Text>
+        </View>
       </View>
     );
   }
 
-  const Screen2 = (props) => {
-    return (
-      <View style = {{flexDirection: "column"}}>
-        <Text> Nice To Meet You </Text>
-        <Text> Buddy Oh </Text>
-      </View>
-    );
-  }
+  let myMessage = "";
+  let currentUser = "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+  let otherUser = "wVgW65Og51OCuC7lD8LtRJBWuUC2";
+  let conversationId = "-NE1h9dOvSOgnJMdRTRv";
+  // let conversationId = "";
+  const [renderAgain, setRenderAgain] = React.useState(false);
+  const [messages, setMessages] = React.useState([]);
 
-  const Screen3 = (props) => {
-    return (
-      <View style = {{flexDirection: "column"}}>
-        <Text> Eat Some Food </Text>
-        <Text> Cause You're Hungry </Text>
-      </View>
-    );
-  }
-
-  let myScreens = [
-    <Screen1 />, <Screen2 />, <Screen3 />
-  ];
-
-  let [currentIndex, setCurrentIndex] = React.useState(0);
-
-  function limitScroll(){
-    if (currentIndex < 0) {
-      setCurrentIndex(myScreens.length - 1);
+  function invertArray(array) {
+    let result = [];
+    for (let i = 0; i < array.length; i++) {
+      result.unshift(array[i]);
     }
-    else if (currentIndex > myScreens.length - 1) {
-      setCurrentIndex(0);
+    return result;
+  }
+
+  async function loadMessages() {
+    //get initial data
+    const db = getDatabase();
+    const messageRef = ref(db, `Messaging/${conversationId}/messages`);
+    await onValue(messageRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        let dataArray = Object.values(data);
+        let final = invertArray(dataArray);
+        setMessages(final);
+        setRenderAgain(true);
+      }  
+    });
+  }
+
+  function sendMessage() {
+    //if there's a message, send it
+
+    if (myMessage != "" && myMessage != " ") {
+      // get database
+      const db = getDatabase();
+
+      // setup a conversation space and get the id if there isn't already one |  TDO: more needed here!
+      if (conversationId == "") {
+        const reference = ref(db, "Messaging");
+        let conversationObject = push(reference, {
+          type: "individual",
+          people: [currentUser, otherUser]
+        }); 
+        let conversationIdArray = conversationObject.toString().split("/");
+        conversationId = conversationIdArray[conversationIdArray.length - 1];
+      }
+  
+      //create the message
+      let dateObj = new Date();
+      let sentTDO = new TDO(
+        dateObj.getHours(), 
+        dateObj.getMinutes(),
+        dateObj.getSeconds(),
+        dateObj.getMonth() + 1,
+        dateObj.getDate(),
+        dateObj.getFullYear()
+      );
+
+      //set messages based on my messages 
+      const messageRef = ref(db, `Messaging/${conversationId}/messages`);
+      push(messageRef, {
+        message: myMessage,
+        sender: currentUser,
+        sentTDO
+      }); 
+
+       //clear myMessage
+       myMessage = "";
     }
   }
 
-  //---------------------------------------------------------------------------
-  // Section of code to put functions to be run after a component is re-rendered
-  //---------------------------------------------------------------------------
-
-  //loops the index back around on the other end when 
-  limitScroll();
+  //only run this method on the first render of the page
+  useEffect(() => {
+    loadMessages();
+  }, []);
 
   return (
     <View style = {styles.container}>
         <View style = {styles.top}>
-          <Input placeHolderText={"insert role"} func = {(val) => role.setVal(val)}/>
-          <Input placeHolderText={"insert title"} func = {(val) => title.setVal(val)}/>
-          <Input placeHolderText={"insert bio"} func = {(val) => bio.setVal(val)}/>
-          <TouchableHighlight style = {styles.button} onPress = {() => sendPayload()}>
-            <Text> Tap This! </Text>
-          </TouchableHighlight>
+          <FlatList 
+            style = {styles.flatList}
+            data = {messages}
+            renderItem = {renderMessage}
+            inverted = {true}
+            extraData = {renderAgain}
+          />
         </View>
-        <View style = {styles.botContainer}>
-          <View style = {{flexDirection: "row", height: "30%"}}>
-            <TouchableHighlight style = {styles.buttons} onPress = {() => setCurrentIndex(currentIndex - 1)}>
-              <Text> Prev </Text>
-            </TouchableHighlight>
-            <TouchableHighlight style = {styles.buttons} onPress = {() => setCurrentIndex(currentIndex + 1)}>
-              <Text> Next </Text>
-            </TouchableHighlight>
-          </View>
-          <View style={styles.sliderContainer}>
-            <Slider currentIndex = {currentIndex} screens = {myScreens} /> 
-          </View>
+        <View style = {styles.messagingBottomContainer}>
+          <Input placeHolderText={"Type Message"} func = {(val) => myMessage = val}/>
+          <TouchableHighlight style = {styles.button} onPress = {() => sendMessage()}>
+            <Text> Send </Text>
+          </TouchableHighlight>
+          <TouchableHighlight style = {styles.button} onPress = {() => navigation.navigate("Router")}>
+            <Text> Go back </Text>
+          </TouchableHighlight>
         </View>
     </View> 
   );    
@@ -123,40 +143,20 @@ const styles = StyleSheet.create({
   },
 
   top: {
-    height: "40%",
+    height: "80%",
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "blue"
   },
 
-  botContainer: {
-    height: "60%",
-    width: "100%"
-  },
-
-  sliderContainer: {
-    backgroundColor: "white",
-    width: "100%",
-    height: "50%",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-
-  header: {
-    width: "100%",
-    height: "20%",
-    top: "0%"
-  },
-
-  firstPage: {
+  messagingBottomContainer: {
     backgroundColor: "red",
-    position: "relative",
-    width: "90%",
-    height: "50%",
     flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
-    justifyContent: "center"
+    height: "20%",
+    width: "100%"
   },
   
   button: {
@@ -165,11 +165,38 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: "purple"
   },
-
-  buttons: {
-    height: "40%",
+  message: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+    marginLeft: "5%",
+    marginRight: "5%",
+    marginBottom: "5%",
+  },
+  sender: {
+    backgroundColor: "red",
+    justifyContent: "center",
     width: "20%",
-    margin: 20,
-    backgroundColor: "green"
+    alignItems: "center"
+  },
+  textMessage: {
+    backgroundColor: "orange",
+    justifyContent: "center",
+    width: "80%",
+    alignItems: "flex-start",
+    paddingLeft: "5%",
+    padding: "10%"
+  },
+  time: {
+    backgroundColor: "green",
+    justifyContent: "center",
+    width: "100%",
+    alignItems: "center",
+    flexDirection: "row"
+  },
+  flatList: {
+    backgroundColor: "purple",
+    width: "100%"
   }
 });
