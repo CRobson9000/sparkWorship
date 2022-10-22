@@ -23,15 +23,6 @@ function App() {
         <Stack.Screen name="ProfileScreenIPublic" component={ProfileScreenIPublic} />
         <Stack.Screen name="ProfileScreenIPersonal" component={ProfileScreenIPersonal} />
         <Stack.Screen name="ProfileCreation" component={ProfileCreation}/>
-<<<<<<< Updated upstream
-        <Stack.Screen name="LocationData" component={LocationData} />
-        <Stack.Screen name="SparkView" component={SparkView}/>
-        <Stack.Screen name="Test" component={MyTest}/>
-        <Stack.Screen name="SparkCreation" component={SparkCreation}/>
-        <Stack.Screen name="userDashboard" component={UserDashboard}/>
-        <Stack.Screen name="HostingDashboard" component={HostingDashboard}/>
-=======
->>>>>>> Stashed changes
       </Stack.Navigator>
     </NavigationContainer>
   );
