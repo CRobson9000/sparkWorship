@@ -3,6 +3,7 @@ import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity, Image } fr
 import { Input, Slider } from '../../components/components';
 import { Observable } from '../../components/classes';
 import { getDatabase, ref, set, get } from 'firebase/database';
+import SelectList from 'react-native-dropdown-select-list'
 
 export default function ProfileScreen({route, navigation}) {
   //set environment variables
@@ -66,11 +67,14 @@ export default function ProfileScreen({route, navigation}) {
     navigation.navigate("Router");
   }
 
-
-//code for sliders and screens
+  //code for sliders and screens
   const Screen1 = (props) => {
+    let dropDownItems = ['Redo', 'Undo', 'Cut', 'Copy'];
+    const [selected, setSelected] = React.useState("");
+
     return (
         <View style={styleSheet.content}>
+            <SelectList data={dropDownItems} setSelected={setSelected} />
             <Text style={styleSheet.text}>Name</Text>
             <Input start = {inputs.name.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.name.setVal(val)}/>
             <Text style={styleSheet.text}>Email</Text>

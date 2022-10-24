@@ -30,6 +30,7 @@
     "react-dom": "18.0.0",
     "react-native": "0.69.6",
     "react-native-calendars": "^1.1289.0",
+    "react-native-dropdown-select-list": "^1.0.23",
     "react-native-geocoding": "^0.5.0",
     "react-native-gesture-handler": "~2.5.0",
     "react-native-google-matrix": "^0.0.3",

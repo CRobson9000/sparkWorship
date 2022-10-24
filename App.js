@@ -20,11 +20,7 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-<<<<<<< Updated upstream
       <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="SparkCreation">
-=======
-      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="ComponentTesting">
->>>>>>> Stashed changes
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
         <Stack.Screen name="Router" component={Router} />

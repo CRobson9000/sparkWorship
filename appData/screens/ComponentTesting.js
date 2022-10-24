@@ -6,6 +6,7 @@ import { Observable, TDO } from '../components/classes';
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 import { List } from 'react-native-paper';
 import { Menu } from 'react-native-paper';
+import SelectList from 'react-native-dropdown-select-list'
 
 export default function ComponentTesting({ navigation }) {
   let instruments = ["Piano", "Bass", "Guitar"];
@@ -60,6 +61,11 @@ export default function ComponentTesting({ navigation }) {
     );
   }
 
+
+  let dropDownItems = ['Redo', 'Undo', 'Cut', 'Copy', 'Paste', 'Delete'];
+  const [selected, setSelected] = React.useState("true");
+  let myTestItem = "";
+
   return (
     // Accordion Component Code
     <View style = {accordianStyles.container}>
@@ -78,13 +84,35 @@ export default function ComponentTesting({ navigation }) {
         <Text> Hi </Text>
       </View>
 
-      <View style = {{width: "100%", height: "10%", backgroundColor: "blue"}}>
-        <DropDown />
+      {/* <View style = {{backgroundColor: "green", height: "10%", width: "100%", position: "absolute", top: "40%"}}>
+        <SelectList 
+          style = {{position: "absolute", top: "205"}}
+          data={dropDownItems} 
+          setSelected={setSelected} 
+          dropDownStyles={dropDownStyles.menu}
+          maxHeight={100}
+        />
+      </View> */}
+      <View style = {{backgroundColor: "green", height: "10%", width: "100%"}}>
+        <DropDown 
+          placeholder = {"Choose a role"} 
+          items = {dropDownItems} 
+          // style = {dropDownStyles} 
+          func = {(item)=> {myTestItem = item; console.log(myTestItem)}}
+          rerenderParent = {() => setSelected(!selected)}
+        />
+      </View>
+      
+      
+      <View style = {{backgroundColor: "red", zIndex: -3}}>
+        <Text> Hi </Text>
+        <Text>{selected}</Text>
       </View>
 
-      <View style = {{backgroundColor: "red"}}>
+
+      {/* <View style = {{backgroundColor: "red"}}>
         <Text> Hi </Text>
-      </View>
+      </View> */}
       
     </View> 
   );    

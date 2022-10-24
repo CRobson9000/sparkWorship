@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { TextInput, View, TouchableOpacity } from 'react-native';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, FlatList } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import { Button, Menu, Divider, Provider } from 'react-native-paper';
+import { Menu, IconButton } from 'react-native-paper';
 //element for input
 const Input = (props) => {
     const [text, onChangeText] = React.useState(props.start || "");
@@ -59,15 +59,51 @@ class Slider extends Component {
   }
 }
 
-const DropDown = (items, func, style) => {
+const DropDown = (props) => {
+  const [expanded, setExpanded] = React.useState(false);
+  const inputStyle = props.style || {};
+  const [placeholder, setPlaceholder] = React.useState(props.placeholder);
+  const rerenderParent = props.rerenderParent;
+
+  const dropDownContent = () => {
+    if (expanded) {
+      return(
+        <View style={[dropDownStyles.listContainer, inputStyle.listContainer]}>
+          <FlatList 
+            style = {{backgroundColor: "blue", width: "100%", height: "100%", zIndex: 1}}
+            data = {props.items}
+            renderItem = {renderItem}
+          />
+        </View>
+      )
+    }
+  }
+
+  const onSelect = (item) => {
+    props.func(item);
+    setPlaceholder(item);
+    setExpanded(false);
+  }
+
+  const renderItem = (object, index, separators) =>
+  {
+    return (
+      <Menu.Item style = {[dropDownStyles.menuItem, inputStyle.menuItem]} onPress={() => onSelect(object.item)} title={object.item} />
+    );
+  }
+
   const dropDownStyles = StyleSheet.create({
     container: {
-      width: "50%",
-      height: "50%"
+      width: "70%",
+      height: "70%"
     },
     listContainer: {
       width: "100%",
-      height: "100%",
+      height: "300%",
+      position: "absolute",
+      top: "100%",
+      justifyContent: "center",
+      alignItems: "center",
     },
     menuItem: {
       flexDirection: "row",
@@ -82,31 +118,19 @@ const DropDown = (items, func, style) => {
       alignItems: "center",
       width: "100%",
       height: "100%",
-      padding: "5%",
-      backgroundColor: "yellow"
+      padding: "5%"
     }
   });
 
-  const [expanded, setExpanded] = React.useState(false);
-
-  const dropDownContent = () => {
-    if (expanded) {
-      return(
-        <View style={dropDownStyles.listContainer}>
-          <Menu.Item style = {dropDownStyles.menuItem} onPress={() => {}} title="Redo" />
-          <Menu.Item style = {dropDownStyles.menuItem} onPress={() => {}} title="Undo" />
-          <Menu.Item style = {dropDownStyles.menuItem} onPress={() => {}} title="Cut" />
-          <Menu.Item style = {dropDownStyles.menuItem} onPress={() => {}} title="Copy" />
-          <Menu.Item style = {dropDownStyles.menuItem} onPress={() => {}} title="Paste" />
-        </View>
-      )
-    }
-  }
-
   return(
-    <View style={dropDownStyles.container}>
-      <TouchableOpacity style = {dropDownStyles.element} onPress={() => setExpanded(!expanded)}>
-        <Text> Placeholder Text </Text>
+    <View style={[dropDownStyles.container, inputStyle.container]}>
+      <TouchableOpacity style = {[dropDownStyles.element, inputStyle.element]} onPress={() => {setExpanded(!expanded); rerenderParent()}}>
+        <Text> {placeholder} </Text>
+        <IconButton
+          icon="chevron-down"
+          size={20}
+          onPress={() => setExpanded(!expanded)}
+        />
       </TouchableOpacity>
       {dropDownContent()}
     </View>  
