@@ -13,17 +13,17 @@ export default function SparkView({ navigation }) {
             </View>
             <View style={[sparkViewStyles.sparkContainer]}>
                 <View style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
-                    <View style={{width:"85%"}}>
+                    <View style={{width:"87%"}}>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>Sunrise Worship Service</Text>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Starting at 7AM on Apr 6th</Text>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Cannon Hill, PA, 19512</Text>
                     </View>
-                    <View style={{width:"15%"}}>
+                    <View style={{width:"13%", alignItems:"center"}}>
                         <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
 
                         </Image>
-                        <Image style={{width: "80%", height: "35%"}} source={require("../../../assets/miniEri.png")}>
+                        <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
 
                         </Image>
                     </View>
@@ -35,27 +35,27 @@ export default function SparkView({ navigation }) {
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Starting at 6PM on May 16th</Text>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Cannon Hill, PA, 19512</Text>
                     </View>
-                    <View style={{width:"13%"}}>
+                    <View style={{width:"13%", alignItems:"center"}}>
                         <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
 
                         </Image>
-                        <Image style={{width: "85%", height: "30%"}} source={require("../../../assets/miniEri.png")}>
+                        <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
 
                         </Image>
                     </View>
                 </View>
                 <View style={[sparkViewStyles.boxOne]}>
-                <View style={{width:"85%"}}>
+                <View style={{width:"87%"}}>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>Pentatonix Live (Acappella)</Text>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Pentatonix</Text>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Starting at 7AM on Dec 24th</Text>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Cannon Hill, PA, 19512</Text>
                     </View>
-                    <View style={{width:"10%", alignItems: "flex-start"}}>
+                    <View style={{width:"13%", alignItems:"center"}}>
                         <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
 
                         </Image>
-                        <Image style={{width: "100%", height: "30%", marginRight: "5%"}} source={require("../../../assets/miniEri.png")}>
+                        <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
 
                         </Image>
                     </View>
@@ -78,7 +78,7 @@ export default function SparkView({ navigation }) {
                         <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
 
                         </Image>
-                        <Image style={{width: "80%", height: "35%"}} source={require("../../../assets/miniEri.png")}>
+                        <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
 
                         </Image>
                     </View>
@@ -101,22 +101,22 @@ export default function SparkView({ navigation }) {
                         <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
 
                         </Image>
-                        <Image style={{width: "80%", height: "35%", marginRight: "5%"}} source={require("../../../assets/miniEri.png")}>
+                        <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
 
                         </Image>
                     </View>
                 </View>
             </View>
             <View style={[sparkViewStyles.bottomContainer]}>
-                <Image style={{width: "7%", height: "45%", marginLeft: "6.5%"}} source={require("../../../assets/Home.png")}> 
+                <Image style={{width: "7.5%", height: "45%", marginLeft: "6.5%"}} source={require("../../../assets/Home.png")}> 
                 </Image>
-                <Image style={{width: "7%", height: "45%"}} source={require("../../../assets/Vector.png")}> 
+                <Image style={{width: "7.5%", height: "45%"}} source={require("../../../assets/Vector.png")}> 
                 </Image>
-                <Image style={{width: "7%", height: "45%"}} source={require("../../../assets/Chat.png")}> 
+                <Image style={{width: "7.5%", height: "45%"}} source={require("../../../assets/Chat.png")}> 
                 </Image>
-                <Image style={{width: "7%", height: "45%"}} source={require("../../../assets/Plus.png")}> 
+                <Image style={{width: "7.5%", height: "45%"}} source={require("../../../assets/Plus.png")}> 
                 </Image>
-                <Image style={{width: "7%", height: "45%", marginRight: "6.5%"}} source={require("../../../assets/Profile.png")}> 
+                <Image style={{width: "7.5%", height: "45%", marginRight: "6.5%"}} source={require("../../../assets/Profile.png")}> 
                 </Image>
             </View>
         </View>
@@ -188,7 +188,8 @@ const sparkViewStyles = StyleSheet.create({
         height:"8%",
         flexDirection: "row", 
         justifyContent: "space-between", 
-        alignItems: "center"
+        alignItems: "center",
+        backgroundColor: "rgba(255,255,255,1)",
     },
     inputBox: {
         height: "7.5%",
@@ -219,5 +220,11 @@ const sparkViewStyles = StyleSheet.create({
         height: "7.5%",
         marginBottom: "10%",
         borderWidth: 3
+    },
+    profPic:{
+        width: "93%", 
+        height: "35%", 
+        marginRight: "30%"
     }
+
 });
