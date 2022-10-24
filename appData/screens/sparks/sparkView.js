@@ -12,10 +12,20 @@ export default function SparkView({ navigation }) {
             </View>
             <View style={[sparkViewStyles.sparkContainer]}>
                 <View style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
-                    <Text style={[sparkViewStyles.boxText]}>X Playing at Y</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+                    <View style={{width:"85%"}}>
+                        <Text style={[sparkViewStyles.boxText]}>Sunrise Worship Service</Text>
+                        <Text style={[sparkViewStyles.boxText]}>Featuring Billy Joel</Text>
+                        <Text style={[sparkViewStyles.boxText]}>Starting at 7AM on 6th</Text>
+                        <Text style={[sparkViewStyles.boxText]}>Cannon Hill, PA, 19512</Text>
+                    </View>
+                    <View style={{width:"15%"}}>
+                        <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
 
-                    </Image>
+                        </Image>
+                        <Image style={{width: "80%", height: "35%"}} source={require("../../../assets/miniEri.png")}>
+
+                        </Image>
+                    </View>
                 </View>
                 <View style={[sparkViewStyles.boxTwo]}>
                     <Text style={[sparkViewStyles.boxText]}>X Playing at Y</Text>
@@ -59,7 +69,7 @@ const sparkViewStyles = StyleSheet.create({
     sparkViewTopBorder:
     {
         height: "10%",
-        backgroundColor: "rgba(236,96,20,0.25)",
+        backgroundColor: "#EC6014",
     },
     sparkViewContentContainer:
     {
@@ -102,10 +112,11 @@ const sparkViewStyles = StyleSheet.create({
         alignItems: "center",
     },
     boxText:{
-        width: "58%", 
+        width: "70%", 
         marginLeft:"10%",
-        marginTop: "2%",
-        marginBottom: "2%",
+        marginTop: "1%",
+        marginBottom: "1%",
+        fontSize: 14
     },
     bottomContainer:{
         width:"100%",
