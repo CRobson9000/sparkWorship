@@ -17,14 +17,18 @@ export default function ProfileScreen({route, navigation}) {
     username: new Observable("", () => updatePayload(inputs.username.getVal(), "username")),
     email: new Observable("", () => updatePayload(inputs.email.getVal(), "email")),
     birthday: new Observable("", () => updatePayload(inputs.birthday.getVal(), "birthday")),
-    location: new Observable("", () => updatePayload(inputs.location.getVal(), "location")),
+    streetAddress: new Observable("", () => updatePayload(inputs.streetAddress.getVal(), "location")),
+    city: new Observable("", () => updatePayload(inputs.city.getVal(), "city")),
+    zipCode: new Observable("", () => updatePayload(inputs.zipCode.getVal(), "zipCode")),
     //second variable screens
     password: new Observable("", () => updatePayload(inputs.password.getVal(), "password")),
     phoneNumber: new Observable("", () => updatePayload(inputs.phoneNumber.getVal(), "phoneNumber")),
     //third screen variables
     churchName: new Observable("", () => updatePayload(inputs.churchName.getVal(), "churchName")),
     denomination: new Observable("", () => updatePayload(inputs.denomination.getVal(), "denomination")),
-    churchLocation: new Observable("", () => updatePayload(inputs.churchLocation.getVal(), "churchLocation")),
+    churchStreetAddress: new Observable("", () => updatePayload(inputs.churchStreetAddress.getVal(), "churchStreetAddress")),
+    churchCity: new Observable("", () => updatePayload(inputs.churchCity.getVal(), "churchCity")),
+    churchZipCode: new Observable("", () => updatePayload(inputs.churchZipCode.getVal(), "churchZipCode")),
     //fourth variable screens
     instrument: new Observable("", () => updatePayload(inputs.instrument.getVal(), "instrument")),
     experience: new Observable("", () => updatePayload(inputs.experience.getVal(), "experience")),
@@ -73,22 +77,43 @@ export default function ProfileScreen({route, navigation}) {
 
 //code for sliders and screens
   const Screen1 = (props) => {
-    const data = ['Male', 'Female'];
+    const gender = ['Male', 'Female'];
+    const state = ['']
     return (
         <View style={styleSheet.content}>
             <Text style={styleSheet.stageText}>General Information</Text>
             <Text style={styleSheet.text}>Name</Text>
             <Input start = {inputs.name.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.name.setVal(val)}/>
             <Text style={styleSheet.text}>Username</Text>
-            <Input start = {inputs.email.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.email.setVal(val)}/>
+            <Input start = {inputs.username.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.username.setVal(val)}/>
             <Text style={styleSheet.text}>Email</Text>
-            <Input start = {inputs.password.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.password.setVal(val)}/>
-            <Text style={styleSheet.text}>Gender</Text>
-            <Dropdown style={styleSheet.dropDown} data={data}/>
-            <Text style={styleSheet.text}>Birthday</Text>
-            <Input start = {inputs.birthday.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.birthday.setVal(val)}></Input>
-            <Text style={styleSheet.text}>Location</Text>
-            <Input start = {inputs.location.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.location.setVal(val)}/>
+            <Input start = {inputs.email.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.email.setVal(val)}/>
+            <View style={styleSheet.row1}>
+                <View style={styleSheet.column1}>
+                    <Text style={styleSheet.text}>Gender</Text>
+                    <Dropdown style={styleSheet.dropDown} data={gender}/>
+                </View>
+                <View style={styleSheet.column1}>
+                    <Text style={styleSheet.text}>Birthday</Text>
+                    <Input start = {inputs.birthday.getVal()} inputStyle = {styleSheet.inputBox1} func = {(val) => inputs.birthday.setVal(val)}></Input>
+                </View>
+            </View>
+            <Text style={styleSheet.text}>Street Address (Optional)</Text>
+            <Input start = {inputs.streetAddress.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.streetAddress.setVal(val)}/>
+            <View style={styleSheet.row3}>
+                <View style={styleSheet.column2}>
+                    <Text style={styleSheet.text}>City</Text>
+                    <Input start = {inputs.city.getVal()} inputStyle = {styleSheet.inputBox3} func = {(val) => inputs.city.setVal(val)}></Input>
+                </View>
+                <View style={styleSheet.column2}>
+                    <Text style={styleSheet.text}>State</Text>
+                    <Dropdown style={styleSheet.dropDown} data={state}/>
+                </View>
+                <View style={styleSheet.column2}>
+                    <Text style={styleSheet.text}>Zip Code</Text>
+                    <Input start = {inputs.zipCode.getVal()} inputStyle = {styleSheet.inputBox3} func = {(val) => inputs.zipCode.setVal(val)}></Input>
+                </View>
+            </View>
         </View>
     );
   }
@@ -99,6 +124,7 @@ export default function ProfileScreen({route, navigation}) {
             <Text style={styleSheet.stageText}>Authentication</Text>
             <Text style={styleSheet.text}>Password</Text>
             <Input start = {inputs.password.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.password.setVal(val)}/>
+            <Text style={styleSheet.resetPasswordtext}>Reset Password</Text>
             <Text style={styleSheet.text}>Phone Number</Text>
             <Input start = {inputs.phoneNumber.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.phoneNumber.setVal(val)}/>
             <TouchableOpacity style={styleSheet.authenticationButton} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Enable Two-Step Authentication</Text></TouchableOpacity>
@@ -112,12 +138,25 @@ export default function ProfileScreen({route, navigation}) {
         <Text style={styleSheet.stageText}>Home Church</Text>
         <Text style={styleSheet.smallText}>This section is optional. You may skip by clicking Next.</Text>
         <Text style={styleSheet.text}>Church Name</Text>
-        <Input start = {inputs.instrument.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.instrument.setVal(val)}/>
+        <Input start = {inputs.churchName.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.churchName.setVal(val)}/>
         <Text style={styleSheet.text}>Denomination</Text>
-        <Input start = {inputs.experience.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.experience.setVal(val)}/>
-        <Text style={styleSheet.text}>Church Location</Text>
-        <Input start = {inputs.praiseExperience.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.praiseExperience.setVal(val)}/>
-        <TouchableOpacity style={styleSheet.addInstrumentButton}><Text style={styleSheet.buttonText}>+ Add Instrument</Text></TouchableOpacity>
+        <Input start = {inputs.denomination.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.denomination.setVal(val)}/>
+        <Text style={styleSheet.text}>Street Address</Text>
+            <Input start = {inputs.churchStreetAddress.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.churchStreetAddress.setVal(val)}/>
+            <View style={styleSheet.row3}>
+                <View style={styleSheet.column2}>
+                    <Text style={styleSheet.text}>City</Text>
+                    <Input start = {inputs.churchCity.getVal()} inputStyle = {styleSheet.inputBox3} func = {(val) => inputs.churchCity.setVal(val)}></Input>
+                </View>
+                <View style={styleSheet.column2}>
+                    <Text style={styleSheet.text}>State</Text>
+                    <Dropdown style={styleSheet.dropDown} data={data}/>
+                </View>
+                <View style={styleSheet.column2}>
+                    <Text style={styleSheet.text}>Zip Code</Text>
+                    <Input start = {inputs.churchZipCode.getVal()} inputStyle = {styleSheet.inputBox3} func = {(val) => inputs.churchZipCode.setVal(val)}></Input>
+                </View>
+            </View>
       </View>
     );
   }
@@ -126,9 +165,17 @@ export default function ProfileScreen({route, navigation}) {
     return (
       <View style={styleSheet.content}>
         <Text style={styleSheet.stageText}>Social Media</Text>
-        <Text style={styleSheet.text}>Biography (Optional)</Text>
-        <Text style={styleSheet.italicText}>Tell attendees more about you!</Text>
-        <Input start = {inputs.bio.getVal()} inputStyle = {styleSheet.BiographySquare} func = {(val) => inputs.bio.setVal(val)}/>
+        <Text style={styleSheet.text}>Linked Accounts</Text>
+        <View style={styleSheet.box}>
+            <Image style={styleSheet.logo} source={require("../../../assets/instagramlogo.png")}></Image>
+        </View>
+        <View style={styleSheet.box}>
+            <Image style={styleSheet.logo} source={require("../../../assets/tiktoklogo.png")}></Image>
+        </View>
+        <View style={styleSheet.box}>
+            <Image style={styleSheet.logo} source={require("../../../assets/facebooklogo.png")}></Image>
+        </View>
+        <TouchableOpacity style={styleSheet.addInstrumentButton}><Text style={styleSheet.buttonText}>+ Add Social Media Account</Text></TouchableOpacity>
       </View>
     );
   }
@@ -139,14 +186,16 @@ export default function ProfileScreen({route, navigation}) {
         <Text style={styleSheet.stageText}>Musical Background</Text>
         <Text style={styleSheet.text}>Current Instruments</Text>
         <View style={styleSheet.box}>
-
+            <Text style={styleSheet.text1}>Piano</Text>
         </View>
         <View style={styleSheet.box}>
-
+        <Text style={styleSheet.text1}>Guitar</Text>
         </View>
         <View style={styleSheet.box}>
-
+            <Text style={styleSheet.text1}>Trumpet</Text>
         </View>
+        <TouchableOpacity style={styleSheet.addInstrumentButton}><Text style={styleSheet.buttonText}>+ Add Instrument</Text></TouchableOpacity>
+        <TouchableOpacity style={styleSheet.addInstrumentButton}><Text style={styleSheet.buttonText}>+ Skilled Genre</Text></TouchableOpacity>
       </View>
     );
   }
@@ -191,7 +240,10 @@ export default function ProfileScreen({route, navigation}) {
     <View style={styleSheet.MainContainer}> 
         <View style={styleSheet.topBorder}>
           <Text style={styleSheet.titleText}>Profile Creation</Text>
-          <Slider currentIndex = {currentIndex} screens = {myTitles}/>
+          <View style={styleSheet.row}>
+            <Image style={styleSheet.profilePicture1} source={require("../../../assets/guitarman.png")}></Image>
+            <Slider currentIndex = {currentIndex} screens = {myTitles}/>
+          </View>
         </View>
         <Slider currentIndex = {currentIndex} screens = {myScreens} />
 
@@ -204,6 +256,77 @@ export default function ProfileScreen({route, navigation}) {
 }
 
 const styleSheet = StyleSheet.create({
+
+    profilePicture1: {
+        height: "450%",
+        width: "38%",
+        top: "22%",
+        borderRadius: "100%",
+        right: "100%"
+    },
+
+    text1: {
+        fontSize: 18,
+        fontWeight: "500",
+        left: "25%",
+        top: "3%"
+    },
+
+    logo: {
+        height: "70%",
+        width: "9%",
+        left: "20%",
+        top: "2%"
+    }, 
+
+    column1 : {
+        flexDirection: "column",
+        width: "45%",
+        height: "100%"
+    },
+
+    column2 : {
+        flexDirection: "column",
+        width: "32%",
+        height: "100%"
+    },
+
+    resetPasswordtext: {
+        textAlign: "right",
+        fontSize: 12,
+        right: "8%",
+        marginBottom: "3%"
+    },
+
+    row1: {
+        flexDirection: "row",
+        height: "8%",
+        left: "4%",
+        marginBottom: "7%"
+    },
+
+    row3: {
+        flexDirection: "row",
+        width: "85%",
+        height: "8%",
+        justifyContent: "space-evenly",
+        left: "6%",
+        marginBottom: "7%"
+    },
+
+    inputBox1: {
+        backgroundColor: "#F2905B",
+        borderRadius: 10,
+        height: "100%",
+        width: "95%",
+
+    },
+    
+    inputBox3: {
+        backgroundColor: "#F2905B",
+        borderRadius: 10,
+        height: "100%",
+    },
 
     MainContainer: {
         backgroundColor: "white",
@@ -221,7 +344,7 @@ const styleSheet = StyleSheet.create({
         backgroundColor: "#F2905B",
         borderRadius: 10,
         width: "85%",
-        height: "8%",
+        height: "100%",
         left: "7.5%",
         marginBottom: "3%"
     },
@@ -234,7 +357,7 @@ const styleSheet = StyleSheet.create({
         marginBottom: "3%",
         marginTop: "3%",
         alignSelf: "center",
-        flexDirection: "row"
+        flexDirection: "row",
     },
 
     content: {
@@ -258,9 +381,7 @@ const styleSheet = StyleSheet.create({
     phaseText: {
         paddingBottom: "3%",
         fontSize: 20,
-        fontFamily: "Gill Sans",
         alignSelf: "center",
-        top: "50%",
         fontWeight: "500"
     },
 
@@ -295,6 +416,7 @@ const styleSheet = StyleSheet.create({
         backgroundColor: "#F2905B",
         borderRadius: 10,
         width: "45%", 
+        height: "100%"
     },
 
     button:{
