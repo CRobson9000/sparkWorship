@@ -1,6 +1,7 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import React from 'react';
 
+import { Dimensions } from 'react-native';
 import { stylesPortrait } from "../../styles/portrait";
 import colors from '../../../config/colors'
 
@@ -13,10 +14,10 @@ export default function SparkView({ navigation }) {
             <View style={[sparkViewStyles.sparkContainer]}>
                 <View style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
                     <View style={{width:"85%"}}>
-                        <Text style={[sparkViewStyles.boxText]}>Sunrise Worship Service</Text>
-                        <Text style={[sparkViewStyles.boxText]}>Featuring Billy Joel</Text>
-                        <Text style={[sparkViewStyles.boxText]}>Starting at 7AM on 6th</Text>
-                        <Text style={[sparkViewStyles.boxText]}>Cannon Hill, PA, 19512</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>Sunrise Worship Service</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Starting at 7AM on Apr 6th</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Cannon Hill, PA, 19512</Text>
                     </View>
                     <View style={{width:"15%"}}>
                         <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
@@ -28,37 +29,94 @@ export default function SparkView({ navigation }) {
                     </View>
                 </View>
                 <View style={[sparkViewStyles.boxTwo]}>
-                    <Text style={[sparkViewStyles.boxText]}>X Playing at Y</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+                <View style={{width:"87%"}}>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>Song of Creation</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Cannoneers</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Starting at 6PM on May 16th</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Cannon Hill, PA, 19512</Text>
+                    </View>
+                    <View style={{width:"13%"}}>
+                        <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
 
-                    </Image>
+                        </Image>
+                        <Image style={{width: "85%", height: "30%"}} source={require("../../../assets/miniEri.png")}>
+
+                        </Image>
+                    </View>
                 </View>
                 <View style={[sparkViewStyles.boxOne]}>
-                    <Text style={[sparkViewStyles.boxText]}>X Playing at Y</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+                <View style={{width:"85%"}}>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>Pentatonix Live (Acappella)</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Pentatonix</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Starting at 7AM on Dec 24th</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Cannon Hill, PA, 19512</Text>
+                    </View>
+                    <View style={{width:"10%", alignItems: "flex-start"}}>
+                        <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
 
-                    </Image>
+                        </Image>
+                        <Image style={{width: "100%", height: "30%", marginRight: "5%"}} source={require("../../../assets/miniEri.png")}>
+
+                        </Image>
+                    </View>
                 </View>
                 <View style={[sparkViewStyles.boxTwo]}>
-                    <Text style={[sparkViewStyles.boxText]}>X Playing at Y</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+                <View style={{width:"87%"}}>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>New Year’s Worship (Solo)</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Gabriel Himself</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Starting at 11AM Dec 31st</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>New York City, NY, 10036</Text>
+                    </View>
+                    <View style={{width:"13%", alignItems:"center"}}>
+                        <View
+                            style={{
+                            width: 5,
+                            height: 5,
+                            borderRadius: Math.round(Dimensions.get('window').width / 2),
+                            backgroundColor: '#F2905B',
+                        }}></View>
+                        <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
 
-                    </Image>
+                        </Image>
+                        <Image style={{width: "80%", height: "35%"}} source={require("../../../assets/miniEri.png")}>
+
+                        </Image>
+                    </View>
                 </View>
                 <View style={[sparkViewStyles.boxOne, sparkViewStyles.veryBottomBox]}>
-                    <Text style={[sparkViewStyles.boxText]}>X Playing at Y</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+                <View style={{width:"87%"}}>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>World’s End Choir (Choral)</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring The Universe</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Starting Jan 5th 2023</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>New Jerusalem, NJ, 77777</Text>
+                    </View>
+                    <View style={{width:"13%", alignItems:"center"}}>
+                        <View
+                            style={{
+                            width: 5,
+                            height: 5,
+                            borderRadius: Math.round(Dimensions.get('window').width / 2),
+                            backgroundColor: '#F2905B',
+                        }}></View>
+                        <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
 
-                    </Image>
+                        </Image>
+                        <Image style={{width: "80%", height: "35%", marginRight: "5%"}} source={require("../../../assets/miniEri.png")}>
+
+                        </Image>
+                    </View>
                 </View>
             </View>
             <View style={[sparkViewStyles.bottomContainer]}>
-                <Image style={{width: "10%", height: "50%", marginLeft: "6.5%"}} source={require("../../../assets/ProfileNavIcon.png")}> 
+                <Image style={{width: "7%", height: "45%", marginLeft: "6.5%"}} source={require("../../../assets/Home.png")}> 
                 </Image>
-            
-                <Image style={{width: "10%", height: "60%"}} source={require("../../../assets/magniGlass.png")}> 
+                <Image style={{width: "7%", height: "45%"}} source={require("../../../assets/Vector.png")}> 
                 </Image>
-                <Image style={{width: "10%", height: "55%", marginRight: "6.5%"}} source={require("../../../assets/flame.png")}> 
+                <Image style={{width: "7%", height: "45%"}} source={require("../../../assets/Chat.png")}> 
+                </Image>
+                <Image style={{width: "7%", height: "45%"}} source={require("../../../assets/Plus.png")}> 
+                </Image>
+                <Image style={{width: "7%", height: "45%", marginRight: "6.5%"}} source={require("../../../assets/Profile.png")}> 
                 </Image>
             </View>
         </View>
@@ -118,10 +176,16 @@ const sparkViewStyles = StyleSheet.create({
         marginBottom: "1%",
         fontSize: 14
     },
+    topText:{
+        fontWeight: "bold",
+        marginLeft:"6%"
+    },
+    notTopText:{
+        marginLeft: "12%"
+    },
     bottomContainer:{
         width:"100%",
         height:"8%",
-        backgroundColor: "rgba(217, 217, 217, 1)",
         flexDirection: "row", 
         justifyContent: "space-between", 
         alignItems: "center"
