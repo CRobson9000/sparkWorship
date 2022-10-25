@@ -49,7 +49,7 @@ export default function ProfileScreen({route, navigation}) {
             obj.setVal(updateVal);
         }
     }
-}
+  }
 
   const updatePayload = (updateVal, updateName) =>
   {
@@ -73,12 +73,10 @@ export default function ProfileScreen({route, navigation}) {
     navigation.navigate("DatabaseTest");
   }
 
-  const data = ['Male', 'Female'];
-
-//code for sliders and screens
+  //code for sliders and screens
   const Screen1 = (props) => {
     const gender = ['Male', 'Female'];
-    const state = ['']
+    const state = ['PA']
     return (
         <View style={styleSheet.content}>
             <Text style={styleSheet.stageText}>General Information</Text>
@@ -133,6 +131,7 @@ export default function ProfileScreen({route, navigation}) {
   }
 
   const Screen3 = (props) => {
+    const state = ['PA']
     return (
       <View style={styleSheet.content}>
         <Text style={styleSheet.stageText}>Home Church</Text>
@@ -150,7 +149,7 @@ export default function ProfileScreen({route, navigation}) {
                 </View>
                 <View style={styleSheet.column2}>
                     <Text style={styleSheet.text}>State</Text>
-                    <Dropdown style={styleSheet.dropDown} data={data}/>
+                    <Dropdown style={styleSheet.dropDown} data={state}/>
                 </View>
                 <View style={styleSheet.column2}>
                     <Text style={styleSheet.text}>Zip Code</Text>
@@ -253,7 +252,7 @@ export default function ProfileScreen({route, navigation}) {
         </View>
     </View>
   );
-}
+  }
 
 const styleSheet = StyleSheet.create({
 
@@ -371,18 +370,19 @@ const styleSheet = StyleSheet.create({
         left: "9%",
     },
 
+    phaseText: {
+        textAlign: "center",
+        fontSize: 15,
+        fontWeight: "500",
+        top: "2%",
+        paddingBottom: "5%"
+      },
+
     italicText: {
         paddingBottom: "3%",
         fontSize: 9,
         left: "9%",
         fontStyle: "italic"
-    },
-
-    phaseText: {
-        paddingBottom: "3%",
-        fontSize: 20,
-        alignSelf: "center",
-        fontWeight: "500"
     },
 
     stageText: {
@@ -486,7 +486,7 @@ const styleSheet = StyleSheet.create({
       titleText: {
         top: "25%",
         textAlign: "center",
-        fontSize: "25%",
+        fontSize: 15, 
         fontWeight: "600"
       }, 
 
@@ -553,4 +553,14 @@ const styleSheet2 = StyleSheet.create({
         marginBottom: "3%"
       },
 
-}); 
+    profilePicture: {
+        width: "50%",
+        height: "70%",
+    },
+    smallText: {
+        textAlign: "center",
+        fontSize: 15,
+        color: "gray",
+        paddingBottom: "5%"
+    }
+});
