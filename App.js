@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+
 import LoginScreen from './appData/screens/account/LoginScreen.js';
 import RegistrationScreen from './appData/screens/account/RegistrationScreen.js';
 import Router from './appData/screens/Router.js';

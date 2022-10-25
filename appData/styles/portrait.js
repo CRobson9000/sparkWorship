@@ -39,7 +39,7 @@ const stylesPortrait = StyleSheet.create({
         color: "#006175",
         top: 65,
         fontWeight: "bold",
-        fontSize: 25
+        fontSize: 20
     },
     username :
     {
@@ -110,6 +110,12 @@ const stylesPortrait = StyleSheet.create({
         marginBottom: "5%",
         paddingLeft: "2%",
         borderWidth: 3
+    },
+
+    scrollView:
+    {
+        
+        bottom: 50
     },
 });
 

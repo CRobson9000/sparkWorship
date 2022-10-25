@@ -22,6 +22,7 @@ import {StyleSheet} from 'react-native';
 
 // import for Bottom Nav Bar
 
+<<<<<<< HEAD
 //import Icon from 'react-native-ico-material-design';
 
 
@@ -30,6 +31,8 @@ import {StyleSheet} from 'react-native';
 
 
 
+=======
+>>>>>>> aziannasBranch
 
 export default function UserDashboard({ navigation }) {
   return (
