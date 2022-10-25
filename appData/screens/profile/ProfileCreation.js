@@ -1,9 +1,17 @@
 import React, {useRef, useState} from 'react';
 import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from "react-native";
+<<<<<<< HEAD
 import { Input, Slider } from '../../components/components';
 import { Observable } from '../../components/classes';
 import { getDatabase, ref, set, get } from 'firebase/database';
 import { Dropdown } from 'react-native-element-dropdown';
+=======
+import { StatusBar } from 'expo-status-bar';
+import { Input, Slider } from '../../components/components';
+import { Observable } from '../../components/classes';
+import { getDatabase, ref, set, get } from 'firebase/database';
+import { SelectList } from 'react-native-dropdown-select-list';
+>>>>>>> a1247bab5aee92f65597e8f39013cc3606a1540e
 
 export default function ProfileScreen({route, navigation}) {
   //set environment variables
@@ -45,7 +53,7 @@ export default function ProfileScreen({route, navigation}) {
             obj.setVal(updateVal);
         }
     }
-}
+  }
 
   const updatePayload = (updateVal, updateName) =>
   {
@@ -69,24 +77,39 @@ export default function ProfileScreen({route, navigation}) {
     navigation.navigate("DatabaseTest");
   }
 
+<<<<<<< HEAD
   const data = ['Male', 'Female'];
 
 //code for sliders and screens
+=======
+  //code for sliders and screens
+>>>>>>> a1247bab5aee92f65597e8f39013cc3606a1540e
   const Screen1 = (props) => {
     const data = ['Male', 'Female'];
     return (
         <View style={styleSheet.content}>
+<<<<<<< HEAD
             <Text style={styleSheet.stageText}>General Information</Text>
+=======
+            <Text style={styleSheet.phaseText}>General Information</Text>
+            <SelectList data={data} setSelected={setSelected}/>
+>>>>>>> a1247bab5aee92f65597e8f39013cc3606a1540e
             <Text style={styleSheet.text}>Name</Text>
             <Input start = {inputs.name.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.name.setVal(val)}/>
             <Text style={styleSheet.text}>Username</Text>
             <Input start = {inputs.email.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.email.setVal(val)}/>
+<<<<<<< HEAD
             <Text style={styleSheet.text}>Email</Text>
             <Input start = {inputs.password.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.password.setVal(val)}/>
             <Text style={styleSheet.text}>Gender</Text>
             <Dropdown style={styleSheet.dropDown} data={data}/>
             <Text style={styleSheet.text}>Birthday</Text>
             <Input start = {inputs.birthday.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.birthday.setVal(val)}></Input>
+=======
+            
+            <Text style={styleSheet.text}>Location</Text>
+            <Input start = {inputs.phoneNumber.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.phoneNumber.setVal(val)} />
+>>>>>>> a1247bab5aee92f65597e8f39013cc3606a1540e
             <Text style={styleSheet.text}>Location</Text>
             <Input start = {inputs.location.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.location.setVal(val)}/>
         </View>
@@ -201,7 +224,11 @@ export default function ProfileScreen({route, navigation}) {
         </View>
     </View>
   );
+<<<<<<< HEAD
 }
+=======
+};
+>>>>>>> a1247bab5aee92f65597e8f39013cc3606a1540e
 
 const styleSheet = StyleSheet.create({
 
@@ -216,6 +243,7 @@ const styleSheet = StyleSheet.create({
         backgroundColor: "rgb(219, 233, 236)",
         marginBottom: "5%"
     },
+<<<<<<< HEAD
 
     dropDown: {
         backgroundColor: "#F2905B",
@@ -237,6 +265,9 @@ const styleSheet = StyleSheet.create({
         flexDirection: "row"
     },
 
+=======
+      
+>>>>>>> a1247bab5aee92f65597e8f39013cc3606a1540e
     content: {
         height: "50%",
         width: "100%"
@@ -247,6 +278,17 @@ const styleSheet = StyleSheet.create({
         fontSize: 15,
         left: "9%",
     },
+<<<<<<< HEAD
+=======
+   
+    phaseText: {
+        textAlign: "center",
+        fontSize: 15,
+        fontWeight: "500",
+        top: "2%",
+        paddingBottom: "5%"
+      },
+>>>>>>> a1247bab5aee92f65597e8f39013cc3606a1540e
 
     italicText: {
         paddingBottom: "3%",
@@ -272,7 +314,11 @@ const styleSheet = StyleSheet.create({
       },
 
     inputBox: {
+<<<<<<< HEAD
         backgroundColor: "#F2905B",
+=======
+        backgroundColor: "rgb(242, 144, 91)",
+>>>>>>> a1247bab5aee92f65597e8f39013cc3606a1540e
         borderRadius: 10,
         width: "85%",
         height: "8%",
@@ -302,8 +348,12 @@ const styleSheet = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         height: "40%",
+<<<<<<< HEAD
         width: "40%",
         top: "10%",
+=======
+        width: "37%",
+>>>>>>> a1247bab5aee92f65597e8f39013cc3606a1540e
         borderRadius: 10
     },
 
@@ -329,7 +379,11 @@ const styleSheet = StyleSheet.create({
 
     buttonText: {
         color: "white",
+<<<<<<< HEAD
         fontSize: 12,
+=======
+        fontSize: 15,
+>>>>>>> a1247bab5aee92f65597e8f39013cc3606a1540e
     },
 
     addInstrumentButton:{
@@ -364,7 +418,7 @@ const styleSheet = StyleSheet.create({
       titleText: {
         top: "25%",
         textAlign: "center",
-        fontSize: "25%",
+        fontSize: 15,
         fontWeight: "600"
       }, 
 
@@ -431,4 +485,20 @@ const styleSheet2 = StyleSheet.create({
         marginBottom: "3%"
       },
 
+<<<<<<< HEAD
 }); 
+=======
+    profilePicture: {
+        width: "50%",
+        height: "70%",
+    },
+
+    smallText: {
+        textAlign: "center",
+        fontSize: 15,
+        color: "gray",
+        paddingBottom: "5%"
+    }
+});
+
+>>>>>>> a1247bab5aee92f65597e8f39013cc3606a1540e
