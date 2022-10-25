@@ -69,7 +69,7 @@ export default function HostingDashboard({ navigation }) {
   return (
 
 
-<TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
+    <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
  
       <View style={stylesPortrait.container}>
 
