@@ -6,7 +6,7 @@ import RegistrationScreen from './appData/screens/account/RegistrationScreen.js'
 import Router from './appData/screens/Router.js';
 import SparkView from './appData/screens/sparks/sparkView.js';
 import LocationData from './appData/screens/LocationData.js';
-import ProfileCreation from './appData/screens/profile/ProfileCreation'
+import ProfileCreation from './appData/screens/profile/ProfileCreation';
 import ProfileScreenIPublic from './appData/screens/profile/ProfileScreenIPublic.js';
 import ProfileScreenIPersonal from './appData/screens/profile/ProfileScreenIPersonal.js';
 import MyTest from './appData/screens/MyTest.js';
@@ -20,7 +20,7 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="SparkCreation">
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="ProfileCreation">
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
         <Stack.Screen name="Router" component={Router} />
