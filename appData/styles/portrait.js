@@ -111,6 +111,12 @@ const stylesPortrait = StyleSheet.create({
         paddingLeft: "2%",
         borderWidth: 3
     },
+
+    scrollView:
+    {
+        
+        bottom: 50
+    },
 });
 
 export { stylesPortrait }

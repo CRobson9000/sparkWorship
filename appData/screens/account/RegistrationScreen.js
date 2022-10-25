@@ -1,4 +1,4 @@
-import { Image, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Image, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
 import React from 'react';
 import { useDeviceOrientation } from '@react-native-community/hooks';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -16,7 +16,7 @@ import { Input } from '../../components/components.js'
 //database processing import statements
 import { getDatabase, ref, set } from 'firebase/database';
 
-export default function RegisterScreen({ navigation }) {
+export default function RegistrationScreen({ navigation }) {
 
   /*------------------------------------------------*/
   /*----------BACK-END APP CODE ----------*/
@@ -161,15 +161,22 @@ export default function RegisterScreen({ navigation }) {
           }}></View>
 
         {/* Container for everything below the logo */}
+        
         <View style={stylesPortrait.contentContainer}>
+         <ScrollView style={[stylesPortrait.scrollView]}>
+          <Input placeHolderText={"First Name"} secure={false} func= {(val) => inputtedEmail = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+          <Input placeHolderText={"Last Name"} secure={false} func= {(val) => inputtedEmail = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+          <Input placeHolderText={"Role"} secure={false} func= {(val) => inputtedEmail = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
           <Input placeHolderText={"Email"} secure={false} func= {(val) => inputtedEmail = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+          <Input placeHolderText={"Username"} secure={false} func= {(val) => inputtedEmail = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
           <Input placeHolderText={"Password"} secure={false} func={(val) => inputtedPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
           <Input placeHolderText={"Confirm Password"} secure={false} func={(val) => confirmPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
-          <Input placeHolderText={"Location"} secure={false} func={(val) => location = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+           
 
           <TouchableOpacity activeOpacity={1} onPress = {() => signUp(navigation)} style={[stylesPortrait.button]}>
             <View><Text style={{color: "white"}}>Create new User</Text></View>
           </TouchableOpacity>
+          </ScrollView>
         </View>
       </View>
     </TouchableWithoutFeedback>

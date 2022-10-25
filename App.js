@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+
 import LoginScreen from './appData/screens/account/LoginScreen.js';
 import RegistrationScreen from './appData/screens/account/RegistrationScreen.js';
 import DatabaseTest from './appData/screens/DatabaseTest.js';
@@ -18,6 +19,7 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="HostingDashboard">
+        <Stack.Screen name="RegirstrationScreen" component={RegistrationScreen} />
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="DatabaseTest" component={DatabaseTest} />
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
