@@ -239,10 +239,7 @@ export default function ProfileScreen({route, navigation}) {
     <View style={styleSheet.MainContainer}> 
         <View style={styleSheet.topBorder}>
           <Text style={styleSheet.titleText}>Profile Creation</Text>
-          <View style={styleSheet.row}>
             <Image style={styleSheet.profilePicture1} source={require("../../../assets/guitarman.png")}></Image>
-            <Slider currentIndex = {currentIndex} screens = {myTitles}/>
-          </View>
         </View>
         <Slider currentIndex = {currentIndex} screens = {myScreens} />
 
@@ -257,11 +254,11 @@ export default function ProfileScreen({route, navigation}) {
 const styleSheet = StyleSheet.create({
 
     profilePicture1: {
-        height: "450%",
-        width: "38%",
-        top: "22%",
+        height: "50%",
+        width: "34%",
+        top: "34%",
         borderRadius: "100%",
-        right: "100%"
+        alignSelf: "center"
     },
 
     text1: {
