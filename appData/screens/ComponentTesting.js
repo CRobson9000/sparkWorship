@@ -80,10 +80,6 @@ export default function ComponentTesting({ navigation }) {
         </List.Section>
       </View>
 
-      <View style = {{backgroundColor: "red"}}>
-        <Text> Hi </Text>
-      </View>
-
       {/* <View style = {{backgroundColor: "green", height: "10%", width: "100%", position: "absolute", top: "40%"}}>
         <SelectList 
           style = {{position: "absolute", top: "205"}}
@@ -102,18 +98,6 @@ export default function ComponentTesting({ navigation }) {
           rerenderParent = {() => setSelected(!selected)}
         />
       </View>
-      
-      
-      <View style = {{backgroundColor: "red", zIndex: -3}}>
-        <Text> Hi </Text>
-        <Text>{selected}</Text>
-      </View>
-
-
-      {/* <View style = {{backgroundColor: "red"}}>
-        <Text> Hi </Text>
-      </View> */}
-      
     </View> 
   );    
 };

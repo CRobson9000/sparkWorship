@@ -28,36 +28,24 @@ export default function Router({ navigation }) {
     return (
         <View style={mainStyles.mainContainer}>
             <View style={mainStyles.infoStyles}>
-                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "red"}]} onPress={() => navigation.navigate("ProfileScreenIPublic")}>
-                    <Text style={{color: "white"}}> Profile Public Page </Text>
-                </TouchableHighlight>
-
-                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "red"}]} onPress={() => navigation.navigate("ProfileScreenIPersonal")}>
-                    <Text style={{color: "white"}}> Profile Personal Page </Text>
-                </TouchableHighlight>
-
                 <TouchableHighlight style={[mainStyles.button, {backgroundColor: "red"}]} onPress={() => navigation.navigate("ProfileCreation")}>
                     <Text style={{color: "white"}}> Profile Creation Page </Text>
-                </TouchableHighlight>
-
-                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "orange"}]} onPress={() => navigation.navigate("LocationData")}>
-                    <Text style={{color: "white"}}> Location Data Test </Text>
                 </TouchableHighlight>
 
                 <TouchableHighlight style={[mainStyles.button, {backgroundColor: "purple"}]} onPress={() => navigation.navigate("SparkCreation")}>
                     <Text style={{color: "white"}}> Spark Creation </Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "blue"}]} onPress={() => navigation.navigate("userDashboard")}>
-                    <Text style={{color: "white"}}> Dashboard Attendee </Text>
-                </TouchableHighlight>
-
-                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "blue"}]} onPress={() => navigation.navigate("HostingDashboard")}>
-                    <Text style={{color: "white"}}> Conversations Testing </Text>
+                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "purple"}]} onPress={() => navigation.navigate("SparkView")}>
+                    <Text style={{color: "white"}}> Spark Search </Text>
                 </TouchableHighlight>
 
                 <TouchableHighlight style={[mainStyles.button, {backgroundColor: "blue"}]} onPress={() => navigation.navigate("Test")}>
-                    <Text style={{color: "white"}}> Messages Testing </Text>
+                    <Text style={{color: "white"}}> Messaaging Back-end </Text>
+                </TouchableHighlight>
+
+                <TouchableHighlight style={[mainStyles.button, {backgroundColor: "blue"}]} onPress={() => navigation.navigate("ComponentTesting")}>
+                    <Text style={{color: "white"}}> Components Testing </Text>
                 </TouchableHighlight>
             </View>
         </View>
