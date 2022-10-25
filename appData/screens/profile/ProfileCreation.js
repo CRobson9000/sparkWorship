@@ -241,7 +241,6 @@ export default function ProfileScreen({route, navigation}) {
           <Text style={styleSheet.titleText}>Profile Creation</Text>
           <View style={styleSheet.row}>
             <Image style={styleSheet.profilePicture1} source={require("../../../assets/guitarman.png")}></Image>
-            <Slider currentIndex = {currentIndex} screens = {myTitles}/>
           </View>
         </View>
         <Slider currentIndex = {currentIndex} screens = {myScreens} />

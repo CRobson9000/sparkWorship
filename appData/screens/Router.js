@@ -41,7 +41,7 @@ export default function Router({ navigation }) {
                 </TouchableHighlight>
 
                 <TouchableHighlight style={[mainStyles.button, {backgroundColor: "blue"}]} onPress={() => navigation.navigate("Test")}>
-                    <Text style={{color: "white"}}> Messaaging Back-end </Text>
+                    <Text style={{color: "white"}}> Messaging Back-end </Text>
                 </TouchableHighlight>
 
                 <TouchableHighlight style={[mainStyles.button, {backgroundColor: "blue"}]} onPress={() => navigation.navigate("ComponentTesting")}>
