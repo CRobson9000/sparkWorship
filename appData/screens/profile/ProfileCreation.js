@@ -10,38 +10,59 @@ export default function ProfileScreen({route, navigation}) {
   let props = route.params;
   //let userId = props.userId;
 
-  //all kinds of inputs
+  /*This is an object of all of the possible textbox variables a user can change.  
+  */
   let inputs = {
-    //first screen variables
+    //Sample input explanation
     name: new Observable("", () => updatePayload(inputs.name.getVal(), "name")),
-    username: new Observable("", () => updatePayload(inputs.username.getVal(), "username")),
-    email: new Observable("", () => updatePayload(inputs.email.getVal(), "email")),
-    birthday: new Observable("", () => updatePayload(inputs.birthday.getVal(), "birthday")),
-    streetAddress: new Observable("", () => updatePayload(inputs.streetAddress.getVal(), "location")),
-    city: new Observable("", () => updatePayload(inputs.city.getVal(), "city")),
-    zipCode: new Observable("", () => updatePayload(inputs.zipCode.getVal(), "zipCode")),
-    //second variable screens
-    password: new Observable("", () => updatePayload(inputs.password.getVal(), "password")),
-    phoneNumber: new Observable("", () => updatePayload(inputs.phoneNumber.getVal(), "phoneNumber")),
-    //third screen variables
-    churchName: new Observable("", () => updatePayload(inputs.churchName.getVal(), "churchName")),
-    denomination: new Observable("", () => updatePayload(inputs.denomination.getVal(), "denomination")),
-    churchStreetAddress: new Observable("", () => updatePayload(inputs.churchStreetAddress.getVal(), "churchStreetAddress")),
-    churchCity: new Observable("", () => updatePayload(inputs.churchCity.getVal(), "churchCity")),
-    churchZipCode: new Observable("", () => updatePayload(inputs.churchZipCode.getVal(), "churchZipCode")),
-    //fourth variable screens
-    instrument: new Observable("", () => updatePayload(inputs.instrument.getVal(), "instrument")),
-    experience: new Observable("", () => updatePayload(inputs.experience.getVal(), "experience")),
-    praiseExperience: new Observable("", () => updatePayload(inputs.praiseExperience.getVal(), "praiseExperience")),
-    //fifth variable screens
-    bio: new Observable("", () => updatePayload(inputs.bio.getVal(), "bio"))
+
+    /*
+      name - the name of the input
+      Observable: runs a function when it's value is changed
+         - Parameters
+           1. start value
+           2. function that runs when the value is changed
+              - Parameters
+                 1. value to set in update object
+                 2. name to set it to
+                 Result: update is set to include the change
+                   In other words......  
+                   update = {
+                      name: "<insert whatever value>"
+                   }
+        - An observable's value is changed when a user types something into one of the textboxes (see screen info for more comments)
+        - There will be one of these for each textValue a user can add to (Phase 1, Phase 3, phone number is phase 2) 
+    */
+
+   //first screen variables
+   name: new Observable("", () => updatePayload(inputs.name.getVal(), "name")),
+   username: new Observable("", () => updatePayload(inputs.username.getVal(), "username")),
+   email: new Observable("", () => updatePayload(inputs.email.getVal(), "email")),
+   birthday: new Observable("", () => updatePayload(inputs.birthday.getVal(), "birthday")),
+   streetAddress: new Observable("", () => updatePayload(inputs.streetAddress.getVal(), "location")),
+   city: new Observable("", () => updatePayload(inputs.city.getVal(), "city")),
+   zipCode: new Observable("", () => updatePayload(inputs.zipCode.getVal(), "zipCode")),
+
+   //second variable screens
+   password: new Observable("", () => updatePayload(inputs.password.getVal(), "password")),
+   phoneNumber: new Observable("", () => updatePayload(inputs.phoneNumber.getVal(), "phoneNumber")),
+
+   //third screen variables
+   churchName: new Observable("", () => updatePayload(inputs.churchName.getVal(), "churchName")),
+   denomination: new Observable("", () => updatePayload(inputs.denomination.getVal(), "denomination")),
+   churchStreetAddress: new Observable("", () => updatePayload(inputs.churchStreetAddress.getVal(), "churchStreetAddress")),
+   churchCity: new Observable("", () => updatePayload(inputs.churchCity.getVal(), "churchCity")),
+   churchZipCode: new Observable("", () => updatePayload(inputs.churchZipCode.getVal(), "churchZipCode")),
   } 
 
+  // Here is the update variable, which keeps track of all the changes a user has made
   let update = useRef({});
+
+  //This is the id of the user that you want to save the information to.   
   let userId = "pgFfrUx2ryd7h7iE00fD09RAJyG3";
 
+  //This function uses update to populate a phase with information entered previously
   const updateToStart = () => {
-    //console.log("update", update);
     for (let key in inputs) {
         let updateVal = update[key];
         if (updateVal) {
@@ -51,26 +72,39 @@ export default function ProfileScreen({route, navigation}) {
     }
   }
 
+  // This function is what actually updates the object "update" (seen implemented in the "inputs" section above)
   const updatePayload = (updateVal, updateName) =>
   {
     update[updateName] = updateVal;
   }
 
+  // This is the function which will take all of the changes to update and push them to firebase
   function sendPayload() {
-    //loop through all of the key, value pairs in the object update and set the data in firebase based upon the keys and values
-    for (let i = 0; i < Object.keys(update).length; i++)
-    {
-      //get keys and values out of update object, which houses everything that was changed
-      let updateVal = update[Object.keys(update)[i]];
-      let updateKey = Object.keys(update)[i];
-      if (updateVal != "") {
-        //send an single update to the database, which changes the value at the key to the new value under whatever the current user is
-        const db = getDatabase();
-        const reference = ref(db, `Users/${userId}/info/${updateKey}`);
-        set(reference, updateVal);
-      }
-    }
-    navigation.navigate("Router");
+    /*
+      Insert your code here... 
+      You'll need to update firebase with all of the changes stored in update
+
+
+      *** Some Help ***
+      Here's how to save data to firebase:  
+      1. initialize the db object with this line (only have to do once...)
+      const db = getDatabase();
+
+      // Set up a reference.  You'll need to route to the "info" section of the database (look on firebase to see this) using the user's id.  
+      It should end with something like "name", so that the information will be saved under whatever attribute you're trying to save
+
+      const reference = ref(db, <insert path here>);
+
+      // This is the method which will actually set a value to the space you've defined above 
+       set(reference, <insert value to set>);
+    */
+
+
+
+
+
+    // Once everything is finalized, navigate to user profile screen
+    navigation.navigate("ProfileScreenIPersonal");
   }
 
   //code for sliders and screens
@@ -81,6 +115,13 @@ export default function ProfileScreen({route, navigation}) {
         <View style={styleSheet.content}>
             <Text style={styleSheet.stageText}>General Information</Text>
             <Text style={styleSheet.text}>Name</Text>
+
+            {/* 
+            --------------------------------------------------------------------------------------------
+            This is the spot where an observable's value is changed (as shown by the setVal function) 
+            --------------------------------------------------------------------------------------------
+            */}
+
             <Input start = {inputs.name.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.name.setVal(val)}/>
             <Text style={styleSheet.text}>Username</Text>
             <Input start = {inputs.username.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.username.setVal(val)}/>
