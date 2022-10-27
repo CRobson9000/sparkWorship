@@ -121,7 +121,7 @@ export default function LocationData({ navigation }) {
         <Text >Get lat and lon</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={{borderColor: "black", padding: 10, borderWidth: 2, margin: 20}}activeOpacity={1} onPress = {() => navigation.navigate("DatabaseTest")}>
+      <TouchableOpacity style={{borderColor: "black", padding: 10, borderWidth: 2, margin: 20}}activeOpacity={1} onPress = {() => navigation.navigate("Router")}>
         <Text> Back </Text>
       </TouchableOpacity>
 
