@@ -53,6 +53,62 @@ export default function LocationData({ navigation }) {
     console.log(location1, location2);
   }
 
+  let sparkMilage = 5;
+
+    const userLocation = {
+        city: "Mechanicsburg",
+        state: "Pennsylvania",
+        zip: 17055
+    };
+
+    const sparks =[
+        {
+            id:
+            {
+                info: {
+                    location: {
+                        address: {
+                            address: "7693 Browns Mill Rd",
+                            city: "Chambersburg",
+                            state: "Pennsylvania",
+                            zip: 17202,
+                        },
+                        lat: 39.833128472575915,
+                        lon: -77.7115903252737
+                    }
+                }
+            }
+        },
+        {
+            id: 
+            {
+                info: {
+                    location: {
+                        address: {
+                            address: "2150 Bumble Bee Hollow Rd",
+                            city: "Mechanicsburg",
+                            state: "Pennsylvania",
+                            zip: 17055
+                        },
+                        lat: 40.176332622843134,
+                        lon: -76.98694473369463
+                    }
+                }
+            }
+        }
+    ]
+
+    sparks.filter(spark => checkMiles(spark));
+
+    function checkMiles(spark) {
+      var config = {
+        method: 'get',
+        url: "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + userLocation + "&destinations=" + sparks[0,1] + "&units=imperial&key=AIzaSyCusL6lRbILhO9P7AyHSwpT-ZS6N5diyBQ",
+        headers: { }
+      };
+      
+    }
+
   return (
     <View style = {{flex: 1, justifyContent: "center", alignItems: "center"}}>
       <Text >Location Data</Text>
