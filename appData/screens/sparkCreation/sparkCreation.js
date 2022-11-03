@@ -86,7 +86,7 @@ export default function SparkCreation({ navigation }) {
                 const roleReference = ref(db, `Sparks/${sparkId}/roles/${role}`)
                 set(roleReference, {
                     requested: {id: ""},
-                    rejected: {id: ""} 
+                    final: "" 
                 }).then(() => resolve());
             })
             return rolePromise;

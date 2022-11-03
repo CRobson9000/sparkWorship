@@ -1,9 +1,14 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useEffect} from 'react';
 import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from "react-native";
 import { Input, Slider } from '../../components/components';
 import { Observable } from '../../components/classes';
 import { getDatabase, ref, set, get } from 'firebase/database';
 import { Dropdown } from 'react-native-element-dropdown';
+
+import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
+import * as ImagePicker from 'expo-image-picker';
+// had to make a weird file to "redefine" ref since it already exists from firebase/database
+import { storageRef } from '../../../config/additionalMethods';
 
 export default function ProfileScreen({route, navigation}) {
   //set environment variables
@@ -264,14 +269,110 @@ export default function ProfileScreen({route, navigation}) {
     }
   }
 
+  // ------------------
+  // Photo upload code
+  // ------------------
+
+  const [image, setImage] = React.useState(null);
+
+  function uploadPhoto() {
+    // --------------------------------
+    // select photo from file selector
+    // --------------------------------
+
+    // No permissions request is necessary for launching the image library
+    ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    }).then((result) => {
+
+      // -------------------------------------------
+      // Convert result to blob which can be stored
+      // -------------------------------------------
+
+      if (result) {
+        const filePromise = new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.onload = function () {
+            resolve(xhr.response);
+          };
+          xhr.onerror = function (e) {
+            console.log(e);
+            reject(new TypeError("Network request failed"));
+          };
+          xhr.responseType = "blob";
+          xhr.open("GET", result.uri, true);
+          xhr.send(null);
+        });
+
+        filePromise.then((fileBlob) => {
+
+          // ----------------------------------------------------------------
+          // Store result in Cloud Storage and store a reference in firebase
+          // ----------------------------------------------------------------
+
+          if (fileBlob) {
+            // Get main storage
+            const storage = getStorage();
+      
+            // Points to 'sparkData/<currentID>'
+            const sparkImageRef = storageRef(storage, `userData/${userId}/userCoverPhoto`);
+            uploadBytes(sparkImageRef, fileBlob).then((finalSnap) => {
+              console.log("File upload was successful!");
+              setImage({uri: result.uri});
+            })
+            .catch((error) => {
+              // Upload to firebase failed so call an error or message
+              console.log("failed to upload image blob to firebase");
+            });
+          }
+        })
+        .catch((error) => {
+          // Conversion to blob failed so throw an error or message
+          console.log("failed to convert image to blob");
+        })
+      }
+    })
+    .catch((error) => {
+      // Image Picker failed so throw an error or message
+      console.log("failed to find a file");
+    }) 
+  }
+
+  async function getPhoto() {
+    //set the url of a default photo, which will be shown in there is no image found
+    let defaultPic = require("../../../assets/ProfileNavIcon.png");
+    
+    //get the photo from firebase storage
+    const storage = getStorage();
+    getDownloadURL(storageRef(storage, `userData/${userId}/userCoverPhoto`))
+    .then((url) => {
+      //display the image that was found using its url
+      console.log("Got photo");
+      setImage({uri: url});
+    })
+    .catch((error) => {
+      // could not find a spark cover image so display the default instead
+      console.log("Display default");
+      setImage(defaultPic);
+    })
+  }
+
   //---------------------------------------------------------------------------
   // Section of code to put functions to be run after a component is re-rendered
   //---------------------------------------------------------------------------
 
   //loops the index back around on the other end when 
   limitScroll();
-
   updateToStart();
+
+  //will only run on the first load
+  useEffect(() => {
+    getPhoto();
+  }, [])
+
   /*------------------------------------------------*/
   /*--------------FRONT-END APP CODE ---------------*/
   /*------------------------------------------------*/
@@ -281,12 +382,14 @@ export default function ProfileScreen({route, navigation}) {
         <View style={styleSheet.topBorder}>
           <Text style={styleSheet.titleText}>Profile Creation</Text>
           <View style={styleSheet.row}>
-            <Image style={styleSheet.profilePicture1} source={require("../../../assets/guitarman.png")}></Image>
+            <TouchableOpacity style = {styleSheet.profilePictureContainer} onPress = {() => uploadPhoto()}>
+              <Image style={styleSheet.profilePicImage} source={image}></Image>
+            </TouchableOpacity>
           </View>
         </View>
         <Slider currentIndex = {currentIndex} screens = {myScreens} />
 
-        <View style={styleSheet.row}>
+        <View style={styleSheet.bottomRow}>
             <TouchableOpacity style={styleSheet.button} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Previous</Text></TouchableOpacity>
             <TouchableOpacity style={styleSheet.button} onPress = {() => setCurrentIndex(currentIndex + 1)}><Text style={styleSheet.buttonText}>Next</Text></TouchableOpacity>
         </View>
@@ -296,12 +399,17 @@ export default function ProfileScreen({route, navigation}) {
 
 const styleSheet = StyleSheet.create({
 
-    profilePicture1: {
-        height: "450%",
-        width: "38%",
-        top: "22%",
-        borderRadius: 20,
-        right: "100%"
+    profilePictureContainer: {
+        height: "66%",
+        width: "35%",
+        top: "50%",
+        left: "10%"
+    },
+
+    profilePicImage: {
+      height: "100%",
+      width: "100%",
+      borderRadius: 20,
     },
 
     text1: {
@@ -469,11 +577,12 @@ const styleSheet = StyleSheet.create({
         borderRadius: 10
     },
 
-    row: {
+    bottomRow: {
         flexDirection: "row",
         alignSelf: 'center',
         alignContent: "center",
         justifyContent: "space-evenly",
+        //backgroundColor: "red",
         height: "11%",
         width: '85%',
         marginTop: "2%"

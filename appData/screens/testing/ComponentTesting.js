@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableHighlight, Text, View, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import React, {useRef, useEffect} from 'react';
-import { Input, Slider, DropDown } from '../components/components';
-import { Observable, TDO } from '../components/classes';
+import { Input, Slider, DropDown } from '../../components/components';
+import { Observable, TDO } from '../../components/classes';
 
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 import { List } from 'react-native-paper';
