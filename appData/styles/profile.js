@@ -16,7 +16,7 @@ const stylesProfile = StyleSheet.create({
         top: "30%",
         left: "8%",
         width: "40%",
-        borderRadius: "80%"
+        borderRadius: 10
     },
 
     row: {
@@ -25,7 +25,7 @@ const stylesProfile = StyleSheet.create({
     },
 
     boldText: {
-        fontFamily: "Gill Sans",
+        //fontFamily: "Gill Sans",
         fontWeight: "500",
         left: "52%",
         bottom: "9%"
@@ -34,16 +34,16 @@ const stylesProfile = StyleSheet.create({
     generalText: {
         paddingTop: "1%",
         paddingBottom: "2%",
-        fontSize: "17%",
+        fontSize: 12,
         left: "9%",
-        fontFamily: "Gill Sans"
+        //fontFamily: "Gill Sans"
     },
 
     Square: {
         width: "85%",
         height: "75%", 
         backgroundColor: "rgb(249, 203, 177)",
-        borderRadius: "20%",
+        borderRadius: 10,
         alignSelf: "center"
     },
 
@@ -58,15 +58,15 @@ const stylesProfile = StyleSheet.create({
         justifyContent: "space-evenly"
     },
       title: {
-        fontSize: "21",
+        fontSize: 21,
         left: "57%",
         bottom: "5%",
-        fontFamily: "Gill Sans"
+        //fontFamily: "Gill Sans"
       },
     locationText: {
-        fontSize: "17",
+        fontSize: 17,
         left: "60%",
-        fontFamily: "Gill Sans",
+       // fontFamily: "Gill Sans",
         fontWeight: "300"
       },  
     
@@ -87,16 +87,16 @@ const stylesProfile = StyleSheet.create({
         width: "90%"
       },
       title: {
-        fontSize: "21",
+        fontSize: 21,
         left: "57%",
         bottom: "5%",
-        fontFamily: "Gill Sans"
+        //fontFamily: "Gill Sans"
       },
     
       locationText: {
-        fontSize: "17",
+        fontSize: 17,
         left: "60%",
-        fontFamily: "Gill Sans",
+        //fontFamily: "Gill Sans",
         fontWeight: "300"
       },  
       button: {
@@ -118,7 +118,7 @@ const stylesProfile = StyleSheet.create({
         width: "85%",
         marginTop: "10%",
         marginBottom: "3%",
-        borderRadius: "10%"
+        borderRadius: 10
       },
       friendsButton:{
         backgroundColor: "rgb(242, 144, 91)",
@@ -127,29 +127,29 @@ const stylesProfile = StyleSheet.create({
         alignItems: "center",
         height: "60%",
         width: "40%",
-        borderRadius: "10%",
+        borderRadius: 10,
       },
       buttonText1: {
         color: "white",
         fontSize: 17,
-        fontFamily: "Gill Sans",
+        //fontFamily: "Gill Sans",
       },
       buttonText2: {
         color: "black",
         fontSize: 17,
-        fontFamily: "Gill Sans",
+        //fontFamily: "Gill Sans",
       },
 
     italicText: {
         paddingBottom: "3%",
-        fontSize: "15%",
+        fontSize: 12,
         left: "9%",
         fontStyle: "italic"
     },
 
     inputBox: {
         backgroundColor: "rgb(242, 144, 91)",
-        borderRadius: "10%",
+        borderRadius: 10,
         width: "85%",
         height: "4%",
         alignSelf: "center",
@@ -163,7 +163,7 @@ const stylesProfile = StyleSheet.create({
         alignItems: "center",
         height: "26%",
         width: "37%",
-       borderRadius: "10%"
+       borderRadius: 10
     },
     row: {
         flexDirection: "row",
@@ -172,7 +172,7 @@ const stylesProfile = StyleSheet.create({
 
     buttonText: {
         color: "white",
-        fontSize: "17%",
+        fontSize: 12,
     },
 
     addInstrumentButton:{
@@ -184,7 +184,7 @@ const stylesProfile = StyleSheet.create({
         height: "5%",
         width: "85%",
         marginTop: "5%",
-        borderRadius: "10%"
+        borderRadius: 10
     },
 
     BiographySquare: {
@@ -192,20 +192,20 @@ const stylesProfile = StyleSheet.create({
         width: "85%",
         height: "25%",
         backgroundColor: "rgb(249, 203, 177)",
-        borderRadius: "20%",
+        borderRadius: 10,
         marginBottom: "3%"
       },
 
     titleText: {
       top: "25%",
       textAlign: "center",
-      fontSize: "25%",
+      fontSize: 21,
       fontWeight: "600"
     }, 
     
     phaseText: {
       textAlign: "center",
-      fontSize: "20%",
+      fontSize: 21,
       fontWeight: "500",
       top: "2%",
       paddingBottom: "5%"
@@ -219,12 +219,12 @@ const stylesProfile = StyleSheet.create({
       alignItems: "center",
       height: "5%",
       marginTop: "5%",
-      borderRadius: "10%"
+      borderRadius: 10
     },
 
     smallText: {
       textAlign: "center",
-      fontSize: "13%",
+      fontSize: 12,
       color: "gray",
       paddingBottom: "5%"
     }

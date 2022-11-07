@@ -106,7 +106,7 @@ export default function RegisterScreen({ navigation }) {
                 style={{
                   width: 50,
                   height: 50,
-                  borderRadius: '50%',
+                  borderRadius: 10,
                   left: 20,
                   top: 60,
                   backgroundColor: '#006175',
@@ -116,7 +116,7 @@ export default function RegisterScreen({ navigation }) {
                 style={{
                   width: 50,
                   height: 50,
-                  borderRadius: '50%',
+                  borderRadius: 10,
                   right: -320,
                   top: 50,
                   backgroundColor: '#006175',
@@ -126,7 +126,7 @@ export default function RegisterScreen({ navigation }) {
                 style={{
                   width: 85,
                   height: 85,
-                  borderRadius: '50%',
+                  borderRadius: 10,
                   right: -325,
                   bottom: 260,
                   backgroundColor: '#EE9344',
@@ -136,7 +136,7 @@ export default function RegisterScreen({ navigation }) {
                 style={{
                   width: 25,
                   height: 25,
-                  borderRadius: '50%',
+                  borderRadius: 10,
                   left: 50,
                   bottom: 300,
                   backgroundColor: '#006175',
@@ -146,7 +146,7 @@ export default function RegisterScreen({ navigation }) {
                 style={{
                   width: 25,
                   height: 25,
-                  borderRadius: '50%',
+                  borderRadius: 10,
                   left: 135,
                   bottom: 68,
                   backgroundColor: '#EE9344',
