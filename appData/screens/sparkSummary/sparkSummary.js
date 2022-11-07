@@ -2,7 +2,8 @@ import React from 'react';
 import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity, Image, ScrollView } from "react-native";
 import { stylesProfile } from "../../styles/profile.js";
 
-return(
+export default function SparkSummary({ navigation }) {
+  return(
     <View style={stylesProfile.MainContainer}>
       <View style={[stylesProfile.topBorder, {height: "40%"}]}>
       {/* Profile Picture */}
@@ -27,4 +28,5 @@ return(
       </View>
     </View>
     </View>
-)
+  )
+}

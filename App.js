@@ -15,13 +15,14 @@ import SparkCreation from './appData/screens/sparkCreation/sparkCreation.js';
 import UserDashboard from './appData/screens/dashboard/UserDashboard';
 import HostingDashboard from './appData/screens/dashboard/HostingDashboard';
 import ComponentTesting from './appData/screens/ComponentTesting.js';
+import SparkSummary from './appData/screens/SparkSummary/sparkSummary.js';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Router">
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="SparkSummary">
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
         <Stack.Screen name="Router" component={Router} />
@@ -35,6 +36,7 @@ function App() {
         <Stack.Screen name="userDashboard" component={UserDashboard}/>
         <Stack.Screen name="HostingDashboard" component={HostingDashboard}/>
         <Stack.Screen name="ComponentTesting" component={ComponentTesting}/>
+        <Stack.Screen name="SparkSummary" component={SparkSummary}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
