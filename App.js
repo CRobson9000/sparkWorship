@@ -15,7 +15,7 @@ import SparkCreation from './appData/screens/sparkCreation/sparkCreation.js';
 import UserDashboard from './appData/screens/dashboard/UserDashboard';
 import HostingDashboard from './appData/screens/dashboard/HostingDashboard';
 import ComponentTesting from './appData/screens/ComponentTesting.js';
-import SparkSummary from './appData/screens/SparkSummary/sparkSummary.js';
+import SparkSummary from './appData/screens/sparkSummary/sparkSummary.js';
 
 const Stack = createNativeStackNavigator();
 
