@@ -5,7 +5,7 @@ import { Observable } from '../../components/classes';
 import { getDatabase, ref, set, get } from 'firebase/database';
 import { Dropdown } from 'react-native-element-dropdown';
 
-export default function ProfileScreen({route, navigation}) {
+export default function ProfileCreation({route, navigation}) {
   //set environment variables
   let props = route.params;
   //let userId = props.userId;
