@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const stylesProfile = StyleSheet.create({
+const stylesSummary = StyleSheet.create({
 
     MainContainer: {
         backgroundColor: "white",
@@ -16,7 +16,7 @@ const stylesProfile = StyleSheet.create({
         top: "30%",
         left: "8%",
         width: "40%",
-        borderRadius: "80%"
+        borderRadius: 80
     },
 
     row: {
@@ -25,7 +25,7 @@ const stylesProfile = StyleSheet.create({
     },
 
     boldText: {
-        fontFamily: "Gill Sans",
+        fontFamily: "Roboto",
         fontWeight: "500",
         left: "52%",
         bottom: "9%"
@@ -34,16 +34,16 @@ const stylesProfile = StyleSheet.create({
     generalText: {
         paddingTop: "1%",
         paddingBottom: "2%",
-        fontSize: "17%",
+        fontSize: 17,
         left: "9%",
-        fontFamily: "Gill Sans"
+        fontFamily: "Roboto"
     },
 
     Square: {
         width: "85%",
         height: "75%", 
         backgroundColor: "rgb(249, 203, 177)",
-        borderRadius: "20%",
+        borderRadius: 20,
         alignSelf: "center"
     },
 
@@ -57,27 +57,27 @@ const stylesProfile = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-evenly"
     },
-      title: {
-        fontSize: "21",
-        left: "57%",
-        bottom: "5%",
-        fontFamily: "Gill Sans"
-      },
+    title: {
+      fontSize: 21,
+      left: "57%",
+      bottom: "5%",
+      fontFamily: "Roboto"
+    },
     locationText: {
-        fontSize: "17",
-        left: "60%",
-        fontFamily: "Gill Sans",
-        fontWeight: "300"
-      },  
+      fontSize: 17,
+      left: "60%",
+      fontFamily: "Roboto",
+      fontWeight: "300"
+    },  
     
-      button: {
-        backgroundColor: 'rgb(242, 144, 91)',
-        width: "22%",
-        height: "50%",
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 25,
-      },
+    button: {
+      backgroundColor: 'rgb(242, 144, 91)',
+      width: "22%",
+      height: "50%",
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 25,
+    },
 
     buttonsRow: {
         marginTop: "5%",
@@ -87,16 +87,16 @@ const stylesProfile = StyleSheet.create({
         width: "90%"
       },
       title: {
-        fontSize: "21",
+        fontSize: 21,
         left: "57%",
         bottom: "5%",
-        fontFamily: "Gill Sans"
+        fontFamily: "Roboto"
       },
     
       locationText: {
-        fontSize: "17",
+        fontSize: 17,
         left: "60%",
-        fontFamily: "Gill Sans",
+        fontFamily: "Roboto",
         fontWeight: "300"
       },  
       button: {
@@ -118,7 +118,7 @@ const stylesProfile = StyleSheet.create({
         width: "85%",
         marginTop: "10%",
         marginBottom: "3%",
-        borderRadius: "10%"
+        borderRadius: 10
       },
       friendsButton:{
         backgroundColor: "rgb(242, 144, 91)",
@@ -132,24 +132,24 @@ const stylesProfile = StyleSheet.create({
       buttonText1: {
         color: "white",
         fontSize: 17,
-        fontFamily: "Gill Sans",
+        fontFamily: "Roboto",
       },
       buttonText2: {
         color: "black",
         fontSize: 17,
-        fontFamily: "Gill Sans",
+        fontFamily: "Roboto",
       },
 
     italicText: {
         paddingBottom: "3%",
-        fontSize: "15%",
+        fontSize: 15,
         left: "9%",
         fontStyle: "italic"
     },
 
     inputBox: {
         backgroundColor: "rgb(242, 144, 91)",
-        borderRadius: "10%",
+        borderRadius: 10,
         width: "85%",
         height: "4%",
         alignSelf: "center",
@@ -163,7 +163,7 @@ const stylesProfile = StyleSheet.create({
         alignItems: "center",
         height: "26%",
         width: "37%",
-       borderRadius: "10%"
+       borderRadius: 10
     },
     row: {
         flexDirection: "row",
@@ -172,7 +172,7 @@ const stylesProfile = StyleSheet.create({
 
     buttonText: {
         color: "white",
-        fontSize: "17%",
+        fontSize: 17,
     },
 
     addInstrumentButton:{
@@ -184,7 +184,7 @@ const stylesProfile = StyleSheet.create({
         height: "5%",
         width: "85%",
         marginTop: "5%",
-        borderRadius: "10%"
+        borderRadius: 10
     },
 
     BiographySquare: {
@@ -192,20 +192,20 @@ const stylesProfile = StyleSheet.create({
         width: "85%",
         height: "25%",
         backgroundColor: "rgb(249, 203, 177)",
-        borderRadius: "20%",
+        borderRadius: 20,
         marginBottom: "3%"
       },
 
     titleText: {
       top: "25%",
       textAlign: "center",
-      fontSize: "25%",
+      fontSize: 25,
       fontWeight: "600"
     }, 
     
     phaseText: {
       textAlign: "center",
-      fontSize: "20%",
+      fontSize: 20,
       fontWeight: "500",
       top: "2%",
       paddingBottom: "5%"
@@ -219,15 +219,15 @@ const stylesProfile = StyleSheet.create({
       alignItems: "center",
       height: "5%",
       marginTop: "5%",
-      borderRadius: "10%"
+      borderRadius: 10
     },
 
     smallText: {
       textAlign: "center",
-      fontSize: "13%",
+      fontSize: 13,
       color: "gray",
       paddingBottom: "5%"
     }
 });
 
-export {stylesProfile}
+export {stylesSummary}
