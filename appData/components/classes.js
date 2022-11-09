@@ -67,6 +67,23 @@ class TDO {
     }
 }
 
+class FirebaseButler {
+    static fbGet(pathRef) {
+        const db = getDatabase();
+        const dataRef = ref(db, pathRef);
+        let dataPromise = new Promise((resolve, reject) => {
+            get(dataRef).then((snapshot) => {
+                if (snapshot.val()) {
+                    resolve(snapshot.val());
+                }
+                else {
+                    reject(`Data not found at path: ${pathRef}`);
+                }
+            })
+        })
 
+        return dataPromise;
+    }
+} 
 
-export { Observable, TDO };
+export { Observable, TDO, FirebaseButler };
