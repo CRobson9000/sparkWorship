@@ -3,13 +3,50 @@ import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } f
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List } from 'react-native-paper';
 import { stylesSummary } from "../../styles/summary.js";
+import { Input, Slider, DropDown } from '../../components/components';
+import { Observable, TDO } from '../../components/classes';
+import { stylesPortrait } from "../../styles/portrait";
 
 export default function SparkSummary({ navigation }) {
 
+  let inputs = {
+    address: new Observable("", () => updatePayload(inputs.address.getVal(), "address")),
+    city: new Observable("", () => updatePayload(inputs.city.getVal(), "city")),
+    state: new Observable("", () => updatePayload(inputs.state.getVal(), "state")),
+    zip: new Observable("", () => updatePayload(inputs.zip.getVal(), "zip")),
+  };
+  const updatePayload = (updateVal, updateName) =>
+  {
+      update[updateName] = updateVal;
+  };
   const FirstRoute = () => (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <Text style={{borderColor: "#F2905B", borderWidth: 10, width: '85%', alignSelf: "center", height: 300, top: 50, borderRadius: 10}}></Text>
-    </View>
+    <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
+        <View style={[sparkViewStyles.sparkContainer]}>
+          <View style={[sparkViewStyles.sparkVerticalContainer]}>
+                <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Location</Text>
+                <View style={[sparkViewStyles.topLocationContainer]}>
+                    <Text style={{paddingLeft:"4%"}}>Address</Text>
+                    <Input start = {inputs.address.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.address.setVal(val)}/>
+                </View>
+                <View style={[sparkViewStyles.locationContainer]}>
+                    <Text style={{paddingLeft:"4%"}}>City</Text>
+                    <Input start = {inputs.city.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.city.setVal(val)}/>
+                </View>
+                <View style={[sparkViewStyles.locationContainer]}>
+                    <Text style={{paddingLeft:"4%"}}>Zip</Text>
+                    <Input start = {inputs.zip.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.zip.setVal(val)}/>
+                </View>
+                <View style={[sparkViewStyles.locationContainer]}>
+                    <Text style={{paddingLeft:"4%"}}>State</Text>
+                    <Input start = {inputs.state.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.state.setVal(val)}/>
+                </View>
+                <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => sendPayload()}>
+                    <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Submit</Text>
+                </TouchableOpacity>
+                  
+          </View>
+      </View>
+    </ScrollView>
     );
 
 
@@ -223,3 +260,141 @@ const styles = StyleSheet.create({
   },
 
 })
+
+const sparkViewStyles = StyleSheet.create({
+
+  addButton: {
+      height: "50%",
+      width: "20%",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "#006175",
+      borderRadius: 7
+  },
+  sparkContainer:
+  {
+      width:"100%",
+      height:"90%",
+      backgroundColor: "rgba(255,255,255,1)",
+      flexDirection: "row", 
+      justifyContent: "center", 
+      alignItems: "center"
+  },
+  locationContainer:
+  {
+      width:"90%",
+      flexDirection:"column", 
+      height:"10%",
+      marginTop: "12%"
+  },
+  topLocationContainer:{
+      width:"90%",
+      flexDirection:"column", 
+      height:"10%",
+      marginTop: "4%"
+  },
+  timeContainer:{
+      flexDirection:"row",
+      marginBottom: "8%",
+      justifyContent: "center",
+      alignItems: "center"
+  },
+  sparkVerticalContainer:
+  {
+      width:"100%",
+      height:"100%",
+      backgroundColor: "rgba(255,255,255,1)",
+      flexDirection: "column", 
+      justifyContent: "space-between", 
+      alignItems: "center"
+  },
+
+  bottomContainer:{
+      width:"100%",
+      height:"8%",
+      flexDirection: "row", 
+      justifyContent: "center", 
+      alignItems: "center"
+  },
+
+  newInputBox:{
+      height:"100%",
+      borderWidth: 0,
+      borderColor: "black",
+      backgroundColor: "#F9CBB1",
+      paddingLeft: "1%",
+      marginTop: "1%",
+      borderRadius: 8,
+      textAlign: 'center',
+      color: "white",
+      width: "100%",
+  },
+  locationInputBox:{
+      textAlign: 'left',
+      paddingLeft: '2%',
+      fontSize: 18
+  },
+  dateInputBox: {
+      height: "10%",
+      marginHorizontal: "2%",
+      borderWidth: 0,
+      borderColor: "black",
+      paddingHorizontal: "1%",
+      fontSize: 24,
+      borderRadius: 8,
+      textAlign: 'center',
+      color: "black",
+      width: "100%",
+      alignContent: "center"
+  },
+  minuteInputBox:{
+      height: "10%",
+      marginHorizontal: "2%",
+      borderWidth: 0,
+      borderColor: "black",
+      paddingHorizontal: "1%",
+      fontSize: 36,
+      borderRadius: 8,
+      textAlign: 'center',
+      color: "black",
+      width: "15%",
+      alignContent: "center"
+  },
+  hourInputBox:{
+      height: "10%",
+      marginHorizontal: "2%",
+      borderWidth: 0,
+      borderColor: "black",
+      paddingHorizontal: "1%",
+      fontSize: 36,
+      borderRadius: 8,
+      textAlign: 'center',
+      color: "black",
+      width: "15%",
+      alignContent:"flex-end",
+      justifyContent:"flex-end"
+  },
+  dateInputContainer:{
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      marginHorizontal: "1%",
+      width: "25%",
+  },
+
+  button:
+  {
+      backgroundColor: "#006175",
+      marginHorizontal: "17%",
+      color: "#FFFFFF",
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 5,
+      paddingTop: "2%",
+      paddingBottom: "2%",
+      marginTop: "2%",
+      marginBottom: "2%",
+      borderWidth: 0,
+      paddingHorizontal: "5%"
+  },
+});
