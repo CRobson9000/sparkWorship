@@ -16,13 +16,18 @@ import UserDashboard from './appData/screens/dashboard/UserDashboard';
 import HostingDashboard from './appData/screens/dashboard/HostingDashboard';
 import ComponentTesting from './appData/screens//testing/ComponentTesting.js';
 import FunctionalityTesting from './appData/screens/testing/FunctionalityTesting';
+// import UserHub from './appData/screens/dashboard/UserHub';
+import BottomTabNavigator from './appData/screens/Navigation/BottomTabNavigator.js';
+// import Routes from '../constants';
+import Routes from './appData/screens/constants/Routes.js';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="ProfileCreation">
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="LoginScreen">
+        {/* <Stack.SCreen name="UserHub" componenet={UserHub} /> */}
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
         <Stack.Screen name="Router" component={Router} />
@@ -33,10 +38,11 @@ function App() {
         <Stack.Screen name="SparkView" component={SparkView}/>
         <Stack.Screen name="Test" component={MyTest}/>
         <Stack.Screen name="SparkCreation" component={SparkCreation}/>
-        <Stack.Screen name="UserDashboard" component={UserDashboard}/>
+        {/* <Stack.Screen name="UserDashboard" component={UserDashboard}/> */}
         <Stack.Screen name="HostingDashboard" component={HostingDashboard}/>
         <Stack.Screen name="ComponentTesting" component={ComponentTesting}/>
         <Stack.Screen name="FunctionalityTesting" component={FunctionalityTesting}/>
+        <Stack.Screen name={Routes.UserDashboard} component={BottomTabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );
