@@ -1,7 +1,7 @@
 import { Image, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import React from 'react';
 import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
-import {Routes} from '../constants/Routes';
+import Routes from '../constants/Routes.js';
 // import Routes from './appData/screens/constants/Routes.js';
 import UserDashboard from '../dashboard/UserDashboard';
 
@@ -29,11 +29,11 @@ export default function LoginScreen({ navigation }) {
     signInWithEmailAndPassword(auth, username, userPassword).then((userCredential) => {
         // Signed in with a valid username and password 
         const user = userCredential.user;
-        navigation.navigate(Routes.UserDashboard, {userId: user.uid});
+        navigation.navigate(Routes['userDashboard'], {userId: user.uid});
     }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode);
+        //console.log(errorCode);
         console.log(errorMessage);
     });
   }

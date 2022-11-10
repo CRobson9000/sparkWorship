@@ -1,7 +1,7 @@
 let Routes={
     Login: 'LoginScreen',
     Register: 'Registration',
-    UserDashboard: 'UserDashboard',
+    userDashboard: 'UserDashboard',
     HostingDashboard: 'HostingDashboard',
     UserHub: 'UserHub',
     SparkView: 'Spark View',
