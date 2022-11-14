@@ -3,7 +3,8 @@ import React from 'react';
 
 import { Dimensions } from 'react-native';
 import { stylesPortrait } from "../../styles/portrait";
-import colors from '../../../config/colors'
+import colors from '../../../config/colors';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function SparkView({ navigation }) {
     return(

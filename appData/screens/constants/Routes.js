@@ -1,14 +1,15 @@
 let Routes={
-    Login: 'LoginScreen',
-    Register: 'Registration',
+    login: 'LoginScreen',
+    register: 'Registration',
     userDashboard: 'UserDashboard',
-    HostingDashboard: 'HostingDashboard',
-    UserHub: 'UserHub',
-    SparkView: 'Spark View',
-    ProfileCreation: 'Profile Creation',
-    PublicProfile:'Public Profile',
-    PersonalProfile: "Personal Profile",
-    SparkCreation: 'Spark Creation',
+    hostingDashboard: 'HostingDashboard',
+    userHub: 'UserHub',
+    sparkView: 'Spark View',
+    profileCreation: 'Profile Creation',
+    publicProfile:'Public Profile',
+    personalProfile: "Personal Profile",
+    sparkCreation: 'Spark Creation',
+    messagingScreen: 'MessagingScreen',
 
 
 

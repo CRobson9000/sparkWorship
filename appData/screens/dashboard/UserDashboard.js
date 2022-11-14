@@ -3,6 +3,7 @@ import React, {useEffect, useRef} from 'react';
 import { useDeviceOrientation } from '@react-native-community/hooks';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, createUserWithEmailAndPassword } from "@firebase/auth";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 
 

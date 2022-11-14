@@ -20,6 +20,7 @@ import FunctionalityTesting from './appData/screens/testing/FunctionalityTesting
 import BottomTabNavigator from './appData/screens/Navigation/BottomTabNavigator.js';
 // import Routes from '../constants';
 import Routes from './appData/screens/constants/Routes.js';
+// import MessagingScreen from './appData/screens/testing/MessagingScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,7 +28,6 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={Routes["userDashboard"]}>
-        {/* <Stack.SCreen name="UserHub" componenet={UserHub} /> */}
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
         <Stack.Screen name="Router" component={Router} />
@@ -42,7 +42,11 @@ function App() {
         <Stack.Screen name="HostingDashboard" component={HostingDashboard}/>
         <Stack.Screen name="ComponentTesting" component={ComponentTesting}/>
         <Stack.Screen name="FunctionalityTesting" component={FunctionalityTesting}/>
-        <Stack.Screen name={Routes["userDashboard"]} component={BottomTabNavigator} />
+        {/* <Stack.SCreen name="UserHub" componenet={UserHub} /> */}
+        <Stack.Screen 
+        name={Routes["userDashboard"]} 
+        component={BottomTabNavigator}
+        options={{headerShown: false}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

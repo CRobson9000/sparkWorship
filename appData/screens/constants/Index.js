@@ -15,6 +15,8 @@ export {default as UserDashboard} from '../dashboard/UserDashboard';
 export {default as HostingDashboard} from '../dashboard/HostingDashboard';
 export {default as ComponentTesting} from '../testing/ComponentTesting.js';
 export {default as FunctionalityTesting} from '../testing/FunctionalityTesting';
+export {default as UserHub} from '../dashboard/UserHub';
+// export {default as MessagingScreen} from './appData/screens/testing/MessagingScreen';
 export {default as Routes} from '../constants/Routes';
 // export {default as Routes} from './appData/screens/constants/Routes.js';
 
