@@ -280,7 +280,6 @@ export default function SparkCreation({ navigation }) {
         // ---------------
         const [roles, setRoles] = React.useState([]);
         const [dropDownItems, setDropDownItems] = React.useState([]);
-        const [test, setTest] = React.useState("Hi there!");
 
         const dropDownStyles = StyleSheet.create({
             container: {
