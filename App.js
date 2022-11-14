@@ -6,7 +6,7 @@ import LoginScreen from './appData/screens/account/LoginScreen.js';
 import RegistrationScreen from './appData/screens/account/RegistrationScreen.js';
 import Router from './appData/screens/Router.js';
 import SparkView from './appData/screens/sparks/sparkView.js';
-import LocationData from './appData/screens/LocationData.js';
+import LocationData from './appData/screens/testing/LocationData.js';
 import ProfileCreation from './appData/screens/profile/ProfileCreation';
 import ProfileScreenIPublic from './appData/screens/profile/ProfileScreenIPublic.js';
 import ProfileScreenIPersonal from './appData/screens/profile/ProfileScreenIPersonal.js';
@@ -14,14 +14,20 @@ import MyTest from './appData/screens/MyTest.js';
 import SparkCreation from './appData/screens/sparkCreation/sparkCreation.js';
 import UserDashboard from './appData/screens/dashboard/UserDashboard';
 import HostingDashboard from './appData/screens/dashboard/HostingDashboard';
-import ComponentTesting from './appData/screens/ComponentTesting.js';
+import ComponentTesting from './appData/screens//testing/ComponentTesting.js';
+import FunctionalityTesting from './appData/screens/testing/FunctionalityTesting';
+// import UserHub from './appData/screens/dashboard/UserHub';
+import BottomTabNavigator from './appData/screens/Navigation/BottomTabNavigator.js';
+// import Routes from '../constants';
+import Routes from './appData/screens/constants/Routes.js';
+// import MessagingScreen from './appData/screens/testing/MessagingScreen';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Router">
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={Routes["userDashboard"]}>
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
         <Stack.Screen name="Router" component={Router} />
@@ -32,9 +38,15 @@ function App() {
         <Stack.Screen name="SparkView" component={SparkView}/>
         <Stack.Screen name="Test" component={MyTest}/>
         <Stack.Screen name="SparkCreation" component={SparkCreation}/>
-        <Stack.Screen name="userDashboard" component={UserDashboard}/>
+        {/* <Stack.Screen name="UserDashboard" component={UserDashboard}/> */}
         <Stack.Screen name="HostingDashboard" component={HostingDashboard}/>
         <Stack.Screen name="ComponentTesting" component={ComponentTesting}/>
+        <Stack.Screen name="FunctionalityTesting" component={FunctionalityTesting}/>
+        {/* <Stack.SCreen name="UserHub" componenet={UserHub} /> */}
+        <Stack.Screen 
+        name={Routes["userDashboard"]} 
+        component={BottomTabNavigator}
+        options={{headerShown: false}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

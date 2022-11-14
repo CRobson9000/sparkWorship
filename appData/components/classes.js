@@ -1,3 +1,5 @@
+import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
+
 class Observable {
     constructor(start, observer){
          //set start value of "observer"
@@ -25,14 +27,22 @@ class Observable {
 }
 
 class TDO {
-    constructor(hours, minutes, seconds, month, day, year){
-        this.TDO = {
-            "hours": hours,
-            "minutes": minutes,
-            "seconds:": seconds,
-            "month": month,
-            "day": day,
-            "year": year
+    constructor(hours, minutes, seconds, month, day, year, object){
+        /*if an object parameter is given when a TDO is made, it means you are converting a TDO object from firebase
+        to an actual TDO object.  If that's not given, we can assume that they are giving hours, minutes, seconds, day, etc...
+        */
+        if (!object) {
+            this.TDO = {
+                "hours": hours,
+                "minutes": minutes,
+                "seconds:": seconds,
+                "month": month,
+                "day": day,
+                "year": year
+            }
+        }
+        else {
+            this.TDO = object
         }
     }
     setDate(month, day, year) {
@@ -53,6 +63,11 @@ class TDO {
         return `${this.TDO["month"]}/${this.TDO["day"]}/${this.TDO["year"]}`;
     }
 
+    getFormattedDateFormal(){
+       const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+       return `${months[this.TDO.month - 1]} ${this.TDO.day}, 20${this.TDO.year}`
+    }
+
     getFormattedTime(){
         let am = true;
         let hour;
@@ -67,6 +82,25 @@ class TDO {
     }
 }
 
+class FirebaseButler {
+    static fbGet(pathRef) {
+        const db = getDatabase();
+        const dataRef = ref(db, pathRef);
+        let dataPromise = new Promise((resolve, reject) => {
+            get(dataRef).then((snapshot) => {
+                if (snapshot.val()) {
+                    resolve(snapshot.val());
+                }
+                else {
+                    reject(`Data not found at path: ${pathRef}`);
+                }
+            })
+        })
+
+        return dataPromise;
+    }
+} 
 
 
-export { Observable, TDO };
+
+export { Observable, TDO, FirebaseButler };

@@ -1,6 +1,11 @@
 import { Image, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import React from 'react';
 import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
+import Routes from '../constants/Routes.js';
+import UserDashboard from '../dashboard/UserDashboard';
+import Icon from 'react-native-vector-icons/Ionicons';
+
+// import Routes.UserDashboard from '../dashboard/UserDashboard';
 
 //import statements for styles
 import { stylesPortrait } from "../../styles/portrait.js";
@@ -14,7 +19,7 @@ export default function LoginScreen({ navigation }) {
   /*------------------------------------------------*/
   /*----------BACK-END APP CODE ----------*/
   /*------------------------------------------------*/
-
+// console.log( Routes.UserDashboard );
   //global variables
   let username;
   let userPassword;
@@ -24,11 +29,11 @@ export default function LoginScreen({ navigation }) {
     signInWithEmailAndPassword(auth, username, userPassword).then((userCredential) => {
         // Signed in with a valid username and password 
         const user = userCredential.user;
-        navigation.navigate("ProfileCreation", {userId: user.uid});
+        navigation.navigate(Routes['userDashboard'], {userId: user.uid});
     }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode);
+        //console.log(errorCode);
         console.log(errorMessage);
     });
   }
@@ -126,8 +131,8 @@ export default function LoginScreen({ navigation }) {
             <Text style={[stylesPortrait.forgotPassword]}>Forgot password?</Text>
           </TouchableOpacity>
 
-
           <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
+          {/* <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}> */}
             <View><Text style={{color: "white"}}>Login</Text></View>
           </TouchableOpacity>
 

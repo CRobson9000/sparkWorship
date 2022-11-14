@@ -25,19 +25,31 @@ const stylesPortrait = StyleSheet.create({
         position: "absolute",
         bottom:30
     },
+    // calendar: {
+    //     flex: 1,
+    //     width: "80%",
+    //     height: "20%",
+    //     //resizeMode: 'contain',
+    //     marginLeft: "10%",
+    //     overflow: "hidden",
+    //     bottom: "23%",
+    //     backgroundColor: "red"
+    //   },
     calendar: {
-        flex: 1,
-        width: "80%",
         height: "20%",
-        resizeMode: 'contain',
-        marginLeft: "10%",
-        overflow: "hidden",
-        bottom: "23%"
-      },
+        width: "100%",
+        backgroundColor: 'green'
+    },
+    // topText: {
+    //     textAlign: 'center',
+    //     color: "#006175",
+    //     top: 65,
+    //     fontWeight: "bold",
+    //     fontSize: 20
+    // },
+    
     topText: {
-        textAlign: 'center',
         color: "#006175",
-        top: 65,
         fontWeight: "bold",
         fontSize: 20
     },
@@ -106,7 +118,6 @@ const stylesPortrait = StyleSheet.create({
         alignItems: "flex-start",
         borderRadius: 15,
         borderColor: "#CDDFE3",
-        height: "15%",
         marginBottom: "5%",
         paddingLeft: "2%",
         borderWidth: 3
