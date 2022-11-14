@@ -2,8 +2,9 @@ import React from 'react';
 import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List } from 'react-native-paper';
+import Routes from '../constants/Routes';
 
-export default function PSPersonal() {
+export default function PSPersonal({ route, navigation }) {
 
     const FirstRoute = () => (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -93,20 +94,20 @@ export default function PSPersonal() {
               <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
                 <TouchableOpacity><Image style={{height: 40, width: 40}} source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity>
                 <Text style={styles.titleText}>My Profile</Text>
-                <TouchableOpacity><Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}></Image></TouchableOpacity>
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.profileCreation)}><Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}></Image></TouchableOpacity>
               </View>
               <View style={styles.row}>
                 <Image style={styles.profilePicture} source={require('../../../assets/blankprofilepic.png')}></Image>
                 <View style={styles.column}>
-                  <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10}}>FirstName LastName</Text>
-                  <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13}}>Instrumentalist</Text>
+                  <Text style={{fontSize: 20, fontWeight: '500', marginBottom: 10}}>FirstName LastName</Text>
+                  <Text style={{fontSize: 15, fontWeight: '400', marginBottom: 13}}>Instrumentalist</Text>
                   <View style={styles.row2}>
                     <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
                     <Text>Location</Text>
                   </View>
                 </View>
               </View>
-            <View style={[styles.row, {marginLeft: 20, marginRight: 20, top: 135}]}>
+            <View style={[styles.row, {marginLeft: 20, marginRight: 20, top: "30%"}]}>
               <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
               <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
               <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
@@ -116,9 +117,6 @@ export default function PSPersonal() {
             </View>
             <View style={styles.content}>
               <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
-            </View>
-            <View style={styles.navigation}>
-              <Image style={{width: '100%', height: '100%'}} source={require('../../../assets/navigation.png')}></Image>
             </View>
         </View>
       );
@@ -137,7 +135,7 @@ const styles = StyleSheet.create({
     },
 
     content: {
-      height: '51%'
+      height: '58%'
     },
 
     titleText: {

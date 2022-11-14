@@ -10,10 +10,10 @@ let Routes={
     publicProfile:'Public Profile',
     personalProfile: "Personal Profile",
     sparkCreation: 'Spark Creation',
-    messagingScreen: 'MessagingScreen',
+    messaging: 'Messaging',
 
     //testing routes
-    myTest: "My Test", 
+    // myTest: "My Test", 
     router: "Router",
     componentTesting: "ComponentTesting",
     functionalityTesting: "FunctionalityTesting",

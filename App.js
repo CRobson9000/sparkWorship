@@ -2,10 +2,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //import statements for actual screens
-import {Navigator, LoginScreen, RegistrationScreen, SparkView, ProfileCreation, ProfileScreenIPublic, ProfileScreenIPersonal, SparkCreation, UserDashboard, UserHub} from './appData/screens/constants/Index.js';
+import {Navigator, LoginScreen, RegistrationScreen, SparkView, ProfileCreation, PSPersonal, PSPublic, SparkCreation, UserDashboard, UserHub, Messaging} from './appData/screens/constants/Index.js';
 
 //import statements for testing screens
-import {Router, LocationData, MyTest, ComponentTesting, FunctionalityTesting} from './appData/screens/constants/Index.js';
+import {Router, LocationData, ComponentTesting, FunctionalityTesting} from './appData/screens/constants/Index.js';
 
 //initialize the firebase application
 import './config/firebase.js';
@@ -16,18 +16,18 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={Routes.login}>
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={"Navigator"}>
         {/* Actual Screens used in our app */}
         <Stack.Screen name={Routes.login} component={LoginScreen} />
         <Stack.Screen name={Routes.registration} component={RegistrationScreen} />
-        <Stack.Screen name={Routes.publicProfile} component={ProfileScreenIPublic} />
-        <Stack.Screen name={Routes.personalProfile} component={ProfileScreenIPersonal} />
+        <Stack.Screen name={Routes.publicProfile} component={PSPublic} />
+        <Stack.Screen name={Routes.personalProfile} component={PSPersonal} />
         <Stack.Screen name={Routes.profileCreation} component={ProfileCreation}/>
         <Stack.Screen name={Routes.sparkView} component={SparkView}/>
-        <Stack.Screen name={Routes.myTest} component={MyTest}/>
         <Stack.Screen name={Routes.sparkCreation} component={SparkCreation}/>
         <Stack.Screen name={Routes.userDashboard} component={UserDashboard}/>
         <Stack.Screen name={Routes.userHub} component={UserHub} />
+        <Stack.Screen name={Routes.messaging} component={Messaging} />
         <Stack.Screen name="Navigator" component={Navigator} options={{headerShown: false}} />
 
         {/* Screens for Testing Purposes */}
