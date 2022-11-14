@@ -52,47 +52,52 @@ export default function SparkSummary({ navigation }) {
 
     const SecondRoute = () => (
         <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
-            <List.Section title="Instruments">
+          <View style={{alignItems: "center", justifyContent: "center"}}>
+            <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Requests</Text>
+          </View>
+            <List.Section style={{marginTop: "6%"}}>
               <List.Accordion style={styles.accordian} title="Guitar">
-                <List.Subheader style={{left: 15}}>General Experience</List.Subheader>
-                <List.Subheader style={{left: 15}}>Worship Experience</List.Subheader>
-                <List.Subheader style={{left: 15}}>Additional Notes</List.Subheader>
+                <List.Subheader style={styles.accordionSubheading}>General Experience</List.Subheader>
+                <List.Subheader style={styles.accordionSubheading}>Worship Experience</List.Subheader>
+                <List.Subheader style={styles.accordionSubheading}>Additional Notes</List.Subheader>
               </List.Accordion>
               <List.Accordion style={styles.accordian} title="Piano">
-                <List.Subheader style={{left: 15}}>General Experience</List.Subheader>
-                <List.Subheader style={{left: 15}}>Worship Experience</List.Subheader>
-                <List.Subheader style={{left: 15}}>Additional Notes</List.Subheader>
+                <List.Subheader style={styles.accordionSubheading}>General Experience</List.Subheader>
+                <List.Subheader style={styles.accordionSubheading}>Worship Experience</List.Subheader>
+                <List.Subheader style={styles.accordionSubheading}>Additional Notes</List.Subheader>
               </List.Accordion>
               <List.Accordion style={styles.accordian} title="Trumpet">
-                <List.Subheader style={{left: 15}}>General Experience</List.Subheader>
-                <List.Subheader style={{left: 15}}>Worship Experience</List.Subheader>
-                <List.Subheader style={{left: 15}}>Additional Notes</List.Subheader>
+                <List.Subheader style={styles.accordionSubheading}>General Experience</List.Subheader>
+                <List.Subheader style={styles.accordionSubheading}>Worship Experience</List.Subheader>
+                <List.Subheader style={styles.accordionSubheading}>Additional Notes</List.Subheader>
               </List.Accordion>
             </List.Section>
-          <Text style={{fontSize: 14, left: 15}}>Skilled Genres</Text>
-          <View style={[styles.row2, {top: 20, justifyContent: 'space-evenly'}]}>
-            <View style={styles.genres}>
-              <Text style={{fontSize: 16, color: 'white'}}>Rock</Text>
-            </View>
-            <View style={styles.genres}>
-              <Text style={{fontSize: 16, color: 'white'}}>Country</Text>
-            </View>
-            <View style={styles.genres}>
-              <Text style={{fontSize: 16, color: 'white'}}>Jazz</Text>
-            </View>
-          </View>
-          <View>
-            <Text style={{marginTop:"5%", color: 'white'}}>a</Text>
-          </View>
         </ScrollView>
       );
       
     const ThirdRoute = () => (
-        <View style={{ flex: 1, backgroundColor: 'white' }}>
-          <Text style={{borderColor: "#F2905B", borderWidth: 7, width: '85%', alignSelf: "center", height: 75, top: 50, borderRadius: 10, fontSize: 25, textAlign: 'center', padding: 10}}>Church Name</Text>
-          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: 20, textAlign: 'center', padding: 10, marginTop: 20}}>Denomination</Text>
-          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: 20, textAlign: 'center', padding: 10, marginTop: 20}}>Location</Text>
-        </View>
+      <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
+      <View style={{alignItems: "center", justifyContent: "center"}}>
+        <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Set List</Text>
+      </View>
+        <List.Section style={{marginTop: "6%"}}>
+          <List.Accordion style={styles.accordian} title="Guitar">
+            <List.Subheader style={styles.accordionSubheading}>General Experience</List.Subheader>
+            <List.Subheader style={styles.accordionSubheading}>Worship Experience</List.Subheader>
+            <List.Subheader style={styles.accordionSubheading}>Additional Notes</List.Subheader>
+          </List.Accordion>
+          <List.Accordion style={styles.accordian} title="Piano">
+            <List.Subheader style={styles.accordionSubheading}>General Experience</List.Subheader>
+            <List.Subheader style={styles.accordionSubheading}>Worship Experience</List.Subheader>
+            <List.Subheader style={styles.accordionSubheading}>Additional Notes</List.Subheader>
+          </List.Accordion>
+          <List.Accordion style={styles.accordian} title="Trumpet">
+            <List.Subheader style={styles.accordionSubheading}>General Experience</List.Subheader>
+            <List.Subheader style={styles.accordionSubheading}>Worship Experience</List.Subheader>
+            <List.Subheader style={styles.accordionSubheading}>Additional Notes</List.Subheader>
+          </List.Accordion>
+        </List.Section>
+    </ScrollView>
       );
 
     const FourthRoute = () => (
@@ -117,8 +122,8 @@ export default function SparkSummary({ navigation }) {
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
         { key: 'first', title: 'Bio' },
-        { key: 'second', title: 'Music' },
-        { key: 'third', title: 'Church' },
+        { key: 'second', title: 'Requests' },
+        { key: 'third', title: 'Set List' },
         { key: 'fourth', title: 'Socials' },
         { key: 'fifth', title: 'Boonies' },
     ]);
@@ -142,28 +147,26 @@ export default function SparkSummary({ navigation }) {
   return(
     <View style={styles.MainContainer}>
     <View style={styles.topBorder}>
-      <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
-        <TouchableOpacity><Image style={{height: 40, width: 40}} source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity>
-        <Text style={styles.titleText}>My Profile</Text>
-        <TouchableOpacity><Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}></Image></TouchableOpacity>
+      <View style={[styles.row2, {justifyContent: 'center', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
+        <Text style={styles.titleText}>Spark Name</Text>
       </View>
       <View style={styles.row}>
         <Image style={styles.profilePicture} source={require('../../../assets/blankprofilepic.png')}></Image>
         <View style={styles.column}>
-          <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10}}>FirstName LastName</Text>
-          <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13}}>Instrumentalist</Text>
+          <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10}}>Leader Name</Text>
+          <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13}}>Date and Time</Text>
           <View style={styles.row2}>
             <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
             <Text>Location</Text>
           </View>
         </View>
       </View>
-    <View style={[styles.row, {marginLeft: 20, marginRight: 20, top: 135}]}>
+    <View style={[styles.row, {marginLeft: 20, marginRight: 20, top: 115}]}>
       <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
       <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
       <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
-      <Image style={{height: 40, width: 40}} source={require('../../../assets/emptyStar.png')}></Image>
-      <Image style={{height: 40, width: 40}} source={require('../../../assets/emptyStar.png')}></Image>
+      <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
+      <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
     </View>
     </View>
     <View style={styles.content}>
@@ -220,14 +223,22 @@ const styles = StyleSheet.create({
   },
 
   accordian: {
-    backgroundColor: '#F2905B',
+    backgroundColor: '#F9CBB1',
+    color: "#FFFFFF",
     height: 50,
     marginLeft: '5%',
     marginRight: '5%', 
-    marginBottom: '4%',
-    borderRadius: 10
   },
-
+  accordionSubheading: {
+    left:15,
+    backgroundColor: "#F2905B",
+    marginRight: '5%',
+    marginLeft: '1%',
+    width: "90%",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "#FFFFFF"
+  },
   navigation: {
     backgroundColor: "rgb(219, 233, 236)",
     height: "7%"
