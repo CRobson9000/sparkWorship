@@ -48,6 +48,7 @@ export default function SparkSummary({ navigation }) {
       </View>
     </ScrollView>
     );
+    // <Image source="../../../assets/miniEri.png"   />
 
 
     const SecondRoute = () => (
@@ -56,7 +57,7 @@ export default function SparkSummary({ navigation }) {
             <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Requests</Text>
           </View>
             <List.Section style={{marginTop: "6%"}}>
-              <List.Accordion style={styles.accordian} title="Guitar">
+              <List.Accordion  style={styles.accordian} title="Guitar">
                 <List.Subheader style={styles.accordionSubheading}>General Experience</List.Subheader>
                 <List.Subheader style={styles.accordionSubheading}>Worship Experience</List.Subheader>
                 <List.Subheader style={styles.accordionSubheading}>Additional Notes</List.Subheader>
@@ -71,7 +72,9 @@ export default function SparkSummary({ navigation }) {
                 <List.Subheader style={styles.accordionSubheading}>Worship Experience</List.Subheader>
                 <List.Subheader style={styles.accordionSubheading}>Additional Notes</List.Subheader>
               </List.Accordion>
+              {/* <List.Image variant="image" source={require("../../../assets/miniEri.png")} />  */}
             </List.Section>
+            
         </ScrollView>
       );
       
