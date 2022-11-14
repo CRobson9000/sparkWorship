@@ -30,12 +30,11 @@ function BottomTabNavigator() {
       //   },
       // })}>
       >
-      <Tab.Screen name="Login" component={LoginScreen} />
       <Tab.Screen name="UserDashboard" component={UserDashboard} />
+      <Tab.Screen name="SparkSearch" component={SparkView} />
       <Tab.Screen name="SparkCreation" component={SparkCreation} />
       <Tab.Screen name="MessagingScreen" component={SparkView} />
       <Tab.Screen name="Profile" component={ProfileScreenIPublic} />
-      {/* <Tab.Screen name="Hub" component={UserHub} /> */}
     </Tab.Navigator>
   );
 }

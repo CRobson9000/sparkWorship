@@ -25,7 +25,7 @@ const stylesProfile = StyleSheet.create({
     },
 
     boldText: {
-        fontFamily: "Gill Sans",
+        // fontFamily: "Gill Sans",
         fontWeight: "500",
         left: "52%",
         bottom: "9%"
@@ -34,7 +34,7 @@ const stylesProfile = StyleSheet.create({
     generalText: {
         paddingTop: "1%",
         paddingBottom: "2%",
-        fontSize: "17%",
+        fontSize: 10,
         left: "9%",
         fontFamily: "Gill Sans"
     },
@@ -58,13 +58,13 @@ const stylesProfile = StyleSheet.create({
         justifyContent: "space-evenly"
     },
       title: {
-        fontSize: "21",
+        fontSize: 21,
         left: "57%",
         bottom: "5%",
         fontFamily: "Gill Sans"
       },
     locationText: {
-        fontSize: "17",
+        fontSize: 17,
         left: "60%",
         fontFamily: "Gill Sans",
         fontWeight: "300"
@@ -87,14 +87,14 @@ const stylesProfile = StyleSheet.create({
         width: "90%"
       },
       title: {
-        fontSize: "21",
+        fontSize: 21,
         left: "57%",
         bottom: "5%",
         fontFamily: "Gill Sans"
       },
     
       locationText: {
-        fontSize: "17",
+        fontSize: 17,
         left: "60%",
         fontFamily: "Gill Sans",
         fontWeight: "300"
@@ -142,7 +142,7 @@ const stylesProfile = StyleSheet.create({
 
     italicText: {
         paddingBottom: "3%",
-        fontSize: "15%",
+        fontSize: 10,
         left: "9%",
         fontStyle: "italic"
     },
@@ -172,7 +172,7 @@ const stylesProfile = StyleSheet.create({
 
     buttonText: {
         color: "white",
-        fontSize: "17%",
+        fontSize: 10,
     },
 
     addInstrumentButton:{
@@ -199,13 +199,13 @@ const stylesProfile = StyleSheet.create({
     titleText: {
       top: "25%",
       textAlign: "center",
-      fontSize: "25%",
+      fontSize: 10,
       fontWeight: "600"
     }, 
     
     phaseText: {
       textAlign: "center",
-      fontSize: "20%",
+      fontSize: 10,
       fontWeight: "500",
       top: "2%",
       paddingBottom: "5%"
@@ -224,7 +224,7 @@ const stylesProfile = StyleSheet.create({
 
     smallText: {
       textAlign: "center",
-      fontSize: "13%",
+      fontSize: 10,
       color: "gray",
       paddingBottom: "5%"
     }

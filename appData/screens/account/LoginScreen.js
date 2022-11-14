@@ -29,7 +29,7 @@ export default function LoginScreen({ navigation }) {
     signInWithEmailAndPassword(auth, username, userPassword).then((userCredential) => {
         // Signed in with a valid username and password 
         const user = userCredential.user;
-        navigation.navigate(Routes['userDashboard'], {userId: user.uid});
+        navigation.navigate("Navigator", {userId: user.uid});
     }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
