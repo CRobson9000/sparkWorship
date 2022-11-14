@@ -16,7 +16,7 @@ const stylesProfile = StyleSheet.create({
         top: "30%",
         left: "8%",
         width: "40%",
-        borderRadius: "80%"
+        borderRadius: 10
     },
 
     row: {
@@ -43,7 +43,7 @@ const stylesProfile = StyleSheet.create({
         width: "85%",
         height: "75%", 
         backgroundColor: "rgb(249, 203, 177)",
-        borderRadius: "20%",
+        borderRadius: 10,
         alignSelf: "center"
     },
 
@@ -118,7 +118,7 @@ const stylesProfile = StyleSheet.create({
         width: "85%",
         marginTop: "10%",
         marginBottom: "3%",
-        borderRadius: "10%"
+        borderRadius: 10
       },
       friendsButton:{
         backgroundColor: "rgb(242, 144, 91)",
@@ -127,7 +127,7 @@ const stylesProfile = StyleSheet.create({
         alignItems: "center",
         height: "60%",
         width: "40%",
-        borderRadius: "10%",
+        borderRadius: 10,
       },
       buttonText1: {
         color: "white",
@@ -149,7 +149,7 @@ const stylesProfile = StyleSheet.create({
 
     inputBox: {
         backgroundColor: "rgb(242, 144, 91)",
-        borderRadius: "10%",
+        borderRadius: 10,
         width: "85%",
         height: "4%",
         alignSelf: "center",
@@ -163,7 +163,7 @@ const stylesProfile = StyleSheet.create({
         alignItems: "center",
         height: "26%",
         width: "37%",
-       borderRadius: "10%"
+       borderRadius: 10
     },
     row: {
         flexDirection: "row",
@@ -184,7 +184,7 @@ const stylesProfile = StyleSheet.create({
         height: "5%",
         width: "85%",
         marginTop: "5%",
-        borderRadius: "10%"
+        borderRadius: 10
     },
 
     BiographySquare: {
@@ -192,7 +192,7 @@ const stylesProfile = StyleSheet.create({
         width: "85%",
         height: "25%",
         backgroundColor: "rgb(249, 203, 177)",
-        borderRadius: "20%",
+        borderRadius: 15,
         marginBottom: "3%"
       },
 
@@ -219,7 +219,7 @@ const stylesProfile = StyleSheet.create({
       alignItems: "center",
       height: "5%",
       marginTop: "5%",
-      borderRadius: "10%"
+      borderRadius: 10
     },
 
     smallText: {
