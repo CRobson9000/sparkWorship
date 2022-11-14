@@ -14,14 +14,14 @@ import UserDashboard from './appData/screens/dashboard/UserDashboard';
 import HostingDashboard from './appData/screens/dashboard/HostingDashboard';
 import ComponentTesting from './appData/screens/ComponentTesting.js';
 import PSPersonal from './appData/screens/profile/ProfileScreenIPersonal.js';
-import ProfileCreation from './appData/screens/profile/ProfileCreation.js'
+import ProfileCreation from './appData/screens/profile/ProfileCreation.js';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="PSPersonal">
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Messaging">
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
         <Stack.Screen name="Router" component={Router} />
