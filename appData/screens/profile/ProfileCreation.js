@@ -5,12 +5,16 @@ import { Observable } from '../../components/classes';
 import { getDatabase, ref, set, get } from 'firebase/database';
 import { Dropdown } from 'react-native-element-dropdown';
 
+<<<<<<< HEAD
 import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from 'expo-image-picker';
 // had to make a weird file to "redefine" ref since it already exists from firebase/database
 import { storageRef } from '../../../config/additionalMethods';
 
 export default function ProfileScreen({route, navigation}) {
+=======
+export default function ProfileCreation({route, navigation}) {
+>>>>>>> kylie-current
   //set environment variables
   let props = route.params;
   //let userId = props.userId;
