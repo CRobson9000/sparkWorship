@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         fontSize: 25,
         top: 70,
-        fontWeight: '500'
+        //fontWeight: '500'
     },
 
     message: {
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     
     time: {
         backgroundColor: "white",
-        justifyContent: "right",
+        justifyContent: "flex-end",
         width: "100%",
         flexDirection: "row"
     },
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
 
     sendText: {
         fontSize: 15, 
-        fontWeight: "400",
+        //fontWeight: "400",
         color: "white"
     }
 
