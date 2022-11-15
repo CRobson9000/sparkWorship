@@ -191,28 +191,28 @@ export default function SparkSummary({ navigation }) {
       <ScrollView>
       <View style={[sparkViewStyles.sparkVerticalTest]}>
         <View style={{alignItems: "center", justifyContent: "center"}}>
-            <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Volunteers</Text>
+            <Text style={{fontSize:28, paddingTop:"4%", paddingBottom:"6%", fontWeight:'500'}}>Volunteers</Text>
         </View>
         <View style={[sparkViewStyles.boxOne]}>
-          <Image style={{width: "20%", height: "68%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+          <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
 
           </Image>
           <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
         </View>
         <View style={[sparkViewStyles.boxOne]}>
-          <Image style={{width: "20%", height: "68%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+          <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
 
           </Image>
           <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
         </View>
         <View style={[sparkViewStyles.boxOne]}>
-          <Image style={{width: "20%", height: "68%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+          <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
 
           </Image>
           <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
         </View>
         <View style={[sparkViewStyles.boxOne]}>
-          <Image style={{width: "20%", height: "68%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+          <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
 
           </Image>
           <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
@@ -537,7 +537,6 @@ const sparkViewStyles = StyleSheet.create({
   boxOne:
   {
       backgroundColor: "#F9CBB1",
-      height: "25%",
       //height: "30%",
       width: "80%",
       flexDirection: "row",
@@ -546,8 +545,14 @@ const sparkViewStyles = StyleSheet.create({
   },
   boxText:{
     width: "58%", 
-    marginLeft:"10%",
-    marginTop: "2%",
-    marginBottom: "2%",
-},
+    marginTop: "11.5%",
+    marginBottom: "11.5%",
+    marginRight: "5%"
+  },
+  profileImage:{
+    width: "15%", 
+    height: "51%",
+    marginLeft: "3%"
+  }
+
 });
