@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableHighlight, Text, View, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import React, {useRef, useEffect} from 'react';
 import { Input, Slider, DropDown } from '../components/components';
-import { Observable, TDO } from '../components/classes';
+import { Observable, TDO, FirebaseButler} from '../components/classes';
 
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 import { List } from 'react-native-paper';
@@ -66,6 +66,13 @@ export default function ComponentTesting({ navigation }) {
   const [selected, setSelected] = React.useState("true");
   let myTestItem = "";
 
+  const [myVariable, setMyVariable] = React.useState("hi");
+
+  async function myFunction() {
+    let myData = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/churchName");
+    setMyVariable(myData);
+  }
+
   return (
     // Accordion Component Code
     <View style = {accordianStyles.container}>
@@ -97,6 +104,12 @@ export default function ComponentTesting({ navigation }) {
           func = {(item)=> {myTestItem = item; console.log(myTestItem)}}
           rerenderParent = {() => setSelected(!selected)}
         />
+      </View>
+      <View style = {{height: "20%", width: "100%", backgroundColor: "blue", flexDirection: "row"}}>
+        <TouchableHighlight style = {{width: "50%", height: "30%", backgroundColor: "red"}} onPress = {() => {myFunction()}}>
+            <Text>Press</Text>
+        </TouchableHighlight>
+        <Text>{myVariable}</Text>
       </View>
     </View> 
   );    

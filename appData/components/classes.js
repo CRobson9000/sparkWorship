@@ -100,7 +100,4 @@ class FirebaseButler {
         return dataPromise;
     }
 } 
-
-
-
 export { Observable, TDO, FirebaseButler };

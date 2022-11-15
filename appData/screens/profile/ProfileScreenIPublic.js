@@ -13,7 +13,12 @@ export default function PSPublic() {
 
     const SecondRoute = () => (
         <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
-            <List.Section title="Instruments">
+            <FlatList 
+              // data = {}
+              // style = {}
+              // renderItem = {} 
+            />
+            {/* <List.Section title="Instruments">
               <List.Accordion style={styles.accordian} title="Guitar">
                 <List.Subheader style={{left: 15}}>General Experience</List.Subheader>
                 <List.Subheader style={{left: 15}}>Worship Experience</List.Subheader>
@@ -29,7 +34,7 @@ export default function PSPublic() {
                 <List.Subheader style={{left: 15}}>Worship Experience</List.Subheader>
                 <List.Subheader style={{left: 15}}>Additional Notes</List.Subheader>
               </List.Accordion>
-            </List.Section>
+            </List.Section> */}
           <Text style={{fontSize: 14, left: 15}}>Skilled Genres</Text>
           <View style={[styles.row2, {top: 20, justifyContent: 'space-evenly'}]}>
             <View style={styles.genres}>

@@ -1,24 +1,92 @@
-import React from 'react';
-import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } from 'react-native';
+import React, {useEffect} from 'react';
+import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List } from 'react-native-paper';
 import Routes from '../constants/Routes';
+import { FirebaseButler } from '../../components/classes';
 
 export default function PSPersonal({ route, navigation }) {
 
     let props = route.params;
 
+  let userId = "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+
     const FirstRoute = () => (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <Text style={{borderColor: "#F2905B", borderWidth: 10, width: '85%', alignSelf: "center", height: 300, top: 50, borderRadius: 10}}></Text>
+      <Text style={{borderColor: "#F2905B", borderWidth: 10, width: '85%', alignSelf: "center", height: 300, top: 50, borderRadius: 10}}>{MyBio}</Text>
     </View>
     );
 
 
-    const SecondRoute = () => (
-        <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
+    const SecondRoute = () => {
+      function instrumentRender(object) {
+        return(
+          <List.Accordion
+          title={object.item.instrumentName}
+          style = {styles.accordian}
+          titleStyle = {accordianStyles.headerText}
+          >   
+            <View style={accordianStyles.listItemContainer}>
+              <View style={accordianStyles.listItemHeader}>
+                <Text style={{fontWeight: "bold", fontSize: 15}}> General Experience </Text>
+              </View>
+              <View style={accordianStyles.listItemContent}>
+                <Text style={accordianStyles.contentText}>
+                  {object.item.generalExperience}
+                </Text>
+              </View>
+            </View>
+
+            <View style={accordianStyles.listItemContainer}>
+              <View style={accordianStyles.listItemHeader}>
+                <Text style={{fontWeight: "bold", fontSize: 15}}> Worship Experience </Text>
+              </View>
+              <View style={accordianStyles.listItemContent}>
+                <Text style={accordianStyles.contentText}>
+                  {object.item.worshipExperience}
+                </Text>
+              </View>
+            </View>
+
+            <View style={accordianStyles.listItemContainer}>
+              <View style={accordianStyles.listItemHeader}>
+                <Text style={{fontWeight: "bold", fontSize: 15}}> Additional Notes </Text>
+              </View>
+              <View style={accordianStyles.listItemContent}>
+                <Text style={accordianStyles.contentText}>
+                  {object.item.additionalNotes}
+                </Text>
+              </View>
+            </View>
+            
+          </List.Accordion>
+        );
+      }
+      return(
+        <View style={{ flex: 1, backgroundColor: 'white'}}>
             <List.Section title="Instruments">
-              <List.Accordion style={styles.accordian} title="Guitar">
+              <FlatList
+                data = {myInstruments}
+                style = {{height: "100%", width: "100%"}}
+                renderItem = {instrumentRender}
+                ListFooterComponent={
+                  <>
+                  <Text style={{fontSize: 14, left: 15}}>Skilled Genres</Text>
+                  <View style={[styles.row2, {top: 20, justifyContent: 'space-evenly'}]}>
+                    <View style={styles.genres}>
+                      <Text style={{fontSize: 16, color: 'white'}}>Rock</Text>
+                    </View>
+                    <View style={styles.genres}>
+                      <Text style={{fontSize: 16, color: 'white'}}>Country</Text>
+                    </View>
+                    <View style={styles.genres}>
+                      <Text style={{fontSize: 16, color: 'white'}}>Jazz</Text>
+                    </View>
+                  </View>
+                  </>
+                } 
+              />
+              {/* <List.Accordion style={styles.accordian} title="Guitar">
                 <List.Subheader style={{left: 15}}>General Experience</List.Subheader>
                 <List.Subheader style={{left: 15}}>Worship Experience</List.Subheader>
                 <List.Subheader style={{left: 15}}>Additional Notes</List.Subheader>
@@ -32,28 +100,17 @@ export default function PSPersonal({ route, navigation }) {
                 <List.Subheader style={{left: 15}}>General Experience</List.Subheader>
                 <List.Subheader style={{left: 15}}>Worship Experience</List.Subheader>
                 <List.Subheader style={{left: 15}}>Additional Notes</List.Subheader>
-              </List.Accordion>
+              </List.Accordion> */}
             </List.Section>
-          <Text style={{fontSize: 14, left: 15}}>Skilled Genres</Text>
-          <View style={[styles.row2, {top: 20, justifyContent: 'space-evenly'}]}>
-            <View style={styles.genres}>
-              <Text style={{fontSize: 16, color: 'white'}}>Rock</Text>
-            </View>
-            <View style={styles.genres}>
-              <Text style={{fontSize: 16, color: 'white'}}>Country</Text>
-            </View>
-            <View style={styles.genres}>
-              <Text style={{fontSize: 16, color: 'white'}}>Jazz</Text>
-            </View>
           </View>
-        </ScrollView>
       );
+    }
       
     const ThirdRoute = () => (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-          <Text style={{borderColor: "#F2905B", borderWidth: 7, width: '85%', alignSelf: "center", height: 75, top: 50, borderRadius: 10, fontSize: 25, textAlign: 'center', padding: 10}}>Church Name</Text>
-          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: 20, textAlign: 'center', padding: 10, marginTop: 20}}>Denomination</Text>
-          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: 20, textAlign: 'center', padding: 10, marginTop: 20}}>Location</Text>
+          <Text style={{borderColor: "#F2905B", borderWidth: 7, width: '85%', alignSelf: "center", height: 75, top: 50, borderRadius: 10, fontSize: 25, textAlign: 'center', padding: 10}}>{MyChurchName}</Text>
+          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: 20, textAlign: 'center', padding: 10, marginTop: 20}}>{MyDenomination}</Text>
+          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: 20, textAlign: 'center', padding: 10, marginTop: 20}}>{MyChurchLocation}</Text>
         </View>
       );
 
@@ -90,6 +147,74 @@ export default function PSPersonal({ route, navigation }) {
       />
     );
 
+    const [MyName, setMyName] = React.useState("FirstName LastName");
+
+    async function setName() {
+      let name = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/name");
+      setMyName(name);
+    }
+
+    const [MyRole, setMyRole] = React.useState("Instrumentalist");
+
+    async function setRole() {
+      let role = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/role");
+      setMyRole(role);
+    }
+
+    const [MyLocation, setMyLocation] = React.useState("Location");
+
+    async function setLocation() {
+      let location = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/location");
+      setMyLocation(location);
+    }
+
+    const [MyBio, setMyBio] = React.useState("bio");
+
+    async function setBio() {
+      let bio = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/bio");
+      setMyBio(bio);
+    }
+
+    const [MyChurchName, setMyChurchName] = React.useState("Church Name");
+
+    async function setChurchName() {
+      let churchName = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/churchName");
+      setMyChurchName(churchName);
+    }
+
+    const [MyDenomination, setMyDenomination] = React.useState("Denomination");
+
+    async function setDenomination() {
+      let denomination = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/denomination");
+      setMyDenomination(denomination);
+    }
+
+    const [MyChurchLocation, setMyChurchLocation] = React.useState("Church Location");
+
+    async function setChurchLocation() {
+      let churchLocation = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/churchLocation");
+      setMyChurchLocation(churchLocation);
+    }
+
+    const [myInstruments, setMyInstruments] = React.useState("My Instruments");
+
+    async function setInstruments() {
+      let instruments = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/instruments");
+      setMyInstruments(() => [...instruments]);
+      //console.log(instruments);
+    }
+
+    useEffect(() => {
+      setName();
+      setRole();
+      setLocation();
+      setBio();
+      setChurchName();
+      setDenomination();
+      setChurchLocation();
+      setInstruments();
+    }, [])
+
       return (
         <View style={styles.MainContainer}>
             <View style={styles.topBorder}>
@@ -98,14 +223,14 @@ export default function PSPersonal({ route, navigation }) {
                 <Text style={styles.titleText}>My Profile</Text>
                 <TouchableOpacity onPress = {() => navigation.navigate(Routes.profileCreation, props)}><Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}></Image></TouchableOpacity>
               </View>
-              <View style={styles.row}>
+              <View style={styles.row} >
                 <Image style={styles.profilePicture} source={require('../../../assets/blankprofilepic.png')}></Image>
                 <View style={styles.column}>
                   <Text style={{fontSize: 20, fontWeight: '500', marginBottom: 10}}>FirstName LastName</Text>
                   <Text style={{fontSize: 15, fontWeight: '400', marginBottom: 13}}>Instrumentalist</Text>
                   <View style={styles.row2}>
                     <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
-                    <Text>Location</Text>
+                    <Text>{MyLocation}</Text>
                   </View>
                 </View>
               </View>
@@ -208,3 +333,45 @@ const styles = StyleSheet.create({
     },
 
 })
+
+const accordianStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "teal",
+    flexDirection: "column"
+  },
+  section: {
+    backgroundColor: "white",
+    width: "100%"
+  },
+  listItemContainer: {
+    backgroundColor: "white",
+    paddingTop: "2%",
+    paddingBottom: "2%"
+  },
+  listItemHeader: {
+    padding: "2%",
+    alignItems: "flex-start",
+  },
+  contentText: {
+    flexWrap: "wrap"
+  },
+  listItemContent: {
+    padding: "5%"
+  },
+  header: {
+    backgroundColor: "yellow",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  headerText: {
+    color: "black",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  accordionList: {
+    width: "100%",
+    top: "5%",
+    height: "30%"
+  }
+});

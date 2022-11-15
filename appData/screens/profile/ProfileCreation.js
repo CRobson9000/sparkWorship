@@ -93,7 +93,7 @@ export default function ProfileScreen({route, navigation}) {
     /*
       Insert your code here... 
       You'll need to update firebase with all of the changes stored in update
-
+    
 
       *** Some Help ***
       Here's how to save data to firebase:  
@@ -108,13 +108,83 @@ export default function ProfileScreen({route, navigation}) {
       // This is the method which will actually set a value to the space you've defined above 
        set(reference, <insert value to set>);
     */
+    const db = getDatabase();
+
+    if (update["name"]) {
+      const nameReference = ref(db, `Users/${userId}/info/name`);
+      set(nameReference, update["name"]);
+    }
+
+    if (update["username"]) {
+      const usernameReference = ref(db, `Users/${userId}/info/username`);
+      set(usernameReference, update["username"]);
+    }
+
+    if (update["email"]) {
+      const emailReference = ref(db, `Users/${userId}/info/email`);
+      set(emailReference, update["email"]);
+    }
+
+    if (update["birthday"]) {
+      const birthdayReference = ref(db, `Users/${userId}/info/birthday`);
+      set(birthdayReference, update["birthday"]);
+    }
+
+    if (update["location"]) {
+      const streetAddressReference = ref(db, `Users/${userId}/info/location`);
+      set(streetAddressReference, update["location"]);
+    }
+
+    if (update["city"]) {
+      const cityReference = ref(db, `Users/${userId}/info/city`);
+      set(cityReference, update["city"]);
+    }
+
+    if (update["zipCode"]) {
+      const zipCodeReference = ref(db, `Users/${userId}/info/zipCode`);
+      set(zipCodeReference, update["zipCode"]);
+    }
+
+    if (update["password"]) {
+      const passwordReference = ref(db, `Users/${userId}/info/password`);
+      set(passwordReference, update["password"]);
+    }
+
+    if (update["phoneNumber"]) {
+      const phoneNumberReference = ref(db, `Users/${userId}/info/phoneNumber`);
+      set(phoneNumberReference, update["phoneNumber"]);
+    }
+
+    if (update["churchName"]) {
+      const churchNameReference = ref(db, `Users/${userId}/info/churchName`);
+      set(churchNameReference, update["churchName"]);
+    }
+
+    if (update["denomination"]) {
+      const denominationReference = ref(db, `Users/${userId}/info/denomination`);
+      set(denominationReference, update["denomination"]);
+    }
+
+    if (update["churchStreetAddress"]) {
+      const churchStreetAddressReference = ref(db, `Users/${userId}/info/churchStreetAddress`);
+      set(churchStreetAddressReference, update["churchStreetAddress"]);
+    }
+
+    if (update["churchCity"]) {
+      const churchCityReference = ref(db, `Users/${userId}/info/churchCity`);
+      set(churchCityReference, update["churchCity"]);
+    }
+
+    if (update["churchZipCode"]) {
+      const churchZipCodeReference = ref(db, `Users/${userId}/info/churchZipCode`);
+      set(churchZipCodeReference, update["churchZipCode"]);
+    }
 
     if (instrumentsArray["current"].length > 0) {
       const db = getDatabase();
       const setInstrumentsRef = ref(db, `Users/${userId}/info/instruments`);
       set(setInstrumentsRef, instrumentsArray["current"]);
     }
-    
 
     // Once everything is finalized, navigate to user profile screen
     navigation.navigate(Routes.personalProfile);
