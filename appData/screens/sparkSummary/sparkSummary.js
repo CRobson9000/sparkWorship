@@ -14,6 +14,27 @@ export default function SparkSummary({ navigation }) {
     city: new Observable("", () => updatePayload(inputs.city.getVal(), "city")),
     state: new Observable("", () => updatePayload(inputs.state.getVal(), "state")),
     zip: new Observable("", () => updatePayload(inputs.zip.getVal(), "zip")),
+
+    publishedDay: new Observable("", () => updatePayload(inputs.publishedDay.getVal(), "publishedDay")),
+    publishedMonth: new Observable("", () => updatePayload(inputs.publishedMonth.getVal(), "publishedMonth")),
+    publishedYear: new Observable("", () => updatePayload(inputs.publishedYear.getVal(), "publishedYear")),
+    publishedHours: new Observable("", () => updatePayload(inputs.publishedHours.getVal(), "publishedHours")),
+    publishedMinutes: new Observable("", () => updatePayload(inputs.publishedMinutes.getVal(), "publishedMinutes")),
+    publishedAmPM: new Observable("", () => updatePayload(inputs.publishedAmPM.getVal(), "publishedAmPM")),
+
+    rehearsalDay: new Observable("", () => updatePayload(inputs.rehearsalDay.getVal(), "rehearsalDay")),
+    rehearsalMonth: new Observable("", () => updatePayload(inputs.rehearsalMonth.getVal(), "rehearsalMonth")),
+    rehearsalYear: new Observable("", () => updatePayload(inputs.rehearsalYear.getVal(), "rehearsalYear")),
+    rehearsalHours: new Observable("", () => updatePayload(inputs.rehearsalHours.getVal(), "rehearsalHours")),
+    rehearsalMinutes: new Observable("", () => updatePayload(inputs.rehearsalMinutes.getVal(), "rehearsalMinutes")),
+    rehearsalAmPM: new Observable("", () => updatePayload(inputs.rehearsalAmPM.getVal(), "rehearsalAmPM")),
+
+    sparkDay: new Observable("", () => updatePayload(inputs.sparkDay.getVal(), "sparkDay")),
+    sparkMonth: new Observable("", () => updatePayload(inputs.sparkMonth.getVal(), "sparkMonth")),
+    sparkYear: new Observable("", () => updatePayload(inputs.sparkYear.getVal(), "sparkYear")),
+    sparkHours: new Observable("", () => updatePayload(inputs.sparkHours.getVal(), "sparkHours")),
+    sparkMinutes: new Observable("", () => updatePayload(inputs.sparkMinutes.getVal(), "sparkMinutes")),
+    sparkAmPM: new Observable("", () => updatePayload(inputs.sparkAmPM.getVal(), "sparkAmPM"))
   };
   const updatePayload = (updateVal, updateName) =>
   {
@@ -104,31 +125,111 @@ export default function SparkSummary({ navigation }) {
       );
 
     const FourthRoute = () => (
-        <View style={{ flex: 1, backgroundColor: 'white' }}>
-          <View style={[styles.socialsBox, {marginTop: 35}]}/>
-          <View style={styles.socialsBox}/>
-          <View style={styles.socialsBox}/>
-          <View style={styles.socialsBox}/>
+      <ScrollView>
+      <View style={[sparkViewStyles.sparkVerticalContainer]}>
+      <View style={[sparkViewStyles.centerContents]}>
+        <View style={{alignItems: "center", justifyContent: "center"}}>
+            <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Times</Text>
         </View>
-      );
-    const FifthRoute = () => (
-      <View style={{ flex: 1, backgroundColor: 'white' }}>
-        <View style={[styles.socialsBox, {marginTop: 35}]}/>
-        <View style={styles.socialsBox}/>
-        <View style={styles.socialsBox}/>
-        <View style={styles.socialsBox}/>
+        <View style={{alignItems: "center", justifyContent: "center", marginTop:"6%"}}>
+            <Text style={[sparkViewStyles.inbetweenText]}>Spark Begins On</Text>
+        </View>
+          
+          <View style={[sparkViewStyles.timeContainer]}>
+              <Input placeHolderText={"MM"} start = {inputs.sparkMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMonth.setVal(val)}/>
+              <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+              <Input placeHolderText={"DD"} start = {inputs.sparkDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkDay.setVal(val)}/>
+              <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+              <Input placeHolderText={"YY"} start = {inputs.sparkYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkYear.setVal(val)}/>
+              <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
+              <Input placeHolderText={"12"} start = {inputs.sparkHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkHours.setVal(val)}/>
+              <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
+              <Input placeHolderText={"30"} start = {inputs.sparkMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMinutes.setVal(val)}/>
+              <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
+              <Input placeHolderText={"PM"} start = {inputs.sparkAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkAmPM.setVal(val)}/>
+          </View>
       </View>
+      <View style={[sparkViewStyles.centerContents, sparkViewStyles.middleMan]}>
+        <View style={{alignItems: "center", justifyContent: "center"}}>
+            <Text style={[sparkViewStyles.inbetweenText]}>First Rehearsal On</Text>
+        </View>
+          <View style={[sparkViewStyles.timeContainer]}>
+              <Input placeHolderText={"MM"} start = {inputs.rehearsalMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMonth.setVal(val)}/>
+              <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+              <Input placeHolderText={"DD"} start = {inputs.rehearsalDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalDay.setVal(val)}/>
+              <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+              <Input placeHolderText={"YY"} start = {inputs.rehearsalYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalYear.setVal(val)}/>
+              <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
+              <Input placeHolderText={"12"} start = {inputs.rehearsalHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalHours.setVal(val)}/>
+              <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
+              <Input placeHolderText={"30"} start = {inputs.rehearsalMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMinutes.setVal(val)}/>
+              <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
+              <Input placeHolderText={"PM"} start = {inputs.rehearsalAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalAmPM.setVal(val)}/>
+          </View>
+      </View>
+      <View style={[sparkViewStyles.centerContents]}>
+          <Text style={[sparkViewStyles.inbetweenText]}>Roles to be Filled By</Text>
+          <View style={[sparkViewStyles.timeContainer]}>
+              <Input placeHolderText={"MM"} start = {inputs.publishedMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedMonth.setVal(val)}/>
+              <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+              <Input placeHolderText={"DD"} start = {inputs.publishedDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedDay.setVal(val)}/>
+              <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+              <Input placeHolderText={"YY"} start = {inputs.publishedYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedYear.setVal(val)}/>
+              <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
+              <Input placeHolderText={"12"} start = {inputs.publishedHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedHours.setVal(val)}/>
+              <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
+              <Input placeHolderText={"30"} start = {inputs.publishedMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedMinutes.setVal(val)}/>
+              <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
+              <Input placeHolderText={"PM"} start = {inputs.publishedAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedAmPM.setVal(val)}/>
+          </View>
+      </View>
+  </View>
+  </ScrollView>
+      );
+
+    const FifthRoute = () => (
+      <ScrollView>
+      <View style={[sparkViewStyles.sparkVerticalTest]}>
+        <View style={{alignItems: "center", justifyContent: "center"}}>
+            <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Volunteers</Text>
+        </View>
+        <View style={[sparkViewStyles.boxOne]}>
+          <Image style={{width: "20%", height: "68%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+
+          </Image>
+          <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
+        </View>
+        <View style={[sparkViewStyles.boxOne]}>
+          <Image style={{width: "20%", height: "68%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+
+          </Image>
+          <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
+        </View>
+        <View style={[sparkViewStyles.boxOne]}>
+          <Image style={{width: "20%", height: "68%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+
+          </Image>
+          <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
+        </View>
+        <View style={[sparkViewStyles.boxOne]}>
+          <Image style={{width: "20%", height: "68%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+
+          </Image>
+          <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
+        </View>
+      </View>
+      </ScrollView>
     );
     
       
       
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
-        { key: 'first', title: 'Bio' },
+        { key: 'first', title: 'Location' },
         { key: 'second', title: 'Requests' },
         { key: 'third', title: 'Set List' },
-        { key: 'fourth', title: 'Socials' },
-        { key: 'fifth', title: 'Boonies' },
+        { key: 'fourth', title: 'Times' },
+        { key: 'fifth', title: 'Volunteers' },
     ]);
     
     const renderScene = SceneMap({
@@ -143,6 +244,8 @@ export default function SparkSummary({ navigation }) {
       <TabBar
         {...props}
         indicatorStyle={{ backgroundColor: '#006175' }}
+        scrollEnabled= {true}
+        labelStyle={{color:"#000000"}}
         style={{ backgroundColor: 'rgb(219, 233, 236)'}}
       />
     );
@@ -322,7 +425,13 @@ const sparkViewStyles = StyleSheet.create({
       justifyContent: "space-between", 
       alignItems: "center"
   },
-
+  sparkVerticalTest:{
+    width:"100%",
+    height:"200%",
+    backgroundColor: "rgba(255,255,255,1)",
+    flexDirection: "column", 
+    alignItems: "center"
+  },
   bottomContainer:{
       width:"100%",
       height:"8%",
@@ -411,4 +520,34 @@ const sparkViewStyles = StyleSheet.create({
       borderWidth: 0,
       paddingHorizontal: "5%"
   },
+  timeAndDateInput:
+  {
+      fontSize:26,
+      justifyContent:"center"
+  },
+  inbetweenText:
+  {
+      marginHorizontal:"5%", 
+      fontSize:20
+  },
+  middleMan:
+  {
+      marginVertical: "20%"
+  },
+  boxOne:
+  {
+      backgroundColor: "#F9CBB1",
+      height: "25%",
+      //height: "30%",
+      width: "80%",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+  },
+  boxText:{
+    width: "58%", 
+    marginLeft:"10%",
+    marginTop: "2%",
+    marginBottom: "2%",
+},
 });
