@@ -19,7 +19,7 @@ export default function PSPersonal() {
       function instrumentRender(object) {
         return(
           <List.Accordion
-          title={object.item}
+          title={object.item.instrumentName}
           style = {styles.accordian}
           titleStyle = {accordianStyles.headerText}
           >   
@@ -64,7 +64,7 @@ export default function PSPersonal() {
         <View style={{ flex: 1, backgroundColor: 'white'}}>
             <List.Section title="Instruments">
               <FlatList
-                data = {[...MyInstruments]}
+                data = {myInstruments}
                 style = {{height: "100%", width: "100%"}}
                 renderItem = {instrumentRender}
                 ListFooterComponent={
@@ -194,11 +194,11 @@ export default function PSPersonal() {
       setMyChurchLocation(churchLocation);
     }
 
-    const [MyInstruments, setMyInstruments] = React.useState("My Instruments");
+    const [myInstruments, setMyInstruments] = React.useState("My Instruments");
 
     async function setInstruments() {
       let instruments = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/instruments");
-      setMyInstruments(instruments);
+      setMyInstruments(() => [...instruments]);
       console.log(instruments);
     }
 
@@ -210,7 +210,7 @@ export default function PSPersonal() {
       setChurchName();
       setDenomination();
       setChurchLocation();
-      //setInstruments();
+      setInstruments();
     }, [])
 
       return (
