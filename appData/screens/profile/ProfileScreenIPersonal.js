@@ -40,7 +40,7 @@ export default function PSPersonal() {
               </View>
               <View style={accordianStyles.listItemContent}>
                 <Text style={accordianStyles.contentText}>
-                  Worship Experience
+                  {object.item.worshipExperience}
                 </Text>
               </View>
             </View>
@@ -51,8 +51,7 @@ export default function PSPersonal() {
               </View>
               <View style={accordianStyles.listItemContent}>
                 <Text style={accordianStyles.contentText}>
-                  My Content ajslkd fja;klfjioew jajsdil;fj iao;e jfoajfl ioasje fioj;ijia jo;fijaeioj  afefia;fj ioaej aoewf 
-                  alsfjioe;j aioejf aioefja fioej foaefaofo;jaioajfejfoawf ijaw i;ewf iajioefj awe alkfjf;
+                  {object.item.additionalNotes}
                 </Text>
               </View>
             </View>
@@ -199,7 +198,7 @@ export default function PSPersonal() {
     async function setInstruments() {
       let instruments = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/instruments");
       setMyInstruments(() => [...instruments]);
-      console.log(instruments);
+      //console.log(instruments);
     }
 
     useEffect(() => {
