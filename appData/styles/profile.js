@@ -25,11 +25,7 @@ const stylesProfile = StyleSheet.create({
     },
 
     boldText: {
-<<<<<<< HEAD
         // fontFamily: "Gill Sans",
-=======
-        //fontFamily: "Gill Sans",
->>>>>>> dorsey-current
         fontWeight: "500",
         left: "52%",
         bottom: "9%"
@@ -38,11 +34,7 @@ const stylesProfile = StyleSheet.create({
     generalText: {
         paddingTop: "1%",
         paddingBottom: "2%",
-<<<<<<< HEAD
         fontSize: 10,
-=======
-        fontSize: 12,
->>>>>>> dorsey-current
         left: "9%",
         //fontFamily: "Gill Sans"
     },
@@ -150,11 +142,7 @@ const stylesProfile = StyleSheet.create({
 
     italicText: {
         paddingBottom: "3%",
-<<<<<<< HEAD
         fontSize: 10,
-=======
-        fontSize: 12,
->>>>>>> dorsey-current
         left: "9%",
         fontStyle: "italic"
     },
@@ -184,11 +172,7 @@ const stylesProfile = StyleSheet.create({
 
     buttonText: {
         color: "white",
-<<<<<<< HEAD
         fontSize: 10,
-=======
-        fontSize: 12,
->>>>>>> dorsey-current
     },
 
     addInstrumentButton:{
@@ -208,32 +192,20 @@ const stylesProfile = StyleSheet.create({
         width: "85%",
         height: "25%",
         backgroundColor: "rgb(249, 203, 177)",
-<<<<<<< HEAD
         borderRadius: 15,
-=======
-        borderRadius: 10,
->>>>>>> dorsey-current
         marginBottom: "3%"
       },
 
     titleText: {
       top: "25%",
       textAlign: "center",
-<<<<<<< HEAD
       fontSize: 10,
-=======
-      fontSize: 21,
->>>>>>> dorsey-current
       fontWeight: "600"
     }, 
     
     phaseText: {
       textAlign: "center",
-<<<<<<< HEAD
       fontSize: 10,
-=======
-      fontSize: 21,
->>>>>>> dorsey-current
       fontWeight: "500",
       top: "2%",
       paddingBottom: "5%"
@@ -252,11 +224,7 @@ const stylesProfile = StyleSheet.create({
 
     smallText: {
       textAlign: "center",
-<<<<<<< HEAD
       fontSize: 10,
-=======
-      fontSize: 12,
->>>>>>> dorsey-current
       color: "gray",
       paddingBottom: "5%"
     }

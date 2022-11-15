@@ -136,7 +136,7 @@ export default function LoginScreen({ navigation }) {
             <View><Text style={{color: "white"}}>Login</Text></View>
           </TouchableOpacity>
 
-          <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate("RegistrationScreen")}>
+          <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate(Routes.registration)}>
             <Text style={[stylesPortrait.centerText]}>Register New User</Text>
           </TouchableOpacity>
         </View>

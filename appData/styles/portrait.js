@@ -16,7 +16,7 @@ const stylesPortrait = StyleSheet.create({
     contentContainer:
     {
         width: "100%",
-        height: "75%",
+        height: "50%"
     },
     contentDashContainer:
     {
@@ -70,7 +70,7 @@ const stylesPortrait = StyleSheet.create({
     inputBox: {
         height: "7.5%",
         marginHorizontal: "10%",
-        marginBottom: "10%",
+        marginBottom: "5%",
         borderWidth: 1,
         borderColor: "#EE9344",
         backgroundColor: "#EE9344",
@@ -84,7 +84,7 @@ const stylesPortrait = StyleSheet.create({
         color: "#006175", 
         textAlign: 'right', 
         right: 40, 
-        bottom: 30
+        bottom: 10
     },
     centerText:
     {
@@ -121,13 +121,7 @@ const stylesPortrait = StyleSheet.create({
         marginBottom: "5%",
         paddingLeft: "2%",
         borderWidth: 3
-    },
-
-    scrollView:
-    {
-        
-        bottom: 50
-    },
+    }
 });
 
 export { stylesPortrait }

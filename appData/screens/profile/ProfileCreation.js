@@ -187,7 +187,7 @@ export default function ProfileScreen({route, navigation}) {
     }
 
     // Once everything is finalized, navigate to user profile screen
-    navigation.navigate(Routes.personalProfile);
+    navigation.navigate(Routes.personalProfile, route.params);
   }
 
   //dropDown renderItem function

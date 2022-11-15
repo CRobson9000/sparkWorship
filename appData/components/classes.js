@@ -92,7 +92,7 @@ class FirebaseButler {
                     resolve(snapshot.val());
                 }
                 else {
-                    reject(null);
+                    resolve(null);
                 }
             })
         })

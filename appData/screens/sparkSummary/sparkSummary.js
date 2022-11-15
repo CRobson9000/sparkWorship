@@ -78,20 +78,17 @@ export default function SparkSummary({ navigation }) {
             <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Requests</Text>
           </View>
             <List.Section style={{marginTop: "6%"}}>
-              <List.Accordion  style={styles.accordian} title="Guitar">
-                <List.Subheader style={styles.accordionSubheading}>General Experience</List.Subheader>
-                <List.Subheader style={styles.accordionSubheading}>Worship Experience</List.Subheader>
-                <List.Subheader style={styles.accordionSubheading}>Additional Notes</List.Subheader>
+              <List.Accordion  style={styles.accordian} title="Person 1">
+                <List.Subheader style={styles.accordionSubheading}>Accept</List.Subheader>
+                <List.Subheader style={styles.accordionSubheading}>Reject</List.Subheader>
               </List.Accordion>
-              <List.Accordion style={styles.accordian} title="Piano">
-                <List.Subheader style={styles.accordionSubheading}>General Experience</List.Subheader>
-                <List.Subheader style={styles.accordionSubheading}>Worship Experience</List.Subheader>
-                <List.Subheader style={styles.accordionSubheading}>Additional Notes</List.Subheader>
+              <List.Accordion style={styles.accordian} title="Person 2">
+              <List.Subheader style={styles.accordionSubheading}>Accept</List.Subheader>
+                <List.Subheader style={styles.accordionSubheading}>Reject</List.Subheader>
               </List.Accordion>
-              <List.Accordion style={styles.accordian} title="Trumpet">
-                <List.Subheader style={styles.accordionSubheading}>General Experience</List.Subheader>
-                <List.Subheader style={styles.accordionSubheading}>Worship Experience</List.Subheader>
-                <List.Subheader style={styles.accordionSubheading}>Additional Notes</List.Subheader>
+              <List.Accordion style={styles.accordian} title="Person 3">
+              <List.Subheader style={styles.accordionSubheading}>Accept</List.Subheader>
+                <List.Subheader style={styles.accordionSubheading}>Reject</List.Subheader>
               </List.Accordion>
               {/* <List.Image variant="image" source={require("../../../assets/miniEri.png")} />  */}
             </List.Section>
@@ -105,20 +102,20 @@ export default function SparkSummary({ navigation }) {
         <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Set List</Text>
       </View>
         <List.Section style={{marginTop: "6%"}}>
-          <List.Accordion style={styles.accordian} title="Guitar">
-            <List.Subheader style={styles.accordionSubheading}>General Experience</List.Subheader>
-            <List.Subheader style={styles.accordionSubheading}>Worship Experience</List.Subheader>
-            <List.Subheader style={styles.accordionSubheading}>Additional Notes</List.Subheader>
+          <List.Accordion style={styles.accordian} title="Song 1">
+            <List.Subheader style={styles.accordionSubheading}>Lyrics</List.Subheader>
+            <List.Subheader style={styles.accordionSubheading}>Chord Charts</List.Subheader>
+            <List.Subheader style={styles.accordionSubheading}>Notes</List.Subheader>
           </List.Accordion>
-          <List.Accordion style={styles.accordian} title="Piano">
-            <List.Subheader style={styles.accordionSubheading}>General Experience</List.Subheader>
-            <List.Subheader style={styles.accordionSubheading}>Worship Experience</List.Subheader>
-            <List.Subheader style={styles.accordionSubheading}>Additional Notes</List.Subheader>
+          <List.Accordion style={styles.accordian} title="Song 2">
+          <List.Subheader style={styles.accordionSubheading}>Lyrics</List.Subheader>
+            <List.Subheader style={styles.accordionSubheading}>Chord Charts</List.Subheader>
+            <List.Subheader style={styles.accordionSubheading}>Notes</List.Subheader>
           </List.Accordion>
-          <List.Accordion style={styles.accordian} title="Trumpet">
-            <List.Subheader style={styles.accordionSubheading}>General Experience</List.Subheader>
-            <List.Subheader style={styles.accordionSubheading}>Worship Experience</List.Subheader>
-            <List.Subheader style={styles.accordionSubheading}>Additional Notes</List.Subheader>
+          <List.Accordion style={styles.accordian} title="Song 3">
+          <List.Subheader style={styles.accordionSubheading}>Lyrics</List.Subheader>
+            <List.Subheader style={styles.accordionSubheading}>Chord Charts</List.Subheader>
+            <List.Subheader style={styles.accordionSubheading}>Notes</List.Subheader>
           </List.Accordion>
         </List.Section>
     </ScrollView>
@@ -278,9 +275,9 @@ export default function SparkSummary({ navigation }) {
     <View style={styles.content}>
       <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
     </View>
-    <View style={styles.navigation}>
+    {/* <View style={styles.navigation}>
       <Image style={{width: '100%', height: '100%'}} source={require('../../../assets/navigation.png')}></Image>
-    </View>
+    </View> */}
 </View>
   );
 };
@@ -298,7 +295,7 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    height: '51%'
+    height: '60%'
   },
 
   titleText: {
@@ -331,7 +328,7 @@ const styles = StyleSheet.create({
   accordian: {
     backgroundColor: '#F9CBB1',
     color: "#FFFFFF",
-    height: 50,
+    padding: 10,
     marginLeft: '5%',
     marginRight: '5%', 
   },

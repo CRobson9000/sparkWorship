@@ -13,6 +13,7 @@ import { storageRef } from '../../../config/additionalMethods'
 
 import { screensEnabled } from 'react-native-screens';
 import { stylesPortrait } from '../../styles/portrait';
+import Routes from "../constants/Routes.js"
 
 export default function MyTest({ route, navigation }) {
   let props = route.params;
@@ -164,6 +165,9 @@ export default function MyTest({ route, navigation }) {
       <View style = {styles.section}>
         <TouchableHighlight style = {styles.acceptButton} onPress = {() => attendSpark()}>
             <Text style={{color: "white"}}> Attend</Text>
+        </TouchableHighlight>
+        <TouchableHighlight style = {styles.acceptButton} onPress = {() => navigation.navigate(Routes.userDashboard, route.params)}>
+            <Text style={{color: "white"}}> Return </Text>
         </TouchableHighlight>
       </View>
 

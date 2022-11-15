@@ -1,5 +1,5 @@
 export {default as LoginScreen} from '../account/LoginScreen';
-export {default as RegistrationScreen} from '../account/LoginScreen';
+export {default as RegistrationScreen} from '../account/RegistrationScreen';
 export {default as SparkView} from '../sparks/sparkView';
 export {default as ProfileCreation} from '../profile/ProfileCreation';
 export {default as PSPublic} from '../profile/ProfileScreenIPublic.js';

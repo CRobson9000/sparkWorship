@@ -161,7 +161,7 @@ export default function UserDashboard({ route, navigation }) {
     <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
       <View style={dashboardStyles.container}>
         <View style = {dashboardStyles.dashboardHeader}>
-          <Text style={stylesPortrait.topText}> Attending</Text>
+          <Text style={stylesPortrait.topText}> Your Sparks </Text>
         </View>
 
         <View style = {dashboardStyles.calendar}>

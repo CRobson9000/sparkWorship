@@ -7,7 +7,7 @@ import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 import { screensEnabled } from 'react-native-screens';
 import { stylesPortrait } from '../styles/portrait';
 
-export default function Message({ navigation }) {
+export default function Message({ route, navigation }) {
 
     const renderMessage = (object, index, separators) => {
         //convert firebase obj to TDO
@@ -38,9 +38,9 @@ export default function Message({ navigation }) {
         </View>
       );
     }
-  
-    let myMessage = "";
-  let currentUser = "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+  let props = route.params;
+  let myMessage = "";
+  let currentUser = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
   let otherUser = "wVgW65Og51OCuC7lD8LtRJBWuUC2";
   let conversationId = "-NE1h9dOvSOgnJMdRTRv";
   // let conversationId = "";
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
 
     nameText: {
         alignSelf: "center",
-        fontSize: 25,
+        fontSize: 20,
         top: 70,
         //fontWeight: '500'
     },

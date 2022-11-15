@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {UserDashboard, SparkView, UserHub, PSPersonal, SparkCreation} from '../constants/Index';
+import {UserDashboard, SparkView, Messaging, PSPersonal, SparkCreation} from '../constants/Index';
 import Routes from '../constants/Routes';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -33,7 +33,7 @@ function BottomTabNavigator( { route, navigation } ) {
       <Tab.Screen name={Routes.userDashboard} component={UserDashboard} initialParams={route.params} />
       <Tab.Screen name={Routes.sparkView} component={SparkView} initialParams={route.params} />
       <Tab.Screen name={Routes.sparkCreation} component={SparkCreation} initialParams={route.params} />
-      <Tab.Screen name={Routes.userHub} component={UserHub} initialParams={route.params} />
+      <Tab.Screen name={Routes.messaging} component={Messaging} initialParams={route.params} />
       <Tab.Screen name={Routes.personalProfile} component={PSPersonal} initialParams={route.params} />
     </Tab.Navigator>
   );
