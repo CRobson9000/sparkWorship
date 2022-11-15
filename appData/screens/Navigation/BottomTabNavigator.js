@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 
-function BottomTabNavigator() {
+function BottomTabNavigator( { route, navigation } ) {
   return (
     <Tab.Navigator screenOptions={{headerShown: false}}
       // screenOptions={({route}) => ({
@@ -30,11 +30,11 @@ function BottomTabNavigator() {
       //   },
       // })}>
       >
-      <Tab.Screen name={Routes.userDashboard} component={UserDashboard} />
-      <Tab.Screen name={Routes.sparkView} component={SparkView} />
-      <Tab.Screen name={Routes.sparkCreation} component={SparkCreation} />
-      <Tab.Screen name={Routes.userHub} component={UserHub} />
-      <Tab.Screen name={Routes.personalProfile} component={PSPersonal} />
+      <Tab.Screen name={Routes.userDashboard} component={UserDashboard} initialParams={route.params} />
+      <Tab.Screen name={Routes.sparkView} component={SparkView} initialParams={route.params} />
+      <Tab.Screen name={Routes.sparkCreation} component={SparkCreation} initialParams={route.params} />
+      <Tab.Screen name={Routes.userHub} component={UserHub} initialParams={route.params} />
+      <Tab.Screen name={Routes.personalProfile} component={PSPersonal} initialParams={route.params} />
     </Tab.Navigator>
   );
 }

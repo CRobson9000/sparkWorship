@@ -92,7 +92,7 @@ class FirebaseButler {
                     resolve(snapshot.val());
                 }
                 else {
-                    reject(`Data not found at path: ${pathRef}`);
+                    reject(null);
                 }
             })
         })

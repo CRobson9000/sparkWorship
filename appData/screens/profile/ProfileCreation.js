@@ -10,6 +10,7 @@ import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from 'expo-image-picker';
 // had to make a weird file to "redefine" ref since it already exists from firebase/database
 import { storageRef } from '../../../config/additionalMethods';
+import Routes from '../constants/Routes.js'
 
 export default function ProfileScreen({route, navigation}) {
   //set environment variables
@@ -67,8 +68,8 @@ export default function ProfileScreen({route, navigation}) {
   // set rinstruments array
   let instrumentsArray = useRef([]);
 
-  //This is the id of the user that you want to save the information to.   
-  let userId = "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+  //This is the id of the user that you want to save the information to.  
+  let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
 
   //This function uses update to populate a phase with information entered previously
   const updateToStart = () => {
@@ -108,13 +109,15 @@ export default function ProfileScreen({route, navigation}) {
        set(reference, <insert value to set>);
     */
 
-    const db = getDatabase();
-    const setInstrumentsRef = ref(db, `Users/${userId}/info/instruments`);
-    set(setInstrumentsRef, instrumentsArray["current"]);
+    if (instrumentsArray["current"].length > 0) {
+      const db = getDatabase();
+      const setInstrumentsRef = ref(db, `Users/${userId}/info/instruments`);
+      set(setInstrumentsRef, instrumentsArray["current"]);
+    }
     
 
     // Once everything is finalized, navigate to user profile screen
-    //navigation.navigate("ProfileScreenIPersonal");
+    navigation.navigate(Routes.personalProfile);
   }
 
   //dropDown renderItem function

@@ -14,9 +14,10 @@ import { storageRef } from '../../../config/additionalMethods'
 import { screensEnabled } from 'react-native-screens';
 import { stylesPortrait } from '../../styles/portrait';
 
-export default function MyTest({ navigation }) {
-  let userId = "wVgW65Og51OCuC7lD8LtRJBWuUC2";
-  let targetUser = "pgFfrUx2ryd7h7iE00fD09RAJyG3"
+export default function MyTest({ route, navigation }) {
+  let props = route.params;
+  let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+  let targetUser = "kicswUalNUNMF4qYmT1OzY7IymG3"
   let currentSparkId = "-NFQyokFAqLdeFJLDkSv";
   let roleToRequest = "acoustic guitar";
 
@@ -56,7 +57,6 @@ export default function MyTest({ navigation }) {
     const attendSparkRef = ref(db, `Users/${userId}/sparks/attending`)
     push(attendSparkRef, currentSparkId);
   }
-
 
   // -----------------
   // Photo Upload Code
@@ -157,7 +157,7 @@ export default function MyTest({ navigation }) {
         <TouchableHighlight style = {[styles.requestButton]} onPress = {() => requestToPlay(roleToRequest)}>
           <Text style={{color: "white"}}> Request </Text>
         </TouchableHighlight>
-        <TouchableHighlight style = {styles.acceptButton} onPress = {() => acceptRequest(roleToRequest, targetUser)}>
+        <TouchableHighlight style = {styles.acceptButton} onPress = {() => acceptRequest(roleToRequest, userId)}>
           <Text style={{color: "white"}}> Accept </Text>
         </TouchableHighlight>
       </View>
@@ -167,22 +167,22 @@ export default function MyTest({ navigation }) {
         </TouchableHighlight>
       </View>
 
-      <View style = {styles.section}>
+      {/* <View style = {styles.section}>
         <TouchableHighlight style = {styles.requestButton} onPress = {() => uploadPhoto()}>
             <Text style={{color: "white"}}> Upload Photo </Text>
         </TouchableHighlight>
         <TouchableHighlight style = {styles.requestButton} onPress = {() => getPhoto()}>
             <Text style={{color: "white"}}> Get Photo </Text>
         </TouchableHighlight>
-      </View>
-      <View style = {styles.photo}>
+      </View> */}
+      {/* <View style = {styles.photo}>
         <Image 
           source={{
             uri: image
           }}
           style = {{height: "100%", width: "100%"}}
         />
-      </View>
+      </View> */}
     </View> 
   );    
 };

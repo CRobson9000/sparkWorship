@@ -6,6 +6,8 @@ import Routes from '../constants/Routes';
 
 export default function PSPersonal({ route, navigation }) {
 
+    let props = route.params;
+
     const FirstRoute = () => (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <Text style={{borderColor: "#F2905B", borderWidth: 10, width: '85%', alignSelf: "center", height: 300, top: 50, borderRadius: 10}}></Text>
@@ -92,9 +94,9 @@ export default function PSPersonal({ route, navigation }) {
         <View style={styles.MainContainer}>
             <View style={styles.topBorder}>
               <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
-                <TouchableOpacity><Image style={{height: 40, width: 40}} source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity>
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.functionalityTesting, props)}><Image style={{height: 40, width: 40}} source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity>
                 <Text style={styles.titleText}>My Profile</Text>
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.profileCreation)}><Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}></Image></TouchableOpacity>
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.profileCreation, props)}><Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}></Image></TouchableOpacity>
               </View>
               <View style={styles.row}>
                 <Image style={styles.profilePicture} source={require('../../../assets/blankprofilepic.png')}></Image>

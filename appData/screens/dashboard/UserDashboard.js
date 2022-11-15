@@ -5,9 +5,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, createUserWithEmailAndPassword } from "@firebase/auth";
 import Icon from 'react-native-vector-icons/Ionicons';
 
-
-
-
 //import statements for styles
 import { stylesPortrait } from "../../styles/portrait";
 
@@ -76,44 +73,48 @@ import RegistrationScreen from '../account/RegistrationScreen';
 // export default UserDashboard;
 
 
-export default function UserDashboard({ navigation }) {
+export default function UserDashboard({ route, navigation }) {
+  let props = route.params;
 
   const [markedDates, setMarkedDates] = React.useState({});
   const [sparkData, setSparkData] = React.useState({});
   let allSparks = useRef([]);
-  
-  let userId = "wVgW65Og51OCuC7lD8LtRJBWuUC2";
+
+  let userId = props?.userId || "wVgW65Og51OCuC7lD8LtRJBWuUC2";
 
   async function getSparks() {
     //get ids of sparks that the current user is attending
     let startingSparksPath = `Users/${userId}/sparks/attending`;
     let sparksOBJs = await FirebaseButler.fbGet(startingSparksPath); 
-    let sparkIds = Object.values(sparksOBJs);
-    let localMarkedDates = {};
-    //each each id, get the actual spark data for that specific spark in firebase (found in Sparks)
-    for (let index in sparkIds) {
-      let sparkId = sparkIds[index];
-      let sparkTDOPath = `Sparks/${sparkId}/info/times/spark`;
-      let sparkNamePath = `Sparks/${sparkId}/info/name`;
 
-      let sparkTDO = await FirebaseButler.fbGet(sparkTDOPath);
-      let sparkName = await FirebaseButler.fbGet(sparkNamePath);
+    if (sparksOBJs) {
+      let sparkIds = Object.values(sparksOBJs);
+      let localMarkedDates = {};
+      //each each id, get the actual spark data for that specific spark in firebase (found in Sparks)
+      for (let index in sparkIds) {
+        let sparkId = sparkIds[index];
+        let sparkTDOPath = `Sparks/${sparkId}/info/times/spark`;
+        let sparkNamePath = `Sparks/${sparkId}/info/name`;
 
-      //add the needed spark data to local sparks array
-      let sparkObject = sparkTDO;
-      sparkObject['name'] = sparkName;
-      sparkObject['id'] = sparkId
-      allSparks['current'].push(sparkObject);
+        let sparkTDO = await FirebaseButler.fbGet(sparkTDOPath);
+        let sparkName = await FirebaseButler.fbGet(sparkNamePath);
 
-      //reformat each the spark date to match the markedDates for the calendar element, then push them to local object
-      let dateString = `20${sparkTDO.TDO.year}-${sparkTDO.TDO.month}-${sparkTDO.TDO.day}`;
-      localMarkedDates[dateString] = {marked: true}
-    } 
+        //add the needed spark data to local sparks array
+        let sparkObject = sparkTDO;
+        sparkObject['name'] = sparkName;
+        sparkObject['id'] = sparkId
+        allSparks['current'].push(sparkObject);
 
-    //update global sparkObject (sparkData)
-    setSparkData(allSparks['current']);
-    //update global markedDates object
-    setMarkedDates(localMarkedDates);
+        //reformat each the spark date to match the markedDates for the calendar element, then push them to local object
+        let dateString = `20${sparkTDO.TDO.year}-${sparkTDO.TDO.month}-${sparkTDO.TDO.day}`;
+        localMarkedDates[dateString] = {marked: true}
+      } 
+
+      //update global sparkObject (sparkData)
+      setSparkData(allSparks['current']);
+      //update global markedDates object
+      setMarkedDates(localMarkedDates);
+    }
   }
 
   const renderSpark = (object) => {
