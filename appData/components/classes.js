@@ -1,3 +1,4 @@
+import { getDatabase, ref, get } from 'firebase/database';
 class Observable {
     constructor(start, observer){
          //set start value of "observer"
