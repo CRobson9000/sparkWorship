@@ -11,6 +11,7 @@ let Routes={
     personalProfile: "Personal Profile",
     sparkCreation: 'Spark Creation',
     messaging: 'Messaging',
+    sparkSummary: 'Spark Summary',
 
     //testing routes
     // myTest: "My Test", 

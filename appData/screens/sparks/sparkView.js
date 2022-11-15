@@ -5,9 +5,11 @@ import { Dimensions } from 'react-native';
 import { stylesPortrait } from "../../styles/portrait";
 import colors from '../../../config/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Routes from '../constants/Routes';
 
-export default function SparkView({ navigation }) {
+export default function SparkView({ route, navigation }) {
     let sparkMilage = 5;
+    let props = route.params;
 
     const userLocation = {
         city: "Mechanicsburg",
@@ -58,7 +60,7 @@ export default function SparkView({ navigation }) {
                 <Text style={{color: "white", textAlign:"center", fontSize:29, paddingTop: 28}}>Spark Worship</Text>
             </View>
             <View style={[sparkViewStyles.sparkContainer]}>
-                <View style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary)} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
                     <View style={{width:"87%"}}>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>Sunrise Worship Service</Text>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>
@@ -73,8 +75,8 @@ export default function SparkView({ navigation }) {
 
                         </Image>
                     </View>
-                </View>
-                <View style={[sparkViewStyles.boxTwo]}>
+                </TouchableOpacity>
+                <TouchableOpacity style={[sparkViewStyles.boxTwo]}>
                 <View style={{width:"87%"}}>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>Song of Creation</Text>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Cannoneers</Text>
@@ -89,8 +91,8 @@ export default function SparkView({ navigation }) {
 
                         </Image>
                     </View>
-                </View>
-                <View style={[sparkViewStyles.boxOne]}>
+                </TouchableOpacity>
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary)} style={[sparkViewStyles.boxOne]}>
                 <View style={{width:"87%"}}>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>Pentatonix Live (Acappella)</Text>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Pentatonix</Text>
@@ -105,8 +107,8 @@ export default function SparkView({ navigation }) {
 
                         </Image>
                     </View>
-                </View>
-                <View style={[sparkViewStyles.boxTwo]}>
+                </TouchableOpacity>
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary)} style={[sparkViewStyles.boxTwo]}>
                 <View style={{width:"87%"}}>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>New Year’s Worship (Solo)</Text>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Gabriel Himself</Text>
@@ -128,8 +130,8 @@ export default function SparkView({ navigation }) {
 
                         </Image>
                     </View>
-                </View>
-                <View style={[sparkViewStyles.boxOne, sparkViewStyles.veryBottomBox]}>
+                </TouchableOpacity>
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary)} style={[sparkViewStyles.boxOne, sparkViewStyles.veryBottomBox]}>
                 <View style={{width:"87%"}}>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>World’s End Choir (Choral)</Text>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring The Universe</Text>
@@ -151,9 +153,9 @@ export default function SparkView({ navigation }) {
 
                         </Image>
                     </View>
-                </View>
+                </TouchableOpacity>
             </View>
-            <View style={[sparkViewStyles.bottomContainer]}>
+            {/* <View style={[sparkViewStyles.bottomContainer]}>
                 <Image style={{width: "7.5%", height: "45%", marginLeft: "6.5%"}} source={require("../../../assets/Home.png")}> 
                 </Image>
                 <Image style={{width: "7.5%", height: "45%"}} source={require("../../../assets/Vector.png")}> 
@@ -164,7 +166,7 @@ export default function SparkView({ navigation }) {
                 </Image>
                 <Image style={{width: "7.5%", height: "45%", marginRight: "6.5%"}} source={require("../../../assets/Profile.png")}> 
                 </Image>
-            </View>
+            </View> */}
         </View>
     );
 }
@@ -183,7 +185,7 @@ const sparkViewStyles = StyleSheet.create({
     sparkContainer:
     {
         width:"100%",
-        height:"82%",
+        height:"90%",
         backgroundColor: "rgba(255,255,255,1)",
         flexDirection: "column", 
         justifyContent: "space-between", 
@@ -220,7 +222,7 @@ const sparkViewStyles = StyleSheet.create({
         marginLeft:"10%",
         marginTop: "1%",
         marginBottom: "1%",
-        fontSize: 14
+        fontSize: 10
     },
     topText:{
         fontWeight: "bold",

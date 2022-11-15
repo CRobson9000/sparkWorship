@@ -16,6 +16,8 @@ import { Input } from '../../components/components.js'
 //database processing import statements
 import { getDatabase, ref, set } from 'firebase/database';
 
+import Routes from '../constants/Routes'
+
 export default function RegistrationScreen({ navigation }) {
 
   /*------------------------------------------------*/
@@ -51,7 +53,7 @@ export default function RegistrationScreen({ navigation }) {
           const user = userCredential.user;
           //set the global userId, which will call an observer
           userId.setVal(user.uid);
-          navigation.navigate("Router");   
+          navigation.navigate("Navigator", {userId: user.uid});   
       }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
