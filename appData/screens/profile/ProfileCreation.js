@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import React, {useRef, useEffect, useLayoutEffect} from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image, FlatList } from "react-native";
 import { Input, Slider } from '../../components/components';
 import { Observable, FirebaseButler } from '../../components/classes';
@@ -20,9 +20,6 @@ export default function ProfileScreen({route, navigation}) {
   /*This is an object of all of the possible textbox variables a user can change.  
   */
   let inputs = {
-    //Sample input explanation
-    name: new Observable("", () => updatePayload(inputs.name.getVal(), "name")),
-
     /*
       name - the name of the input
       Observable: runs a function when it's value is changed
@@ -46,8 +43,9 @@ export default function ProfileScreen({route, navigation}) {
    username: new Observable("", () => updatePayload(inputs.username.getVal(), "username")),
    email: new Observable("", () => updatePayload(inputs.email.getVal(), "email")),
    birthday: new Observable("", () => updatePayload(inputs.birthday.getVal(), "birthday")),
-   streetAddress: new Observable("", () => updatePayload(inputs.streetAddress.getVal(), "location")),
+   streetAddress: new Observable("", () => updatePayload(inputs.streetAddress.getVal(), "street")),
    city: new Observable("", () => updatePayload(inputs.city.getVal(), "city")),
+   state: "",
    zipCode: new Observable("", () => updatePayload(inputs.zipCode.getVal(), "zipCode")),
 
    //second variable screens
@@ -61,17 +59,42 @@ export default function ProfileScreen({route, navigation}) {
    churchCity: new Observable("", () => updatePayload(inputs.churchCity.getVal(), "churchCity")),
    churchZipCode: new Observable("", () => updatePayload(inputs.churchZipCode.getVal(), "churchZipCode")),
   } 
+  //dropDown variables
+  const [inputState, setInputState] = React.useState(inputs.state || "Select a state!");
+  // const [gender, setGender] = React.useState(inputs.)
 
   // Here is the update variable, which keeps track of all the changes a user has made
   let update = useRef({});
 
-  // set rinstruments array
+  // This is the variable that gets the profile data from firebase.  This is only set once on the first load of the page 
+  let fbProfileData = useRef({});
+
+  // set instruments array
   let instrumentsArray = useRef([]);
 
   //This is the id of the user that you want to save the information to.  
   let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
 
-  //This function uses update to populate a phase with information entered previously
+
+  async function getProfileData() {
+    console.log("Got Data!");
+    fbProfileData = await FirebaseButler.fbGet(`Users/${userId}/info`);
+
+    for (let key in inputs) {
+      //these are all of the fields which weren't acquired through a textbox
+      if (fbProfileData[key]) {
+        let inputObj = inputs[key];
+        inputObj.setVal(fbProfileData[key], false);
+      }
+    }
+
+    //set instrument data
+    let startingInstruments = fbProfileData.instruments;
+    for (let i = 0; i < startingInstruments.length; i++) {
+      instrumentsArray["current"].push(startingInstruments[i]);
+    }
+  }
+
   const updateToStart = () => {
     for (let key in inputs) {
         let updateVal = update[key];
@@ -130,9 +153,9 @@ export default function ProfileScreen({route, navigation}) {
       set(birthdayReference, update["birthday"]);
     }
 
-    if (update["location"]) {
-      const streetAddressReference = ref(db, `Users/${userId}/info/location`);
-      set(streetAddressReference, update["location"]);
+    if (update["street"]) {
+      const streetAddressReference = ref(db, `Users/${userId}/info/street`);
+      set(streetAddressReference, update["street"]);
     }
 
     if (update["city"]) {
@@ -202,50 +225,61 @@ export default function ProfileScreen({route, navigation}) {
   //code for sliders and screens
   const Screen1 = (props) => {
     const gender = ['Male', 'Female'];
-    const state = ['PA']
+    const state = ['PA'];
+
     return (
-        <View style={styleSheet.content}>
-            <Text style={styleSheet.stageText}>General Information</Text>
-            <Text style={styleSheet.text}>Name</Text>
+      <View style={styleSheet.content}>
+        <Text style={styleSheet.stageText}>General Information</Text>
+        <Text style={styleSheet.text}>Name</Text>
 
-            {/* 
-            --------------------------------------------------------------------------------------------
-            This is the spot where an observable's value is changed (as shown by the setVal function) 
-            --------------------------------------------------------------------------------------------
-            */}
+        {/* 
+        --------------------------------------------------------------------------------------------
+        This is the spot where an observable's value is changed (as shown by the setVal function) 
+        --------------------------------------------------------------------------------------------
+        */}
 
-            <Input start = {inputs.name.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.name.setVal(val)}/>
-            <Text style={styleSheet.text}>Username</Text>
-            <Input start = {inputs.username.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.username.setVal(val)}/>
-            <Text style={styleSheet.text}>Email</Text>
-            <Input start = {inputs.email.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.email.setVal(val)}/>
-            <View style={styleSheet.row1}>
-                <View style={styleSheet.column1}>
-                    <Text style={styleSheet.text}>Gender</Text>
-                    <Dropdown style={styleSheet.dropDown} data={gender} renderItem={renderDropDownItem}/>
-                </View>
-                <View style={styleSheet.column1}>
-                    <Text style={styleSheet.text}>Birthday</Text>
-                    <Input start = {inputs.birthday.getVal()} inputStyle = {styleSheet.inputBox1} func = {(val) => inputs.birthday.setVal(val)}></Input>
-                </View>
+        <Input start = {inputs?.name?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.name.setVal(val)}/>
+        <Text style={styleSheet.text}>Username</Text>
+        <Input start = {inputs?.username?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.username.setVal(val)}/>
+        <Text style={styleSheet.text}>Email</Text>
+        <Input start = {inputs?.email?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.email.setVal(val)}/>
+        <View style={styleSheet.row1}>
+            <View style={styleSheet.column1}>
+                <Text style={styleSheet.text}>Gender</Text>
+                <Dropdown style={styleSheet.dropDown} data={gender} renderItem={renderDropDownItem}/>
             </View>
-            <Text style={styleSheet.text}>Street Address (Optional)</Text>
-            <Input start = {inputs.streetAddress.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.streetAddress.setVal(val)}/>
-            <View style={styleSheet.row3}>
-                <View style={styleSheet.column2}>
-                    <Text style={styleSheet.text}>City</Text>
-                    <Input start = {inputs.city.getVal()} inputStyle = {styleSheet.inputBox3} func = {(val) => inputs.city.setVal(val)}></Input>
-                </View>
-                <View style={styleSheet.column2}>
-                    <Text style={styleSheet.text}>State</Text>
-                    <Dropdown style={styleSheet.dropDown} data={state} renderItem={renderDropDownItem}/>
-                </View>
-                <View style={styleSheet.column2}>
-                    <Text style={styleSheet.text}>Zip Code</Text>
-                    <Input start = {inputs.zipCode.getVal()} inputStyle = {styleSheet.inputBox3} func = {(val) => inputs.zipCode.setVal(val)}></Input>
-                </View>
+            <View style={styleSheet.column1}>
+                <Text style={styleSheet.text}>Birthday</Text>
+                <Input start = {inputs?.birthday?.getVal()} inputStyle = {styleSheet.inputBox1} func = {(val) => inputs.birthday.setVal(val)}></Input>
             </View>
         </View>
+        <Text style={styleSheet.text}> Street Address (Optional)</Text>
+        <Input start = {inputs?.streetAddress?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.streetAddress.setVal(val)}/>
+        <View style={styleSheet.row3}>
+            <View style={styleSheet.column2}>
+                <Text style={styleSheet.text}>City</Text>
+                <Input start = {inputs?.city?.getVal()} inputStyle = {styleSheet.inputBox3} func = {(val) => inputs.city.setVal(val)}></Input>
+            </View>
+            <View style={styleSheet.column2}>
+                <Text style={styleSheet.text}>State</Text>
+                <Dropdown
+                  style={styleSheet.dropDown} 
+                  data={state} 
+                  renderItem={renderDropDownItem}
+                  search = {false}
+                  maxHeight = {"40%"}
+                  itemTextStyle = {{color: "black", fontSize: 2}}
+                  onChange = {(value) => setInputState(value)}
+                  placeholder = {inputState}
+                  value = {inputState}
+                />
+            </View>
+            <View style={styleSheet.column2}>
+                <Text style={styleSheet.text}>Zip Code</Text>
+                <Input start = {inputs?.zipCode?.getVal()} inputStyle = {styleSheet.inputBox3} func = {(val) => inputs.zipCode.setVal(val)}></Input>
+            </View>
+        </View>
+      </View>
     );
   }
 
@@ -538,7 +572,7 @@ export default function ProfileScreen({route, navigation}) {
     <Text style={styleSheet.phaseText}>Phase 5</Text>
   ];
 
-  let [currentIndex, setCurrentIndex] = React.useState(0);
+  let [currentIndex, setCurrentIndex] = React.useState(1);
 
   function limitScroll(){
     if (currentIndex < 0) {
@@ -649,31 +683,39 @@ export default function ProfileScreen({route, navigation}) {
   //will only run on the first load
   useEffect(() => {
     getPhoto();
+    getProfileData().then(() => {
+      setCurrentIndex(0);
+    });
   }, [])
+
+  // useEffect(() => {
+    
+  // }, [currentIndex])
 
   /*------------------------------------------------*/
   /*--------------FRONT-END APP CODE ---------------*/
   /*------------------------------------------------*/
-
+  // if (done) {
   return (
-    <View style={styleSheet.MainContainer}> 
-        <View style={styleSheet.topBorder}>
-          <Text style={styleSheet.titleText}>Profile Creation</Text>
-          <View style={styleSheet.row}>
-            <TouchableOpacity style = {styleSheet.profilePictureContainer} onPress = {() => uploadPhoto()}>
-              <Image style={styleSheet.profilePicImage} source={image}></Image>
-            </TouchableOpacity>
+      <View style={styleSheet.MainContainer}> 
+          <View style={styleSheet.topBorder}>
+            <Text style={styleSheet.titleText}>Profile Creation</Text>
+            <View style={styleSheet.row}>
+              <TouchableOpacity style = {styleSheet.profilePictureContainer} onPress = {() => uploadPhoto()}>
+                <Image style={styleSheet.profilePicImage} source={image}></Image>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-        <Slider currentIndex = {currentIndex} screens = {myScreens} />
+          <Slider currentIndex = {currentIndex} screens = {myScreens} />
 
-        <View style={styleSheet.bottomRow}>
-            <TouchableOpacity style={styleSheet.button} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Previous</Text></TouchableOpacity>
-            <TouchableOpacity style={styleSheet.button} onPress = {() => (currentIndex == myScreens.length - 1) ? sendPayload() : setCurrentIndex(currentIndex + 1)}><Text style={styleSheet.buttonText}>{(currentIndex == myScreens.length - 1) ? "Submit" : "Next"}</Text></TouchableOpacity>
-        </View>
-    </View>
-  );
-  }
+          <View style={styleSheet.bottomRow}>
+              <TouchableOpacity style={styleSheet.button} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Previous</Text></TouchableOpacity>
+              <TouchableOpacity style={styleSheet.button} onPress = {() => (currentIndex == myScreens.length - 1) ? sendPayload() : setCurrentIndex(currentIndex + 1)}><Text style={styleSheet.buttonText}>{(currentIndex == myScreens.length - 1) ? "Submit" : "Next"}</Text></TouchableOpacity>
+          </View>
+      </View>
+    );
+  // }
+}
 
 const styleSheet = StyleSheet.create({
     instrumentDialogInput: {

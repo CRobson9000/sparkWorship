@@ -7,7 +7,7 @@ const stylesPortrait = StyleSheet.create({
     {
       flex: 1,
       flexDirection: "column",
-      backgroundColor: colors.secondary
+      backgroundColor: colors.secondary,
     },
     topBorder:
     {
