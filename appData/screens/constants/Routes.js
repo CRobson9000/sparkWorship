@@ -18,7 +18,8 @@ let Routes={
     router: "Router",
     componentTesting: "ComponentTesting",
     functionalityTesting: "FunctionalityTesting",
-    locationData: "LocationData"
+    locationData: "LocationData",
+    dimensionsTesting: "DimensionsTesting"
 
 
 

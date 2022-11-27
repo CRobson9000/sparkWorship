@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //import statements for actual screens
-import {Navigator, LoginScreen, RegistrationScreen, SparkView, SparkSummary, ProfileCreation, PSPersonal, PSPublic, SparkCreation, UserDashboard, UserHub, Messaging} from './appData/screens/constants/Index.js';
+import {Navigator, LoginScreen, RegistrationScreen, SparkView, SparkSummary, ProfileCreation, PSPersonal, PSPublic, SparkCreation, UserDashboard, UserHub, Messaging, DimensionsTesting} from './appData/screens/constants/Index.js';
 
 //import statements for testing screens
 import {Router, LocationData, ComponentTesting, FunctionalityTesting} from './appData/screens/constants/Index.js';
@@ -16,7 +16,7 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={Routes.login}>
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={Routes.dimensionsTesting}>
         {/* Actual Screens used in our app */}
         <Stack.Screen name={Routes.login} component={LoginScreen} />
         <Stack.Screen name={Routes.registration} component={RegistrationScreen} />
@@ -35,6 +35,7 @@ function App() {
         {/* <Stack.Screen name="HostingDashboard" component={HostingDashboard}/> */}
         <Stack.Screen name={Routes.router} component={Router} />
         <Stack.Screen name={Routes.componentTesting} component={ComponentTesting}/>
+        <Stack.Screen name={Routes.dimensionsTesting} component={DimensionsTesting}/>
         <Stack.Screen name={Routes.functionalityTesting} component={FunctionalityTesting}/>
         <Stack.Screen name={Routes.locationData} component={LocationData} />
       </Stack.Navigator>
