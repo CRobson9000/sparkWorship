@@ -15,3 +15,7 @@ export default function DimensionsTesting({ navigation }) {
         }}></View>
     )
 }
+
+const testStyles = StyleSheet.create({
+    
+})
