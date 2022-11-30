@@ -1,4 +1,6 @@
 import React from 'react';
+import { enableRipple } from '@syncfusion/ej2-base';
+import { DropDownButtonComponent } from '@syncfusion/ej2-react-splitbuttons';
 import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List } from 'react-native-paper';
@@ -8,7 +10,6 @@ import { Observable, TDO } from '../../components/classes';
 import { stylesPortrait } from "../../styles/portrait";
 
 export default function SparkSummary({ navigation }) {
-
   let inputs = {
     address: new Observable("", () => updatePayload(inputs.address.getVal(), "address")),
     city: new Observable("", () => updatePayload(inputs.city.getVal(), "city")),
@@ -217,6 +218,13 @@ export default function SparkSummary({ navigation }) {
       </View>
       </ScrollView>
     );
+    const SixthRoute = () => (
+      <ScrollView>
+        <DropDownButtonComponent id="element" items={[{text: stuff}, {text: moreStuff}]}>
+          Test Stuff
+        </DropDownButtonComponent>
+      </ScrollView>
+    );
     
       
       
@@ -227,6 +235,7 @@ export default function SparkSummary({ navigation }) {
         { key: 'third', title: 'Set List' },
         { key: 'fourth', title: 'Times' },
         { key: 'fifth', title: 'Volunteers' },
+        { key: 'sixth', title: 'Test'}
     ]);
     
     const renderScene = SceneMap({
@@ -234,7 +243,8 @@ export default function SparkSummary({ navigation }) {
         second: SecondRoute,
         third: ThirdRoute,
         fourth: FourthRoute,
-        fifth: FifthRoute
+        fifth: FifthRoute,
+        sixth: SixthRoute
     });
 
     const renderTabBar = props => (
