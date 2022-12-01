@@ -1,6 +1,6 @@
 import React from 'react';
 import { enableRipple } from '@syncfusion/ej2-base';
-import { DropDownButtonComponent } from '@syncfusion/ej2-react-splitbuttons';
+import DropDownPicker from 'react-native-dropdown-picker';
 import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List } from 'react-native-paper';
@@ -41,6 +41,12 @@ export default function SparkSummary({ navigation }) {
   {
       update[updateName] = updateVal;
   };
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState(null);
+  const [items, setItems] = React.useState([
+    {label: 'Apple', value: 'apple'},
+    {label: 'Banana', value: 'banana'}
+  ]);
   const FirstRoute = () => (
     <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
         <View style={[sparkViewStyles.sparkContainer]}>
@@ -219,11 +225,29 @@ export default function SparkSummary({ navigation }) {
       </ScrollView>
     );
     const SixthRoute = () => (
-      <ScrollView>
-        <DropDownButtonComponent id="element" items={[{text: stuff}, {text: moreStuff}]}>
-          Test Stuff
-        </DropDownButtonComponent>
-      </ScrollView>
+        <DropDownPicker
+          placeholderStyle={{
+            alignContent: "center", justifyContent: "center"
+          }}
+          dropDownContainerStyle={{
+            backgroundColor: "#FFA500"
+          }}
+          containerStyle={{
+            backgroundColor: "#FFA500"
+          }}
+          dropDownStyle={{
+            backgroundColor: "#FFA500"
+          }}
+          showArrowIcon={false}
+          open={open}
+          value={value}
+          items={items}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setItems}
+          style={{color: "#FFA500"}}
+      
+        />
     );
     
       
