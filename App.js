@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //import statements for actual screens
-import {Navigator, LoginScreen, RegistrationScreen, SparkView, SparkSummary, ProfileCreation, PSPersonal, PSPublic, SparkCreation, UserDashboard, UserHub, Messaging} from './appData/screens/navigation/constants/Index.js';
+import {Navigator, LoginScreen, RegistrationScreen, SparkView, SparkSummary, ProfileCreation, PSPersonal, PSPublic, SparkCreation, UserDashboard, UserHub, Messaging} from './appData/screens/Navigation/constants/Index.js';
 
 //import statements for testing screens
 import {Router, LocationData, ComponentTesting, FunctionalityTesting} from './appData/screens/Navigation/constants/Index.js';

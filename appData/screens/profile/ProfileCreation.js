@@ -10,7 +10,7 @@ import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from 'expo-image-picker';
 // had to make a weird file to "redefine" ref since it already exists from firebase/database
 import { storageRef } from '../../../config/additionalMethods';
-import Routes from '../navigation/constants/Routes.js'
+import Routes from '../Navigation/constants/Routes.js'
 
 export default function ProfileScreen({route, navigation}) {
   //set environment variables

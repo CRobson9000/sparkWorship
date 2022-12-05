@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { Dimensions } from 'react-native';
 import { stylesPortrait } from "../../styles/portrait";
 import colors from '../../../config/colors';
-import Routes from '../navigation/constants/Routes';
+import Routes from '../Navigation/constants/Routes';
 
 import { FirebaseButler, TDO } from "../../components/classes";
 
