@@ -1,11 +1,11 @@
 import { StyleSheet, TouchableHighlight, Text, View, TouchableOpacity, FlatList, SafeAreaView, Image } from 'react-native';
 import React, {useRef, useEffect} from 'react';
-import { Input, Slider } from '../components/components';
-import { Observable, TDO } from '../components/classes';
+import { Input, Slider } from '../../components/components';
+import { Observable, TDO } from '../../components/classes';
 
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 import { screensEnabled } from 'react-native-screens';
-import { stylesPortrait } from '../styles/portrait';
+import { stylesPortrait } from '../../styles/portrait';
 
 export default function Message({ route, navigation }) {
 

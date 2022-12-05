@@ -1,7 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {UserDashboard, SparkView, UserHub, Messaging, PSPersonal, SparkCreation} from '../constants/Index';
-import Routes from '../constants/Routes';
+import {UserDashboard, SparkView, Messaging, PSPersonal, SparkCreation, UserHub} from './constants/Index';
+import Routes from './constants/Routes';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 

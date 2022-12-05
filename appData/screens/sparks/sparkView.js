@@ -1,11 +1,14 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import React from 'react';
+import {StyleSheet, FlatList, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import React, { useEffect } from 'react';
 
 import { Dimensions } from 'react-native';
 import { stylesPortrait } from "../../styles/portrait";
 import colors from '../../../config/colors';
-import Icon from 'react-native-vector-icons/Ionicons';
-import Routes from '../constants/Routes';
+import Routes from '../Navigation/constants/Routes';
+
+import { FirebaseButler, TDO } from "../../components/classes";
+
+import { getDatabase, ref, set, get } from 'firebase/database';
 
 export default function SparkView({ route, navigation }) {
     let sparkMilage = 5;
@@ -17,50 +20,100 @@ export default function SparkView({ route, navigation }) {
         zip: 17055
     };
 
-    const sparks =[
-        {
-            id:
-            {
-                info: {
-                    location: {
-                        address: {
-                            address: "7693 Browns Mill Rd",
-                            city: "Chambersburg",
-                            state: "Pennsylvania",
-                            zip: 17202,
-                        },
-                        lat: 39.833128472575915,
-                        lon: -77.7115903252737
-                    }
-                }
-            }
-        },
-        {
-            id: 
-            {
-                info: {
-                    location: {
-                        address: {
-                            address: "2150 Bumble Bee Hollow Rd",
-                            city: "Mechanicsburg",
-                            state: "Pennsylvania",
-                            zip: 17055
-                        },
-                        lat: 40.176332622843134,
-                        lon: -76.98694473369463
-                    }
-                }
-            }
-        }
-    ]
+    const [sparks, setSparks] = React.useState({});
+
+    //spark code
+    const renderSpark = (object) => {
+        //console.log("Object", object.item);
+        let item = object.item;
+
+        //Date Time string formatting
+        let sparkTimeObj = item.info.times.spark.TDO;
+        let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
+        let finalTime = sparkTDO.getFormattedTime();
+        let finalDate = sparkTDO.getFormattedDateFormal();
+        let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
+
+        //Location formatting
+        let locationObj = item.info.location;
+        let locationString = `${locationObj.address} ${locationObj.city}, ${locationObj.state} ${locationObj.zip}`;
+        
+        return (
+            <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary)} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
+                <View style={{width:"87%"}}>
+                    <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name || "No Name"} </Text>
+                    <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>
+                    <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{finalDateTime}</Text>
+                    <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{locationString}</Text>
+                </View>
+                <View style={{width:"13%", alignItems:"center"}}>
+                    <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
+
+                    </Image>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    function filterMyRole(spark, role) {
+        //return true or false
+
+        // if spark has role, return true, if not return false
+    }
+
+    function filterByDistance(spark, distance) {
+        //get location data from user (from userId)
+
+        //build url with location data from spark (up top)
+
+        //use url and these distances to get the distance between them (use code below)
+
+        // var axios = require('axios');
+        // var config = {
+        //     method: 'get',
+        //     url: 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=Washington%2C%20DC&destinations=New%20York%20City%2C%20NY&units=imperial&key=AIzaSyCusL6lRbILhO9P7AyHSwpT-ZS6N5diyBQ',
+        //     headers: { }
+        // };
+
+        // axios(config)
+        // .then(function (response) {
+        //     console.log(JSON.stringify(response.data));
+
+
+            //compare found distance in response to the distance parameter in this function
+
+            
+        // })
+        // .catch(function (error) {
+        //     console.log(error);
+        // });
+    }
+
+    // Run filter:  let filteredSparks = sparks.filter((spark) => filterMyRole(spark, <insertRole>));
+
+    async function getSparks() {
+        let fbSparks = await FirebaseButler.fbGet(`Sparks`);
+        delete fbSparks.id;
+        setSparks(fbSparks);
+    }
+
+    //Location code
+    useEffect(() => {
+        getSparks();
+    }, [])
     
     return(
-        <View style={stylesPortrait.container}>
+        <View style={[stylesPortrait.container, {alignItems: "center"}]}>
             <View style={[sparkViewStyles.sparkViewTopBorder]}>
                 <Text style={{color: "white", textAlign:"center", fontSize:29, paddingTop: 28}}>Spark Worship</Text>
             </View>
             <View style={[sparkViewStyles.sparkContainer]}>
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary)} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
+                <FlatList 
+                    data = {Object.values(sparks)}
+                    style = {{flex: 1}}
+                    renderItem = {renderSpark}
+                />
+                {/* <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary)} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
                     <View style={{width:"87%"}}>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>Sunrise Worship Service</Text>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>
@@ -153,7 +206,7 @@ export default function SparkView({ route, navigation }) {
 
                         </Image>
                     </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
             {/* <View style={[sparkViewStyles.bottomContainer]}>
                 <Image style={{width: "7.5%", height: "45%", marginLeft: "6.5%"}} source={require("../../../assets/Home.png")}> 
@@ -175,6 +228,7 @@ const sparkViewStyles = StyleSheet.create({
     sparkViewTopBorder:
     {
         height: "10%",
+        width: "100%",
         backgroundColor: "#EC6014",
     },
     sparkViewContentContainer:
@@ -184,7 +238,7 @@ const sparkViewStyles = StyleSheet.create({
     },
     sparkContainer:
     {
-        width:"100%",
+        width:"85%",
         height:"90%",
         backgroundColor: "rgba(255,255,255,1)",
         flexDirection: "column", 
@@ -200,8 +254,10 @@ const sparkViewStyles = StyleSheet.create({
     boxOne:
     {
         backgroundColor: "#DBE9EC",
-        height: "16%",
-        width: "80%",
+        flex: 1,
+        padding: "3%",
+        // height: "16%",
+        // width: "80%",
         borderRadius: 30,
         flexDirection: "row",
         justifyContent: "space-between",
@@ -270,9 +326,8 @@ const sparkViewStyles = StyleSheet.create({
         borderWidth: 3
     },
     profPic:{
-        width: "93%", 
-        height: "35%", 
+        height: "45%",
+        width: "120%", 
         marginRight: "30%"
     }
-
 });

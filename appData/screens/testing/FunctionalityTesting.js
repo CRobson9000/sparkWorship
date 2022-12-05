@@ -13,7 +13,7 @@ import { storageRef } from '../../../config/additionalMethods'
 
 import { screensEnabled } from 'react-native-screens';
 import { stylesPortrait } from '../../styles/portrait';
-import Routes from "../constants/Routes.js"
+import Routes from "../Navigation/constants/Routes.js"
 
 export default function MyTest({ route, navigation }) {
   let props = route.params;

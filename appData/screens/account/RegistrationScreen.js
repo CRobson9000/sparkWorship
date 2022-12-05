@@ -1,4 +1,4 @@
-import { Image, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
+import { Image, StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
 import React from 'react';
 import { useDeviceOrientation } from '@react-native-community/hooks';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -12,21 +12,27 @@ import { Dimensions, TouchableHighlight } from 'react-native';
 
 //import components
 import { Input } from '../../components/components.js'
+import { Observable } from '../../components/classes.js'
 
 //database processing import statements
 import { getDatabase, ref, set } from 'firebase/database';
 
-import Routes from '../constants/Routes'
+import { Dropdown } from 'react-native-element-dropdown';
+
+
+import Routes from '../Navigation/constants/Routes'
 
 export default function RegistrationScreen({ navigation }) {
 
   /*------------------------------------------------*/
   /*----------BACK-END APP CODE ----------*/
   /*------------------------------------------------*/
-  let inputtedEmail = "";
-  let inputtedPassword = "";
+  const [role, setRole] = React.useState("Select a role");
+  let name = "";
+  let email = "";
+  let username = "";
+  let password = "";
   let confirmPassword = "";
-  let location = "";
 
   //userId
   let userId = {
@@ -47,10 +53,11 @@ export default function RegistrationScreen({ navigation }) {
   function signUp(navigation) {
     const auth = getAuth();
     //creates a new user in "authentication" of firebase
-    if (inputtedPassword == confirmPassword) {
-      createUserWithEmailAndPassword(auth, inputtedEmail, inputtedPassword).then((userCredential) => {
+    if (password == confirmPassword) {
+      createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
         console.log("User created successfully!");
           const user = userCredential.user;
+
           //set the global userId, which will call an observer
           userId.setVal(user.uid);
           navigation.navigate("Navigator", {userId: user.uid});   
@@ -78,8 +85,20 @@ export default function RegistrationScreen({ navigation }) {
     const db = getDatabase();
     const reference = ref(db, `Users/${uid}`);
     set(reference, {
+        name: name,
+        username: username,
+        role: role,
+        email: email,
         loggedIn: true
     });
+  }
+
+  const renderDropDownItem = (item) => {
+    return (
+      <View style={{padding: "5%", justifyContent: "center", alignItems: "center", flex: 1}}>
+        <Text> {item} </Text>
+      </View>
+    )
   }
 
   //--------------------
@@ -165,12 +184,23 @@ export default function RegistrationScreen({ navigation }) {
         
         <View style={stylesPortrait.contentContainer}>
           <ScrollView>
-            <Input placeHolderText={"First Name"} secure={false} func= {(val) => inputtedEmail = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
-            <Input placeHolderText={"Last Name"} secure={false} func= {(val) => inputtedEmail = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
-            <Input placeHolderText={"Role"} secure={false} func= {(val) => inputtedEmail = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
-            <Input placeHolderText={"Email"} secure={false} func= {(val) => inputtedEmail = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
-            <Input placeHolderText={"Username"} secure={false} func= {(val) => inputtedEmail = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
-            <Input placeHolderText={"Password"} secure={false} func={(val) => inputtedPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+            <Dropdown
+                style = {regStyles.dropDown}
+                data = {["instrumentalist", "attendee"]}
+                dropdownPosition = {"top"}
+                search = {false}
+                maxHeight = {"40%"}
+                itemTextStyle = {{color: "black", fontSize: 5}}
+                onChange = {(value) => setRole(value)}
+                placeholder = {role}
+                value = {role}
+                placeholderStyle = {{textAlign: "center"}}
+                renderItem = {renderDropDownItem}
+            />
+            <Input placeHolderText={"First and Last Name"} secure={false} func= {(val) => name = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+            <Input placeHolderText={"Email"} secure={false} func= {(val) => email = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+            <Input placeHolderText={"Username"} secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+            <Input placeHolderText={"Password"} secure={false} func={(val) => password = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
             <Input placeHolderText={"Confirm Password"} secure={false} func={(val) => confirmPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
             <TouchableOpacity onPress = {() => signUp(navigation)} style={stylesPortrait.button}>
               <Text style={{color: "white"}}>Create new User</Text>
@@ -180,4 +210,15 @@ export default function RegistrationScreen({ navigation }) {
       </View>
   );
 }
+
+const regStyles = StyleSheet.create({
+  dropDown: {
+    backgroundColor: "#F2905B",
+    borderRadius: 10,
+    width: "50%",
+    height: "10%",
+    marginBottom: "4%",
+    left: "25%"
+},
+});
 

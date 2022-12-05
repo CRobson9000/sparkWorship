@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List } from 'react-native-paper';
-import Routes from '../constants/Routes';
+import Routes from '../Navigation/constants/Routes';
 import { FirebaseButler } from '../../components/classes';
 import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storageRef } from '../../../config/additionalMethods';
@@ -181,6 +181,7 @@ export default function PSPersonal({ route, navigation }) {
     const [MyBio, setMyBio] = React.useState("Bio is not set");
 
     async function setBio() {
+      //bio = userObj.bio;
       let bio = await FirebaseButler.fbGet(`Users/${userId}/info/bio`);
       if (bio) {
         setMyBio(bio);
@@ -242,6 +243,26 @@ export default function PSPersonal({ route, navigation }) {
       })
     }
 
+    // -----------------------
+    // Demo Friend Code
+    // -----------------------
+
+    async function logFriends() {
+      //get current friends list, which is a list of userIds
+      let friendsListObj = await FirebaseButler.fbGet(`Users/${userId}/friends`);
+      let friendsList = Object.values(friendsListObj);
+
+      //populate full friends list
+      let fullFriendsList = [];
+      for (let friendIndex in friendsList) {
+        let friendId = friendsList[friendIndex];
+        let friendName = await FirebaseButler.fbGet(`Users/${friendId}/info/name`);
+        fullFriendsList.push(friendName);
+      }
+
+      console.log("Friends", fullFriendsList);
+    }
+
     useEffect(() => {
       setName();
       setRole();
@@ -258,7 +279,7 @@ export default function PSPersonal({ route, navigation }) {
         <View style={styles.MainContainer}>
             <View style={styles.topBorder}>
               <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.functionalityTesting, props)}><Image style={{height: 40, width: 40}} source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity>
+                <TouchableOpacity onPress = {() => logFriends()}><Image style={{height: 40, width: 40}} source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity>
                 <Text style={styles.titleText}>My Profile</Text>
                 <TouchableOpacity onPress = {() => navigation.navigate(Routes.profileCreation, props)}><Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}></Image></TouchableOpacity>
               </View>

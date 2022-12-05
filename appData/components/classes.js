@@ -10,9 +10,11 @@ class Observable {
         } 
         else this.value = null;
     }
-    setVal(val) {
+    setVal(val, observe = true) {
         this.value = val;
-        this.myObserver();
+        if (observe) {
+            this.myObserver();
+        }
         //console.log("Observer", val);
     }
 
@@ -43,6 +45,14 @@ class TDO {
         }
         else {
             this.TDO = object
+
+            //convert object vals to ints from strings
+            // console.log(typeof this.TDO.minutes)
+            // if (typeof this.TDO.minutes == "string") {
+            //     for (let time in object) {
+            //         this.TDO[time] = parseInt(this.TDO[time]);
+            //     }
+            // }
         }
     }
     setDate(month, day, year) {
