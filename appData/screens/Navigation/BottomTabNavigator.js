@@ -24,7 +24,8 @@ function BottomTabNavigator( { route, navigation } ) {
             ? 'flash'
             : 'flash-outline';
         } else if (route.name == Routes.messaging) {
-              iconName = focused ? 'message-circle' : 'message-circle-outline';
+          // iconName = focused ? 'message-circle' : 'message-circle-outline';
+          iconName = focused ? 'chatbox-ellipses' : 'chatbox-ellipses-outline';
         } else if (route.name == Routes.personalProfile) {
           iconName = focused ? 'person' : 'person-outline';
         } 
