@@ -14,7 +14,7 @@ import Routes from "../Navigation/constants/Routes";
 export default function SparkCreation({ route, navigation }) {
     //set environment variables
     let props = route.params;
-    let userId = props.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+    let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
     let update = useRef({});
     let rolesArray = useRef([]);
 

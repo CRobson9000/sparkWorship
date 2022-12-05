@@ -243,6 +243,26 @@ export default function PSPersonal({ route, navigation }) {
       })
     }
 
+    // -----------------------
+    // Demo Friend Code
+    // -----------------------
+
+    async function logFriends() {
+      //get current friends list, which is a list of userIds
+      let friendsListObj = await FirebaseButler.fbGet(`Users/${userId}/friends`);
+      let friendsList = Object.values(friendsListObj);
+
+      //populate full friends list
+      let fullFriendsList = [];
+      for (let friendIndex in friendsList) {
+        let friendId = friendsList[friendIndex];
+        let friendName = await FirebaseButler.fbGet(`Users/${friendId}/info/name`);
+        fullFriendsList.push(friendName);
+      }
+
+      console.log("Friends", fullFriendsList);
+    }
+
     useEffect(() => {
       setName();
       setRole();
@@ -259,7 +279,7 @@ export default function PSPersonal({ route, navigation }) {
         <View style={styles.MainContainer}>
             <View style={styles.topBorder}>
               <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.functionalityTesting, props)}><Image style={{height: 40, width: 40}} source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity>
+                <TouchableOpacity onPress = {() => logFriends()}><Image style={{height: 40, width: 40}} source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity>
                 <Text style={styles.titleText}>My Profile</Text>
                 <TouchableOpacity onPress = {() => navigation.navigate(Routes.profileCreation, props)}><Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}></Image></TouchableOpacity>
               </View>
