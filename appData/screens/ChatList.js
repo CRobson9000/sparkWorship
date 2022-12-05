@@ -4,23 +4,21 @@ import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image,
 export default function ChatList(){
     return(
         <View style={styles.MainContainer}>
-
             <View style={styles.topBorder}>
-                <Image style={styles.logo} source={require('/sparkWorship/assets/logo2.png')}/>
-
+                <Image style={styles.logo} source={require('../../assets/logo2.png')}/>
             </View>
 
             <View style={styles.content}>
 
                 <View style={styles.searchBar}>
                     <View style={styles.row2}>
-                        <Image style={styles.searchIcon} source={require('/sparkWorship/assets/searchIcon.png')}/>
+                        <Image style={styles.searchIcon} source={require('../../assets/searchIcon.png')}/>
                         <Text style={{color: "grey"}}>Search</Text>
                     </View>
                 </View>
 
                 <View style={styles.row}>
-                    <Image style={styles.profilePicture} source={require('/sparkWorship/assets/headshot.jpg')}/>
+                    <Image style={styles.profilePicture} source={require('../../assets/headshot.jpg')}/>
                     <View style={styles.column}>
                         <Text style={styles.name}>John Smith</Text>
                         <Text style={styles.message}>Hey! Are you going to the spark in Nashville tonight?</Text>
@@ -28,7 +26,7 @@ export default function ChatList(){
                 </View>
 
                 <View style={styles.row}>
-                    <Image style={styles.profilePicture} source={require('/sparkWorship/assets/headshot1.jpg')}/>
+                    <Image style={styles.profilePicture} source={require('../../assets/headshot1.jpg')}/>
                     <View style={styles.column}>
                         <Text style={styles.name}>William Jones</Text>
                         <Text style={styles.message}>Just got your message, I will look into it.</Text>
@@ -36,7 +34,7 @@ export default function ChatList(){
                 </View>
 
                 <View style={styles.row}>
-                    <Image style={styles.profilePicture} source={require('/sparkWorship/assets/headshot2.jpg')}/>
+                    <Image style={styles.profilePicture} source={require('../../assets/headshot2.jpg')}/>
                     <View style={styles.column}>
                         <Text style={styles.name}>Aaron Moore</Text>
                         <Text style={styles.message}>Hello, I saw you play the guitar. I would love to have you be a part of my spark!</Text>
@@ -44,7 +42,7 @@ export default function ChatList(){
                 </View>
 
                 <View style={styles.row}>
-                    <Image style={styles.profilePicture} source={require('/sparkWorship/assets/headshot3.jpg')}/>
+                    <Image style={styles.profilePicture} source={require('../../assets/headshot3.jpg')}/>
                     <View style={styles.column}>
                         <Text style={styles.name}>Chris Samson</Text>
                         <Text style={styles.message}>Sorry for the late response!</Text>
@@ -52,7 +50,7 @@ export default function ChatList(){
                 </View>
 
                 <View style={styles.row}>
-                    <Image style={styles.profilePicture} source={require('/sparkWorship/assets/headshot5.jpg')}/>
+                    <Image style={styles.profilePicture} source={require('../../assets/headshot5.jpg')}/>
                     <View style={styles.column}>
                         <Text style={styles.name}>Austin Rock</Text>
                         <Text style={styles.message}>That spark last night was awesome, best one yet!</Text>
@@ -61,9 +59,9 @@ export default function ChatList(){
 
             </View>
 
-            <View style={styles.navigation}>
-                <Image style={styles.navigationBar} source={require('/sparkWorship/assets/navigation.png')}/>
-            </View>
+            {/* <View style={styles.navigation}>
+                <Image style={styles.navigationBar} source={require('../../assets/navigation.png')}/>
+            </View> */}
 
         </View>
     )
@@ -73,21 +71,26 @@ export default function ChatList(){
 const styles = StyleSheet.create({
 
     MainContainer: {
+        top: 0,
         backgroundColor: "white",
-        height: "100%"
+        flex: 1,
     },
 
     topBorder: {
         backgroundColor: "rgb(219, 233, 236)",
         height: "15%", 
-        marginBottom: 15,
-        alignItems: "center"
+        width: "100%",
+        //marginBottom: 15,
+        alignItems: "center",
+        justifyContent: "center"
     },
 
     content: {
-        alignItems: "center",
+        alignItems: "flex-start",
+        marginLeft: "5%",
         backgroundColor: "white",
-        height: "75%",
+        height: "85%",
+        width: "100%",
         justifyContent: 'center'
     },
 
@@ -98,7 +101,7 @@ const styles = StyleSheet.create({
     },
 
     row: {
-        width: '85%',
+        width: '70%',
         marginBottom: 40,
         flexDirection: "row",
         justifyContent: "space-between",
@@ -106,9 +109,10 @@ const styles = StyleSheet.create({
     },
 
     column: {
-        marginLeft: 30,
-        width: 250,
-        flexDirection: "column"
+        marginLeft: "10%",
+        width: "90%",
+        flexDirection: "column",
+        
     },
 
     profilePicture: {
@@ -126,7 +130,8 @@ const styles = StyleSheet.create({
     },
 
     message: {
-        fontSize: 15
+        fontSize: 15,
+        flexWrap: "wrap"
     }, 
 
     navigationBar: {
@@ -159,7 +164,6 @@ const styles = StyleSheet.create({
     logo: {
         height: 60,
         width: 225,
-        top: 60
     }
 
 })
