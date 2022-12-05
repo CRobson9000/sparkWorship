@@ -1,6 +1,6 @@
 import React from 'react';
 import { enableRipple } from '@syncfusion/ej2-base';
-import DropDownPicker from 'react-native-dropdown-picker';
+//import DropDownPicker from 'react-native-dropdown-picker';
 import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List } from 'react-native-paper';
@@ -47,7 +47,7 @@ export default function SparkSummary({ navigation }) {
     {label: 'Apple', value: 'apple'},
     {label: 'Banana', value: 'banana'}
   ]);
-  const FirstRoute = () => (
+  const LocationRoute = () => (
     <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
         <View style={[sparkViewStyles.sparkContainer]}>
           <View style={[sparkViewStyles.sparkVerticalContainer]}>
@@ -79,36 +79,68 @@ export default function SparkSummary({ navigation }) {
     // <Image source="../../../assets/miniEri.png"   />
 
 
-    const SecondRoute = () => (
-        <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
-          <View style={{alignItems: "center", justifyContent: "center"}}>
-            <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Requests</Text>
-          </View>
-            <List.Section style={{marginTop: "6%"}}>
-              <List.Accordion style={styles.accordian} title="Person 1">
-                <TouchableOpacity style={{width: "100%", flexDirection:"row", justifyContent:"space-between"}}>
-                  <List.Subheader style={styles.accordionSubheading}>
-                    <Text>Egg</Text>
-                    <Text>Big</Text>
-                  </List.Subheader>
-              </TouchableOpacity>
-                <List.Subheader style={styles.accordionSubheading}>Reject</List.Subheader>
-              </List.Accordion>
-              <List.Accordion style={styles.accordian} title="Person 2">
-              <List.Subheader style={styles.accordionSubheading}>Accept</List.Subheader>
-                <List.Subheader style={styles.accordionSubheading}>Reject</List.Subheader>
-              </List.Accordion>
-              <List.Accordion style={styles.accordian} title="Person 3">
-              <List.Subheader style={styles.accordionSubheading}>Accept</List.Subheader>
-                <List.Subheader style={styles.accordionSubheading}>Reject</List.Subheader>
-              </List.Accordion>
-              {/* <List.Image variant="image" source={require("../../../assets/miniEri.png")} />  */}
-            </List.Section>
+    const VolunteersRoute = () => (
+        // <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
+        //   <View style={{alignItems: "center", justifyContent: "center"}}>
+        //     <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Requests</Text>
+        //   </View>
+        //     <List.Section style={{marginTop: "6%"}}>
+        //       <List.Accordion style={styles.accordian} title="Person 1">
+        //         <TouchableOpacity style={{width: "100%", flexDirection:"row", justifyContent:"space-between"}}>
+        //           <List.Subheader style={styles.accordionSubheading}>
+        //             <Text>Egg</Text>
+        //             <Text>Big</Text>
+        //           </List.Subheader>
+        //       </TouchableOpacity>
+        //         <List.Subheader style={styles.accordionSubheading}>Reject</List.Subheader>
+        //       </List.Accordion>
+        //       <List.Accordion style={styles.accordian} title="Person 2">
+        //       <List.Subheader style={styles.accordionSubheading}>Accept</List.Subheader>
+        //         <List.Subheader style={styles.accordionSubheading}>Reject</List.Subheader>
+        //       </List.Accordion>
+        //       <List.Accordion style={styles.accordian} title="Person 3">
+        //       <List.Subheader style={styles.accordionSubheading}>Accept</List.Subheader>
+        //         <List.Subheader style={styles.accordionSubheading}>Reject</List.Subheader>
+        //       </List.Accordion>
+        //       {/* <List.Image variant="image" source={require("../../../assets/miniEri.png")} />  */}
+        //     </List.Section>
             
+        // </ScrollView>
+
+        <ScrollView>
+          <View style={[sparkViewStyles.sparkVerticalTest]}>
+            <View style={{alignItems: "center", justifyContent: "center"}}>
+                <Text style={{fontSize:28, paddingTop:"4%", paddingBottom:"6%", fontWeight:'500'}}>Volunteers</Text>
+            </View>
+            <View style={[sparkViewStyles.boxOne]}>
+              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
+
+              </Image>
+              <Text style={[sparkViewStyles.originalBoxText]}>Spark Leader: Colin Robson (you)</Text>
+            </View>
+            <View style={[sparkViewStyles.boxOne]}>
+              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
+
+              </Image>
+              <Text style={[sparkViewStyles.originalBoxText]}>Azianna Yang: Bass</Text>
+            </View>
+            <View style={[sparkViewStyles.boxOne]}>
+              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
+
+              </Image>
+              <Text style={[sparkViewStyles.originalBoxText]}>Colin Robson: Piano</Text>
+            </View>
+            <View style={[sparkViewStyles.boxOne]}>
+              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
+
+              </Image>
+              <Text style={[sparkViewStyles.originalBoxText]}>Austin Dorsey: Vocals</Text>
+            </View>
+          </View>
         </ScrollView>
       );
       
-    const ThirdRoute = () => (
+    const SetListRoute = () => (
       <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
       <View style={{alignItems: "center", justifyContent: "center"}}>
         <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Set List</Text>
@@ -133,7 +165,7 @@ export default function SparkSummary({ navigation }) {
     </ScrollView>
       );
 
-    const FourthRoute = () => (
+    const TimesRoute = () => (
       <ScrollView>
       <View style={[sparkViewStyles.sparkVerticalContainer]}>
       <View style={[sparkViewStyles.centerContents]}>
@@ -196,7 +228,7 @@ export default function SparkSummary({ navigation }) {
   </ScrollView>
       );
 
-    const FifthRoute = () => (
+    const RequestsRoute = () => (
       <ScrollView>
       <View style={[sparkViewStyles.sparkVerticalTest]}>
         <View style={{alignItems: "center", justifyContent: "center"}}>
@@ -282,19 +314,19 @@ export default function SparkSummary({ navigation }) {
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
         { key: 'first', title: 'Location' },
-        { key: 'second', title: 'Requests' },
+        { key: 'second', title: 'Times' },
         { key: 'third', title: 'Set List' },
-        { key: 'fourth', title: 'Times' },
-        { key: 'fifth', title: 'Volunteers' },
+        { key: 'fourth', title: 'Volunteers' },
+        { key: 'fifth', title: 'Requests' },
     //  { key: 'sixth', title: 'Test'}
     ]);
     
     const renderScene = SceneMap({
-        first: FirstRoute,
-        second: SecondRoute,
-        third: ThirdRoute,
-        fourth: FourthRoute,
-        fifth: FifthRoute,
+        first: LocationRoute,
+        second: TimesRoute,
+        third: SetListRoute,
+        fourth: VolunteersRoute,
+        fifth: RequestsRoute,
     //    sixth: SixthRoute
     });
 
