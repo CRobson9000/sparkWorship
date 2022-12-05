@@ -9,6 +9,7 @@ export {default as UserDashboard} from '../../social/UserDashboard';
 export {default as UserHub} from '../../social/UserHub';
 export {default as Navigator} from '../BottomTabNavigator';
 export {default as Messaging}  from '../../social/MessagingScreen.js';
+export {default as ChatList} from '../../social/ChatList.js'
 export {default as SparkSummary}  from '../../sparks/sparkSummary.js';
 // export {default as HostingDashboard} from '../dashboard/HostingDashboard';
 
@@ -16,3 +17,4 @@ export {default as Router} from '../../account/LoginScreen';
 export {default as LocationData} from '../../testing/LocationData.js';
 export {default as ComponentTesting} from '../../testing/ComponentTesting.js';
 export {default as FunctionalityTesting} from '../../testing/FunctionalityTesting';
+export {default as DimensionsTesting} from '../../testing/DimensionsTesting.js';
