@@ -25,6 +25,10 @@ const stylesPortrait = StyleSheet.create({
         position: "absolute",
         bottom:30
     },
+    userHubScroll:
+    {
+        top: 70
+    },
     // calendar: {
     //     flex: 1,
     //     width: "80%",

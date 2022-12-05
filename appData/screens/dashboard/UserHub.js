@@ -19,32 +19,82 @@ export default function UserHub({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
  
-      <View style={stylesPortrait.container}>
+      {/* <View style={stylesPortrait.container}> */}
 
-        <Text style={stylesPortrait.topText}> Hosting </Text>
+       
 
-        <Image style={stylesPortrait.calendar} source={require("../../../assets/calendar.png")}></Image>
+      
 
         {/* Container for everything below the logo */}
-        <View style={stylesPortrait.contentDashContainer}>
-          <ScrollView>
+        {/* <View style={stylesPortrait.contentDashContainer}> */}
+          <ScrollView style={stylesPortrait.userHubScroll}>
+
             <TouchableOpacity activeOpacity={1} style={[stylesPortrait.dashboardButton]}>
-              <View><Text style={{lineHeight: 30, color: "#006175"}}>September 12, 2022
+              <View><Text style={{lineHeight: 30, color: "#006175"}}> 
+              <Image style={{height: 40, width: 40}} source={require('../../../assets/userHub1.png')}></Image>
+              Oyin Dolapo
               {'\n'}
-              Time: 6:00 pm
+                
               {'\n'}
-              Mechanicsburg, PA</Text></View>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+              Maecenas vitae justo ipsum. Morbi sed mauris ante.Quisque semper,
+               augue fringilla pretium laoreet, tellus metus sodales dui, vitae 
+               imperdiet est nisi interdum neque.
+               {'\n'}
+                
+               {'\n'}
+              Intrument: Guitar 
+              {'\n'}
+              Location: Mechanicsburg, PA</Text></View>
+              <Image style={{height: 15, width: 152}} source={require('../../../assets/heart.png')}></Image>
+              <Image style={{height: 15, width: 15}} source={require('../../../assets/comment.png')}></Image> 
             </TouchableOpacity>
+
             <TouchableOpacity activeOpacity={1} onPress = {() => signUp(navigation)} style={[stylesPortrait.dashboardButton]}>
-              <View><Text style={{lineHeight: 30, color: "#006175"}}>September 27, 2022
+              <View><Text style={{lineHeight: 30, color: "#006175"}}>
+              <Image style={{height: 40, width: 40}} source={require('../../../assets/userHub2.png')}></Image>
+              Abdul Weber
               {'\n'}
-              Time: 7:00pm
+                
               {'\n'}
-              Mechanicsburg, PA</Text></View>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+              Maecenas vitae justo ipsum. Morbi sed mauris ante.Quisque semper,
+               augue fringilla pretium laoreet, tellus metus sodales dui, vitae 
+               imperdiet est nisi interdum neque.
+               {'\n'}
+                
+               {'\n'}
+              Intrument: Piano
+              {'\n'}
+              Location: Mechanicsburg, PA</Text></View>
+              <Image style={{height: 15, width: 15}} source={require('../../../assets/heart.png')}></Image>
+              <Image style={{height: 15, width: 15}} source={require('../../../assets/comment.png')}></Image> 
             </TouchableOpacity>
+
+            <TouchableOpacity activeOpacity={1} onPress = {() => signUp(navigation)} style={[stylesPortrait.dashboardButton]}>
+              <View><Text style={{lineHeight: 30, color: "#006175"}}>
+              <Image style={{height: 40, width: 40}} source={require('../../../assets/userHub3.png')}></Image>
+              Michael Lis
+              {'\n'}
+                
+              {'\n'}
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+              Maecenas vitae justo ipsum. Morbi sed mauris ante.Quisque semper,
+               augue fringilla pretium laoreet, tellus metus sodales dui, vitae 
+               imperdiet est nisi interdum neque.
+               {'\n'}
+                
+               {'\n'}
+              Intrument: Drums 
+              {'\n'}
+              Location: Mechanicsburg, PA</Text></View>
+              <Image style={{height: 15, width: 15}} source={require('../../../assets/heart.png')}></Image>
+              <Image style={{height: 15, width: 15}} source={require('../../../assets/comment.png')}></Image> 
+            </TouchableOpacity>
+            
           </ScrollView>
-        </View>
-      </View>
+        {/* </View> */}
+      {/* </View> */}
      </TouchableWithoutFeedback> 
   );
 }
