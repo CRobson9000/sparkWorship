@@ -251,31 +251,31 @@ export default function SparkSummary({ navigation }) {
       </View>
       </ScrollView>
     );
-    const SixthRoute = () => (
-        <DropDownPicker
-          placeholderStyle={{
-            alignContent: "center", justifyContent: "center"
-          }}
-          dropDownContainerStyle={{
-            backgroundColor: "#FFA500"
-          }}
-          containerStyle={{
-            backgroundColor: "#FFA500"
-          }}
-          dropDownStyle={{
-            backgroundColor: "#FFA500"
-          }}
-          showArrowIcon={false}
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-          style={{color: "#FFA500"}}
+    // const SixthRoute = () => (
+    //    <DropDownPicker
+    //      placeholderStyle={{
+    //        alignContent: "center", justifyContent: "center"
+    //      }}
+    //      dropDownContainerStyle={{
+    //        backgroundColor: "#FFA500"
+    //      }}
+    //      containerStyle={{
+    //        backgroundColor: "#FFA500"
+    //      }}
+    //      dropDownStyle={{
+    //        backgroundColor: "#FFA500"
+    //      }}
+    //      showArrowIcon={false}
+    //      open={open}
+    //      value={value}
+    //      items={items}
+    //      setOpen={setOpen}
+    //      setValue={setValue}
+    //      setItems={setItems}
+    //      style={{color: "#FFA500"}}
       
-        />
-    );
+    //    />
+    //);
     
       
       
@@ -286,7 +286,7 @@ export default function SparkSummary({ navigation }) {
         { key: 'third', title: 'Set List' },
         { key: 'fourth', title: 'Times' },
         { key: 'fifth', title: 'Volunteers' },
-        { key: 'sixth', title: 'Test'}
+    //  { key: 'sixth', title: 'Test'}
     ]);
     
     const renderScene = SceneMap({
@@ -295,7 +295,7 @@ export default function SparkSummary({ navigation }) {
         third: ThirdRoute,
         fourth: FourthRoute,
         fifth: FifthRoute,
-        sixth: SixthRoute
+    //    sixth: SixthRoute
     });
 
     const renderTabBar = props => (
