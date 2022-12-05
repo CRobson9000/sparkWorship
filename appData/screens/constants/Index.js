@@ -10,6 +10,7 @@ export {default as UserHub} from '../dashboard/UserHub';
 export {default as Navigator} from '../Navigation/BottomTabNavigator';
 export {default as Messaging}  from '../MessagingScreen.js';
 export {default as SparkSummary}  from '../sparkSummary/sparkSummary.js';
+export {default as ChatList} from '../ChatList.js';
 // export {default as HostingDashboard} from '../dashboard/HostingDashboard';
 
 export {default as Router} from '../account/LoginScreen';

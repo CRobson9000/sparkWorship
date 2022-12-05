@@ -4,8 +4,7 @@ import { Input, Slider } from '../../components/components';
 import { Observable, FirebaseButler } from '../../components/classes';
 import { getDatabase, ref, set, get } from 'firebase/database';
 import { Dropdown } from 'react-native-element-dropdown';
-import { Dialog, Portal, Provider, Checkbox, List, IconButton, Menu } from 'react-native-paper';
-
+import { Dialog, Portal, Provider, Checkbox, List, IconButton, Menu, ProgressBar } from 'react-native-paper';
 import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from 'expo-image-picker';
 // had to make a weird file to "redefine" ref since it already exists from firebase/database
@@ -659,10 +658,11 @@ export default function ProfileScreen({route, navigation}) {
     <View style={styleSheet.MainContainer}> 
         <View style={styleSheet.topBorder}>
           <Text style={styleSheet.titleText}>Profile Creation</Text>
-          <View style={styleSheet.row}>
-            <TouchableOpacity style = {styleSheet.profilePictureContainer} onPress = {() => uploadPhoto()}>
-              <Image style={styleSheet.profilePicImage} source={image}></Image>
+            <View style={{flexDirection:"row", height: 135, justifyContent: "space-evenly", alignItems: "center", top: 90}}>
+              <TouchableOpacity style = {styleSheet.profilePictureContainer} onPress = {() => uploadPhoto()}>
+                <Image style={styleSheet.profilePicImage} source={image}></Image>
             </TouchableOpacity>
+            <ProgressBar style={{width: 200, height: 20, borderRadius: 10}} progress={0.2}/>
           </View>
         </View>
         <Slider currentIndex = {currentIndex} screens = {myScreens} />
@@ -695,16 +695,14 @@ const styleSheet = StyleSheet.create({
     },
 
     profilePictureContainer: {
-        height: "66%",
-        width: "35%",
-        top: "50%",
-        left: "10%"
+        height: "100%",
+        width: "35%"
     },
 
     profilePicImage: {
       height: "100%",
       width: "100%",
-      borderRadius: 20,
+      borderRadius: 25,
     },
 
     text1: {
@@ -738,6 +736,11 @@ const styleSheet = StyleSheet.create({
         fontSize: 12,
         right: "8%",
         marginBottom: "3%"
+    },
+
+    row: {
+        flexDirection: 'row',
+        marginBottom: '4%'
     },
 
     row1: {
@@ -788,7 +791,7 @@ const styleSheet = StyleSheet.create({
         width: "85%",
         height: "100%",
         left: "7.5%",
-        marginBottom: "3%"
+        marginBottom: "4%"
     },
 
     instrumentBox: {
@@ -840,7 +843,7 @@ const styleSheet = StyleSheet.create({
 
     stageText: {
         textAlign: "center",
-        fontSize: 10,
+        fontSize: 20,
         fontWeight: "500",
         marginBottom: "3%"
       },
@@ -851,7 +854,7 @@ const styleSheet = StyleSheet.create({
         width: "85%",
         height: "8%",
         alignSelf: "center",
-        marginBottom: "3%"
+        marginBottom: "4%"
     },
 
     authenticationButton: {
@@ -862,14 +865,15 @@ const styleSheet = StyleSheet.create({
         alignItems: "center",
         height: "10%",
         marginTop: "5%",
-        borderRadius: 5
+        borderRadius: 10
       },
 
     inputBox2: {
         backgroundColor: "#F2905B",
         borderRadius: 10,
         width: "45%", 
-        height: "100%"
+        height: "100%",
+        marginBottom: "4%"
     },
 
     button:{
@@ -887,7 +891,6 @@ const styleSheet = StyleSheet.create({
         alignSelf: 'center',
         alignContent: "center",
         justifyContent: "space-evenly",
-        //backgroundColor: "red",
         height: "11%",
         width: '85%',
         marginTop: "2%"
@@ -940,7 +943,7 @@ const styleSheet = StyleSheet.create({
       titleText: {
         top: "25%",
         textAlign: "center",
-        fontSize: 15, 
+        fontSize: 20, 
         fontWeight: "600"
       }, 
 

@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //import statements for actual screens
-import {Navigator, LoginScreen, RegistrationScreen, SparkView, SparkSummary, ProfileCreation, PSPersonal, PSPublic, SparkCreation, UserDashboard, UserHub, Messaging, DimensionsTesting} from './appData/screens/constants/Index.js';
+import {Navigator, LoginScreen, RegistrationScreen, SparkView, SparkSummary, ProfileCreation, PSPersonal, PSPublic, SparkCreation, UserDashboard, UserHub, Messaging, ChatList, DimensionsTesting } from './appData/screens/constants/Index.js';
 
 //import statements for testing screens
 import {Router, LocationData, ComponentTesting, FunctionalityTesting} from './appData/screens/constants/Index.js';
@@ -28,6 +28,7 @@ function App() {
         <Stack.Screen name={Routes.userDashboard} component={UserDashboard}/>
         <Stack.Screen name={Routes.userHub} component={UserHub} />
         <Stack.Screen name={Routes.messaging} component={Messaging} />
+        <Stack.Screen name={Routes.chatList} component={ChatList}/>
         <Stack.Screen name={Routes.sparkSummary} component={SparkSummary} />        
         <Stack.Screen name="Navigator" component={Navigator} options={{headerShown: false}} />
 
