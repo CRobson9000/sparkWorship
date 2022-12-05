@@ -85,8 +85,13 @@ export default function SparkSummary({ navigation }) {
             <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Requests</Text>
           </View>
             <List.Section style={{marginTop: "6%"}}>
-              <List.Accordion  style={styles.accordian} title="Person 1">
-                <List.Subheader style={styles.accordionSubheading}>Accept</List.Subheader>
+              <List.Accordion style={styles.accordian} title="Person 1">
+                <TouchableOpacity style={{width: "100%", flexDirection:"row", justifyContent:"space-between"}}>
+                  <List.Subheader style={styles.accordionSubheading}>
+                    <Text>Egg</Text>
+                    <Text>Big</Text>
+                  </List.Subheader>
+              </TouchableOpacity>
                 <List.Subheader style={styles.accordionSubheading}>Reject</List.Subheader>
               </List.Accordion>
               <List.Accordion style={styles.accordian} title="Person 2">
@@ -201,25 +206,47 @@ export default function SparkSummary({ navigation }) {
           <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
 
           </Image>
-          <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
+          <Text style={[sparkViewStyles.originalBoxText]}>Project Lead (you)</Text>
         </View>
         <View style={[sparkViewStyles.boxOne]}>
           <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
 
           </Image>
-          <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
+          <Text style={[sparkViewStyles.originalBoxText]}>Accepted Friend</Text>
         </View>
         <View style={[sparkViewStyles.boxOne]}>
           <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
 
           </Image>
-          <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
+          <Text style={[sparkViewStyles.boxText]}>Volunteer 1</Text>
+          <TouchableOpacity style={[sparkViewStyles.acceptButton]}>
+          <Image source={require("../../../assets/check-mark-24.png")}>
+
+          </Image>
+          </TouchableOpacity>
+          <TouchableOpacity style={[sparkViewStyles.denyButton]}>
+          <Image source={require("../../../assets/x-mark-24.png")}>
+
+          </Image>
+          </TouchableOpacity>
         </View>
         <View style={[sparkViewStyles.boxOne]}>
           <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
 
           </Image>
-          <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
+          <Text style={[sparkViewStyles.boxText]}>Volunteer 2</Text>
+
+          <TouchableOpacity style={[sparkViewStyles.acceptButton]}>
+          <Image source={require("../../../assets/check-mark-24.png")}>
+
+          </Image>
+          </TouchableOpacity>
+          <TouchableOpacity style={[sparkViewStyles.denyButton]}>
+          <Image source={require("../../../assets/x-mark-24.png")}>
+
+          </Image>
+          </TouchableOpacity>
+
         </View>
       </View>
       </ScrollView>
@@ -575,7 +602,14 @@ const sparkViewStyles = StyleSheet.create({
       alignItems: "center",
   },
   boxText:{
-    width: "58%", 
+    width: "30%", 
+    marginTop: "11.5%",
+    marginBottom: "11.5%",
+    marginRight: "5%",
+    marginLeft: "13.5%"
+  },
+  originalBoxText:{
+    width: "58.5%", 
     marginTop: "11.5%",
     marginBottom: "11.5%",
     marginRight: "5%"
@@ -584,6 +618,28 @@ const sparkViewStyles = StyleSheet.create({
     width: "15%", 
     height: "51%",
     marginLeft: "3%"
+  },
+  accordionImage:{
+    width: "8%", 
+    height: "30%",
+    marginVertical: "0%"
+  },
+  accordionImageRight:{
+    width: "8%", 
+    height: "30%",
+    marginRight: "2%",
+    marginVertical: "0%"
+  },
+  acceptButton:{
+    width: "8%", 
+    height: "30%",
+    marginVertical: "0%"
+  },
+  denyButton:{
+    width: "8%", 
+    height: "30%",
+    marginRight: "2%",
+    marginVertical: "0%"
   },
   sideOfAccordionImage:{
     width: "15%", 
