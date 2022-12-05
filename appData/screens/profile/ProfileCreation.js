@@ -661,8 +661,8 @@ export default function ProfileScreen({route, navigation}) {
             <View style={{flexDirection:"row", height: 135, justifyContent: "space-evenly", alignItems: "center", top: 90}}>
               <TouchableOpacity style = {styleSheet.profilePictureContainer} onPress = {() => uploadPhoto()}>
                 <Image style={styleSheet.profilePicImage} source={image}></Image>
-            </TouchableOpacity>
-            <ProgressBar style={{width: 200, height: 20, borderRadius: 10}} progress={0.2}/>
+              </TouchableOpacity>
+            <ProgressBar color = {"rgb(0, 97, 117)"}style={{width: 200, height: 20, borderRadius: 10}} progress={((currentIndex + 1) / 5)}/>
           </View>
         </View>
         <Slider currentIndex = {currentIndex} screens = {myScreens} />
@@ -695,7 +695,7 @@ const styleSheet = StyleSheet.create({
     },
 
     profilePictureContainer: {
-        height: "100%",
+        height: "80%",
         width: "35%"
     },
 
