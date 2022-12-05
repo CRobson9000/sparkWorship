@@ -584,6 +584,10 @@ const sparkViewStyles = StyleSheet.create({
     width: "15%", 
     height: "51%",
     marginLeft: "3%"
+  },
+  sideOfAccordionImage:{
+    width: "15%", 
+    height: "24%",
+    marginLeft: "3%"
   }
-
 });
