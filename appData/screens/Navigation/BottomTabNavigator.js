@@ -1,7 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {UserDashboard, SparkView, Messaging, PSPersonal, SparkCreation} from '../constants/Index';
-import Routes from '../constants/Routes';
+import {UserDashboard, SparkView, Messaging, PSPersonal, SparkCreation} from './constants/Index';
+import Routes from './constants/Routes';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();

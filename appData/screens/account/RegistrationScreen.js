@@ -20,7 +20,7 @@ import { getDatabase, ref, set } from 'firebase/database';
 import { Dropdown } from 'react-native-element-dropdown';
 
 
-import Routes from '../constants/Routes'
+import Routes from '../navigation/constants/Routes'
 
 export default function RegistrationScreen({ navigation }) {
 

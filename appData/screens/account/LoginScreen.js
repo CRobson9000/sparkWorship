@@ -1,8 +1,7 @@
 import { Image, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import React from 'react';
 import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
-import Routes from '../constants/Routes.js';
-import UserDashboard from '../dashboard/UserDashboard';
+import Routes from '../navigation/constants/Routes.js';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 // import Routes.UserDashboard from '../dashboard/UserDashboard';

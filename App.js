@@ -2,21 +2,21 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //import statements for actual screens
-import {Navigator, LoginScreen, RegistrationScreen, SparkView, SparkSummary, ProfileCreation, PSPersonal, PSPublic, SparkCreation, UserDashboard, UserHub, Messaging} from './appData/screens/constants/Index.js';
+import {Navigator, LoginScreen, RegistrationScreen, SparkView, SparkSummary, ProfileCreation, PSPersonal, PSPublic, SparkCreation, UserDashboard, UserHub, Messaging} from './appData/screens/navigation/constants/Index.js';
 
 //import statements for testing screens
-import {Router, LocationData, ComponentTesting, FunctionalityTesting} from './appData/screens/constants/Index.js';
+import {Router, LocationData, ComponentTesting, FunctionalityTesting} from './appData/screens/navigation/constants/Index.js';
 
 //initialize the firebase application
 import './config/firebase.js';
 
-import Routes from './appData/screens/constants/Routes.js';
+import Routes from './appData/screens/navigation/constants/Routes.js';
 const Stack = createNativeStackNavigator();
 
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={Routes.sparkView}>
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={Routes.login}>
         {/* Actual Screens used in our app */}
         <Stack.Screen name={Routes.login} component={LoginScreen} />
         <Stack.Screen name={Routes.registration} component={RegistrationScreen} />

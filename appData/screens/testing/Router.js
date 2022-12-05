@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Text, TouchableHighlight, View} from 'react-native';
-import { mainStyles } from '../styles/dataBaseTestStyles';
+import { mainStyles } from '../../styles/dataBaseTestStyles';
 import { getDatabase, ref, onValue, set, get } from 'firebase/database';
-import '../../config/firebase.js';
+import '../../../config/firebase.js';
 
 export default function Router({ navigation }) {
     const [dataText, setDataText] = useState("Database Text");

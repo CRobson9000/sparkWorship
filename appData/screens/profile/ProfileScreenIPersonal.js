@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List } from 'react-native-paper';
-import Routes from '../constants/Routes';
+import Routes from '../navigation/constants/Routes';
 import { FirebaseButler } from '../../components/classes';
 import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storageRef } from '../../../config/additionalMethods';
@@ -181,6 +181,7 @@ export default function PSPersonal({ route, navigation }) {
     const [MyBio, setMyBio] = React.useState("Bio is not set");
 
     async function setBio() {
+      //bio = userObj.bio;
       let bio = await FirebaseButler.fbGet(`Users/${userId}/info/bio`);
       if (bio) {
         setMyBio(bio);

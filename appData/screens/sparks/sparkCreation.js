@@ -9,7 +9,7 @@ import { Input, Slider, DropDown } from '../../components/components';
 import { Observable, TDO } from '../../components/classes';
 import { getDatabase, ref, set, get, push } from 'firebase/database';
 
-import Routes from "../constants/Routes";
+import Routes from "../navigation/constants/Routes";
 
 export default function SparkCreation({ route, navigation }) {
     //set environment variables
