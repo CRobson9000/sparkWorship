@@ -12,6 +12,7 @@ let Routes={
     sparkCreation: 'Spark Creation',
     messaging: 'Messaging',
     sparkSummary: 'Spark Summary',
+    chatList: 'chatList',
 
     //testing routes
     // myTest: "My Test", 
