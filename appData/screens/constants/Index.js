@@ -16,3 +16,4 @@ export {default as Router} from '../account/LoginScreen';
 export {default as LocationData} from '../testing/LocationData.js';
 export {default as ComponentTesting} from '../testing/ComponentTesting.js';
 export {default as FunctionalityTesting} from '../testing/FunctionalityTesting';
+export {default as DimensionsTesting} from '../testing/DimensionsTesting.js';
