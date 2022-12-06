@@ -85,7 +85,10 @@ export default function UserDashboard({ route, navigation }) {
   async function getSparks() {
     //get ids of sparks that the current user is attending
     let startingSparksPath = `Users/${userId}/sparks/attending`;
-    let sparksOBJs = await FirebaseButler.fbGet(startingSparksPath); 
+    let attendingSparksOBJs = await FirebaseButler.fbGet(startingSparksPath) || {};
+    let playingSparkOBJs = await FirebaseButler.fbGet(`Users/${userId}/sparks/playing`) || {}; 
+
+    let sparksOBJs = {...attendingSparksOBJs, ...playingSparkOBJs};
 
     if (sparksOBJs) {
       let sparkIds = Object.values(sparksOBJs);

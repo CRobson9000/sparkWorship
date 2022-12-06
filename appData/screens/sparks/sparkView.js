@@ -13,6 +13,7 @@ import { getDatabase, ref, set, get } from 'firebase/database';
 export default function SparkView({ route, navigation }) {
     let sparkMilage = 5;
     let props = route.params;
+    let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3"
 
     const userLocation = {
         city: "Mechanicsburg",
@@ -39,7 +40,7 @@ export default function SparkView({ route, navigation }) {
         let locationString = `${locationObj.address} ${locationObj.city}, ${locationObj.state} ${locationObj.zip}`;
         
         return (
-            <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary)} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
+            <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary, {userId})} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
                 <View style={{width:"87%"}}>
                     <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name || "No Name"} </Text>
                     <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>

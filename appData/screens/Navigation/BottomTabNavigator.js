@@ -45,13 +45,12 @@ function BottomTabNavigator( { route, navigation } ) {
         }
       })}
     >
-     
-      <Tab.Screen name={Routes.userDashboard} component={UserDashboard} initialParams={route.params} />
-      <Tab.Screen name={Routes.sparkView} component={SparkView} initialParams={route.params} />
-      <Tab.Screen name={Routes.sparkCreation} component={SparkCreation} initialParams={route.params} />
-      <Tab.Screen name={Routes.userHub} component={UserHub} initialParams={route.params} />
+      <Tab.Screen name={Routes.userDashboard} component={UserDashboard} options={{ unmountOnBlur: true }} initialParams={route.params} />
+      <Tab.Screen name={Routes.sparkView} component={SparkView} options={{ unmountOnBlur: true }} initialParams={route.params} />
+      <Tab.Screen name={Routes.sparkCreation} component={SparkCreation} options={{ unmountOnBlur: true }} initialParams={route.params} />
+      <Tab.Screen name={Routes.userHub} component={UserHub} options={{ unmountOnBlur: true }} initialParams={route.params} />
       {/* <Tab.Screen name={Routes.messaging} component={Messaging} initialParams={route.params} /> */}
-      <Tab.Screen name={Routes.personalProfile} component={PSPersonal} initialParams={route.params} />
+      <Tab.Screen name={Routes.personalProfile} component={PSPersonal} options={{ unmountOnBlur: true }} initialParams={route.params} />
     </Tab.Navigator>
   );
 }

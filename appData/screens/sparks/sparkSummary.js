@@ -3,13 +3,22 @@ import { enableRipple } from '@syncfusion/ej2-base';
 //import DropDownPicker from 'react-native-dropdown-picker';
 import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import { List } from 'react-native-paper';
+import { List, IconButton } from 'react-native-paper';
 import { stylesSummary } from "../../styles/summary.js";
 import { Input, Slider, DropDown } from '../../components/components';
 import { Observable, TDO } from '../../components/classes';
 import { stylesPortrait } from "../../styles/portrait";
 
-export default function SparkSummary({ navigation }) {
+import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
+
+
+export default function SparkSummary({ route, navigation }) {
+
+  let props = route.params;
+  let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+  let currentSparkId = props?.currentSparkId || "-NHSPNV5tXpWmVtr6M3h";
+  let currentSparkIdAttend = "-NFQzJtPbk7zfcY0Iy2l";
+
   let inputs = {
     address: new Observable("", () => updatePayload(inputs.address.getVal(), "address")),
     city: new Observable("", () => updatePayload(inputs.city.getVal(), "city")),
@@ -41,12 +50,14 @@ export default function SparkSummary({ navigation }) {
   {
       update[updateName] = updateVal;
   };
+
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(null);
   const [items, setItems] = React.useState([
     {label: 'Apple', value: 'apple'},
     {label: 'Banana', value: 'banana'}
   ]);
+
   const LocationRoute = () => (
     <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
         <View style={[sparkViewStyles.sparkContainer]}>
@@ -228,61 +239,79 @@ export default function SparkSummary({ navigation }) {
   </ScrollView>
       );
 
-    const RequestsRoute = () => (
-      <ScrollView>
-      <View style={[sparkViewStyles.sparkVerticalTest]}>
-        <View style={{alignItems: "center", justifyContent: "center"}}>
-            <Text style={{fontSize:28, paddingTop:"4%", paddingBottom:"6%", fontWeight:'500'}}>Volunteers</Text>
+    const RequestsRoute = () => {
+      
+      const acceptRequest = (role, id) => {
+        //define "final" for the role selected to be the id of the user selected
+        const db = getDatabase();
+        const acceptRef = ref(db, `Sparks/${currentSparkId}/roles/${role}/final`);
+        set(acceptRef, id);
+    
+        //send notification to the user
+    
+        //log the action
+    
+        //add spark to user's section as a spark they are playing for
+        const addSparkRef = ref(db, `Users/${id}/sparks/playing`);
+        push(addSparkRef, currentSparkId);
+      }
+    
+      return (
+        <ScrollView>
+        <View style={[sparkViewStyles.sparkVerticalTest]}>
+          <View style={{alignItems: "center", justifyContent: "center"}}>
+              <Text style={{fontSize:28, paddingTop:"4%", paddingBottom:"6%", fontWeight:'500'}}>Volunteers</Text>
+          </View>
+          <View style={[sparkViewStyles.boxOne]}>
+            <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
+
+            </Image>
+            <Text style={[sparkViewStyles.originalBoxText]}>Project Lead (you)</Text>
+          </View>
+          <View style={[sparkViewStyles.boxOne]}>
+            <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
+
+            </Image>
+            <Text style={[sparkViewStyles.originalBoxText]}>Accepted Friend</Text>
+          </View>
+          <View style={[sparkViewStyles.boxOne]}>
+            <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
+
+            </Image>
+            <Text style={[sparkViewStyles.boxText]}> Piano: Colin Robson </Text>
+            <TouchableOpacity onPress = {() => acceptRequest("piano", "kicswUalNUNMF4qYmT1OzY7IymG3")} style={[sparkViewStyles.acceptButton]}>
+            <Image source={require("../../../assets/check-mark-24.png")}>
+
+            </Image>
+            </TouchableOpacity>
+            <TouchableOpacity style={[sparkViewStyles.denyButton]}>
+            <Image source={require("../../../assets/x-mark-24.png")}>
+
+            </Image>
+            </TouchableOpacity>
+          </View>
+          <View style={[sparkViewStyles.boxOne]}>
+            <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
+
+            </Image>
+            <Text style={[sparkViewStyles.boxText]}>Volunteer 2</Text>
+
+            <TouchableOpacity style={[sparkViewStyles.acceptButton]}>
+            <Image source={require("../../../assets/check-mark-24.png")}>
+
+            </Image>
+            </TouchableOpacity>
+            <TouchableOpacity style={[sparkViewStyles.denyButton]}>
+            <Image source={require("../../../assets/x-mark-24.png")}>
+
+            </Image>
+            </TouchableOpacity>
+
+          </View>
         </View>
-        <View style={[sparkViewStyles.boxOne]}>
-          <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-          </Image>
-          <Text style={[sparkViewStyles.originalBoxText]}>Project Lead (you)</Text>
-        </View>
-        <View style={[sparkViewStyles.boxOne]}>
-          <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-          </Image>
-          <Text style={[sparkViewStyles.originalBoxText]}>Accepted Friend</Text>
-        </View>
-        <View style={[sparkViewStyles.boxOne]}>
-          <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-          </Image>
-          <Text style={[sparkViewStyles.boxText]}>Volunteer 1</Text>
-          <TouchableOpacity style={[sparkViewStyles.acceptButton]}>
-          <Image source={require("../../../assets/check-mark-24.png")}>
-
-          </Image>
-          </TouchableOpacity>
-          <TouchableOpacity style={[sparkViewStyles.denyButton]}>
-          <Image source={require("../../../assets/x-mark-24.png")}>
-
-          </Image>
-          </TouchableOpacity>
-        </View>
-        <View style={[sparkViewStyles.boxOne]}>
-          <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-          </Image>
-          <Text style={[sparkViewStyles.boxText]}>Volunteer 2</Text>
-
-          <TouchableOpacity style={[sparkViewStyles.acceptButton]}>
-          <Image source={require("../../../assets/check-mark-24.png")}>
-
-          </Image>
-          </TouchableOpacity>
-          <TouchableOpacity style={[sparkViewStyles.denyButton]}>
-          <Image source={require("../../../assets/x-mark-24.png")}>
-
-          </Image>
-          </TouchableOpacity>
-
-        </View>
-      </View>
-      </ScrollView>
-    );
+        </ScrollView>
+      );
+    }
     // const SixthRoute = () => (
     //    <DropDownPicker
     //      placeholderStyle={{
@@ -340,11 +369,19 @@ export default function SparkSummary({ navigation }) {
       />
     );
 
+    const attendSpark = () => {
+      //add spark to user's section as a spark they are attending
+      const db = getDatabase();
+      const attendSparkRef = ref(db, `Users/${userId}/sparks/attending`)
+      push(attendSparkRef, currentSparkIdAttend);
+    }
+
   return(
     <View style={styles.MainContainer}>
     <View style={styles.topBorder}>
       <View style={[styles.row2, {justifyContent: 'center', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
         <Text style={styles.titleText}>Spark Name</Text>
+        <IconButton onPress = {() => attendSpark()}style = {{position: "absolute", left: "85%"}}icon = "checkbox-marked-circle-plus-outline"/>
       </View>
       <View style={styles.row}>
         <Image style={styles.profilePicture} source={require('../../../assets/blankprofilepic.png')}></Image>
