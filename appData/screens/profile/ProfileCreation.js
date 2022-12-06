@@ -703,7 +703,7 @@ export default function ProfileScreen({route, navigation}) {
               <TouchableOpacity style = {styleSheet.profilePictureContainer} onPress = {() => uploadPhoto()}>
                 <Image style={styleSheet.profilePicImage} source={image}></Image>
               </TouchableOpacity>
-              <ProgressBar style={{width: 170, height: 20, borderRadius: 10, top: "80%", left: "30%"}} progress={(currentIndex + 1) / 5}/>
+              <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: 170, height: 20, borderRadius: 10, top: "80%", left: "30%"}} progress={(currentIndex + 1) / 5}/>
             </View>
           </View>
           <Slider currentIndex = {currentIndex} screens = {myScreens} />

@@ -4,14 +4,18 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List } from 'react-native-paper';
 import Routes from '../Navigation/constants/Routes';
 import { FirebaseButler } from '../../components/classes';
+import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storageRef } from '../../../config/additionalMethods';
 
-export default function PSPersonal() {
+export default function PSPersonal({ route, navigation }) {
 
-  let userId = "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+    let props = route.params;
+
+    let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
 
     const FirstRoute = () => (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <Text style={{borderColor: "#F2905B", borderWidth: 10, width: '85%', alignSelf: "center", height: 300, top: 50, borderRadius: 10}}>{MyBio}</Text>
+      <Text style={{borderColor: "#F2905B", borderWidth: 10, width: '85%', alignSelf: "center", height: 300, top: 50, borderRadius: 10, padding: 20, flexWrap: "wrap"}}>{MyBio}</Text>
     </View>
     );
 
@@ -67,22 +71,24 @@ export default function PSPersonal() {
                 data = {myInstruments}
                 style = {{height: "100%", width: "100%"}}
                 renderItem = {instrumentRender}
-                ListFooterComponent={
-                  <>
-                  <Text style={{fontSize: 14, left: 15}}>Skilled Genres</Text>
-                  <View style={[styles.row2, {top: 20, justifyContent: 'space-evenly'}]}>
-                    <View style={styles.genres}>
-                      <Text style={{fontSize: 16, color: 'white'}}>Rock</Text>
+                ListFooterComponent= {() => {
+                  return (
+                    <View style = {{padding: 20}}>
+                      <Text style={{fontSize: 14, left: 15}}>Skilled Genres</Text>
+                      <View style={[styles.row2, {top: 20, justifyContent: 'space-evenly'}]}>
+                        <View style={styles.genres}>
+                          <Text style={{fontSize: 16, color: 'white'}}>Rock</Text>
+                        </View>
+                        <View style={styles.genres}>
+                          <Text style={{fontSize: 16, color: 'white'}}>Country</Text>
+                        </View>
+                        <View style={styles.genres}>
+                          <Text style={{fontSize: 16, color: 'white'}}>Jazz</Text>
+                        </View>
+                      </View>
                     </View>
-                    <View style={styles.genres}>
-                      <Text style={{fontSize: 16, color: 'white'}}>Country</Text>
-                    </View>
-                    <View style={styles.genres}>
-                      <Text style={{fontSize: 16, color: 'white'}}>Jazz</Text>
-                    </View>
-                  </View>
-                  </>
-                } 
+                  )
+                }}
               />
               {/* <List.Accordion style={styles.accordian} title="Guitar">
                 <List.Subheader style={{left: 15}}>General Experience</List.Subheader>
@@ -145,28 +151,34 @@ export default function PSPersonal() {
       />
     );
 
-    const [MyName, setMyName] = React.useState("FirstName LastName");
+    const [MyName, setMyName] = React.useState("Name not set");
 
     async function setName() {
-      let name = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/name");
-      setMyName(name);
+      let name = await FirebaseButler.fbGet(`Users/${userId}/info/name`);
+      if (name) {
+        setMyName(name);
+      }
     }
 
-    const [MyRole, setMyRole] = React.useState("Instrumentalist");
+    const [MyRole, setMyRole] = React.useState("Role is not set");
 
     async function setRole() {
-      let role = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/role");
-      setMyRole(role);
+      let role = await FirebaseButler.fbGet(`Users/${userId}/role`);
+      if (role) {
+        setMyRole(role);
+      }
     }
 
-    const [MyLocation, setMyLocation] = React.useState("Location");
+    const [MyLocation, setMyLocation] = React.useState("Location is not set");
 
     async function setLocation() {
-      let location = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/location");
-      setMyLocation(location);
+      let location = await FirebaseButler.fbGet(`Users/${userId}/info/location`);
+      if (location) {
+        setMyLocation(location);
+      }
     }
 
-    const [MyBio, setMyBio] = React.useState("bio");
+    const [MyBio, setMyBio] = React.useState("Bio is not set");
 
     async function setBio() {
       //bio = userObj.bio;
@@ -176,33 +188,59 @@ export default function PSPersonal() {
       }
     }
 
-    const [MyChurchName, setMyChurchName] = React.useState("Church Name");
+    const [MyChurchName, setMyChurchName] = React.useState("Church Name is not set");
 
     async function setChurchName() {
-      let churchName = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/churchName");
-      setMyChurchName(churchName);
+      let churchName = await FirebaseButler.fbGet(`Users/${userId}/info/churchName`);
+      if (churchName) {
+        setMyChurchName(churchName);
+      }
     }
 
-    const [MyDenomination, setMyDenomination] = React.useState("Denomination");
+    const [MyDenomination, setMyDenomination] = React.useState("Denomination is not set");
 
     async function setDenomination() {
-      let denomination = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/denomination");
-      setMyDenomination(denomination);
+      let denomination = await FirebaseButler.fbGet(`Users/${userId}/info/denomination`);
+      if (denomination) {
+        setMyDenomination(denomination);
+      }
     }
 
-    const [MyChurchLocation, setMyChurchLocation] = React.useState("Church Location");
+    const [MyChurchLocation, setMyChurchLocation] = React.useState("Church Location is not set");
 
     async function setChurchLocation() {
-      let churchLocation = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/churchLocation");
-      setMyChurchLocation(churchLocation);
+      let churchLocation = await FirebaseButler.fbGet(`Users/${userId}/info/churchStreetAddress`);
+      if (churchLocation) {
+        setMyChurchLocation(churchLocation);
+      }
     }
 
-    const [myInstruments, setMyInstruments] = React.useState("My Instruments");
+    const [myInstruments, setMyInstruments] = React.useState(null);
 
     async function setInstruments() {
-      let instruments = await FirebaseButler.fbGet("Users/pgFfrUx2ryd7h7iE00fD09RAJyG3/info/instruments");
-      setMyInstruments(() => [...instruments]);
-      //console.log(instruments);
+      let instruments = await FirebaseButler.fbGet(`Users/${userId}/info/instruments`);
+      if (instruments) {
+        setMyInstruments(() => [...instruments]);
+      }
+    }
+
+    const [image, setImage] = React.useState(null);
+
+    async function getPhoto() {
+      //set the url of a default photo, which will be shown in there is no image found
+      let defaultPic = require("../../../assets/ProfileNavIcon.png");
+      
+      //get the photo from firebase storage
+      const storage = getStorage();
+      getDownloadURL(storageRef(storage, `userData/${userId}/userCoverPhoto`))
+      .then((url) => {
+        //display the image that was found using its url
+        setImage({uri: url});
+      })
+      .catch((error) => {
+        // could not find a spark cover image so display the default instead
+        setImage(defaultPic);
+      })
     }
 
     // -----------------------
@@ -234,6 +272,7 @@ export default function PSPersonal() {
       setDenomination();
       setChurchLocation();
       setInstruments();
+      getPhoto();
     }, [])
 
       return (
@@ -242,20 +281,20 @@ export default function PSPersonal() {
               <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
                 <TouchableOpacity onPress = {() => logFriends()}><Image style={{height: 40, width: 40}} source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity>
                 <Text style={styles.titleText}>My Profile</Text>
-                <TouchableOpacity><Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}></Image></TouchableOpacity>
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.profileCreation, props)}><Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}></Image></TouchableOpacity>
               </View>
               <View style={styles.row} >
-                <Image style={styles.profilePicture} source={require('../../../assets/blankprofilepic.png')}></Image>
+                <Image style={styles.profilePicture} source={image}></Image>
                 <View style={styles.column}>
-                  <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10}}>{MyName}</Text>
-                  <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13}}>Instrumentalist</Text>
+                  <Text style={{fontSize: 20, fontWeight: '500', marginBottom: 10}}>{MyName}</Text>
+                  <Text style={{fontSize: 15, fontWeight: '400', marginBottom: 13}}>Instrumentalist</Text>
                   <View style={styles.row2}>
                     <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
                     <Text>{MyLocation}</Text>
                   </View>
                 </View>
               </View>
-            <View style={[styles.row, {marginLeft: 20, marginRight: 20, top: 135}]}>
+            <View style={[styles.row, {marginLeft: 20, marginRight: 20, top: "30%"}]}>
               <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
               <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
               <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
@@ -266,9 +305,6 @@ export default function PSPersonal() {
             <View style={styles.content}>
               <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
             </View>
-            <View style={styles.navigation}>
-              <Image style={{width: '100%', height: '100%'}} source={require('../../../assets/navigation.png')}></Image>
-            </View>
         </View>
       );
 }
@@ -277,7 +313,7 @@ const styles = StyleSheet.create({
     MainContainer: {
       top: "-5%",
       backgroundColor: "white",
-      height: "100%",
+      height: "105%",
     },
 
     topBorder:{
@@ -287,7 +323,7 @@ const styles = StyleSheet.create({
     },
 
     content: {
-      height: '60%'
+      height: '58%'
     },
 
     titleText: {
@@ -313,13 +349,14 @@ const styles = StyleSheet.create({
     },
 
     profilePicture: {
-      height: 125,
-      width: 125,
+      height: "120%",
+      width: "36%",
+      borderRadius: 20
     },
 
     accordian: {
       backgroundColor: '#F2905B',
-      height: 50,
+      padding: 10,
       marginLeft: '5%',
       marginRight: '5%', 
       marginBottom: '4%',
