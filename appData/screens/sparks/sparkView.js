@@ -67,9 +67,6 @@ export default function SparkView({ route, navigation }) {
     }
     
 
-    let filteredSparks = Object.values(sparks).filter((spark) => filterMyRole(spark, "piano"));
-    console.log(filteredSparks);
-
     function filterByDistance(spark, distance) {
         //get location data from user (from userId)
 
@@ -112,6 +109,9 @@ export default function SparkView({ route, navigation }) {
     //Location code
     useEffect(() => {
         getSparks();
+
+        let filteredSparks = Object.values(sparks).filter((spark) => filterMyRole(spark, "piano"));
+        console.log(filteredSparks);
     }, [])
     
     return(
