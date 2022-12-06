@@ -188,17 +188,23 @@ export default function SparkSummary({ route, navigation }) {
         </View>
           
           <View style={[sparkViewStyles.timeContainer]}>
-              <Input placeHolderText={"MM"} start = {inputs.sparkMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMonth.setVal(val)}/>
+              {/* <Input placeHolderText={"MM"} start = {inputs.sparkMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMonth.setVal(val)}/> */}
+              <Text style = {{fontSize: 30}}>05</Text>
               <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-              <Input placeHolderText={"DD"} start = {inputs.sparkDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkDay.setVal(val)}/>
+              <Text style = {{fontSize: 30}}>10</Text>
+              {/* <Input placeHolderText={"DD"} start = {inputs.sparkDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkDay.setVal(val)}/> */}
               <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-              <Input placeHolderText={"YY"} start = {inputs.sparkYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkYear.setVal(val)}/>
+              <Text style = {{fontSize: 30}}>22</Text>
+              {/* <Input placeHolderText={"YY"} start = {inputs.sparkYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkYear.setVal(val)}/> */}
               <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
-              <Input placeHolderText={"12"} start = {inputs.sparkHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkHours.setVal(val)}/>
+              <Text style = {{fontSize: 30}}>5</Text>
+              {/* <Input placeHolderText={"12"} start = {inputs.sparkHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkHours.setVal(val)}/> */}
               <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
-              <Input placeHolderText={"30"} start = {inputs.sparkMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMinutes.setVal(val)}/>
+              <Text style = {{fontSize: 30}}>30</Text>
+              {/* <Input placeHolderText={"30"} start = {inputs.sparkMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMinutes.setVal(val)}/> */}
               <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
-              <Input placeHolderText={"PM"} start = {inputs.sparkAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkAmPM.setVal(val)}/>
+              <Text style = {{fontSize: 30}}>PM</Text>
+              {/* <Input placeHolderText={"PM"} start = {inputs.sparkAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkAmPM.setVal(val)}/> */}
           </View>
       </View>
       <View style={[sparkViewStyles.centerContents, sparkViewStyles.middleMan]}>
@@ -206,17 +212,23 @@ export default function SparkSummary({ route, navigation }) {
             <Text style={[sparkViewStyles.inbetweenText]}>First Rehearsal On</Text>
         </View>
           <View style={[sparkViewStyles.timeContainer]}>
-              <Input placeHolderText={"MM"} start = {inputs.rehearsalMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMonth.setVal(val)}/>
+              {/* <Input placeHolderText={"MM"} start = {inputs.rehearsalMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMonth.setVal(val)}/> */}
+              <Text style = {{fontSize: 30}}>05</Text>
               <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-              <Input placeHolderText={"DD"} start = {inputs.rehearsalDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalDay.setVal(val)}/>
+              {/* <Input placeHolderText={"DD"} start = {inputs.rehearsalDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalDay.setVal(val)}/> */}
+              <Text style = {{fontSize: 30}}>05</Text>
               <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-              <Input placeHolderText={"YY"} start = {inputs.rehearsalYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalYear.setVal(val)}/>
+              {/* <Input placeHolderText={"YY"} start = {inputs.rehearsalYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalYear.setVal(val)}/> */}
+              <Text style = {{fontSize: 30}}>22</Text>
               <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
-              <Input placeHolderText={"12"} start = {inputs.rehearsalHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalHours.setVal(val)}/>
+              {/* <Input placeHolderText={"12"} start = {inputs.rehearsalHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalHours.setVal(val)}/> */}
+              <Text style = {{fontSize: 30}}>06</Text>
               <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
-              <Input placeHolderText={"30"} start = {inputs.rehearsalMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMinutes.setVal(val)}/>
+              {/* <Input placeHolderText={"30"} start = {inputs.rehearsalMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMinutes.setVal(val)}/> */}
+              <Text style = {{fontSize: 30}}>45</Text>
               <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
-              <Input placeHolderText={"PM"} start = {inputs.rehearsalAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalAmPM.setVal(val)}/>
+              <Text style = {{fontSize: 30}}>PM</Text>
+              {/* <Input placeHolderText={"PM"} start = {inputs.rehearsalAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalAmPM.setVal(val)}/> */}
           </View>
       </View>
       <View style={[sparkViewStyles.centerContents]}>

@@ -249,7 +249,7 @@ export default function PSPersonal({ route, navigation }) {
 
     async function logFriends() {
       //get current friends list, which is a list of userIds
-      let friendsListObj = await FirebaseButler.fbGet(`Users/${userId}/friends`);
+      let friendsListObj = await FirebaseButler.fbGet(`Users/${userId}/friends`) || {};
       let friendsList = Object.values(friendsListObj);
 
       //populate full friends list
