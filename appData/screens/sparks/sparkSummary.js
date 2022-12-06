@@ -391,7 +391,7 @@ export default function SparkSummary({ route, navigation }) {
     const [MySparkName, setMySparkName] = React.useState("Spark Name");
 
     async function setSparkName() {
-      let sparkName = await FirebaseButler.fbGet("Sparks/-NFQyokFAqLdeFJLDkSv/info/name");
+      let sparkName = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/info/name`);
       setMySparkName(sparkName);
     }
 
@@ -405,21 +405,21 @@ export default function SparkSummary({ route, navigation }) {
     const [MyAddress, setMyAddress] = React.useState("Location");
 
     async function setAddress() {
-      let address = await FirebaseButler.fbGet("Sparks/-NFQyokFAqLdeFJLDkSv/info/location/address");
+      let address = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/info/location/address`);
       setMyAddress(address);
     }
 
     const [MyCity, setMyCity] = React.useState("");
 
     async function setCity() {
-      let city = await FirebaseButler.fbGet("Sparks/-NFQyokFAqLdeFJLDkSv/info/location/city");
+      let city = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/info/location/city`);
       setMyCity(city);
     }
 
     const [MyState, setMyState] = React.useState("");
 
     async function setState() {
-      let state = await FirebaseButler.fbGet("Sparks/-NFQyokFAqLdeFJLDkSv/info/location/state");
+      let state = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/info/location/state`);
       setMyState(state);
     }
 

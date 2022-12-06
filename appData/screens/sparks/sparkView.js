@@ -24,7 +24,6 @@ export default function SparkView({ route, navigation }) {
 
     //spark code
     const renderSpark = (object) => {
-        //console.log("Object", object.item);
         let item = object.item;
 
         //Date Time string formatting
@@ -57,12 +56,12 @@ export default function SparkView({ route, navigation }) {
 
     function filterMyRole(spark, role) {
         //return true or false
-        if (spark?.roles[role] && spark?.roles[role]?.set == true) {
-        return true;
-       }
-       else {
-        return false;
-       }
+        if (spark["roles"] && spark["roles"][role]?.set == true) {
+            return true;
+        }
+        else {
+            return false;
+        }
         // if spark has role, return true, if not return false
     }
     
@@ -100,18 +99,22 @@ export default function SparkView({ route, navigation }) {
 
     //Run filter:  let filteredSparks = sparks.filter((spark) => filterMyRole(spark, <insertRole>));
 
+    printFilterSparks();
+
     async function getSparks() {
         let fbSparks = await FirebaseButler.fbGet(`Sparks`);
         delete fbSparks.id;
         setSparks(fbSparks);
     }
 
+    function printFilterSparks() {
+        let filteredSparks = Object.values(sparks).filter((spark) => filterMyRole(spark, "Piano"));
+        console.log("Filtered Sparks", filteredSparks);
+    }
+
     //Location code
     useEffect(() => {
         getSparks();
-
-        let filteredSparks = Object.values(sparks).filter((spark) => filterMyRole(spark, "piano"));
-        console.log(filteredSparks);
     }, [])
     
     return(

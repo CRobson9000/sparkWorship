@@ -29,7 +29,7 @@ function App() {
         <Stack.Screen name={Routes.userHub} component={UserHub} />
         <Stack.Screen name={Routes.messaging} component={Messaging} />
         <Stack.Screen name={Routes.chatList} component={ChatList}/>
-        <Stack.Screen name={Routes.sparkSummary} component={SparkSummary} />        
+        <Stack.Screen name={Routes.sparkSummary} options={{ unmountOnBlur: true }} component={SparkSummary} />        
         <Stack.Screen name="Navigator" component={Navigator} options={{headerShown: false}} />
 
         {/* Screens for Testing Purposes */}
