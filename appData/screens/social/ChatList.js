@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image, FlatList } from "react-native";
+import Routes from '../Navigation/constants/Routes.js'
 
-export default function ChatList(){
+export default function ChatList({ route, navigation }){
     return(
         <View style={styles.MainContainer}>
             <View style={styles.topBorder}>
@@ -17,45 +18,45 @@ export default function ChatList(){
                     </View>
                 </View>
 
-                <View style={styles.row}>
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.messaging)} style={styles.row}>
                     <Image style={styles.profilePicture} source={require('../../../assets/headshot.jpg')}/>
                     <View style={styles.column}>
                         <Text style={styles.name}>John Smith</Text>
                         <Text style={styles.message}>Hey! Are you going to the spark in Nashville tonight?</Text>
                     </View>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.row}>
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.messaging)} style={styles.row}>
                     <Image style={styles.profilePicture} source={require('../../../assets/headshot1.jpg')}/>
                     <View style={styles.column}>
                         <Text style={styles.name}>William Jones</Text>
                         <Text style={styles.message}>Just got your message, I will look into it.</Text>
                     </View>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.row}>
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.messaging)} style={styles.row}>
                     <Image style={styles.profilePicture} source={require('../../../assets/headshot2.jpg')}/>
                     <View style={styles.column}>
                         <Text style={styles.name}>Aaron Moore</Text>
                         <Text style={styles.message}>Hello, I saw you play the guitar. I would love to have you be a part of my spark!</Text>
                     </View>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.row}>
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.messaging)} style={styles.row}>
                     <Image style={styles.profilePicture} source={require('../../../assets/headshot3.jpg')}/>
                     <View style={styles.column}>
                         <Text style={styles.name}>Chris Samson</Text>
                         <Text style={styles.message}>Sorry for the late response!</Text>
                     </View>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.row}>
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.messaging)} style={styles.row}>
                     <Image style={styles.profilePicture} source={require('../../../assets/headshot5.jpg')}/>
                     <View style={styles.column}>
                         <Text style={styles.name}>Austin Rock</Text>
                         <Text style={styles.message}>That spark last night was awesome, best one yet!</Text>
                     </View>
-                </View>
+                </TouchableOpacity>
 
             </View>
 
