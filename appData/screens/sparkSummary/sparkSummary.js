@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List } from 'react-native-paper';
 import { stylesSummary } from "../../styles/summary.js";
 import { Input, Slider, DropDown } from '../../components/components';
-import { Observable, TDO } from '../../components/classes';
+import { Observable, TDO, FirebaseButler } from '../../components/classes';
 import { stylesPortrait } from "../../styles/portrait";
 
 export default function SparkSummary({ navigation }) {
@@ -247,11 +247,54 @@ export default function SparkSummary({ navigation }) {
       />
     );
 
+    const [MySparkName, setMySparkName] = React.useState("Spark Name");
+
+    async function setSparkName() {
+      let sparkName = await FirebaseButler.fbGet("Sparks/-NFQyokFAqLdeFJLDkSv/info/name");
+      setMySparkName(sparkName);
+    }
+
+    // const [MyDate, setMyDate] = React.useState("Date and Time");
+    
+    // async function setDate() {
+    //   let date = await FirebaseButler.fbGet("Sparks/-NFQyokFAqLdeFJLDkSv/info/times/spark/TDO");
+    //   setMyDate(date);
+    // }
+
+    const [MyAddress, setMyAddress] = React.useState("Location");
+
+    async function setAddress() {
+      let address = await FirebaseButler.fbGet("Sparks/-NFQyokFAqLdeFJLDkSv/info/location/address");
+      setMyAddress(address);
+    }
+
+    const [MyCity, setMyCity] = React.useState("");
+
+    async function setCity() {
+      let city = await FirebaseButler.fbGet("Sparks/-NFQyokFAqLdeFJLDkSv/info/location/city");
+      setMyCity(city);
+    }
+
+    const [MyState, setMyState] = React.useState("");
+
+    async function setState() {
+      let state = await FirebaseButler.fbGet("Sparks/-NFQyokFAqLdeFJLDkSv/info/location/state");
+      setMyState(state);
+    }
+
+    useEffect(() => {
+      setSparkName();
+      // setDate();
+      setAddress();
+      setCity();
+      setState();
+    }, [])
+
   return(
     <View style={styles.MainContainer}>
     <View style={styles.topBorder}>
       <View style={[styles.row2, {justifyContent: 'center', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
-        <Text style={styles.titleText}>Spark Name</Text>
+        <Text style={styles.titleText}>{MySparkName}</Text>
       </View>
       <View style={styles.row}>
         <Image style={styles.profilePicture} source={require('../../../assets/blankprofilepic.png')}></Image>
@@ -260,7 +303,7 @@ export default function SparkSummary({ navigation }) {
           <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13}}>Date and Time</Text>
           <View style={styles.row2}>
             <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
-            <Text>Location</Text>
+            <Text>{MyAddress} {MyCity}, {MyState}</Text>
           </View>
         </View>
       </View>

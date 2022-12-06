@@ -1,10 +1,10 @@
 import {StyleSheet, FlatList, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import React, { useEffect } from 'react';
-
 import { Dimensions } from 'react-native';
 import { stylesPortrait } from "../../styles/portrait";
 import colors from '../../../config/colors';
 import Routes from '../constants/Routes';
+//import { getDatabase, ref, set, get } from 'firebase/database';
 
 import { FirebaseButler, TDO } from "../../components/classes";
 
@@ -57,9 +57,18 @@ export default function SparkView({ route, navigation }) {
 
     function filterMyRole(spark, role) {
         //return true or false
-
+        if (spark?.roles[role] && spark?.roles[role]?.set == true) {
+        return true;
+       }
+       else {
+        return false;
+       }
         // if spark has role, return true, if not return false
     }
+    
+
+    let filteredSparks = Object.values(sparks).filter((spark) => filterMyRole(spark, "piano"));
+    console.log(filteredSparks);
 
     function filterByDistance(spark, distance) {
         //get location data from user (from userId)
@@ -67,6 +76,9 @@ export default function SparkView({ route, navigation }) {
         //build url with location data from spark (up top)
 
         //use url and these distances to get the distance between them (use code below)
+
+        // const db = getDatabase();
+        // ref(db, `Users/${userId}/info/instruments`);
 
         // var axios = require('axios');
         // var config = {
@@ -89,7 +101,7 @@ export default function SparkView({ route, navigation }) {
         // });
     }
 
-    // Run filter:  let filteredSparks = sparks.filter((spark) => filterMyRole(spark, <insertRole>));
+    //Run filter:  let filteredSparks = sparks.filter((spark) => filterMyRole(spark, <insertRole>));
 
     async function getSparks() {
         let fbSparks = await FirebaseButler.fbGet(`Sparks`);
@@ -220,6 +232,8 @@ export default function SparkView({ route, navigation }) {
                 <Image style={{width: "7.5%", height: "45%", marginRight: "6.5%"}} source={require("../../../assets/Profile.png")}> 
                 </Image>
             </View> */}
+
+            
         </View>
     );
 }
