@@ -104,9 +104,9 @@ export default function SparkView({ route, navigation }) {
     
     return(
         <View style={[stylesPortrait.container, {alignItems: "center"}]}>
-            <View style={[sparkViewStyles.sparkViewTopBorder]}>
+            {/* <View style={[sparkViewStyles.sparkViewTopBorder]}>
                 <Text style={{color: "white", textAlign:"center", fontSize:29, paddingTop: 28}}>Spark Worship</Text>
-            </View>
+            </View> */}
             <View style={[sparkViewStyles.sparkContainer]}>
                 <FlatList 
                     data = {Object.values(sparks)}
@@ -239,7 +239,7 @@ const sparkViewStyles = StyleSheet.create({
     sparkContainer:
     {
         width:"85%",
-        height:"90%",
+        height:"100%",
         backgroundColor: "rgba(255,255,255,1)",
         flexDirection: "column", 
         justifyContent: "space-between", 

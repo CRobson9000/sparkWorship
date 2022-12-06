@@ -259,7 +259,9 @@ export default function UserDashboard({ route, navigation }) {
 
 const dashboardStyles = StyleSheet.create({
   container: {
-    flex: 1,
+    top: "-5%",
+    width: "100%",
+    height: "105%",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white"

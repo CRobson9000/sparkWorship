@@ -736,8 +736,10 @@ const styleSheet = StyleSheet.create({
     },
 
     profilePictureContainer: {
-        height: "80%",
-        width: "35%"
+        height: "70%",
+        width: "35%",
+        top: "20%",
+        left: "20%"
     },
 
     profilePicImage: {

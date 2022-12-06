@@ -311,6 +311,7 @@ export default function PSPersonal({ route, navigation }) {
 
 const styles = StyleSheet.create({
     MainContainer: {
+      top: "-5%",
       backgroundColor: "white",
       height: "100%",
     },
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
     },
 
     content: {
-      height: '58%'
+      height: '60%'
     },
 
     titleText: {

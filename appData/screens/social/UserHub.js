@@ -29,7 +29,7 @@ export default function UserHub({ route, navigation }) {
       {/* <View style={stylesPortrait.container}> */}
         {/* Container for everything below the logo */}
         {/* <View style={stylesPortrait.contentDashContainer}> */}
-          <View style = {{width: "100%", height: "93%"}}>
+          <View style = {{top: "-5%", width: "100%", height: "93%"}}>
             <ScrollView style={stylesPortrait.userHubScroll}>
 
               <TouchableOpacity activeOpacity={1} style={[stylesPortrait.dashboardButton]}>
