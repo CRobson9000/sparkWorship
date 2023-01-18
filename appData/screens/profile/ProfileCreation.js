@@ -5,11 +5,9 @@ import { Observable, FirebaseButler } from '../../components/classes';
 import { getDatabase, ref, set, get } from 'firebase/database';
 import { Dropdown } from 'react-native-element-dropdown';
 import { Dialog, Portal, Provider, Checkbox, List, IconButton, Menu, ProgressBar } from 'react-native-paper';
-import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
-import * as ImagePicker from 'expo-image-picker';
 // had to make a weird file to "redefine" ref since it already exists from firebase/database
-import { storageRef } from '../../../config/additionalMethods';
-import Routes from '../Navigation/constants/Routes.js'
+import Routes from '../Navigation/constants/Routes.js';
+import ProfileImage from '../../components/profileImage.js';
 
 export default function ProfileScreen({route, navigation}) {
   //set environment variables
@@ -42,25 +40,24 @@ export default function ProfileScreen({route, navigation}) {
    username: new Observable("", () => updatePayload(inputs.username.getVal(), "username")),
    email: new Observable("", () => updatePayload(inputs.email.getVal(), "email")),
    birthday: new Observable("", () => updatePayload(inputs.birthday.getVal(), "birthday")),
-   streetAddress: new Observable("", () => updatePayload(inputs.streetAddress.getVal(), "street")),
+   streetAddress: new Observable("", () => updatePayload(inputs.streetAddress.getVal(), "streetAddress")),
    city: new Observable("", () => updatePayload(inputs.city.getVal(), "city")),
-   state: "",
    zipCode: new Observable("", () => updatePayload(inputs.zipCode.getVal(), "zipCode")),
-
+   state: null,
+   gender: null,
    //second variable screens
-   password: new Observable("", () => updatePayload(inputs.password.getVal(), "password")),
    phoneNumber: new Observable("", () => updatePayload(inputs.phoneNumber.getVal(), "phoneNumber")),
 
    //third screen variables
    churchName: new Observable("", () => updatePayload(inputs.churchName.getVal(), "churchName")),
    denomination: new Observable("", () => updatePayload(inputs.denomination.getVal(), "denomination")),
    churchStreetAddress: new Observable("", () => updatePayload(inputs.churchStreetAddress.getVal(), "churchStreetAddress")),
+   churchState: null,
    churchCity: new Observable("", () => updatePayload(inputs.churchCity.getVal(), "churchCity")),
    churchZipCode: new Observable("", () => updatePayload(inputs.churchZipCode.getVal(), "churchZipCode")),
+
+   instrumentsArray: []
   } 
-  //dropDown variables
-  const [inputState, setInputState] = React.useState(inputs.state || "Select a state!");
-  // const [gender, setGender] = React.useState(inputs.)
 
   // Here is the update variable, which keeps track of all the changes a user has made
   let update = useRef({});
@@ -74,23 +71,49 @@ export default function ProfileScreen({route, navigation}) {
   //This is the id of the user that you want to save the information to.  
   let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
 
+  // Model variables
+  let states = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
+
+  // global variables for dropDowns
+  const globalUserState = useRef(null);
+  const globalChurchState = useRef(null);
+  const globalGender = useRef(null);
 
   async function getProfileData() {
-    console.log("Got Data!");
     fbProfileData = await FirebaseButler.fbGet(`Users/${userId}/info`);
+    if (fbProfileData) {
 
-    for (let key in inputs) {
-      //these are all of the fields which weren't acquired through a textbox
-      if (fbProfileData[key]) {
-        let inputObj = inputs[key];
-        inputObj.setVal(fbProfileData[key], false);
+      for (let key in inputs) {
+        //these are all of the fields which weren't acquired through a textbox
+        if (fbProfileData[key] && inputs[key]) {
+          //these keys are special cases because they need to populate dropdown data
+          if (key == "state") {
+            globalUserState.current = fbProfileData[key];
+            inputs[key] = fbProfileData[key];
+          }
+          else if (key == "churchState") {
+            globalChurchState.current = fbProfileData[key];
+            inputs[key] = fbProfileData[key];
+          }
+          else if (key == "gender") {
+            globalGender.current = fbProfileData[key];
+            inputs[key] = fbProfileData[key];
+          }
+          else {
+            let inputObj = inputs[key];
+            inputObj.setVal(fbProfileData[key], false);
+          }
+        }
       }
-    }
-
-    //set instrument data
-    let startingInstruments = fbProfileData.instruments;
-    for (let i = 0; i < startingInstruments.length; i++) {
-      instrumentsArray["current"].push(startingInstruments[i]);
+  
+      //set instrument data
+      if (fbProfileData.instruments) {
+        let startingInstruments = fbProfileData.instruments;
+        for (let i = 0; i < startingInstruments.length; i++) {
+          instrumentsArray["current"].push(startingInstruments[i]);
+          inputs["instrumentsArray"].push(startingInstruments[i]);
+        }
+      }
     }
   }
 
@@ -108,6 +131,24 @@ export default function ProfileScreen({route, navigation}) {
   const updatePayload = (updateVal, updateName) =>
   {
     update[updateName] = updateVal;
+  }
+
+  arraysAreEqual();
+
+  function arraysAreEqual(object1, object2) {
+    for (let index in object1) {
+      if (typeof object1[index] == "object" && typeof object2[index] == "object") {
+        if (!arraysAreEqual(Object.values(object1[index]), Object.values(object2[index]))) {
+          return false;
+        }
+      }
+      else {
+        if (object1[index] != object2[index]) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   // This is the function which will take all of the changes to update and push them to firebase
@@ -201,13 +242,26 @@ export default function ProfileScreen({route, navigation}) {
       const churchZipCodeReference = ref(db, `Users/${userId}/info/churchZipCode`);
       set(churchZipCodeReference, update["churchZipCode"]);
     }
-
-    if (instrumentsArray["current"].length > 0) {
-      const db = getDatabase();
+    console.log("Bool", !arraysAreEqual(instrumentsArray["current"], inputs["instrumentsArray"]));
+    if (instrumentsArray["current"].length > 0  && !arraysAreEqual(instrumentsArray["current"], inputs["instrumentsArray"])) {
       const setInstrumentsRef = ref(db, `Users/${userId}/info/instruments`);
       set(setInstrumentsRef, instrumentsArray["current"]);
     }
 
+    if (globalUserState.current != inputs["state"]) {
+      const userStateRef = ref(db, `Users/${userId}/info/state`);
+      set(userStateRef, globalUserState.current);
+    }
+
+    if (globalGender.current != inputs["gender"]) {
+      const genderRef = ref(db, `Users/${userId}/info/gender`);
+      set(genderRef, globalGender.current);
+    }
+    
+    if (globalChurchState.current != inputs["churchState"]) {
+      const churchStateRef = ref(db, `Users/${userId}/info/churchState`);
+      set(churchStateRef, globalChurchState.current);
+    }
     // Once everything is finalized, navigate to user profile screen
     navigation.navigate(Routes.personalProfile, route.params);
   }
@@ -223,20 +277,39 @@ export default function ProfileScreen({route, navigation}) {
 
   //code for sliders and screens
   const Screen1 = (props) => {
-    const gender = ['Male', 'Female'];
-    const state = ['PA'];
+    let genders = ['Male', 'Female'];
+
+     //dropDown variables
+    const [userState, setUserState] = React.useState(null);
+    const [gender, setGender] = React.useState(null);
+
+    // these two methods will update the global variables when the values of the local variables change
+    useEffect(() => {
+      if (gender) {
+        globalGender.current = gender;
+      }
+    }, [gender]);
+
+    useEffect(() => {
+      if (userState) {
+        globalUserState.current = userState;
+      }
+    }, [userState]);
+
+    // these two methods will initialize gender and userState to whatever globalGender and globalUserState are.  These will be set when 
+    // the user's data is first pulled from firebase
+    useEffect(() => {
+      setGender(globalGender.current);
+    }, [globalGender])
+
+    useEffect(() => {
+      setUserState(globalUserState.current);
+    }, [globalUserState])
 
     return (
       <View style={styleSheet.content}>
         <Text style={styleSheet.stageText}>General Information</Text>
         <Text style={styleSheet.text}>Name</Text>
-
-        {/* 
-        --------------------------------------------------------------------------------------------
-        This is the spot where an observable's value is changed (as shown by the setVal function) 
-        --------------------------------------------------------------------------------------------
-        */}
-
         <Input start = {inputs?.name?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.name.setVal(val)}/>
         <Text style={styleSheet.text}>Username</Text>
         <Input start = {inputs?.username?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.username.setVal(val)}/>
@@ -245,7 +318,15 @@ export default function ProfileScreen({route, navigation}) {
         <View style={styleSheet.row1}>
             <View style={styleSheet.column1}>
                 <Text style={styleSheet.text}>Gender</Text>
-                <Dropdown style={styleSheet.dropDown} data={gender} renderItem={renderDropDownItem}/>
+                <Dropdown style={styleSheet.dropDown} 
+                  data={genders} 
+                  renderItem={renderDropDownItem}
+                  onChange = {(value) => setGender(value)}
+                  placeholder={gender}
+                  value={gender}
+                  maxHeight = {"40%"}
+                  itemTextStyle = {{color: "black", fontSize: 2}}
+                />
             </View>
             <View style={styleSheet.column1}>
                 <Text style={styleSheet.text}>Birthday</Text>
@@ -263,14 +344,13 @@ export default function ProfileScreen({route, navigation}) {
                 <Text style={styleSheet.text}>State</Text>
                 <Dropdown
                   style={styleSheet.dropDown} 
-                  data={state} 
+                  data={states} 
                   renderItem={renderDropDownItem}
-                  search = {false}
                   maxHeight = {"40%"}
                   itemTextStyle = {{color: "black", fontSize: 2}}
-                  onChange = {(value) => setInputState(value)}
-                  placeholder = {inputState}
-                  value = {inputState}
+                  onChange = {(value) => setUserState(value)}
+                  placeholder = {userState}
+                  value = {userState}
                 />
             </View>
             <View style={styleSheet.column2}>
@@ -287,7 +367,7 @@ export default function ProfileScreen({route, navigation}) {
         <View style={styleSheet.content}>
             <Text style={styleSheet.stageText}>Authentication</Text>
             <Text style={styleSheet.text}>Password</Text>
-            <Input start = {inputs.password.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.password.setVal(val)}/>
+            <Input /*start = {inputs.password.getVal()}*/ inputStyle = {styleSheet.inputBox} /*func = {(val) => inputs.password.setVal(val)}*//>
             <Text style={styleSheet.resetPasswordtext}>Reset Password</Text>
             <Text style={styleSheet.text}>Phone Number</Text>
             <Input start = {inputs.phoneNumber.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.phoneNumber.setVal(val)}/>
@@ -297,7 +377,19 @@ export default function ProfileScreen({route, navigation}) {
   }
 
   const Screen3 = (props) => {
-    const state = ['PA']
+    const [churchState, setChurchState] = React.useState(null);
+
+    //see comments in screen 1 for details on how this works
+    useEffect(() => {
+      if (churchState) {
+        globalChurchState.current = churchState;
+      }
+    }, [churchState]);
+
+    useEffect(() => {
+      setChurchState(globalChurchState.current);
+    }, [globalChurchState])
+
     return (
       <View style={styleSheet.content}>
         <Text style={styleSheet.stageText}>Home Church</Text>
@@ -315,7 +407,16 @@ export default function ProfileScreen({route, navigation}) {
                 </View>
                 <View style={styleSheet.column2}>
                     <Text style={styleSheet.text}>State</Text>
-                    <Dropdown style={styleSheet.dropDown} data={state} renderItem={renderDropDownItem}/>
+                    <Dropdown 
+                      style={styleSheet.dropDown} 
+                      data={states} 
+                      renderItem={renderDropDownItem}
+                      maxHeight = {"40%"}
+                      itemTextStyle = {{color: "black", fontSize: 2}}
+                      onChange = {(value) => setChurchState(value)}
+                      placeholder = {churchState}
+                      value = {churchState}
+                    />
                 </View>
                 <View style={styleSheet.column2}>
                     <Text style={styleSheet.text}>Zip Code</Text>
@@ -582,95 +683,6 @@ export default function ProfileScreen({route, navigation}) {
     }
   }
 
-  // ------------------
-  // Photo upload code
-  // ------------------
-
-  const [image, setImage] = React.useState(null);
-
-  function uploadPhoto() {
-    // --------------------------------
-    // select photo from file selector
-    // --------------------------------
-
-    // No permissions request is necessary for launching the image library
-    ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    }).then((result) => {
-
-      // -------------------------------------------
-      // Convert result to blob which can be stored
-      // -------------------------------------------
-
-      if (result) {
-        const filePromise = new Promise((resolve, reject) => {
-          const xhr = new XMLHttpRequest();
-          xhr.onload = function () {
-            resolve(xhr.response);
-          };
-          xhr.onerror = function (e) {
-            console.log(e);
-            reject(new TypeError("Network request failed"));
-          };
-          xhr.responseType = "blob";
-          xhr.open("GET", result.uri, true);
-          xhr.send(null);
-        });
-
-        filePromise.then((fileBlob) => {
-
-          // ----------------------------------------------------------------
-          // Store result in Cloud Storage and store a reference in firebase
-          // ----------------------------------------------------------------
-
-          if (fileBlob) {
-            // Get main storage
-            const storage = getStorage();
-      
-            // Points to 'sparkData/<currentID>'
-            const sparkImageRef = storageRef(storage, `userData/${userId}/userCoverPhoto`);
-            uploadBytes(sparkImageRef, fileBlob).then((finalSnap) => {
-              console.log("File upload was successful!");
-              setImage({uri: result.uri});
-            })
-            .catch((error) => {
-              // Upload to firebase failed so call an error or message
-              console.log("failed to upload image blob to firebase");
-            });
-          }
-        })
-        .catch((error) => {
-          // Conversion to blob failed so throw an error or message
-          console.log("failed to convert image to blob");
-        })
-      }
-    })
-    .catch((error) => {
-      // Image Picker failed so throw an error or message
-      console.log("failed to find a file");
-    }) 
-  }
-
-  async function getPhoto() {
-    //set the url of a default photo, which will be shown in there is no image found
-    let defaultPic = require("../../../assets/ProfileNavIcon.png");
-    
-    //get the photo from firebase storage
-    const storage = getStorage();
-    getDownloadURL(storageRef(storage, `userData/${userId}/userCoverPhoto`))
-    .then((url) => {
-      //display the image that was found using its url
-      setImage({uri: url});
-    })
-    .catch((error) => {
-      // could not find a spark cover image so display the default instead
-      setImage(defaultPic);
-    })
-  }
-
   //---------------------------------------------------------------------------
   // Section of code to put functions to be run after a component is re-rendered
   //---------------------------------------------------------------------------
@@ -681,7 +693,6 @@ export default function ProfileScreen({route, navigation}) {
 
   //will only run on the first load
   useEffect(() => {
-    getPhoto();
     getProfileData().then(() => {
       setCurrentIndex(0);
     });
@@ -699,11 +710,12 @@ export default function ProfileScreen({route, navigation}) {
       <View style={styleSheet.MainContainer}> 
           <View style={styleSheet.topBorder}>
             <Text style={styleSheet.titleText}>Profile Creation</Text>
-            <View style={styleSheet.row}>
-              <TouchableOpacity style = {styleSheet.profilePictureContainer} onPress = {() => uploadPhoto()}>
+            <View style={styleSheet.topRow}>
+              {/* <TouchableOpacity style = {styleSheet.profilePictureContainer} onPress = {() => uploadPhoto()}>
                 <Image style={styleSheet.profilePicImage} source={image}></Image>
-              </TouchableOpacity>
-              <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: 170, height: 20, borderRadius: 10, top: "80%", left: "30%"}} progress={(currentIndex + 1) / 5}/>
+              </TouchableOpacity> */}
+              <ProfileImage userId = {userId} changeable = {true} size = {"large"}/>
+              <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: 170, height: 20, borderRadius: 10}} progress={(currentIndex + 1) / 5}/>
             </View>
           </View>
           <Slider currentIndex = {currentIndex} screens = {myScreens} />
@@ -780,6 +792,13 @@ const styleSheet = StyleSheet.create({
         fontSize: 12,
         right: "8%",
         marginBottom: "3%"
+    },
+
+    topRow: {
+      width: "100%",
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      alignItems: "center"
     },
 
     row: {
@@ -985,7 +1004,8 @@ const styleSheet = StyleSheet.create({
       },
     
       titleText: {
-        top: "25%",
+        marginTop: "15%",
+        padding: "5%",
         textAlign: "center",
         fontSize: 20, 
         fontWeight: "600"

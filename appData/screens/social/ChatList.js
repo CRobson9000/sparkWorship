@@ -1,8 +1,89 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image, FlatList } from "react-native";
-import Routes from '../Navigation/constants/Routes.js'
+import Routes from '../Navigation/constants/Routes.js';
+import ProfileImage from '../../components/profileImage.js';
+import { FirebaseButler } from '../../components/classes';
+import { IconButton } from 'react-native-paper';
 
 export default function ChatList({ route, navigation }){
+    // Set the context
+    let props = route.params;
+    let userId = props?.userId;
+
+    // Global variables used
+    const [conversations, setConversations] = React.useState([]);
+
+    // Functions
+    async function getConversations () {
+        let convoData = await FirebaseButler.fbGet(`Users/${userId}/conversations`);
+        if (convoData) {
+            let startingConvos = [];
+            for (let convoIndex in convoData) {
+                let convoId = convoData[convoIndex];
+                let convo = await FirebaseButler.fbGet(`Messaging/${convoId}`);
+                let peopleLookup = {};
+                // populate a people object with the id and associated name
+                for (let peopleIndex in convo.people) {
+                    let personId = convo.people[peopleIndex];
+                    // get the data from firebase
+                    if (personId != userId) {
+                        let personName = await FirebaseButler.fbGet(`Users/${personId}/info/name`);
+                        peopleLookup[personId] = personName;
+                    }
+                }
+                // create the people string
+                let peopleArray = Object.values(peopleLookup);
+                let peopleString = peopleArray.join(", ");
+    
+                // get last message
+                let messagesArray = Object.values(convo.messages);
+                let lastMessage = messagesArray[messagesArray.length - 1];
+    
+                startingConvos.push({
+                    lastMessageText: lastMessage.message,
+                    peopleString,
+                    peopleLookup,
+                    lastMessageTime: lastMessage["sentTDO"]["TDO"],
+                    convoData: convo,
+                    convoId
+                })
+            }
+            setConversations([...startingConvos]);
+        }
+    }
+
+    const renderConversation = (object) => {
+        let convoData = object.item.convoData;
+        let convoId = object.item.convoId;
+        let peopleLookup = object.item.peopleLookup;
+        let peopleString = object.item.peopleString;
+        let context = {...props};
+        context.convoId = convoId;
+        context.convoData = convoData;
+        context.peopleLookup = peopleLookup;
+        context.peopleString = peopleString;
+        return (
+            <TouchableOpacity onPress = {() => navigation.navigate(Routes.messaging, context)} style={styles.row}>
+                <ProfileImage size = {"medium"} userId = {Object.keys(peopleLookup)[0]}/>
+                <View style={styles.column}>
+                    <Text style={styles.name}>{object.item.peopleString}</Text>
+                    <Text style={styles.message}>{object.item.lastMessageText}</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    // ----------------------
+    // Code that runs onload 
+    // ----------------------
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            console.log("Load");
+            getConversations();
+        });
+        return unsubscribe;
+    }, [navigation]);
+
     return(
         <View style={styles.MainContainer}>
             <View style={styles.topBorder}>
@@ -18,52 +99,23 @@ export default function ChatList({ route, navigation }){
                     </View>
                 </View>
 
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.messaging)} style={styles.row}>
-                    <Image style={styles.profilePicture} source={require('../../../assets/headshot.jpg')}/>
-                    <View style={styles.column}>
-                        <Text style={styles.name}>John Smith</Text>
-                        <Text style={styles.message}>Hey! Are you going to the spark in Nashville tonight?</Text>
-                    </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.messaging)} style={styles.row}>
-                    <Image style={styles.profilePicture} source={require('../../../assets/headshot1.jpg')}/>
-                    <View style={styles.column}>
-                        <Text style={styles.name}>William Jones</Text>
-                        <Text style={styles.message}>Just got your message, I will look into it.</Text>
-                    </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.messaging)} style={styles.row}>
-                    <Image style={styles.profilePicture} source={require('../../../assets/headshot2.jpg')}/>
-                    <View style={styles.column}>
-                        <Text style={styles.name}>Aaron Moore</Text>
-                        <Text style={styles.message}>Hello, I saw you play the guitar. I would love to have you be a part of my spark!</Text>
-                    </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.messaging)} style={styles.row}>
-                    <Image style={styles.profilePicture} source={require('../../../assets/headshot3.jpg')}/>
-                    <View style={styles.column}>
-                        <Text style={styles.name}>Chris Samson</Text>
-                        <Text style={styles.message}>Sorry for the late response!</Text>
-                    </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.messaging)} style={styles.row}>
-                    <Image style={styles.profilePicture} source={require('../../../assets/headshot5.jpg')}/>
-                    <View style={styles.column}>
-                        <Text style={styles.name}>Austin Rock</Text>
-                        <Text style={styles.message}>That spark last night was awesome, best one yet!</Text>
-                    </View>
-                </TouchableOpacity>
-
+                <FlatList 
+                    style = {{flex: 1}}
+                    data = {conversations}
+                    renderItem = {renderConversation}
+                />                
             </View>
+
+            <IconButton 
+                icon = {"plus-circle"}
+                size = { 50 }
+                style = {styles.addMessage}
+                onPress = {() => navigation.navigate(Routes.messaging, {...props, peopleLookup: {oDiZMc2STiPpGUEJth0AVc6UIwl2: "Attender Joe"}, peopleString: "Attender Joe"})}
+            />
 
             {/* <View style={styles.navigation}>
                 <Image style={styles.navigationBar} source={require('../../assets/navigation.png')}/>
             </View> */}
-
         </View>
     )
 }
@@ -90,15 +142,15 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
         marginLeft: "5%",
         backgroundColor: "white",
-        height: "85%",
+        height: "75%",
         width: "100%",
         justifyContent: 'center'
     },
 
-    navigation: {
-        backgroundColor: "white",
-        height: "10%",
-        alignItems: "center"
+    addMessage: {
+        position: "absolute",
+        bottom: "2%",
+        right: "2%"
     },
 
     row: {
@@ -127,7 +179,8 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 18,
         marginBottom: 5,
-        fontWeight: "500"
+        fontWeight: "500",
+        flexWrap: "nowrap"
     },
 
     message: {

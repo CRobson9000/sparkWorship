@@ -4,9 +4,7 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List } from 'react-native-paper';
 import Routes from '../Navigation/constants/Routes';
 import { FirebaseButler } from '../../components/classes';
-import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storageRef } from '../../../config/additionalMethods';
-
+import ProfileImage from '../../components/profileImage.js';
 export default function PSPersonal({ route, navigation }) {
 
     let props = route.params;
@@ -224,25 +222,6 @@ export default function PSPersonal({ route, navigation }) {
       }
     }
 
-    const [image, setImage] = React.useState(null);
-
-    async function getPhoto() {
-      //set the url of a default photo, which will be shown in there is no image found
-      let defaultPic = require("../../../assets/ProfileNavIcon.png");
-      
-      //get the photo from firebase storage
-      const storage = getStorage();
-      getDownloadURL(storageRef(storage, `userData/${userId}/userCoverPhoto`))
-      .then((url) => {
-        //display the image that was found using its url
-        setImage({uri: url});
-      })
-      .catch((error) => {
-        // could not find a spark cover image so display the default instead
-        setImage(defaultPic);
-      })
-    }
-
     // -----------------------
     // Demo Friend Code
     // -----------------------
@@ -272,7 +251,7 @@ export default function PSPersonal({ route, navigation }) {
       setDenomination();
       setChurchLocation();
       setInstruments();
-      getPhoto();
+      //getPhoto();
     }, [])
 
       return (
@@ -284,7 +263,8 @@ export default function PSPersonal({ route, navigation }) {
                 <TouchableOpacity onPress = {() => navigation.navigate(Routes.profileCreation, props)}><Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}></Image></TouchableOpacity>
               </View>
               <View style={styles.row} >
-                <Image style={styles.profilePicture} source={image}></Image>
+                {/* <Image style={styles.profilePicture} source={image}></Image> */}
+                <ProfileImage size = "large" userId = {userId} />
                 <View style={styles.column}>
                   <Text style={{fontSize: 20, fontWeight: '500', marginBottom: 10}}>{MyName}</Text>
                   <Text style={{fontSize: 15, fontWeight: '400', marginBottom: 13}}>Instrumentalist</Text>
