@@ -1,7 +1,5 @@
 import { Image, StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
-import React from 'react';
-import { useDeviceOrientation } from '@react-native-community/hooks';
-import { LinearGradient } from 'expo-linear-gradient';
+import React, { useRef } from 'react';
 import { getAuth, createUserWithEmailAndPassword } from "@firebase/auth";
 
 //import statements for styles
@@ -11,16 +9,13 @@ import { stylesPortrait } from "../../styles/portrait";
 import { Dimensions, TouchableHighlight } from 'react-native';
 
 //import components
-import { Input } from '../../components/components.js'
-import { Observable } from '../../components/classes.js'
+import { Input, Toast } from '../../components/components.js';
+import Routes from '../Navigation/constants/Routes'
 
 //database processing import statements
 import { getDatabase, ref, set } from 'firebase/database';
-
 import { Dropdown } from 'react-native-element-dropdown';
-
-
-import Routes from '../Navigation/constants/Routes'
+import { Provider } from 'react-native-paper';
 
 export default function RegistrationScreen({ navigation }) {
 
@@ -34,26 +29,33 @@ export default function RegistrationScreen({ navigation }) {
   let password = "";
   let confirmPassword = "";
 
-  //userId
+  const toastRef = useRef("");
 
   function signUp(navigation) {
     const auth = getAuth();
     //creates a new user in "authentication" of firebase
-    if (password == confirmPassword) {
+    if (password == confirmPassword && role && email && password && username && name) {
+      // if () location is valid
       createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-        console.log("User created successfully!");
           const user = userCredential.user;
           createUserSpace(user.uid).then(() => {
             navigation.navigate("Navigator", {userId: user.uid}); 
           })
       }).catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorMessage);
+        toastRef.current(errorMessage);
       });
     }
     else {
-      console.log("Error: passwords do not match");
+      let message = [];
+      if (!name) message.push("Please input a name");
+      if (!email) message.push("Please input an email");
+      if (!username) message.push("Please enter a username");
+      if (!password) message.push("Please enter a password");
+      if (password != confirmPassword) message.push("Passwords do not match");
+
+      let finalMessage = message.join(", ")
+      toastRef.current.showToast(finalMessage);
     }
   }
 
@@ -185,6 +187,9 @@ export default function RegistrationScreen({ navigation }) {
               <Text style={{color: "white"}}>Create new User</Text>
             </TouchableOpacity>
           </ScrollView>
+          <Provider>
+            <Toast ref = {toastRef}/>
+          </Provider>
         </View>
       </View>
   );
