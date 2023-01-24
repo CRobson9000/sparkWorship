@@ -17,10 +17,10 @@ export default function DimensionsTesting({ navigation }) {
             top: 60,
             backgroundColor: '#006175',
           }}></View>
-          <Text style={{fontSize: (screenWidth/3)}}>Size Test</Text>
-          <Text style={{fontSize: (screenWidth/4)}}>Size Test</Text>
-          <Text style={{fontSize: (screenWidth/5)}}>Size Test</Text>
-          <Text style={{fontSize: (screenWidth/6)}}>Size Test</Text>
+          <Text style={{fontSize: (height/10)}}>Size Test</Text>
+          <Text style={{fontSize: (height/20)}}>Size Test</Text>
+          <Text style={{fontSize: (height/30)}}>Size Test</Text>
+          <Text style={{fontSize: (height/40)}}>Size Test</Text>
         </View>
     )
 }
