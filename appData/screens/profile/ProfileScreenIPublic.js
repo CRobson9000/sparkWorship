@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List, IconButton } from 'react-native-paper';
 import Routes from '../Navigation/constants/Routes';
