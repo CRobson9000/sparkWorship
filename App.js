@@ -16,7 +16,11 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
+<<<<<<< HEAD
       <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={Routes.login}>
+=======
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={Routes.dimensionsTesting}>
+>>>>>>> 271620293 (Custom Font Setup)
         {/* Actual Screens used in our app */}
         <Stack.Screen name={Routes.login} component={LoginScreen} />
         <Stack.Screen name={Routes.registration} component={RegistrationScreen} />
