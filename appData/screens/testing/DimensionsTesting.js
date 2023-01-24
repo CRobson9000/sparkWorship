@@ -17,7 +17,7 @@ export default function DimensionsTesting({ navigation }) {
             top: 60,
             backgroundColor: '#006175',
           }}></View>
-          <Text style={{fontSize: (height/10)}}>Size Test</Text>
+          <Text style={{fontSize: (height/10), fontFamily:"RNSMiles"}}>Size Test</Text>
           <Text style={{fontSize: (height/20)}}>Size Test</Text>
           <Text style={{fontSize: (height/30)}}>Size Test</Text>
           <Text style={{fontSize: (height/40)}}>Size Test</Text>
