@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity, TextInput, FlatList } from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity, TextInput, FlatList, Dimensions } from 'react-native';
 import React, {useRef, useEffect} from 'react';
 import { IconButton } from 'react-native-paper';
 

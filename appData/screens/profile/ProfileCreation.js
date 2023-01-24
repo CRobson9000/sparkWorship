@@ -1,5 +1,5 @@
 import React, {useRef, useEffect} from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image, FlatList } from "react-native";
+import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image, FlatList, Dimensions } from "react-native";
 import { Input, Slider } from '../../components/components';
 import { Observable, FirebaseButler } from '../../components/classes';
 import { getDatabase, ref, set, get } from 'firebase/database';

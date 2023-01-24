@@ -1,7 +1,7 @@
 import React from 'react';
 import { enableRipple } from '@syncfusion/ej2-base';
 //import DropDownPicker from 'react-native-dropdown-picker';
-import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List } from 'react-native-paper';
 import { stylesSummary } from "../../styles/summary.js";

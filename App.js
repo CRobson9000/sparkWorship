@@ -10,8 +10,16 @@ import {Router, LocationData, ComponentTesting, FunctionalityTesting} from './ap
 //initialize the firebase application
 import './config/firebase.js';
 
+import * as Font from 'expo-font';
+
 import Routes from './appData/screens/constants/Routes.js';
 const Stack = createNativeStackNavigator();
+
+const getFonts = () => Font.loadAsync({
+  'RNSMiles': require('./appData/fonts/RNSMiles-Black.otf')
+});
+
+
 
 function App() {
   return (
