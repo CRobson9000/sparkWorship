@@ -36,13 +36,13 @@ export default function UserHub({ route, navigation }) {
                 <View>
                   <View style = {{flexDirection: "row"}}>
                     <TouchableHighlight style={{height: 40, width: 40}} onPress = {() => navigation.navigate(Routes.publicProfile, {userId, selectedUserId: "wVgW65Og51OCuC7lD8LtRJBWuUC2"})}>
-                          <Image style={{height: "100%", width: "100%"}} source={require('../../../assets/userHub1.png')}></Image>
+                          <Image style={{height: "100%", width: "100%"}} source={require('../../../assets/Picture1.png')}></Image>
                       </TouchableHighlight>
-                    <Text style={{marginLeft: "5%", lineHeight: 30, color: "#006175"}}> 
+                    <Text style={{marginLeft: "5%", lineHeight: 30, color: "#000000", fontWeight: "bold", fontSize: 15}}> 
                       Dave Birdy
                     </Text>  
                   </View>
-                  <Text style={{lineHeight: 30, color: "#006175"}}> 
+                  <Text style={{lineHeight: 30, color: "#000000"}}> 
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
                     Maecenas vitae justo ipsum. Morbi sed mauris ante.Quisque semper,
                     augue fringilla pretium laoreet, tellus metus sodales dui, vitae 
@@ -52,21 +52,21 @@ export default function UserHub({ route, navigation }) {
                     Intrument: Guitar 
                     {'\n'}
                     Location: Mechanicsburg, PA</Text></View>
-                <Image style={{height: 15, width: 15}} source={require('../../../assets/heart.png')}></Image>
-                <Image style={{height: 15, width: 15}} source={require('../../../assets/comment.png')}></Image> 
+                {/* <Image style={{height: 15, width: 15}} source={require('../../../assets/heart.png')}></Image> */}
+                 
               </TouchableOpacity>
 
               <TouchableOpacity activeOpacity={1} style={[stylesPortrait.dashboardButton]}>
                 <View>
                   <View style = {{flexDirection: "row"}}> 
                     <TouchableHighlight style={{height: 40, width: 40}} onPress = {() => navigation.navigate(Routes.publicProfile, {userId, selectedUserId: "24Ir2DjDbdd1M0p8WoQGDMPdPbe2"})}>
-                          <Image style={{height: "100%", width: "100%"}} source={require('../../../assets/userHub2.png')}></Image>
+                          <Image style={{height: "100%", width: "100%"}} source={require('../../../assets/Picture1.png')}></Image>
                       </TouchableHighlight>
-                    <Text style={{marginLeft: "5%", lineHeight: 30, color: "#006175"}}> 
+                    <Text style={{marginLeft: "5%", lineHeight: 30, color: "#000000", fontWeight: "bold", fontSize: 15}}> 
                       Mark Zuck
                     </Text>  
                   </View>
-                  <Text style={{lineHeight: 30, color: "#006175"}}> 
+                  <Text style={{lineHeight: 30, color: "#000000"}}> 
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
                     Maecenas vitae justo ipsum. Morbi sed mauris ante.Quisque semper,
                     augue fringilla pretium laoreet, tellus metus sodales dui, vitae 
@@ -76,21 +76,21 @@ export default function UserHub({ route, navigation }) {
                     Intrument: Piano 
                     {'\n'}
                     Location: Mechanicsburg, PA</Text></View>
-                <Image style={{height: 15, width: 15}} source={require('../../../assets/heart.png')}></Image>
-                <Image style={{height: 15, width: 15}} source={require('../../../assets/comment.png')}></Image> 
+                {/* <Image style={{height: 15, width: 15}} source={require('../../../assets/heart.png')}></Image> */}
               </TouchableOpacity>
 
               <TouchableOpacity activeOpacity={1} style={[stylesPortrait.dashboardButton]}>
                 <View>
                   <View style = {{flexDirection: "row"}}> 
                     <TouchableHighlight style={{height: 40, width: 40}} onPress = {() => navigation.navigate(Routes.publicProfile, {userId, selectedUserId: "pgFfrUx2ryd7h7iE00fD09RAJyG3"})}>
-                          <Image style={{height: "100%", width: "100%"}} source={require('../../../assets/userHub3.png')}></Image>
+                          <Image style={{height: "100%", width: "100%"}} source={require('../../../assets/Picture1.png')}></Image>
                       </TouchableHighlight>
-                    <Text style={{marginLeft: "5%", lineHeight: 30, color: "#006175"}}> 
+                    <Text style={{marginLeft: "5%", lineHeight: 30, color: "#000000", fontWeight: "bold", fontSize: 15}}> 
+                    {/* original font color: "#006175" */}
                       Devin Robson
                     </Text>  
                   </View>
-                  <Text style={{lineHeight: 30, color: "#006175"}}> 
+                  <Text style={{lineHeight: 30, color: "#000000"}}> 
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
                     Maecenas vitae justo ipsum. Morbi sed mauris ante.Quisque semper,
                     augue fringilla pretium laoreet, tellus metus sodales dui, vitae 
@@ -100,8 +100,7 @@ export default function UserHub({ route, navigation }) {
                     Intrument: Drums 
                     {'\n'}
                     Location: Mechanicsburg, PA</Text></View>
-                <Image style={{height: 15, width: 15}} source={require('../../../assets/heart.png')}></Image>
-                <Image style={{height: 15, width: 15}} source={require('../../../assets/comment.png')}></Image> 
+                {/* <Image style={{height: 15, width: 15}} source={require('../../../assets/heart.png')}></Image> */}
               </TouchableOpacity>
             </ScrollView>
           </View>

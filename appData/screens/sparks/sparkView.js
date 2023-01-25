@@ -41,12 +41,13 @@ export default function SparkView({ route, navigation }) {
             <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary, {userId})} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
                 <View style={{width:"87%"}}>
                     <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name || "No Name"} </Text>
-                    <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>
+                    {/* <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>
                     <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{finalDateTime}</Text>
-                    <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{locationString}</Text>
+                    <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{locationString}</Text> */}
+                    <Text style={{marginLeft: "87%", marginTop: "2%"}}> More</Text>
                 </View>
                 <View style={{width:"13%", alignItems:"center"}}>
-                    <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
+                    <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/Picture1.png")}>
 
                     </Image>
                 </View>
@@ -257,7 +258,7 @@ const sparkViewStyles = StyleSheet.create({
     {
         width:"85%",
         height:"100%",
-        backgroundColor: "rgba(255,255,255,1)",
+        backgroundColor: colors.secondary,
         flexDirection: "column", 
         justifyContent: "space-between", 
         alignItems: "center"
@@ -273,8 +274,6 @@ const sparkViewStyles = StyleSheet.create({
         backgroundColor: "#DBE9EC",
         flex: 1,
         padding: "3%",
-        // height: "16%",
-        // width: "80%",
         borderRadius: 30,
         flexDirection: "row",
         justifyContent: "space-between",
@@ -295,11 +294,13 @@ const sparkViewStyles = StyleSheet.create({
         marginLeft:"10%",
         marginTop: "1%",
         marginBottom: "1%",
-        fontSize: 10
+        fontSize: 12
     },
     topText:{
         fontWeight: "bold",
-        marginLeft:"6%"
+        // marginLeft:"6%",
+        marginTop: "40%",
+        marginLeft: "45%"
     },
     notTopText:{
         marginLeft: "12%"
@@ -343,8 +344,10 @@ const sparkViewStyles = StyleSheet.create({
         borderWidth: 3
     },
     profPic:{
-        height: "45%",
-        width: "120%", 
-        marginRight: "30%"
+        height: "80%",
+        width: "120%",
+        marginTop: "100%", 
+        marginRight: "650%",
+        marginBottom: "250%",
     }
 });
