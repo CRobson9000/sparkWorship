@@ -708,14 +708,15 @@ export default function ProfileScreen({route, navigation}) {
           </View>
           <Slider currentIndex = {currentIndex} screens = {myScreens} />
 
-          <View style={styleSheet.bottomRow}>
-              <TouchableOpacity style={styleSheet.button} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Previous</Text></TouchableOpacity>
-              <TouchableOpacity style={styleSheet.button} onPress = {() => (currentIndex == myScreens.length - 1) ? sendPayload() : setCurrentIndex(currentIndex + 1)}><Text style={styleSheet.buttonText}>{(currentIndex == myScreens.length - 1) ? "Submit" : "Next"}</Text></TouchableOpacity>
-          </View>
-      </View>
-    );
-  // }
+        <View style={styleSheet.bottomRow}>
+            <TouchableOpacity style={styleSheet.button} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Previous</Text></TouchableOpacity>
+            <TouchableOpacity style={styleSheet.button} onPress = {() => (currentIndex == myScreens.length - 1) ? sendPayload() : setCurrentIndex(currentIndex + 1)}><Text style={styleSheet.buttonText}>{(currentIndex == myScreens.length - 1) ? "Submit" : "Next"}</Text></TouchableOpacity>
+        </View>
+    </View>
+  );
 }
+
+const screenHeight = Dimensions.get('window').height;
 
 const styleSheet = StyleSheet.create({
     instrumentDialogInput: {
@@ -887,7 +888,8 @@ const styleSheet = StyleSheet.create({
 
     stageText: {
         textAlign: "center",
-        fontSize: 20,
+        fontSize: screenHeight/40,
+        fontFamily: "RNSMiles",
         fontWeight: "500",
         marginBottom: "3%"
       },
