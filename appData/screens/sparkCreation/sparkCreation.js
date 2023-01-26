@@ -456,16 +456,16 @@ export default function SparkCreation({ navigation }) {
     //sets up the headers to be displayed by a different slider
     let myHeaders = [
         <View style={sparkViewStyles.header}>
-                <Text style={{fontSize: 28}}>Location</Text>
+                <Text style={{fontSize: 28, fontFamily: "RNSMiles"}}>Location</Text>
         </View>, 
         <View style={sparkViewStyles.header}>
-            <Text style={{fontSize: 28}}>Times</Text>
+            <Text style={{fontSize: 28, fontFamily: "RNSMiles"}}>Times</Text>
         </View>,
         <View style={sparkViewStyles.header}>
-            <Text style={{fontSize: 28}}>Roles</Text>
+            <Text style={{fontSize: 28, fontFamily: "RNSMiles"}}>Roles</Text>
         </View>,
         <View style={sparkViewStyles.header}>
-            <Text style={{fontSize: 28}}>Starting People</Text>
+            <Text style={{fontSize: 28, fontFamily: "RNSMiles"}}>Starting People</Text>
         </View>
     ]
 

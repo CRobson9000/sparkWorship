@@ -56,14 +56,16 @@ const stylesPortrait = StyleSheet.create({
     username :
     {
         color: "#006175", 
-        textAlign: 'left', 
+        textAlign: 'left',
+        fontFamily: 'RNSMiles', 
         left: 45, 
         bottom: 10
     },
     password :
     {
         color: "#006175", 
-        textAlign: 'left', 
+        textAlign: 'left',
+        fontFamily: 'RNSMiles', 
         left: 45, 
         bottom: 10
     },

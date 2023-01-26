@@ -133,7 +133,7 @@ export default function LoginScreen({ navigation }) {
 
           <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
           {/* <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}> */}
-            <View><Text style={{color: "white"}}>Login</Text></View>
+            <View><Text style={{color: "white", fontFamily: "RNSMiles"}}>Login</Text></View>
           </TouchableOpacity>
 
           <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate(Routes.registration)}>

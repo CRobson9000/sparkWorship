@@ -673,7 +673,9 @@ export default function ProfileScreen({route, navigation}) {
         </View>
     </View>
   );
-  }
+}
+
+const screenHeight = Dimensions.get('window').height;
 
 const styleSheet = StyleSheet.create({
     instrumentDialogInput: {
@@ -840,7 +842,8 @@ const styleSheet = StyleSheet.create({
 
     stageText: {
         textAlign: "center",
-        fontSize: 10,
+        fontSize: screenHeight/40,
+        fontFamily: "RNSMiles",
         fontWeight: "500",
         marginBottom: "3%"
       },

@@ -7,6 +7,8 @@ import colors from '../../../config/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Routes from '../constants/Routes';
 
+const screenHeight = Dimensions.get('window').height;
+
 export default function SparkView({ route, navigation }) {
     let sparkMilage = 5;
     let props = route.params;
@@ -57,7 +59,7 @@ export default function SparkView({ route, navigation }) {
     return(
         <View style={stylesPortrait.container}>
             <View style={[sparkViewStyles.sparkViewTopBorder]}>
-                <Text style={{color: "white", textAlign:"center", fontSize:29, paddingTop: 28}}>Spark Worship</Text>
+                <Text style={{color: "white", textAlign:"center", fontSize: screenHeight/30, fontFamily:"RNSMiles", paddingTop: 28}}>Spark Worship</Text>
             </View>
             <View style={[sparkViewStyles.sparkContainer]}>
                 <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary)} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
@@ -222,11 +224,11 @@ const sparkViewStyles = StyleSheet.create({
         marginLeft:"10%",
         marginTop: "1%",
         marginBottom: "1%",
-        fontSize: 10
+        fontSize: screenHeight/70
     },
     topText:{
-        fontWeight: "bold",
-        marginLeft:"6%"
+        marginLeft:"6%",
+        fontFamily: "RNSMiles"
     },
     notTopText:{
         marginLeft: "12%"
