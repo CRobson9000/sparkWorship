@@ -6,6 +6,7 @@ import {Navigator, LoginScreen, RegistrationScreen, SparkView, SparkSummary, Pro
 
 //import statements for testing screens
 import {Router, LocationData, ComponentTesting, FunctionalityTesting} from './appData/screens/Navigation/constants/Index.js';
+import React, {useState} from 'react';
 
 //initialize the firebase application
 import './config/firebase.js';
@@ -49,6 +50,15 @@ function App() {
         </Stack.Navigator>
       </NavigationContainer>
     );
+  }
+  else {
+    return (
+      <AppLoading
+        startAsync={getFonts}
+        onFinish={()=> setFontsLoaded(true)}
+        onError={() => console.log('error')}
+      />
+    )
   }
 }
 

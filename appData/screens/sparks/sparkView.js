@@ -9,7 +9,6 @@ import { FirebaseButler, TDO } from "../../components/classes";
 
 import { getDatabase, ref, set, get } from 'firebase/database';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Routes from '../constants/Routes';
 
 const screenHeight = Dimensions.get('window').height;
 
