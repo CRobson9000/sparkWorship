@@ -1,145 +1,146 @@
-import { StyleSheet, TouchableHighlight, Text, View, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
-import React, {useRef, useEffect} from 'react';
-import { Input, Slider, DropDown } from '../../components/components';
-import { Observable, TDO } from '../../components/classes';
-
+import { StyleSheet, TouchableHighlight, Text, View, TouchableOpacity, FlatList, SafeAreaView, Platform } from 'react-native';
+import React, {useRef, useEffect, useState} from 'react';
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
-import { List } from 'react-native-paper';
-import { Menu } from 'react-native-paper';
-import SelectList from 'react-native-dropdown-select-list'
+import { TDO } from '../../components/classes.js'
+import Routes from '../../screens/Navigation/constants/Routes';
+
+// notification stuff
 
 export default function ComponentTesting({ navigation }) {
-  let instruments = ["Piano", "Bass", "Guitar"];
 
-  const [expanded, setExpanded] = React.useState(true);
-  const handlePress = () => setExpanded(!expanded);
-  const renderItem = (object, index, separators) => {
-    //convert firebase obj to TDO
-    return(
-      <List.Accordion
-          title={object.item}
-          style = {accordianStyles.header}
-          titleStyle = {accordianStyles.headerText}
-      >
-        <View style={accordianStyles.listItemContainer}>
-          <View style={accordianStyles.listItemHeader}>
-            <Text style={{fontWeight: "bold", fontSize: 15}}> General Experience </Text>
-          </View>
-          <View style={accordianStyles.listItemContent}>
-            <Text style={accordianStyles.contentText}>
-               My Content ajslkd fja;klfjioew jajsdil;fj iao;e jfoajfl ioasje fioj;ijia jo;fijaeioj  afefia;fj ioaej aoewf 
-               alsfjioe;j aioejf aioefja fioej foaefaofo;jaioajfejfoawf ijaw i;ewf iajioefj awe alkfjf;
-            </Text>
-          </View>
-        </View>
+  // methods
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
+  
+  // Can use this function below OR use Expo's Push Notification Tool from: https://expo.dev/notifications
+  function getDaysTillSparkNotification(targetSparkTDO) {
+    let daysInMonthArray = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    // Spark Date: February 
+    let currentDate = new Date();
+    let currentDay = currentDate.getDate();
+    let currentMonth =  currentDate.getMonth();
 
-        <View style={accordianStyles.listItemContainer}>
-          <View style={accordianStyles.listItemHeader}>
-            <Text style={{fontWeight: "bold", fontSize: 15}}> Worship Experience </Text>
-          </View>
-          <View style={accordianStyles.listItemContent}>
-            <Text style={accordianStyles.contentText}>
-               My Content ajslkd fja;klfjioew jajsdil;fj iao;e jfoajfl ioasje fioj;ijia jo;fijaeioj  afefia;fj ioaej aoewf 
-               alsfjioe;j aioejf aioefja fioej foaefaofo;jaioajfejfoawf ijaw i;ewf iajioefj awe alkfjf;
-            </Text>
-          </View>
-        </View>
+    let targetDay = targetSparkTDO.getPart("day");
+    let targetMonth = targetSparkTDO.getPart("month") - 1; // subtract one to get the correct index in daysInMonth (January is 0)
+    
+    // get the number of days from the month after the current month until the first day of the spark month
+    let accumulator = currentMonth + 1;
+    let runningDays = 0;
+    while (accumulator != targetMonth) {
+      if (accumulator == daysInMonthArray.length) {
+        accumulator = 0;
+      }
+      runningDays += daysInMonthArray[accumulator];
+      accumulator++;
+    } 
 
-        <View style={accordianStyles.listItemContainer}>
-          <View style={accordianStyles.listItemHeader}>
-            <Text style={{fontWeight: "bold", fontSize: 15}}> Additional Notes </Text>
-          </View>
-          <View style={accordianStyles.listItemContent}>
-            <Text style={accordianStyles.contentText}>
-               My Content ajslkd fja;klfjioew jajsdil;fj iao;e jfoajfl ioasje fioj;ijia jo;fijaeioj  afefia;fj ioaej aoewf 
-               alsfjioe;j aioejf aioefja fioej foaefaofo;jaioajfejfoawf ijaw i;ewf iajioefj awe alkfjf;
-            </Text>
-          </View>
-        </View>
-        
-      </List.Accordion>
-    );
+    // add the number of days left in the current month to the running total
+    runningDays += daysInMonthArray[currentMonth] - currentDay;
+    // add the number of days from the first day of the spark month until the target spark day (targetDay) to the running total
+    runningDays += targetDay + 1;
+    // plus one to send a day after the spark
+    return runningDays;
   }
 
+  async function scheduleNotification() {
+    let sparkTDO = new TDO(5, 30, 0, 3, 24, 2023);
+    let daysUntilSpark = getDaysTillSparkNotification(sparkTDO);
+    // the spark notification will send at 5:30 the day after the spark is completed
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Spark Experience",
+        body: 'Its working!',
+      },
+      trigger: {
+        seconds: 60 * 30 * 60 * 5 * 24 * daysUntilSpark,
+      },
+    });
+  }
+  
+  async function registerForPushNotificationsAsync() {
+    let token;
+    if (Device.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      console.log("My Token", token);
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+  
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+  
+    return token;
+  } 
 
-  let dropDownItems = ['Redo', 'Undo', 'Cut', 'Copy', 'Paste', 'Delete'];
-  const [selected, setSelected] = React.useState("true");
-  let myTestItem = "";
+  //running it
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
-  return (
-    // Accordion Component Code
-    <View style = {accordianStyles.container}>
-      <View style = {accordianStyles.accordionList}>
-        <List.Section style = {accordianStyles.section}>
-          <FlatList 
-            style = {accordianStyles.flatList}
-            data = {instruments}
-            renderItem = {renderItem}
-            // extraData = {renderAgain}
-          />
-        </List.Section>
-      </View>
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
-      {/* <View style = {{backgroundColor: "green", height: "10%", width: "100%", position: "absolute", top: "40%"}}>
-        <SelectList 
-          style = {{position: "absolute", top: "205"}}
-          data={dropDownItems} 
-          setSelected={setSelected} 
-          dropDownStyles={dropDownStyles.menu}
-          maxHeight={100}
-        />
-      </View> */}
-      <View style = {{backgroundColor: "green", height: "10%", width: "100%"}}>
-        <DropDown 
-          placeholder = {"Choose a role"} 
-          items = {dropDownItems} 
-          // style = {dropDownStyles} 
-          func = {(item)=> {myTestItem = item; console.log(myTestItem)}}
-          rerenderParent = {() => setSelected(!selected)}
-        />
-      </View>
-    </View> 
-  );    
-};
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
 
-const accordianStyles = StyleSheet.create({
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      navigation.navigate(Routes.login)
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log("Notification", notification);
+  }, [notification])
+
+  //convert firebase obj to TDO
+  return(
+    <View style={styles.container}>
+      <TouchableHighlight style = {styles.button} onPress = {async() => await scheduleNotification(3)}>
+        <Text style={{color: "white"}}>  Send Notification </Text>
+      </TouchableHighlight>
+    </View>
+  );
+}    
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "teal",
-    flexDirection: "column"
-  },
-  section: {
-    backgroundColor: "white",
-    width: "100%"
-  },
-  listItemContainer: {
-    backgroundColor: "white",
-    paddingTop: "2%",
-    paddingBottom: "2%"
-  },
-  listItemHeader: {
-    padding: "2%",
-    alignItems: "flex-start",
-  },
-  contentText: {
-    flexWrap: "wrap"
-  },
-  listItemContent: {
-    padding: "5%"
-  },
-  header: {
-    backgroundColor: "yellow",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center"
   },
-  headerText: {
-    color: "black",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  accordionList: {
-    width: "100%",
-    top: "5%",
-    height: "30%"
+  button: {
+    padding: "5%",
+    backgroundColor: "blue",
+    borderRadius: 5
   }
-});
+})
