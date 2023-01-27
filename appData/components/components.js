@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { TextInput, View, TouchableOpacity } from 'react-native';
 import { StyleSheet, Text, FlatList } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import { Menu, IconButton } from 'react-native-paper';
+import { Menu, IconButton, Snackbar } from 'react-native-paper';
 
 class Input extends Component{
       
@@ -150,8 +150,38 @@ const DropDown = (props) => {
   );
 }
 
-const ItemWithMenu = (menuItems) => {
+class Toast extends Component {
+  constructor(props) {
+    super();
+    this.props = props;
+    this.state = {
+      show: false,
+      duration: 5000,
+      text: "This is a toast",
+      color: "red"
+    }
+  }
+
+  showToast(text, duration) {
+    this.setState({text, duration: duration || 5000, show: true})
+  }
+
+  dismissToast = () => {
+    this.setState({show: false})
+  }
+
+  render () {
+    return (
+      <Snackbar
+        visible = {this.state.show} 
+        onDismiss = {this.dismissToast}
+        duration = {this.state.duration}
+      >
+        {this.state.text}
+      </Snackbar>
+    )
+  }
 
 }
 
-export { Input, Slider, DropDown }
+export { Input, Slider, DropDown, Toast }
