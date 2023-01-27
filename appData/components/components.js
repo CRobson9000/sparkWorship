@@ -3,29 +3,6 @@ import { TextInput, View, TouchableOpacity } from 'react-native';
 import { StyleSheet, Text, FlatList } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { Menu, IconButton } from 'react-native-paper';
-//element for input
-// const Input = (props) => {
-//     const [text, onChangeText] = React.useState(props.start || "");
-//     if (props.func && text != "") {
-//       props.func(text);
-//     }
-//     let myStyle = props.inputStyle
-//     if (!myStyle) {
-//       myStyle = {
-//           width: "40%",
-//           height: "10%"
-//       }
-//     }
-//     return (
-//         <TextInput
-//           style={myStyle}
-//           onChangeText={onChangeText}
-//           value={text}
-//           placeholder={props.placeHolderText}
-//           secureTextEntry={props.secure}
-//         />
-//     );  
-// };
 
 class Input extends Component{
       

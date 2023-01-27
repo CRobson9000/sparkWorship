@@ -1,91 +1,79 @@
 import { StyleSheet, TouchableHighlight, Text, View, TouchableOpacity, FlatList, SafeAreaView, Image } from 'react-native';
 import React, {useRef, useEffect} from 'react';
 import { Input, Slider } from '../../components/components';
-import { Observable, TDO } from '../../components/classes';
+import { FirebaseButler, Observable, TDO } from '../../components/classes';
 
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
-import { screensEnabled } from 'react-native-screens';
-import { stylesPortrait } from '../../styles/portrait';
+import ProfileImage from '../../components/profileImage.js';
 
 export default function Message({ route, navigation }) {
+  let props = route.params;
+  let currentUser = props?.userId;
 
-    const renderMessage = (object, index, separators) => {
-        //convert firebase obj to TDO
-        let TDOobject = object.item.sentTDO.TDO;
-        let tdo = new TDO(
-          TDOobject.hours, 
-          TDOobject.minutes,
-          TDOobject.seconds,
-          TDOobject.month,
-          TDOobject.day,
-          TDOobject.year
+  // attributes brought from Chatlist Screen
+  let peopleLookup = props?.peopleLookup;
+  let peopleString = props?.peopleString;
+  let convoData = props?.convoData;
+  let conversationId = useRef(props.convoId || null);
+
+  const [messages, setMessages] = React.useState(Object.values(convoData?.["messages"] || []) || []);
+  let currentMessage = useRef("");
+
+  const renderMessage = (object, index, separators) => {
+    //convert firebase obj to TDO
+    let TDOobject = object.item.sentTDO.TDO;
+    let tdo = new TDO (null, null, null, null, null, null, TDOobject
     );
 
+    console.log("OBJ", object.item.sender);
+
     return(
-        <View style = {styles.message}>
-          <View style={{flexDirection:"row", justifyContent: "flex-start"}}>
-            {/* When the other person sends a message, the message box should be a light gray rather than the light orange. */}
-            <View style = {styles.textMessage}><Text>{object.item.message}</Text></View>
-            {/* Profile picture of the sender should be on the right side of the message and the profile picture of the receiver
-                should be on the left side of the message when they send a message */ }
-            <View style = {styles.sender}><Text>{object.item.sender}</Text></View>
-          </View>
-          <View style = {styles.time}>
-          {/* Date should not be displayed for every single message. There should just be one date for all messages in that day */}
-          {/* <Text style = {{margin: "2%"}}>{tdo.getFormattedDate()}</Text> */}
-            <Text style = {{margin: "2%"}}>{tdo.getFormattedTime()}</Text>
-          </View>
+      <View style = {styles.message}>
+        <View style={{flexDirection:"row", justifyContent: "flex-start"}}>
+          {/* When the other person sends a message, the message box should be a light gray rather than the light orange. */}
+          <View style = {styles.textMessage}><Text>{object.item.message}</Text></View>
+          {/* Profile picture of the sender should be on the right side of the message and the profile picture of the receiver
+              should be on the left side of the message when they send a message */ }
+            <ProfileImage userId = {object.item.sender} size = {"small"}/>
+          {/* <View style = {styles.sender}><Text>{object.item.sender}</Text></View> */}
         </View>
-      );
-    }
-  let props = route.params;
-  let myMessage = "";
-  let currentUser = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
-  let otherUser = "wVgW65Og51OCuC7lD8LtRJBWuUC2";
-  let conversationId = "-NE1h9dOvSOgnJMdRTRv";
-  // let conversationId = "";
-  const [renderAgain, setRenderAgain] = React.useState(false);
-  const [messages, setMessages] = React.useState([]);
-
-  function invertArray(array) {
-    let result = [];
-    for (let i = 0; i < array.length; i++) {
-      result.unshift(array[i]);
-    }
-    return result;
+        <View style = {styles.time}>
+        {/* Date should not be displayed for every single message. There should just be one date for all messages in that day */}
+        {/* <Text style = {{margin: "2%"}}>{tdo.getFormattedDate()}</Text> */}
+          <Text style = {{margin: "2%"}}>{tdo.getFormattedTime()}</Text>
+        </View>
+      </View>
+    );
   }
 
-  async function loadMessages() {
-    //get initial data
-    const db = getDatabase();
-    const messageRef = ref(db, `Messaging/${conversationId}/messages`);
-    await onValue(messageRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        let dataArray = Object.values(data);
-        let final = invertArray(dataArray);
-        setMessages(final);
-        setRenderAgain(true);
-      }  
-    });
-  }
-
-  function sendMessage() {
+  async function sendMessage() {
+    console.log("Conversation Id", conversationId.current);
     //if there's a message, send it
-
-    if (myMessage != "" && myMessage != " ") {
+    if (currentMessage.current != "" && currentMessage.current.trim() != "") {
       // get database
       const db = getDatabase();
 
       // setup a conversation space and get the id if there isn't already one |  TDO: more needed here!
-      if (conversationId == "") {
+      if (!conversationId.current) {
         const reference = ref(db, "Messaging");
-        let conversationObject = push(reference, {
-          type: "individual",
-          people: [currentUser, otherUser]
+        let idsArray = Object.keys(peopleLookup);
+        let conversationObject = await push(reference, {
+          people: [...idsArray, currentUser]
         }); 
         let conversationIdArray = conversationObject.toString().split("/");
-        conversationId = conversationIdArray[conversationIdArray.length - 1];
+        conversationId.current = conversationIdArray[conversationIdArray.length - 1];
+
+        //get current conversations array
+        let currentConvoArray = await FirebaseButler.fbGet(`Users/${currentUser}/conversations`) || [];
+        currentConvoArray.push(conversationId.current);
+
+        //set new the current conversations array
+        const newConvoRef = ref(db, `Users/${currentUser}/conversations`);
+        set(newConvoRef, currentConvoArray);
+        for (let peopleIndex in Object.keys(peopleLookup)) {
+          const recipientRef = ref(db, `Users/${Object.keys(peopleLookup)[peopleIndex]}/conversations`);
+          set(recipientRef, currentConvoArray);
+        }
       }
   
       //create the message
@@ -99,49 +87,55 @@ export default function Message({ route, navigation }) {
         dateObj.getFullYear()
       );
 
-      //set messages based on my messages 
-      const messageRef = ref(db, `Messaging/${conversationId}/messages`);
-      push(messageRef, {
-        message: myMessage,
+      //set update message in firebase
+      const messageRef = ref(db, `Messaging/${conversationId.current}/messages`);
+      await push(messageRef, {
+        message: currentMessage.current,
         sender: currentUser,
         sentTDO
-      }); 
+      });
+      
+      // update local copy of message
+      messages.unshift({
+        message: currentMessage.current,
+        sender: currentUser,
+        sentTDO
+      });
 
-       //clear myMessage
-       myMessage = "";
+      setMessages([...messages]);
+
+      
     }
   }
 
   //only run this method on the first render of the page
   useEffect(() => {
-    loadMessages();
-  }, []);
+    //clear myMessage
+    currentMessage.current = "";
+  }, [messages]);
 
-    return(
+  return(
     <View style={styles.container}>
         <View style={styles.topBorder}>
             {/* Name will need to be rendered */}
-            <Text style={styles.nameText}>FirstName LastName</Text>
+            <Text style={styles.nameText}>{peopleString}</Text>
         </View>
         <View style={styles.content}>
             <FlatList 
-            style = {styles.flatList}
-            data = {messages}
-            renderItem = {renderMessage}
-            inverted = {true}
-            extraData = {renderAgain}
+              style = {styles.flatList}
+              data = {messages}
+              renderItem = {renderMessage}
+              inverted = {true}
             />
         </View>
         <View style={styles.messagingContainer}>
-            <Input placeHolderText={"Type Message"} func = {(val) => myMessage = val}/>
+            <Input placeHolderText={"Type Message"} func = {(val) => currentMessage.current = val}/>
             <TouchableHighlight style = {styles.button} onPress = {() => sendMessage()}>
-            <Text style={styles.sendText}> Send </Text>
+              <Text style={styles.sendText}> Send </Text>
             </TouchableHighlight>
         </View>
 
     </View>
-
-
 )}
 
 const styles = StyleSheet.create({

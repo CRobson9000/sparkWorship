@@ -64,7 +64,7 @@ export default function LoginScreen({ navigation }) {
             top: 100
           }}
         >
-          <Text style={{color: "white"}}> Login </Text>
+          <Text style={{color: "#006175"}}> Login </Text>
         </TouchableHighlight>
 
         {/* Mini circles */}

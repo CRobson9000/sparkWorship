@@ -39,7 +39,7 @@ function BottomTabNavigator( { route, navigation } ) {
           return (
             <View style = {{flexDirection: "row", padding: "10%", width: "100%", justifyContent: "center", alignItems: "center", backgroundColor: "rgb(219, 233, 236)"}}>
               <Image style={{position: "absolute", height: 60, width: 220}} source={require('../../../assets/logo2.png')}/>
-              <IconButton onPress = {() => navigation.navigate(Routes.chatList)}icon = "chat-processing" style = {{position: "absolute", right: "5%"}}/>
+              <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}icon = "chat-processing" style = {{position: "absolute", right: "5%"}}/>
             </View>
           );
         }

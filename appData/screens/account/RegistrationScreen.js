@@ -35,20 +35,6 @@ export default function RegistrationScreen({ navigation }) {
   let confirmPassword = "";
 
   //userId
-  let userId = {
-    value: "",
-    valListener: function(val) {},
-    setVal(val) {
-      this.value = val;
-      this.valListener(val);
-    },
-    getVal() {
-      return this.value;
-    },
-    registerListener: function(listener) {
-      this.valListener = listener;
-    }
-  }
 
   function signUp(navigation) {
     const auth = getAuth();
@@ -57,10 +43,9 @@ export default function RegistrationScreen({ navigation }) {
       createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
         console.log("User created successfully!");
           const user = userCredential.user;
-
-          //set the global userId, which will call an observer
-          userId.setVal(user.uid);
-          navigation.navigate("Navigator", {userId: user.uid});   
+          createUserSpace(user.uid).then(() => {
+            navigation.navigate("Navigator", {userId: user.uid}); 
+          })
       }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -76,20 +61,21 @@ export default function RegistrationScreen({ navigation }) {
   //   OBSERVERS
   //--------------------
 
-  const createUserSpace = () => {
-    //verify that the new user has an id
-    console.log("User", userId.getVal());
-    const uid = userId.getVal();
-
+  async function createUserSpace(uid) {
     //create space in the database to store this user's information
     const db = getDatabase();
+
     const reference = ref(db, `Users/${uid}`);
-    set(reference, {
-        name: name,
-        username: username,
-        role: role,
-        email: email,
-        loggedIn: true
+    await set(reference, {
+        loggedIn: true,
+        role: role
+    });
+
+    const infoReference = ref(db, `Users/${uid}/info`);
+    await set(infoReference, {
+      name: name,
+      email: email, 
+      username: username
     });
   }
 
@@ -100,13 +86,6 @@ export default function RegistrationScreen({ navigation }) {
       </View>
     )
   }
-
-  //--------------------
-  //   LISTENERS
-  //--------------------
-
-  //register a listener for when a uid is set
-  userId.registerListener(createUserSpace);
 
   /*------------------------------------------------*/
   /*----------FRONT-END APP CODE ----------*/

@@ -62,21 +62,20 @@ export default function SparkSummary({ route, navigation }) {
     <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
         <View style={[sparkViewStyles.sparkContainer]}>
           <View style={[sparkViewStyles.sparkVerticalContainer]}>
-                <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Location</Text>
                 <View style={[sparkViewStyles.topLocationContainer]}>
-                    <Text style={{paddingLeft:"4%"}}>Address</Text>
+                    <Text style={{paddingLeft:"2%"}}>Address</Text>
                     <Input start = {inputs.address.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.address.setVal(val)}/>
                 </View>
                 <View style={[sparkViewStyles.locationContainer]}>
-                    <Text style={{paddingLeft:"4%"}}>City</Text>
+                    <Text style={{paddingLeft:"2%"}}>City</Text>
                     <Input start = {inputs.city.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.city.setVal(val)}/>
                 </View>
                 <View style={[sparkViewStyles.locationContainer]}>
-                    <Text style={{paddingLeft:"4%"}}>Zip</Text>
+                    <Text style={{paddingLeft:"2%"}}>Zip</Text>
                     <Input start = {inputs.zip.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.zip.setVal(val)}/>
                 </View>
                 <View style={[sparkViewStyles.locationContainer]}>
-                    <Text style={{paddingLeft:"4%"}}>State</Text>
+                    <Text style={{paddingLeft:"2%"}}>State</Text>
                     <Input start = {inputs.state.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.state.setVal(val)}/>
                 </View>
                 <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => sendPayload()}>
@@ -324,6 +323,7 @@ export default function SparkSummary({ route, navigation }) {
         </ScrollView>
       );
     }
+
     // const SixthRoute = () => (
     //    <DropDownPicker
     //      placeholderStyle={{
@@ -350,8 +350,6 @@ export default function SparkSummary({ route, navigation }) {
     //    />
     //);
     
-      
-      
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
         { key: 'first', title: 'Location' },
@@ -368,7 +366,7 @@ export default function SparkSummary({ route, navigation }) {
         third: SetListRoute,
         fourth: VolunteersRoute,
         fifth: RequestsRoute,
-    //    sixth: SixthRoute
+    //  sixth: SixthRoute
     });
 
     const renderTabBar = props => (
@@ -376,7 +374,7 @@ export default function SparkSummary({ route, navigation }) {
         {...props}
         indicatorStyle={{ backgroundColor: '#006175' }}
         scrollEnabled= {true}
-        labelStyle={{color:"#000000"}}
+        labelStyle={{color:"#006175"}}
         style={{ backgroundColor: 'rgb(219, 233, 236)'}}
       />
     );
@@ -441,7 +439,7 @@ export default function SparkSummary({ route, navigation }) {
       <View style={styles.row}>
         <Image style={styles.profilePicture} source={require('../../../assets/blankprofilepic.png')}></Image>
         <View style={styles.column}>
-          <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10}}>Leader Name</Text>
+          <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>Spark Name</Text>
           <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13}}>Date and Time</Text>
           <View style={styles.row2}>
             <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
@@ -449,12 +447,12 @@ export default function SparkSummary({ route, navigation }) {
           </View>
         </View>
       </View>
-    <View style={[styles.row, {marginLeft: 20, marginRight: 20, top: 115}]}>
-      <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
-      <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
-      <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
-      <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
-      <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
+    <View style={[styles.row, {marginLeft: 100, marginRight: 100, top: "30%"}]}>
+      <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
+      <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
+      <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
+      <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
+      <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
     </View>
     </View>
     <View style={styles.content}>
@@ -484,14 +482,14 @@ const styles = StyleSheet.create({
   },
 
   titleText: {
-    fontSize: 25,
+    fontSize: 20,
     textAlign: 'center',
-    fontWeight: '500'
+    color: "#006175"
   },
 
   row: {
     flexDirection: 'row',
-    top: '22%',
+    top: '25%',
     justifyContent: 'space-evenly'
   },
 
@@ -579,6 +577,7 @@ const sparkViewStyles = StyleSheet.create({
       justifyContent: "center", 
       alignItems: "center"
   },
+  
   locationContainer:
   {
       width:"90%",
@@ -587,10 +586,10 @@ const sparkViewStyles = StyleSheet.create({
       marginTop: "12%"
   },
   topLocationContainer:{
-      width:"90%",
+      width:"85%",
       flexDirection:"column", 
       height:"10%",
-      marginTop: "4%"
+      marginTop: "7%"
   },
   timeContainer:{
       flexDirection:"row",
