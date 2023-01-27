@@ -16,7 +16,7 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={Routes.login}>
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={Routes.sparkCreation}>
         {/* Actual Screens used in our app */}
         <Stack.Screen name={Routes.login} component={LoginScreen} />
         <Stack.Screen name={Routes.registration} component={RegistrationScreen} />

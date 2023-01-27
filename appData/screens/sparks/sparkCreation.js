@@ -1,6 +1,7 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import React, {useRef, useEffect} from 'react';
-import { IconButton } from 'react-native-paper';
+import { IconButton, ProgressBar } from 'react-native-paper';
+import { Dropdown } from 'react-native-element-dropdown';
 
 import { stylesPortrait } from "../../styles/portrait";
 import colors from '../../../config/colors';
@@ -50,6 +51,12 @@ export default function SparkCreation({ route, navigation }) {
         sparkMinutes: new Observable("", () => updatePayload(inputs.sparkMinutes.getVal(), "sparkMinutes")),
         sparkAmPM: new Observable("", () => updatePayload(inputs.sparkAmPM.getVal(), "sparkAmPM"))
     };
+
+    // Model variables
+    let states = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
+
+    // global variables for dropDowns
+    const globalUserState = useRef(null);
 
     const updatePayload = (updateVal, updateName) =>
     {
@@ -185,37 +192,60 @@ export default function SparkCreation({ route, navigation }) {
         return modelPromise;
     }
 
+
+    //dropDown renderItem function
+    const renderDropDownItem = (item) => {
+        return (
+        <View style={{padding: "5%", justifyContent: "center", alignItems: "center", flex: 1}}>
+            <Text> {item} </Text>
+        </View>
+    )
+  }
+
     // ------------
     // Phases Code
     // ------------
 
     // Location Entry
     const Screen1 = () => {
+        const [userState, setUserState] = React.useState(null);
+
+        useEffect(() => {
+            if (userState) {
+              globalUserState.current = userState;
+            }
+        }, [userState]);
+
+        useEffect(() => {
+            setUserState(globalUserState.current);
+        }, [globalUserState])
+
         return(
-            <View style={[sparkViewStyles.sparkContainer]}>
-                <View style={[sparkViewStyles.sparkVerticalContainer]}>
-                    <View style={[sparkViewStyles.locationContainer]}>
-                        <Text style={{paddingLeft:"4%"}}>Address</Text>
-                        <Input start = {inputs.address.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.address.setVal(val)}/>
+            <View style={sparkViewStyles.content}>
+                <Text style={sparkViewStyles.stageText}>Location</Text>
+                <Text style={sparkViewStyles.text1}>Street Address</Text>
+                <Input start = {inputs?.address?.getVal()} inputStyle = {sparkViewStyles.inputBox} func = {(val) => inputs.address.setVal(val)}/>
+                <Text style={sparkViewStyles.text1}>City</Text>
+                <Input start = {inputs?.city?.getVal()} inputStyle = {sparkViewStyles.inputBox} func = {(val) => inputs.city.setVal(val)}/>
+                <View style={sparkViewStyles.row2}>
+                    <View style={sparkViewStyles.column2}>
+                        <Text style={sparkViewStyles.text3}>State</Text>
+                        <Dropdown
+                            style={sparkViewStyles.dropDown} 
+                            data={states} 
+                            renderItem={renderDropDownItem}
+                            maxHeight = {"40%"}
+                            itemTextStyle = {{color: "black", fontSize: 2}}
+                            onChange = {(value) => setUserState(value)}
+                            placeholder = {userState}
+                            value = {userState}/>
                     </View>
-                    <View style={[sparkViewStyles.locationContainer]}>
-                        <Text style={{paddingLeft:"4%"}}>City</Text>
-                        <Input start = {inputs.city.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.city.setVal(val)}/>
-                    </View>
-                    <View style={[sparkViewStyles.locationContainer]}>
-                        <Text style={{paddingLeft:"4%"}}>Zip</Text>
-                        <Input start = {inputs.zip.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.zip.setVal(val)}/>
-                    </View>
-                    <View style={[sparkViewStyles.locationContainer]}>
-                        <Text style={{paddingLeft:"4%"}}>State</Text>
-                        <Input start = {inputs.state.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.state.setVal(val)}/>
-                    </View>
-                    <Text style={{paddingBottom:"4%"}}>- Or -</Text>
-                    <View style={[sparkViewStyles.locationContainer]}>
-                        <Text style={{paddingLeft:"5%"}}>Previous Location</Text>
-                        <TextInput style={[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]}></TextInput>
+                    <View style={sparkViewStyles.column2}>
+                        <Text style={sparkViewStyles.text3}>Zip Code</Text>
+                        <Input start = {inputs?.zip?.getVal()} inputStyle = {sparkViewStyles.inputBox2} func = {(val) => inputs.zip.setVal(val)}/>
                     </View>
                 </View>
+                
             </View>
         )
     }
@@ -223,53 +253,60 @@ export default function SparkCreation({ route, navigation }) {
     // Time Entry
     const Screen2 = () => {
         return (
-            <View style={[sparkViewStyles.sparkVerticalContainer]}>
-                <View style={[sparkViewStyles.centerContents]}>
-                    <Text style={[sparkViewStyles.inbetweenText]}>Spark Begins On</Text>
+            <View style={[sparkViewStyles.content]}>
+                <Text style={sparkViewStyles.stageText}>Date and Time</Text>
+                <Text style={[sparkViewStyles.text1]}>Spark Date</Text>
+                <View style={sparkViewStyles.timeDateRow}>
                     <View style={[sparkViewStyles.timeContainer]}>
-                        <Input placeHolderText={"MM"} start = {inputs.sparkMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMonth.setVal(val)}/>
-                        <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-                        <Input placeHolderText={"DD"} start = {inputs.sparkDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkDay.setVal(val)}/>
-                        <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-                        <Input placeHolderText={"YY"} start = {inputs.sparkYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkYear.setVal(val)}/>
-                        <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
-                        <Input placeHolderText={"12"} start = {inputs.sparkHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkHours.setVal(val)}/>
-                        <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
-                        <Input placeHolderText={"30"} start = {inputs.sparkMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMinutes.setVal(val)}/>
-                        <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
-                        <Input placeHolderText={"PM"} start = {inputs.sparkAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkAmPM.setVal(val)}/>
+                        <Input placeHolderText={"MM"} start = {inputs.sparkMonth.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.sparkMonth.setVal(val)}/>
+                        <Text style={[sparkViewStyles.timeDateInput]}> / </Text>
+                        <Input placeHolderText={"DD"} start = {inputs.sparkDay.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.sparkDay.setVal(val)}/>
+                        <Text style={[sparkViewStyles.timeDateInput]}> / </Text>
+                        <Input placeHolderText={"YY"} start = {inputs.sparkYear.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.sparkYear.setVal(val)}/>
+                    </View>
+                    <Text style={[sparkViewStyles.inbetweenText]}>at</Text>
+                    <View style={[sparkViewStyles.timeContainer]}>
+                        <Input placeHolderText={"12"} start = {inputs.sparkHours.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.sparkHours.setVal(val)}/>
+                        <Text style={[sparkViewStyles.timeDateInput]}> : </Text>
+                        <Input placeHolderText={"30"} start = {inputs.sparkMinutes.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.sparkMinutes.setVal(val)}/>
+                        <Text style={[sparkViewStyles.timeDateInput]}> </Text>
+                        <Input placeHolderText={"PM"} start = {inputs.sparkAmPM.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.sparkAmPM.setVal(val)}/>
                     </View>
                 </View>
-                <View style={[sparkViewStyles.centerContents, sparkViewStyles.middleMan]}>
-                    <Text style={[sparkViewStyles.inbetweenText]}>First Rehearsal On</Text>
+                <Text style={[sparkViewStyles.text1]}>First Rehearsal</Text>
+                <View style={sparkViewStyles.timeDateRow}>
                     <View style={[sparkViewStyles.timeContainer]}>
-                        <Input placeHolderText={"MM"} start = {inputs.rehearsalMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMonth.setVal(val)}/>
-                        <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-                        <Input placeHolderText={"DD"} start = {inputs.rehearsalDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalDay.setVal(val)}/>
-                        <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-                        <Input placeHolderText={"YY"} start = {inputs.rehearsalYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalYear.setVal(val)}/>
-                        <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
-                        <Input placeHolderText={"12"} start = {inputs.rehearsalHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalHours.setVal(val)}/>
-                        <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
-                        <Input placeHolderText={"30"} start = {inputs.rehearsalMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMinutes.setVal(val)}/>
-                        <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
-                        <Input placeHolderText={"PM"} start = {inputs.rehearsalAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalAmPM.setVal(val)}/>
+                        <Input placeHolderText={"MM"} start = {inputs.rehearsalMonth.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.rehearsalMonth.setVal(val)}/>
+                        <Text style={[sparkViewStyles.timeDateInput]}> / </Text>
+                        <Input placeHolderText={"DD"} start = {inputs.rehearsalDay.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.rehearsalDay.setVal(val)}/>
+                        <Text style={[sparkViewStyles.timeDateInput]}> / </Text>
+                        <Input placeHolderText={"YY"} start = {inputs.rehearsalYear.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.rehearsalYear.setVal(val)}/>
+                    </View>
+                    <Text style={[sparkViewStyles.inbetweenText]}>at</Text>
+                    <View style={[sparkViewStyles.timeContainer]}>    
+                        <Input placeHolderText={"12"} start = {inputs.rehearsalHours.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.rehearsalHours.setVal(val)}/>
+                        <Text style={[sparkViewStyles.timeDateInput]}> : </Text>
+                        <Input placeHolderText={"30"} start = {inputs.rehearsalMinutes.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.rehearsalMinutes.setVal(val)}/>
+                        <Text style={[sparkViewStyles.timeDateInput]}> </Text>
+                        <Input placeHolderText={"PM"} start = {inputs.rehearsalAmPM.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.rehearsalAmPM.setVal(val)}/>
                     </View>
                 </View>
-                <View style={[sparkViewStyles.centerContents]}>
-                    <Text style={[sparkViewStyles.inbetweenText]}>Roles to be Filled By</Text>
+                <Text style={[sparkViewStyles.text1]}>Roles Filled By</Text>
+                <View style={sparkViewStyles.timeDateRow}>
                     <View style={[sparkViewStyles.timeContainer]}>
-                        <Input placeHolderText={"MM"} start = {inputs.publishedMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedMonth.setVal(val)}/>
-                        <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-                        <Input placeHolderText={"DD"} start = {inputs.publishedDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedDay.setVal(val)}/>
-                        <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-                        <Input placeHolderText={"YY"} start = {inputs.publishedYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedYear.setVal(val)}/>
-                        <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
-                        <Input placeHolderText={"12"} start = {inputs.publishedHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedHours.setVal(val)}/>
-                        <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
-                        <Input placeHolderText={"30"} start = {inputs.publishedMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedMinutes.setVal(val)}/>
-                        <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
-                        <Input placeHolderText={"PM"} start = {inputs.publishedAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedAmPM.setVal(val)}/>
+                        <Input placeHolderText={"MM"} start = {inputs.publishedMonth.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.publishedMonth.setVal(val)}/>
+                        <Text style={[sparkViewStyles.timeDateInput]}> / </Text>
+                        <Input placeHolderText={"DD"} start = {inputs.publishedDay.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.publishedDay.setVal(val)}/>
+                        <Text style={[sparkViewStyles.timeDateInput]}> / </Text>
+                        <Input placeHolderText={"YY"} start = {inputs.publishedYear.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.publishedYear.setVal(val)}/>
+                    </View>
+                    <Text style={[sparkViewStyles.inbetweenText]}>at</Text>
+                    <View style={[sparkViewStyles.timeContainer]}>
+                        <Input placeHolderText={"12"} start = {inputs.publishedHours.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.publishedHours.setVal(val)}/>
+                        <Text style={[sparkViewStyles.timeDateInput]}> : </Text>
+                        <Input placeHolderText={"30"} start = {inputs.publishedMinutes.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.publishedMinutes.setVal(val)}/>
+                        <Text style={[sparkViewStyles.timeDateInput]}> </Text>
+                        <Input placeHolderText={"PM"} start = {inputs.publishedAmPM.getVal()} inputStyle = {sparkViewStyles.timeDateInput} func = {(val) => inputs.publishedAmPM.setVal(val)}/>
                     </View>
                 </View>
             </View>
@@ -358,8 +395,9 @@ export default function SparkCreation({ route, navigation }) {
 
         //front end screen
         return (
-            <View style={[sparkViewStyles.sparkVerticalContainer]}>
-                <View style={[sparkViewStyles.boxOne, sparkViewStyles.inviteVeryTopBox]}>
+            <View style={[sparkViewStyles.content]}>
+                <Text style={sparkViewStyles.stageText}>Roles</Text>
+                <View style={[sparkViewStyles.boxOne, sparkViewStyles.roleTopBox]}>
                     <DropDown
                         placeholder = {"Select Role"}
                         items = {dropDownItems}
@@ -368,7 +406,7 @@ export default function SparkCreation({ route, navigation }) {
                         rerenderParent = {() => setSelected(!selected)}
                     />
                     <TouchableOpacity activeOpacity={1} style={sparkViewStyles.addButton} onPress = {() => addRole()}>
-                        <Text style={{color: "white"}}>Add</Text>
+                        <Text style={{color: "white", borderColor: "white", borderWidth: 2, padding: "8%", borderRadius: 5}}>Add</Text>
                     </TouchableOpacity>
                 </View>
                 <View style = {sparkViewStyles.roleContainer}>
@@ -380,32 +418,7 @@ export default function SparkCreation({ route, navigation }) {
                         style = {{height: "100%", width: "100%"}}
                         renderItem = {renderItem}
                     />
-                </View>
-                
-                {/* <View style={[sparkViewStyles.boxOne]}>
-                    <Text style={[sparkViewStyles.boxText]}>Pastry Maker: None</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/circularX.png")}>
-
-                    </Image>
-                </View>
-                <View style={[sparkViewStyles.boxTwo]}>
-                    <Text style={[sparkViewStyles.boxText]}>Wad Thrower: None</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/circularX.png")}>
-
-                    </Image>
-                </View>
-                <View style={[sparkViewStyles.boxOne]}>
-                    <Text style={[sparkViewStyles.boxText]}>Glue Eater: None</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/circularX.png")}>
-
-                    </Image>
-                </View>
-                <View style={[sparkViewStyles.boxTwo]}>
-                    <Text style={[sparkViewStyles.boxText]}>Spark Leader: You</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
-                    </Image>
-                </View> */}
-                
+                </View> 
             </View>
         );
     }
@@ -413,8 +426,9 @@ export default function SparkCreation({ route, navigation }) {
     // Friend Entry
     const Screen4 = () => {
         return (
-            <View style={[sparkViewStyles.sparkVerticalContainer]}>
-                <View style={[sparkViewStyles.boxOne, sparkViewStyles.inviteVeryTopBox]}>
+            <View style={[sparkViewStyles.content]}>
+                <Text style={sparkViewStyles.stageText}>Volunteers</Text>
+                <View style={[sparkViewStyles.boxOne, sparkViewStyles.roleTopBox]}>
                         <TextInput placeholder='Enter Volunteer Name' style={{fontSize: 18}}></TextInput>
                 </View>
                 <View style={[sparkViewStyles.boxOne]}>
@@ -456,24 +470,8 @@ export default function SparkCreation({ route, navigation }) {
         <Screen1 />, <Screen2 />, <Screen3 />, <Screen4 /> 
     ];
 
-    //sets up the headers to be displayed by a different slider
-    let myHeaders = [
-        <View style={sparkViewStyles.header}>
-                <Text style={{fontSize: 28}}>Location</Text>
-        </View>, 
-        <View style={sparkViewStyles.header}>
-            <Text style={{fontSize: 28}}>Times</Text>
-        </View>,
-        <View style={sparkViewStyles.header}>
-            <Text style={{fontSize: 28}}>Roles</Text>
-        </View>,
-        <View style={sparkViewStyles.header}>
-            <Text style={{fontSize: 28}}>Starting People</Text>
-        </View>
-    ]
-
     //sets the current index, which determines which phase the user is on
-    let [currentIndex, setCurrentIndex] = React.useState(0);
+    let [currentIndex, setCurrentIndex] = React.useState(1);
 
     function limitScroll(){
         if (currentIndex < 0) {
@@ -498,20 +496,16 @@ export default function SparkCreation({ route, navigation }) {
     // Front End Code
     //------------------------------
     return(
-        <View style={sparkViewStyles.container}>
-            <Slider currentIndex = {currentIndex} screens = {myHeaders} />
+        <View style={sparkViewStyles.MainContainer}>
+            <View style={sparkViewStyles.topBorder}>
+                <Text style={sparkViewStyles.titleText}>Spark Creation</Text>
+                <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: 170, height: 20, borderRadius: 10, marginTop: "7%", alignSelf: "center"}} progress={(currentIndex + 1) / 4}/>
+            </View>
             <Slider currentIndex = {currentIndex} screens = {myScreens} />
 
-            <View style={[sparkViewStyles.bottomContainer]}>
-                <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => setCurrentIndex(currentIndex - 1)}>
-                    <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Previous</Text>
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => sendPayload()}>
-                    <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Submit</Text>
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => setCurrentIndex(currentIndex + 1)}>
-                    <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Next</Text>
-                </TouchableOpacity>
+            <View style={[sparkViewStyles.bottomRow]}>
+                <TouchableOpacity style={sparkViewStyles.constantButtons} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={sparkViewStyles.buttonText}>Previous</Text></TouchableOpacity>
+                <TouchableOpacity style={sparkViewStyles.constantButtons} onPress = {() => (currentIndex == myScreens.length - 1) ? sendPayload() : setCurrentIndex(currentIndex + 1)}><Text style={sparkViewStyles.buttonText}>{(currentIndex == myScreens.length - 1) ? "Submit" : "Next"}</Text></TouchableOpacity>
             </View>
         </View>  
 
@@ -519,15 +513,131 @@ export default function SparkCreation({ route, navigation }) {
 }
 
 const sparkViewStyles = StyleSheet.create({
+    
+    MainContainer: {
+      backgroundColor: "white",
+      height: "100%",
+    },
+
+    content: {
+      height: "50%",
+      width: "100%"
+    },
+
+    topBorder: {
+      height: "25%",
+      width: "100%",
+      backgroundColor: "rgb(219, 233, 236)",
+      marginBottom: "5%"
+    },
+
+    // Spark Creation title in top section
+    titleText: {
+      marginTop: "13%",
+      padding: "5%",
+      textAlign: "center",
+      fontSize: 20
+    }, 
+
+    // Title on each screen
+    stageText: {
+      textAlign: "center",
+      fontSize: 20,
+      marginBottom: "4%" 
+    },
+
+    // Labels for all input boxes except Zip Code 
+    text1: {
+      paddingBottom: "2%",
+      fontSize: 15,
+      left: "9%",
+    },
+
+    // All input boxes except Zip Code
+    inputBox: {
+      backgroundColor: "#F2905B",
+      borderRadius: 10,
+      width: "85%",
+      height: "8%",
+      alignSelf: "center",
+      marginBottom: "4%", 
+      padding: 10
+    },
+
+    // Constant area that holds the "Previous" and "Next" Buttons
+    bottomRow: {
+      flexDirection: "row",
+      alignSelf: 'center',
+      justifyContent: "space-between",
+      height: "10%",
+      width: '85%',
+      marginTop: "10%"
+    },
+
+    // Text for all buttons
+    buttonText: {
+      color: "white",
+      fontSize: 12,
+    },
+
+    // "Previous" and "Next" buttons on each screen
+    constantButtons:{
+      backgroundColor: "rgb(0, 97, 117)",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "45%",
+      width: "45%",
+      top: "10%",
+      borderRadius: 10
+    },
+    
+    // State dropdown 
+    dropDown: {
+      backgroundColor: "#F2905B",
+      borderRadius: 10,
+      width: "100%",
+      height: "100%"
+    },
+
+    // Zip Code input box
+    inputBox2: {
+      backgroundColor: "#F2905B",
+      borderRadius: 10,
+      height: "100%",
+      paddingLeft: "10%"
+    },
+
+    // Address row
+    row2: {
+      flexDirection: "row",
+      width: "85%",
+      height: "8%",
+      justifyContent: "space-between",
+      alignSelf: "center",
+      marginBottom: "7%"
+    },
+
+    // Column for State and Zip Code
+    column2 : {
+      flexDirection: "column",
+      width: "45%",
+      height: "100%"
+    },
+
+    // Label for City, State and Zip Code
+    text3: {
+      paddingBottom: "6%",
+      fontSize: 15,
+      left: "5%"
+    },
+
     roleContainer: {
         padding: "5%",
         height: "80%", 
-        width: "80%", 
-        backgroundColor: "#F9CBB1", 
-        borderBottomRightRadius: 20, 
-        borderBottomLeftRadius: 20, 
-        zIndex: -3
+        width: "85%", 
+        backgroundColor: "white"
     },
+
     addButton: {
         height: "50%",
         width: "20%",
@@ -536,84 +646,33 @@ const sparkViewStyles = StyleSheet.create({
         backgroundColor: "#006175",
         borderRadius: 7
     },
+
     roleBox: {
         flexDirection: "row",
         justifyContent: "center",
-        alignItems: "center",
-        zIndex: -3
+        alignItems: "center", 
+        backgroundColor: "#F2905B",
+        width: "100%", 
+        borderRadius: 10
     },  
-    container: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center"
-    },
-    header: {
-        height: "20%",
-        width: "100%",
-        alignItems: "center",
-        justifyContent: "center"
-    },
-    sparkViewTopBorder:
-    {
-        height: "10%"
-    },
-    sparkViewContentContainer:
-    {
-        width: "100%",
-        height: "100%",
-    },
-    sparkContainer:
-    {
-        width:"100%",
-        height:"72%",
-        backgroundColor: "rgba(255,255,255,1)",
-        flexDirection: "row", 
-        justifyContent: "center", 
-        alignItems: "center"
-    },
-    locationContainer:
-    {
-        width:"90%",
-        flexDirection:"column", 
-        height:"14%"
-    },
+
     timeContainer:{
-        flexDirection:"row",
-        marginBottom: "8%",
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    sparkVerticalContainer:
-    {
-        width:"100%",
-        height:"72%",
-        backgroundColor: "rgba(255,255,255,1)",
-        flexDirection: "column", 
-        justifyContent: "center", 
-        alignItems: "center"
-    },
-    roleVeryTopBox:{
-        marginTop: "5%",
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20
-    },
-    roleVeryBottomBox:{
-        marginBottom: "5%",
-        justifyContent: "center",
-        backgroundColor: "#F1884F",
-        height: "8%",
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20
+      backgroundColor: "#F2905B",
+      padding: "3%",
+      borderRadius: 10,
+      flexDirection:"row"
     },
 
-    inviteVeryTopBox:{
-        marginTop: "5%",
+    roleTopBox:{
+        alignSelf: "center",
+        marginTop: "3%",
         justifyContent: "center",
-        backgroundColor: "#F1884F",
-        height: "8%",
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20
+        backgroundColor: "#006175",
+        height: "10%",
+        width: "85%",
+        borderRadius: 10
     },
+
     inviteVeryBottomBox:{
         marginBottom: "5%",
         borderBottomLeftRadius: 20,
@@ -640,138 +699,32 @@ const sparkViewStyles = StyleSheet.create({
         alignItems: "center",
         zIndex: 1
     },
+
     boxText:{
         width: "58%", 
         marginLeft:"10%",
         marginTop: "2%",
         marginBottom: "2%",
     },
-    bottomContainer:{
-        width:"100%",
-        height:"8%",
-        flexDirection: "row", 
-        justifyContent: "center", 
-        alignItems: "center"
+
+    timeDateInput: {
+      fontSize:24,
+      justifyContent:"center",
     },
-    inputBox: {
-        height: "7.5%",
-        marginHorizontal: "10%",
+
+    timeDateRow: {
+        width: "80%",
+        flexDirection:"row",
+        marginTop: "4%",
         marginBottom: "10%",
-        borderWidth: 0,
-        borderColor: "black",
-        backgroundColor: "#F9CBB1",
-        paddingLeft: "1%",
-        borderRadius: 8,
-        textAlign: 'center',
-        color: "white",
-        width: "85%",
-    },
-    newInputBox:{
-        height:"50%",
-        borderWidth: 0,
-        borderColor: "black",
-        backgroundColor: "#F9CBB1",
-        paddingLeft: "1%",
-        borderRadius: 8,
-        textAlign: 'center',
-        color: "white",
-        width: "100%",
-    },
-    locationInputBox:{
-        textAlign: 'left',
-        paddingLeft: '2%',
-        fontSize: 18
-    },
-    dateInputBox: {
-        height: "10%",
-        marginHorizontal: "2%",
-        borderWidth: 0,
-        borderColor: "black",
-        paddingHorizontal: "1%",
-        fontSize: 24,
-        borderRadius: 8,
-        textAlign: 'center',
-        color: "black",
-        width: "100%",
-        alignContent: "center"
-    },
-    minuteInputBox:{
-        height: "10%",
-        marginHorizontal: "2%",
-        borderWidth: 0,
-        borderColor: "black",
-        paddingHorizontal: "1%",
-        fontSize: 36,
-        borderRadius: 8,
-        textAlign: 'center',
-        color: "black",
-        width: "15%",
-        alignContent: "center"
-    },
-    hourInputBox:{
-        height: "10%",
-        marginHorizontal: "2%",
-        borderWidth: 0,
-        borderColor: "black",
-        paddingHorizontal: "1%",
-        fontSize: 36,
-        borderRadius: 8,
-        textAlign: 'center',
-        color: "black",
-        width: "15%",
-        alignContent:"flex-end",
-        justifyContent:"flex-end"
-    },
-    dateInputContainer:{
-        flexDirection: "column",
-        justifyContent: "center",
+        justifyContent: "space-between",
         alignItems: "center",
-        marginHorizontal: "1%",
-        width: "25%",
-    },
-    labelUnderneath:{
-        marginHorizontal: "7%",
-        fontSize: 18
-    },
-    centerText:
-    {
-        textAlign: 'center'
-    },
-    centerContents:
-    {
-        justifyContent:"center", 
-        alignItems:"center"
-    },
-    button:
-    {
-        backgroundColor: "#006175",
-        marginHorizontal: "17%",
-        color: "#FFFFFF",
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 5,
-        paddingTop: "5%",
-        paddingBottom: "5%",
-        borderWidth: 0
-    },
-    testyTouchable:
-    {
-        marginBottom: "10%",
-        height: "80%",
-        width: "35%"
-    },
-    timeAndDateInput:
-    {
-        fontSize:26,
-        justifyContent:"center"
-    },
-    inbetweenText:
-    {
+        alignSelf: "center"
+    }, 
+
+    inbetweenText: {
         marginHorizontal:"5%", 
         fontSize:20
-    },
-    middleMan:
-    {
-        marginVertical: "20%"
     }
+
 });

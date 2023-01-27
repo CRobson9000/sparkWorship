@@ -1,5 +1,5 @@
 import React, {useRef, useEffect, useLayoutEffect} from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image, FlatList } from "react-native";
+import { Text, View, TextInput, ScrollView, TouchableOpacity, Image, FlatList } from "react-native";
 import { Input, Slider } from '../../components/components';
 import { Observable, FirebaseButler } from '../../components/classes';
 import { getDatabase, ref, set, get } from 'firebase/database';
@@ -8,6 +8,7 @@ import { Dialog, Portal, Provider, Checkbox, List, IconButton, Menu, ProgressBar
 // had to make a weird file to "redefine" ref since it already exists from firebase/database
 import Routes from '../Navigation/constants/Routes.js';
 import ProfileImage from '../../components/profileImage.js';
+import { styleSheet } from "../../styles/profileCreationStyles.js";
 
 export default function ProfileScreen({route, navigation}) {
   //set environment variables
@@ -309,15 +310,15 @@ export default function ProfileScreen({route, navigation}) {
     return (
       <View style={styleSheet.content}>
         <Text style={styleSheet.stageText}>General Information</Text>
-        <Text style={styleSheet.text}>Name</Text>
+        <Text style={styleSheet.text1}>Name</Text>
         <Input start = {inputs?.name?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.name.setVal(val)}/>
-        <Text style={styleSheet.text}>Username</Text>
+        <Text style={styleSheet.text1}>Username</Text>
         <Input start = {inputs?.username?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.username.setVal(val)}/>
-        <Text style={styleSheet.text}>Email</Text>
+        <Text style={styleSheet.text1}>Email</Text>
         <Input start = {inputs?.email?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.email.setVal(val)}/>
-        <View style={styleSheet.row1}>
+        <View style={styleSheet.row1}> 
             <View style={styleSheet.column1}>
-                <Text style={styleSheet.text}>Gender</Text>
+                <Text style={styleSheet.text2}>Gender</Text>
                 <Dropdown style={styleSheet.dropDown} 
                   data={genders} 
                   renderItem={renderDropDownItem}
@@ -329,19 +330,19 @@ export default function ProfileScreen({route, navigation}) {
                 />
             </View>
             <View style={styleSheet.column1}>
-                <Text style={styleSheet.text}>Birthday</Text>
-                <Input start = {inputs?.birthday?.getVal()} inputStyle = {styleSheet.inputBox1} func = {(val) => inputs.birthday.setVal(val)}></Input>
+                <Text style={styleSheet.text2}>Birthday</Text>
+                <Input start = {inputs?.birthday?.getVal()} inputStyle = {styleSheet.birthdayInputBox} func = {(val) => inputs.birthday.setVal(val)}></Input>
             </View>
         </View>
-        <Text style={styleSheet.text}> Street Address (Optional)</Text>
+        <Text style={styleSheet.text1}> Street Address (Optional)</Text>
         <Input start = {inputs?.streetAddress?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.streetAddress.setVal(val)}/>
-        <View style={styleSheet.row3}>
+        <View style={styleSheet.row2}>
             <View style={styleSheet.column2}>
-                <Text style={styleSheet.text}>City</Text>
-                <Input start = {inputs?.city?.getVal()} inputStyle = {styleSheet.inputBox3} func = {(val) => inputs.city.setVal(val)}></Input>
+                <Text style={styleSheet.text3}>City</Text>
+                <Input start = {inputs?.city?.getVal()} inputStyle = {styleSheet.inputBox2} func = {(val) => inputs.city.setVal(val)}></Input>
             </View>
             <View style={styleSheet.column2}>
-                <Text style={styleSheet.text}>State</Text>
+                <Text style={styleSheet.text3}>State</Text>
                 <Dropdown
                   style={styleSheet.dropDown} 
                   data={states} 
@@ -354,8 +355,8 @@ export default function ProfileScreen({route, navigation}) {
                 />
             </View>
             <View style={styleSheet.column2}>
-                <Text style={styleSheet.text}>Zip Code</Text>
-                <Input start = {inputs?.zipCode?.getVal()} inputStyle = {styleSheet.inputBox3} func = {(val) => inputs.zipCode.setVal(val)}></Input>
+                <Text style={styleSheet.text3}>Zip Code</Text>
+                <Input start = {inputs?.zipCode?.getVal()} inputStyle = {styleSheet.inputBox2} func = {(val) => inputs.zipCode.setVal(val)}></Input>
             </View>
         </View>
       </View>
@@ -365,16 +366,20 @@ export default function ProfileScreen({route, navigation}) {
   const Screen2 = (props) => {
     return (
         <View style={styleSheet.content}>
-            <Text style={styleSheet.stageText}>Authentication</Text>
-            <Text style={styleSheet.text}>Password</Text>
+            <Text style={styleSheet.stageText}>Reset Password</Text>
+            <Text style={styleSheet.text1}>Password</Text>
             <Input /*start = {inputs.password.getVal()}*/ inputStyle = {styleSheet.inputBox} /*func = {(val) => inputs.password.setVal(val)}*//>
-            <Text style={styleSheet.resetPasswordtext}>Reset Password</Text>
-            <Text style={styleSheet.text}>Phone Number</Text>
+            <Text style={styleSheet.text1}>Confirm Password</Text>
+            <Input inputStyle = {styleSheet.inputBox}/>
+            <TouchableOpacity style={styleSheet.screen2Buttons} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Reset Password</Text></TouchableOpacity>
+            <Text style={styleSheet.stageText}>Authentication</Text>
+            <Text style={styleSheet.text1}>Phone Number</Text>
             <Input start = {inputs.phoneNumber.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.phoneNumber.setVal(val)}/>
-            <TouchableOpacity style={styleSheet.authenticationButton} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Enable Two-Step Authentication</Text></TouchableOpacity>
+            <TouchableOpacity style={styleSheet.screen2Buttons} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Enable Two-Step Authentication</Text></TouchableOpacity>
         </View>
     );
   }
+
 
   const Screen3 = (props) => {
     const [churchState, setChurchState] = React.useState(null);
@@ -393,20 +398,20 @@ export default function ProfileScreen({route, navigation}) {
     return (
       <View style={styleSheet.content}>
         <Text style={styleSheet.stageText}>Home Church</Text>
-        <Text style={styleSheet.smallText}>This section is optional. You may skip by clicking Next.</Text>
-        <Text style={styleSheet.text}>Church Name</Text>
+        <Text style={styleSheet.smallText2}>This section is optional. You may skip by clicking Next.</Text>
+        <Text style={styleSheet.text1}>Church Name</Text>
         <Input start = {inputs.churchName.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.churchName.setVal(val)}/>
-        <Text style={styleSheet.text}>Denomination</Text>
+        <Text style={styleSheet.text1}>Denomination</Text>
         <Input start = {inputs.denomination.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.denomination.setVal(val)}/>
-        <Text style={styleSheet.text}>Street Address</Text>
+        <Text style={styleSheet.text1}>Street Address</Text>
             <Input start = {inputs.churchStreetAddress.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.churchStreetAddress.setVal(val)}/>
-            <View style={styleSheet.row3}>
+            <View style={styleSheet.row2}>
                 <View style={styleSheet.column2}>
-                    <Text style={styleSheet.text}>City</Text>
-                    <Input start = {inputs.churchCity.getVal()} inputStyle = {styleSheet.inputBox3} func = {(val) => inputs.churchCity.setVal(val)}></Input>
+                    <Text style={styleSheet.text3}>City</Text>
+                    <Input start = {inputs.churchCity.getVal()} inputStyle = {styleSheet.inputBox2} func = {(val) => inputs.churchCity.setVal(val)}></Input>
                 </View>
                 <View style={styleSheet.column2}>
-                    <Text style={styleSheet.text}>State</Text>
+                    <Text style={styleSheet.text3}>State</Text>
                     <Dropdown 
                       style={styleSheet.dropDown} 
                       data={states} 
@@ -419,8 +424,8 @@ export default function ProfileScreen({route, navigation}) {
                     />
                 </View>
                 <View style={styleSheet.column2}>
-                    <Text style={styleSheet.text}>Zip Code</Text>
-                    <Input start = {inputs.churchZipCode.getVal()} inputStyle = {styleSheet.inputBox3} func = {(val) => inputs.churchZipCode.setVal(val)}></Input>
+                    <Text style={styleSheet.text3}>Zip Code</Text>
+                    <Input start = {inputs.churchZipCode.getVal()} inputStyle = {styleSheet.inputBox2} func = {(val) => inputs.churchZipCode.setVal(val)}></Input>
                 </View>
             </View>
       </View>
@@ -431,7 +436,7 @@ export default function ProfileScreen({route, navigation}) {
     return (
       <View style={styleSheet.content}>
         <Text style={styleSheet.stageText}>Social Media</Text>
-        <Text style={styleSheet.text}>Linked Accounts</Text>
+        <Text style={styleSheet.text1}>Linked Accounts</Text>
         <View style={styleSheet.box}>
             <Image style={styleSheet.logo} source={require("../../../assets/instagramlogo.png")}></Image>
         </View>
@@ -441,7 +446,7 @@ export default function ProfileScreen({route, navigation}) {
         <View style={styleSheet.box}>
             <Image style={styleSheet.logo} source={require("../../../assets/facebooklogo.png")}></Image>
         </View>
-        <TouchableOpacity style={styleSheet.addInstrumentButton}><Text style={styleSheet.buttonText}>+ Add Social Media Account</Text></TouchableOpacity>
+        <TouchableOpacity style={styleSheet.screen2Buttons}><Text style={styleSheet.buttonText}>+ Add Social Media Account</Text></TouchableOpacity>
       </View>
     );
   }
@@ -597,38 +602,38 @@ export default function ProfileScreen({route, navigation}) {
       return (
         <List.Accordion
           title={object.item.instrumentName}
-          style = {accordianStyles.header}
-          titleStyle = {accordianStyles.headerText}
+          style = {styleSheet.header}
+          titleStyle = {styleSheet.headerText}
           onLongPress = {() => showDialog(object.index)}
         >
-          <View style={accordianStyles.listItemContainer}>
-            <View style={accordianStyles.listItemHeader}>
+          <View style={styleSheet.listItemContainer}>
+            <View style={styleSheet.listItemHeader}>
               <Text style={{fontWeight: "bold", fontSize: 15}}> General Experience </Text>
             </View>
-            <View style={accordianStyles.listItemContent}>
-              <Text style={accordianStyles.contentText}>
+            <View style={styleSheet.listItemContent}>
+              <Text style={styleSheet.contentText}>
                 {object.item.generalExperience}
               </Text>
             </View>
           </View>
 
-          <View style={accordianStyles.listItemContainer}>
-            <View style={accordianStyles.listItemHeader}>
+          <View style={styleSheet.listItemContainer}>
+            <View style={styleSheet.listItemHeader}>
               <Text style={{fontWeight: "bold", fontSize: 15}}> Worship Experience </Text>
             </View>
-            <View style={accordianStyles.listItemContent}>
-              <Text style={accordianStyles.contentText}>
+            <View style={styleSheet.listItemContent}>
+              <Text style={styleSheet.contentText}>
                 {object.item.worshipExperience}
               </Text>
             </View>
           </View>
 
-          <View style={accordianStyles.listItemContainer}>
-            <View style={accordianStyles.listItemHeader}>
+          <View style={styleSheet.listItemContainer}>
+            <View style={styleSheet.listItemHeader}>
               <Text style={{fontWeight: "bold", fontSize: 15}}> Additional Notes </Text>
             </View>
-            <View style={accordianStyles.listItemContent}>
-              <Text style={accordianStyles.contentText}>
+            <View style={styleSheet.listItemContent}>
+              <Text style={styleSheet.contentText}>
                 {object.item.additionalNotes}
               </Text>
             </View>
@@ -652,8 +657,7 @@ export default function ProfileScreen({route, navigation}) {
             style = {{height: "60%", width: "80%"}}
             renderItem = {renderInstrument}
           />
-          <TouchableOpacity style={styleSheet.addInstrumentButton} onPress={() => showDialog()}><Text style={styleSheet.buttonText}>+ Add Instrument</Text></TouchableOpacity>
-          <TouchableOpacity style={styleSheet.addInstrumentButton}><Text style={styleSheet.buttonText}>+ Skilled Genre</Text></TouchableOpacity>
+          <TouchableOpacity style={styleSheet.screen2Buttons} onPress={() => showDialog()}><Text style={styleSheet.buttonText}>+ Add Instrument</Text></TouchableOpacity>
         </View>
       </View>
     );
@@ -662,14 +666,6 @@ export default function ProfileScreen({route, navigation}) {
 
   let myScreens = [
     <Screen1 />, <Screen2 />, <Screen3 />, <Screen4 />, <Screen5 />
-  ];
-
-  let myTitles = [
-    <Text style={styleSheet.phaseText}>Phase 1</Text>, 
-    <Text style={styleSheet.phaseText}>Phase 2</Text>,
-    <Text style={styleSheet.phaseText}>Phase 3</Text>,
-    <Text style={styleSheet.phaseText}>Phase 4</Text>,
-    <Text style={styleSheet.phaseText}>Phase 5</Text>
   ];
 
   let [currentIndex, setCurrentIndex] = React.useState(1);
@@ -715,417 +711,19 @@ export default function ProfileScreen({route, navigation}) {
                 <Image style={styleSheet.profilePicImage} source={image}></Image>
               </TouchableOpacity> */}
               <ProfileImage userId = {userId} changeable = {true} size = {"large"}/>
-              <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: 170, height: 20, borderRadius: 10}} progress={(currentIndex + 1) / 5}/>
+              <View style={styleSheet.column3}>
+                <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: 170, height: 20, borderRadius: 10, marginBottom: "15%"}} progress={(currentIndex + 1) / 5}/>
+                <Text style={styleSheet.smallText1}>Click your profile picture to change</Text>
+              </View>
             </View>
           </View>
           <Slider currentIndex = {currentIndex} screens = {myScreens} />
 
           <View style={styleSheet.bottomRow}>
-              <TouchableOpacity style={styleSheet.button} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Previous</Text></TouchableOpacity>
-              <TouchableOpacity style={styleSheet.button} onPress = {() => (currentIndex == myScreens.length - 1) ? sendPayload() : setCurrentIndex(currentIndex + 1)}><Text style={styleSheet.buttonText}>{(currentIndex == myScreens.length - 1) ? "Submit" : "Next"}</Text></TouchableOpacity>
+              <TouchableOpacity style={styleSheet.constantButtons} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Previous</Text></TouchableOpacity>
+              <TouchableOpacity style={styleSheet.constantButtons} onPress = {() => (currentIndex == myScreens.length - 1) ? sendPayload() : setCurrentIndex(currentIndex + 1)}><Text style={styleSheet.buttonText}>{(currentIndex == myScreens.length - 1) ? "Submit" : "Next"}</Text></TouchableOpacity>
           </View>
       </View>
     );
   // }
 }
-
-const styleSheet = StyleSheet.create({
-    instrumentDialogInput: {
-      flex: 0.8,
-      backgroundColor: "#F2905B",
-      borderRadius: 10,
-      paddingLeft: "5%",
-      marginBottom: "5%",
-      flexWrap: 'wrap'
-    },
-
-    dialogButton: {
-      backgroundColor: "rgb(0, 97, 117)",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "12%",
-      width: "40%",
-      borderRadius: 10
-    },
-
-    profilePictureContainer: {
-        height: "70%",
-        width: "35%",
-        top: "20%",
-        left: "20%"
-    },
-
-    profilePicImage: {
-      height: "100%",
-      width: "100%",
-      borderRadius: 25,
-    },
-
-    text1: {
-        fontSize: 18,
-        fontWeight: "500",
-        left: "25%",
-        top: "3%"
-    },
-
-    logo: {
-        height: "70%",
-        width: "9%",
-        left: "20%",
-        top: "2%"
-    }, 
-
-    column1 : {
-        flexDirection: "column",
-        width: "45%",
-        height: "100%"
-    },
-
-    column2 : {
-        flexDirection: "column",
-        width: "32%",
-        height: "100%"
-    },
-
-    resetPasswordtext: {
-        textAlign: "right",
-        fontSize: 12,
-        right: "8%",
-        marginBottom: "3%"
-    },
-
-    topRow: {
-      width: "100%",
-      flexDirection: "row",
-      justifyContent: "space-evenly",
-      alignItems: "center"
-    },
-
-    row: {
-        flexDirection: 'row',
-        marginBottom: '4%'
-    },
-
-    row1: {
-        flexDirection: "row",
-        height: "8%",
-        left: "4%",
-        marginBottom: "7%"
-    },
-
-    row3: {
-        flexDirection: "row",
-        width: "85%",
-        height: "8%",
-        justifyContent: "space-evenly",
-        left: "6%",
-        marginBottom: "7%"
-    },
-
-    inputBox1: {
-        backgroundColor: "#F2905B",
-        borderRadius: 10,
-        height: "100%",
-        width: "95%",
-
-    },
-    
-    inputBox3: {
-        backgroundColor: "#F2905B",
-        borderRadius: 10,
-        height: "100%",
-    },
-
-    MainContainer: {
-        backgroundColor: "white",
-        height: "100%",
-    },
-
-    topBorder:{
-        height: "30%",
-        width: "100%",
-        backgroundColor: "rgb(219, 233, 236)",
-        marginBottom: "5%"
-    },
-
-    dropDown: {
-        backgroundColor: "#F2905B",
-        borderRadius: 10,
-        width: "85%",
-        height: "100%",
-        left: "7.5%",
-        marginBottom: "4%"
-    },
-
-    instrumentBox: {
-        backgroundColor: "#F2905B",
-        borderRadius: 10,
-        flex: 1,
-        padding: "5%",
-        marginBottom: "3%",
-        marginTop: "3%",
-        flexDirection: "row",
-    },
-
-    box: {
-        backgroundColor: "#F2905B",
-        borderRadius: 10,
-        width: "85%",
-        height: "10%",
-        marginBottom: "3%",
-        marginTop: "3%",
-        alignSelf: "center",
-        flexDirection: "row",
-    },
-
-    content: {
-        height: "50%",
-        width: "100%"
-    },
-
-    text: {
-        paddingBottom: "1%",
-        fontSize: 15,
-        left: "9%",
-    },
-
-    phaseText: {
-        textAlign: "center",
-        fontSize: 15,
-        fontWeight: "500",
-        top: "2%",
-        paddingBottom: "5%"
-      },
-
-    italicText: {
-        paddingBottom: "3%",
-        fontSize: 9,
-        left: "9%",
-        fontStyle: "italic"
-    },
-
-    stageText: {
-        textAlign: "center",
-        fontSize: 20,
-        fontWeight: "500",
-        marginBottom: "3%"
-      },
-
-    inputBox: {
-        backgroundColor: "#F2905B",
-        borderRadius: 10,
-        width: "85%",
-        height: "8%",
-        alignSelf: "center",
-        marginBottom: "4%"
-    },
-
-    authenticationButton: {
-        width: "85%",
-        backgroundColor: "rgb(0, 97, 117)",
-        justifyContent: "center",
-        alignSelf: "center",
-        alignItems: "center",
-        height: "10%",
-        marginTop: "5%",
-        borderRadius: 10
-      },
-
-    inputBox2: {
-        backgroundColor: "#F2905B",
-        borderRadius: 10,
-        width: "45%", 
-        height: "100%",
-        marginBottom: "4%"
-    },
-
-    button:{
-        backgroundColor: "rgb(0, 97, 117)",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "40%",
-        width: "40%",
-        top: "10%",
-        borderRadius: 10
-    },
-
-    bottomRow: {
-        flexDirection: "row",
-        alignSelf: 'center',
-        alignContent: "center",
-        justifyContent: "space-evenly",
-        height: "11%",
-        width: '85%',
-        marginTop: "10%"
-    },
-
-    row2: {
-        flexDirection: "row",
-        alignSelf: 'center',
-        alignContent: "center",
-        justifyContent: "space-between",
-        height: "8%",
-        width: '85%',
-        marginBottom: "3%"
-    },
-
-    buttonText: {
-        color: "white",
-        fontSize: 12,
-    },
-
-    addInstrumentButton:{
-        backgroundColor: "rgb(0, 97, 117)",
-        marginHorizontal: "5%",
-        alignSelf: "center",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "10%",
-        width: "85%",
-        marginTop: "5%",
-        marginBottom: "3%",
-        borderRadius: 10
-    },
-
-    BiographySquare: {
-        alignSelf: "center",
-        width: "85%",
-        height: "25%",
-        backgroundColor: "rgb(249, 203, 177)",
-        borderRadius: 10,
-        marginBottom: "3%"
-      },
-
-      smallText: {
-        textAlign: "center",
-        fontSize: 13,
-        color: "gray",
-        paddingBottom: "5%"
-      },
-    
-      titleText: {
-        marginTop: "15%",
-        padding: "5%",
-        textAlign: "center",
-        fontSize: 20, 
-        fontWeight: "600"
-      }, 
-
-});  
-
-const styleSheet2 = StyleSheet.create({
-
-    row: {
-        flexDirection: "row",
-        left: "57%",
-    },
-    topBorder:{
-        height: "30%",
-        width: "100%",
-        backgroundColor: "rgb(219, 233, 236)",
-        marginBottom: "5%"
-    },
-    
-    profilePicture: {
-        width: "50%",
-        height: "70%",
-    },
-
-    button:{
-        backgroundColor: "rgb(0, 97, 117)",
-        marginHorizontal: "5%",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "26%",
-        width: "37%",
-        marginTop: "5%",
-        marginBottom: "3%",
-        borderRadius: 10
-    },
-    row: {
-        flexDirection: "row",
-        justifyContent: "center"
-    },
-
-    buttonText: {
-        color: "white",
-        fontSize: 10,
-    },
-
-    addInstrumentButton:{
-        backgroundColor: "rgb(0, 97, 117)",
-        marginHorizontal: "5%",
-        alignSelf: "center",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "5%",
-        width: "85%",
-        marginTop: "5%",
-        marginBottom: "3%",
-        borderRadius: 10
-    },
-
-    BiographySquare: {
-        alignSelf: "center",
-        width: "85%",
-        height: "25%",
-        backgroundColor: "rgb(249, 203, 177)",
-        borderRadius: 10,
-        marginBottom: "3%"
-      },
-
-    profilePicture: {
-        width: "50%",
-        height: "70%",
-    },
-    smallText: {
-        textAlign: "center",
-        fontSize: 15,
-        color: "gray",
-        paddingBottom: "5%"
-    }
-});
-
-//styles for instrument
-const accordianStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column"
-  },
-  section: {
-    backgroundColor: "white",
-    width: "100%"
-  },
-  listItemContainer: {
-    backgroundColor: "white",
-    paddingTop: "2%",
-    paddingBottom: "2%"
-  },
-  listItemHeader: {
-    padding: "2%",
-    alignItems: "flex-start",
-  },
-  contentText: {
-    flexWrap: "wrap"
-  },
-  listItemContent: {
-    padding: "5%"
-  },
-  header: {
-    backgroundColor: "#F2905B",
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    margin: "2%",
-  },
-  headerText: {
-    color: "black",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  accordionList: {
-    width: "100%",
-    top: "5%",
-    height: "30%"
-  }
-});

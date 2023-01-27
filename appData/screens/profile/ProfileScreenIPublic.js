@@ -132,7 +132,7 @@ export default function PSPersonal({ route, navigation }) {
       
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
-        { key: 'first', title: 'Bio' },
+        { key: 'first', title: 'Biography' },
         { key: 'second', title: 'Music' },
         { key: 'third', title: 'Church' },
         { key: 'fourth', title: 'Socials' },
@@ -149,6 +149,8 @@ export default function PSPersonal({ route, navigation }) {
       <TabBar
         {...props}
         indicatorStyle={{ backgroundColor: '#006175' }}
+        scrollEnabled= {true}
+        labelStyle={{color:"#000000"}}
         style={{ backgroundColor: 'rgb(219, 233, 236)'}}
       />
     );
@@ -303,12 +305,12 @@ export default function PSPersonal({ route, navigation }) {
                   </View>
                 </View>
               </View>
-            <View style={[styles.row, {marginLeft: 20, marginRight: 20, top: "30%"}]}>
-              <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
-              <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
-              <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
-              <Image style={{height: 40, width: 40}} source={require('../../../assets/emptyStar.png')}></Image>
-              <Image style={{height: 40, width: 40}} source={require('../../../assets/emptyStar.png')}></Image>
+            <View style={[styles.row, {marginLeft: 80, marginRight: 80, top: "30%"}]}>
+              <Image style={{height: 30, width: 30}} source={require('../../../assets/filledspark.png')}></Image>
+              <Image style={{height: 30, width: 30}} source={require('../../../assets/filledspark.png')}></Image>
+              <Image style={{height: 30, width: 30}} source={require('../../../assets/filledspark.png')}></Image>
+              <Image style={{height: 30, width: 30}} source={require('../../../assets/emptyspark.png')}></Image>
+              <Image style={{height: 30, width: 30}} source={require('../../../assets/emptyspark.png')}></Image>
             </View>
             </View>
             <View style={styles.content}>

@@ -11,14 +11,14 @@ export default function PSPersonal({ route, navigation }) {
 
     let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
 
-    const FirstRoute = () => (
+    const BiographyRoute = () => (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <Text style={{borderColor: "#F2905B", borderWidth: 10, width: '85%', alignSelf: "center", height: 300, top: 50, borderRadius: 10, padding: 20, flexWrap: "wrap"}}>{MyBio}</Text>
     </View>
     );
 
 
-    const SecondRoute = () => {
+    const MusicRoute = () => {
       function instrumentRender(object) {
         return(
           <List.Accordion
@@ -62,7 +62,7 @@ export default function PSPersonal({ route, navigation }) {
           </List.Accordion>
         );
       }
-      return(
+      return( 
         <View style={{ flex: 1, backgroundColor: 'white'}}>
             <List.Section title="Instruments">
               <FlatList
@@ -108,7 +108,7 @@ export default function PSPersonal({ route, navigation }) {
       );
     }
       
-    const ThirdRoute = () => (
+    const ChurchRoute = () => (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
           <Text style={{borderColor: "#F2905B", borderWidth: 7, width: '85%', alignSelf: "center", height: 75, top: 50, borderRadius: 10, fontSize: 25, textAlign: 'center', padding: 10}}>{MyChurchName}</Text>
           <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: 20, textAlign: 'center', padding: 10, marginTop: 20}}>{MyDenomination}</Text>
@@ -116,7 +116,7 @@ export default function PSPersonal({ route, navigation }) {
         </View>
       );
 
-    const FourthRoute = () => (
+    const SocialsRoute = () => (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
           <View style={[styles.socialsBox, {marginTop: 35}]}/>
           <View style={styles.socialsBox}/>
@@ -128,23 +128,25 @@ export default function PSPersonal({ route, navigation }) {
       
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
-        { key: 'first', title: 'Bio' },
+        { key: 'first', title: 'Biography' },
         { key: 'second', title: 'Music' },
         { key: 'third', title: 'Church' },
         { key: 'fourth', title: 'Socials' },
     ]);
     
     const renderScene = SceneMap({
-        first: FirstRoute,
-        second: SecondRoute,
-        third: ThirdRoute,
-        fourth: FourthRoute
+        first: BiographyRoute,
+        second: MusicRoute,
+        third: ChurchRoute,
+        fourth: SocialsRoute
     });
 
     const renderTabBar = props => (
       <TabBar
         {...props}
         indicatorStyle={{ backgroundColor: '#006175' }}
+        scrollEnabled= {true}
+        labelStyle={{color:"#006175"}}
         style={{ backgroundColor: 'rgb(219, 233, 236)'}}
       />
     );
@@ -257,7 +259,7 @@ export default function PSPersonal({ route, navigation }) {
       return (
         <View style={styles.MainContainer}>
             <View style={styles.topBorder}>
-              <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
+              <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, top: '10%', alignItems: 'center'}]}>
                 <TouchableOpacity onPress = {() => logFriends()}><Image style={{height: 40, width: 40}} source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity>
                 <Text style={styles.titleText}>My Profile</Text>
                 <TouchableOpacity onPress = {() => navigation.navigate(Routes.profileCreation, props)}><Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}></Image></TouchableOpacity>
@@ -274,12 +276,13 @@ export default function PSPersonal({ route, navigation }) {
                   </View>
                 </View>
               </View>
-            <View style={[styles.row, {marginLeft: 20, marginRight: 20, top: "30%"}]}>
-              <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
-              <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
-              <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
-              <Image style={{height: 40, width: 40}} source={require('../../../assets/emptyStar.png')}></Image>
-              <Image style={{height: 40, width: 40}} source={require('../../../assets/emptyStar.png')}></Image>
+            <View style={[styles.row, {marginLeft: 70, marginRight: 70, top: "20%", alignItems: "center"}]}>
+              <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
+              <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
+              <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
+              <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
+              <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
+              <Text style={{marginLeft: 15, fontSize: 14, color: "#006175"}}>324 sparks</Text>
             </View>
             </View>
             <View style={styles.content}>
@@ -291,9 +294,8 @@ export default function PSPersonal({ route, navigation }) {
 
 const styles = StyleSheet.create({
     MainContainer: {
-      top: "-5%",
       backgroundColor: "white",
-      height: "105%",
+      height: "100%",
     },
 
     topBorder:{
@@ -303,18 +305,18 @@ const styles = StyleSheet.create({
     },
 
     content: {
-      height: '58%'
+      height: '60%'
     },
 
     titleText: {
-      fontSize: 25,
+      fontSize: 20,
       textAlign: 'center',
-      fontWeight: '500'
+      color: "#006175"
     },
 
     row: {
       flexDirection: 'row',
-      top: '22%',
+      top: '15%',
       justifyContent: 'space-evenly'
     },
 
@@ -328,10 +330,15 @@ const styles = StyleSheet.create({
       alignItems: 'center'
     },
 
+    profilePictureContainer: {
+      height: 100, 
+      width: 100
+    },
+
     profilePicture: {
-      height: "120%",
-      width: "36%",
-      borderRadius: 20
+      height: "100%", 
+      width: "100%", 
+      borderRadius: "100%"
     },
 
     accordian: {
