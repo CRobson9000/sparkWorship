@@ -245,9 +245,9 @@ export default function PSPersonal({ route, navigation }) {
       })
     }
 
-    // -----------------------
+    // ------------
     // Friend Code
-    // -----------------------
+    // ------------
 
     async function addFriend() {
       //get current friends
@@ -268,8 +268,6 @@ export default function PSPersonal({ route, navigation }) {
       else {
         console.log("Already a friend!");
       }
-      
-
     }
 
     useEffect(() => {

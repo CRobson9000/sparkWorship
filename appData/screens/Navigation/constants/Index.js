@@ -11,6 +11,7 @@ export {default as Navigator} from '../BottomTabNavigator';
 export {default as Messaging}  from '../../social/MessagingScreen.js';
 export {default as ChatList} from '../../social/ChatList.js'
 export {default as SparkSummary}  from '../../sparks/sparkSummary.js';
+export {default as SparkSurvey} from '../../sparks/sparkSurvey.js';
 // export {default as HostingDashboard} from '../dashboard/HostingDashboard';
 
 export {default as Router} from '../../account/LoginScreen';
