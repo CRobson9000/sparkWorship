@@ -1,10 +1,13 @@
-import { StyleSheet, TouchableHighlight, Text, View, TextInput, FlatList } from 'react-native';
+import { StyleSheet, TouchableHighlight, Text, View, TextInput, FlatList, Dimensions } from 'react-native';
 import React, {useRef, useEffect} from 'react';
 import { Input, Slider } from '../../components/components';
 import { FirebaseButler, Observable, TDO } from '../../components/classes';
 
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 import ProfileImage from '../../components/profileImage.js';
+
+const screenWidth = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 export default function Message({ route, navigation }) {
   let props = route.params;
@@ -200,23 +203,24 @@ const styles = StyleSheet.create({
     },
 
     content: {
-        height: "70%"
+        height: "76%"
     },
 
     messagingContainer: {
-        height: "15%",
+        height: height/9.5,
         width: "100%",
         backgroundColor: "#DBE9EC",
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        padding: "5%"
+        padding: "4%"
     },
 
     nameText: {
         alignSelf: "center",
         fontSize: 20,
         top: 70,
+        fontFamily: "RNSMiles"
         //fontWeight: '500'
     },
 
@@ -257,7 +261,7 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        height: "30%",
+        height: height/30,
         backgroundColor: '#006175',
         width: "18%",
         borderRadius: 20,

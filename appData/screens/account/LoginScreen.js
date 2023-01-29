@@ -53,11 +53,11 @@ export default function LoginScreen({ navigation }) {
             backgroundColor:'#DBE9EC',
             justifyContent: 'center',
             alignItems: 'center',
-            left: 110,
+            left: Dimensions.get('window').width * 0.25,
             top: 100
           }}
         >
-          <Text style={{color: "#006175"}}> Login </Text>
+          <Text style={{color: "#006175", fontFamily: "RNSMiles"}}> Login </Text>
         </TouchableHighlight>
 
         {/* Mini circles */}
@@ -125,7 +125,7 @@ export default function LoginScreen({ navigation }) {
 
           <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
           {/* <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}> */}
-            <View><Text style={{color: "white", fontFamily: "RNSMiles"}}>Login</Text></View>
+            <View><Text style={{color: "white", fontFamily: "RNSMiles", fontSize: Dimensions.get('window').height*0.023}}>Login</Text></View>
           </TouchableOpacity>
 
           <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate(Routes.registration)}>

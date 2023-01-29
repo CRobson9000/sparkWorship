@@ -1,4 +1,8 @@
 import { StyleSheet } from 'react-native';
+import { Dimensions } from 'react-native';
+
+const screenWidth = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 const styleSheet = StyleSheet.create({
 
@@ -8,7 +12,7 @@ const styleSheet = StyleSheet.create({
     },
   
     topBorder:{
-      height: "30%",
+      height: height/2.9,
       width: "100%",
       backgroundColor: "rgb(219, 233, 236)",
       marginBottom: "5%"
@@ -21,10 +25,11 @@ const styleSheet = StyleSheet.create({
   
     // Profile Creation title in top section
     titleText: {
-      marginTop: "13%",
+      marginTop: "10%",
       padding: "5%",
       textAlign: "center",
-      fontSize: 20
+      fontSize: height/40,
+      fontFamily: "RNSMiles"
     }, 
   
     // Row for Profile Picture and Progress Bar
@@ -38,7 +43,7 @@ const styleSheet = StyleSheet.create({
     // Small text for instructions to change profile picture
     smallText1: {
       textAlign: "center",
-      fontSize: 13,
+      fontSize: height/65,
       color: "gray",
       fontStyle: "italic"
     },

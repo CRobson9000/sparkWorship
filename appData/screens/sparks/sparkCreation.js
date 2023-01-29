@@ -12,6 +12,9 @@ import { getDatabase, ref, set, get, push } from 'firebase/database';
 
 import Routes from "../Navigation/constants/Routes";
 
+const screenWidth = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
+
 export default function SparkCreation({ route, navigation }) {
     //set environment variables
     let props = route.params;
@@ -499,7 +502,7 @@ export default function SparkCreation({ route, navigation }) {
         <View style={sparkViewStyles.MainContainer}>
             <View style={sparkViewStyles.topBorder}>
                 <Text style={sparkViewStyles.titleText}>Spark Creation</Text>
-                <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: 170, height: 20, borderRadius: 10, marginTop: "7%", alignSelf: "center"}} progress={(currentIndex + 1) / 4}/>
+                <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2, height: 20, borderRadius: 10, marginTop: height/40, alignSelf: "center"}} progress={(currentIndex + 1) / 4}/>
             </View>
             <Slider currentIndex = {currentIndex} screens = {myScreens} />
 
@@ -525,7 +528,7 @@ const sparkViewStyles = StyleSheet.create({
     },
 
     topBorder: {
-      height: "25%",
+      height: height/4,
       width: "100%",
       backgroundColor: "rgb(219, 233, 236)",
       marginBottom: "5%"
@@ -533,17 +536,18 @@ const sparkViewStyles = StyleSheet.create({
 
     // Spark Creation title in top section
     titleText: {
-      marginTop: "13%",
+      marginTop: height/40,
       padding: "5%",
       textAlign: "center",
-      fontSize: 20
+      fontSize: 20,
+      fontFamily: "RNSMiles"
     }, 
 
     // Title on each screen
     stageText: {
       textAlign: "center",
       fontSize: 20,
-      marginBottom: "4%" 
+      marginBottom: "4%",
     },
 
     // Labels for all input boxes except Zip Code 
@@ -571,7 +575,7 @@ const sparkViewStyles = StyleSheet.create({
       justifyContent: "space-between",
       height: "10%",
       width: '85%',
-      marginTop: "10%"
+      marginTop: height/25
     },
 
     // Text for all buttons
@@ -632,9 +636,9 @@ const sparkViewStyles = StyleSheet.create({
     },
 
     roleContainer: {
-        padding: "5%",
+        padding: "7%",
         height: "80%", 
-        width: "85%", 
+        width: "100%", 
         backgroundColor: "white"
     },
 
@@ -668,7 +672,7 @@ const sparkViewStyles = StyleSheet.create({
         marginTop: "3%",
         justifyContent: "center",
         backgroundColor: "#006175",
-        height: "10%",
+        height: height/10,
         width: "85%",
         borderRadius: 10
     },
@@ -708,12 +712,12 @@ const sparkViewStyles = StyleSheet.create({
     },
 
     timeDateInput: {
-      fontSize:24,
+      fontSize: height/40,
       justifyContent:"center",
     },
 
     timeDateRow: {
-        width: "80%",
+        width: screenWidth/1.3,
         flexDirection:"row",
         marginTop: "4%",
         marginBottom: "10%",
