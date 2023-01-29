@@ -103,11 +103,11 @@ export default function RegistrationScreen({ navigation }) {
             backgroundColor:'#DBE9EC',
             justifyContent: 'center',
             alignItems: 'center',
-            left: 110,
+            left: Dimensions.get('window').width * 0.25,
             top: 100
           }}
         >
-          <Text style={{color: "white", fontFamily: "RNSMiles"}}> Register </Text>
+          <Text style={{color: "#006175", fontFamily: "RNSMiles"}}> Register </Text>
         </TouchableHighlight>
 
         {/* Mini circles */}

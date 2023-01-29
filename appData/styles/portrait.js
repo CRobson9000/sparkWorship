@@ -58,7 +58,8 @@ const stylesPortrait = StyleSheet.create({
     topText: {
         color: "#006175",
         fontWeight: "bold",
-        fontSize: 20
+        fontSize: 20,
+        fontFamily: "RNSMiles"
     },
     username :
     {

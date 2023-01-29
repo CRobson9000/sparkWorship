@@ -414,7 +414,7 @@ export default function SparkCreation({ route, navigation }) {
                 </View>
                 <View style = {sparkViewStyles.roleContainer}>
                     <View style={[sparkViewStyles.roleBox]}>
-                        <Text style={{color: "black", fontSize: 20, padding: "5%"}}>Spark Leader</Text>
+                        <Text style={{color: "black", fontSize: height/47, padding: "5%"}}>Spark Leader</Text>
                     </View>
                     <FlatList 
                         data = {roles}
@@ -436,31 +436,25 @@ export default function SparkCreation({ route, navigation }) {
                 </View>
                 <View style={[sparkViewStyles.boxOne]}>
                     <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+                    <Image style={{width: "17%", height: height/15, marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
 
                     </Image>
                 </View>
                 <View style={[sparkViewStyles.boxTwo]}>
                     <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
-
-                    </Image>
-                </View>
-                <View style={[sparkViewStyles.boxOne]}>
-                    <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+                    <Image style={{width: "17%", height: height/15, marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
 
                     </Image>
                 </View>
                 <View style={[sparkViewStyles.boxTwo]}>
                     <Text style={[sparkViewStyles.boxText]}>Profile Name</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+                    <Image style={{width: "17%", height: height/15, marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
 
                     </Image>
                 </View>
                 <View style={[sparkViewStyles.boxOne, sparkViewStyles.inviteVeryBottomBox]}>
                     <Text style={[sparkViewStyles.boxText]}>Profile Name</Text>
-                    <Image style={{width: "20%", height: "55%", marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
+                    <Image style={{width: "17%", height: height/15, marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
 
                     </Image>
                 </View>
@@ -546,14 +540,15 @@ const sparkViewStyles = StyleSheet.create({
     // Title on each screen
     stageText: {
       textAlign: "center",
-      fontSize: 20,
+      fontSize: height/40,
       marginBottom: "4%",
+      fontFamily: "RNSMiles"
     },
 
     // Labels for all input boxes except Zip Code 
     text1: {
       paddingBottom: "2%",
-      fontSize: 15,
+      fontSize: height/47,
       left: "9%",
     },
 
@@ -581,7 +576,7 @@ const sparkViewStyles = StyleSheet.create({
     // Text for all buttons
     buttonText: {
       color: "white",
-      fontSize: 12,
+      fontSize: height/55,
     },
 
     // "Previous" and "Next" buttons on each screen
@@ -631,7 +626,7 @@ const sparkViewStyles = StyleSheet.create({
     // Label for City, State and Zip Code
     text3: {
       paddingBottom: "6%",
-      fontSize: 15,
+      fontSize: height/47,
       left: "5%"
     },
 
@@ -685,22 +680,24 @@ const sparkViewStyles = StyleSheet.create({
     boxOne:
     {
         backgroundColor: "#F9CBB1",
-        height: "16%",
+        height: "17%",
         //height: "30%",
         width: "80%",
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
+        alignSelf: "center",
         zIndex: 1
     },
     boxTwo:
     {
         backgroundColor: "#F9CBB1",
-        height: "16%",
+        height: "17%",
         width: "80%",
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
+        alignSelf: "center",
         zIndex: 1
     },
 

@@ -5,7 +5,11 @@ import { List } from 'react-native-paper';
 import Routes from '../Navigation/constants/Routes';
 import { FirebaseButler } from '../../components/classes';
 import ProfileImage from '../../components/profileImage.js';
+
+const screenWidth = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 export default function PSPersonal({ route, navigation }) {
+
 
     let props = route.params;
 
@@ -28,7 +32,7 @@ export default function PSPersonal({ route, navigation }) {
           >   
             <View style={accordianStyles.listItemContainer}>
               <View style={accordianStyles.listItemHeader}>
-                <Text style={{fontWeight: "bold", fontSize: 15}}> General Experience </Text>
+                <Text style={[accordianStyles.accordionHeaderText]}> General Experience </Text>
               </View>
               <View style={accordianStyles.listItemContent}>
                 <Text style={accordianStyles.contentText}>
@@ -39,7 +43,7 @@ export default function PSPersonal({ route, navigation }) {
 
             <View style={accordianStyles.listItemContainer}>
               <View style={accordianStyles.listItemHeader}>
-                <Text style={{fontWeight: "bold", fontSize: 15}}> Worship Experience </Text>
+                <Text style={[accordianStyles.accordionHeaderText]}> Worship Experience </Text>
               </View>
               <View style={accordianStyles.listItemContent}>
                 <Text style={accordianStyles.contentText}>
@@ -50,7 +54,7 @@ export default function PSPersonal({ route, navigation }) {
 
             <View style={accordianStyles.listItemContainer}>
               <View style={accordianStyles.listItemHeader}>
-                <Text style={{fontWeight: "bold", fontSize: 15}}> Additional Notes </Text>
+                <Text style={[accordianStyles.accordionHeaderText]}> Additional Notes </Text>
               </View>
               <View style={accordianStyles.listItemContent}>
                 <Text style={accordianStyles.contentText}>
@@ -110,9 +114,9 @@ export default function PSPersonal({ route, navigation }) {
       
     const ChurchRoute = () => (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-          <Text style={{borderColor: "#F2905B", borderWidth: 7, width: '85%', alignSelf: "center", height: 75, top: 50, borderRadius: 10, fontSize: 25, textAlign: 'center', padding: 10}}>{MyChurchName}</Text>
-          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: 20, textAlign: 'center', padding: 10, marginTop: 20}}>{MyDenomination}</Text>
-          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: 20, textAlign: 'center', padding: 10, marginTop: 20}}>{MyChurchLocation}</Text>
+          <Text style={{borderColor: "#F2905B", borderWidth: 7, width: '85%', alignSelf: "center", height: 75, top: 50, borderRadius: 10, fontSize: height/40, textAlign: 'center', padding: 10}}>{MyChurchName}</Text>
+          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: height/42, textAlign: 'center', padding: 10, marginTop: 20}}>{MyDenomination}</Text>
+          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: height/42, textAlign: 'center', padding: 10, marginTop: 20}}>{MyChurchLocation}</Text>
         </View>
       );
 
@@ -268,8 +272,8 @@ export default function PSPersonal({ route, navigation }) {
                 {/* <Image style={styles.profilePicture} source={image}></Image> */}
                 <ProfileImage size = "large" userId = {userId} />
                 <View style={styles.column}>
-                  <Text style={{fontSize: 20, fontWeight: '500', marginBottom: 10}}>{MyName}</Text>
-                  <Text style={{fontSize: 15, fontWeight: '400', marginBottom: 13}}>Instrumentalist</Text>
+                  <Text style={{fontSize: height/35, fontWeight: '500', marginBottom: 10}}>{MyName}</Text>
+                  <Text style={{fontSize: height/45, fontWeight: '400', marginBottom: 13}}>Instrumentalist</Text>
                   <View style={styles.row2}>
                     <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
                     <Text>{MyLocation}</Text>
@@ -309,9 +313,10 @@ const styles = StyleSheet.create({
     },
 
     titleText: {
-      fontSize: 20,
+      fontSize: height/40,
       textAlign: 'center',
-      color: "#006175"
+      color: "#006175",
+      fontFamily: "RNSMiles"
     },
 
     row: {
@@ -422,5 +427,10 @@ const accordianStyles = StyleSheet.create({
     width: "100%",
     top: "5%",
     height: "30%"
+  },
+  accordionHeaderText: {
+    fontSize: 15,
+    fontFamily: "RNSMiles"
   }
+
 });
