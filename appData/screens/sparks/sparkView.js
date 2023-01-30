@@ -123,9 +123,9 @@ export default function SparkView({ route, navigation }) {
     
     return(
         <View style={stylesPortrait.container}>
-            <View style={[sparkViewStyles.sparkViewTopBorder]}>
+            {/* <View style={[sparkViewStyles.sparkViewTopBorder]}>
                 <Text style={{color: "white", textAlign:"center", fontSize: screenHeight/30, fontFamily:"RNSMiles", paddingTop: 28}}>Spark Worship</Text>
-            </View>
+            </View> */}
             <View style={[sparkViewStyles.sparkContainer]}>
                 <FlatList 
                     data = {Object.values(sparks)}
