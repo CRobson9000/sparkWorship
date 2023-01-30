@@ -73,7 +73,7 @@ class ProfileImage extends Component {
         })
         .catch((error) => {
             // could not find a spark cover image so display the default instead
-            //setImage(defaultPic);
+            this.setState({image: require("../../assets/ProfileNavIcon.png")});
         })
     }
 

@@ -13,6 +13,7 @@ let Routes={
     messaging: 'Messaging',
     sparkSummary: 'Spark Summary',
     chatList: 'chatList',
+    sparkSurvey: 'Spark Survey',
 
     //testing routes
     // myTest: "My Test", 

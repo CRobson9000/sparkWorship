@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, Fl
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List, IconButton } from 'react-native-paper';
 import Routes from '../Navigation/constants/Routes';
-import { FirebaseButler } from '../../components/classes';
+import { FirebaseButler, PushNotify } from '../../components/classes';
 import { getDatabase, ref, set, get, push } from 'firebase/database';
 import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storageRef } from '../../../config/additionalMethods';
@@ -247,9 +247,9 @@ export default function PSPersonal({ route, navigation }) {
       })
     }
 
-    // -----------------------
+    // ------------
     // Friend Code
-    // -----------------------
+    // ------------
 
     async function addFriend() {
       //get current friends
@@ -270,8 +270,6 @@ export default function PSPersonal({ route, navigation }) {
       else {
         console.log("Already a friend!");
       }
-      
-
     }
 
     useEffect(() => {
@@ -286,38 +284,44 @@ export default function PSPersonal({ route, navigation }) {
       getPhoto();
     }, [])
 
-      return (
-        <View style={styles.MainContainer}>
-            <View style={styles.topBorder}>
-              <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.functionalityTesting, props)}><Image style={{height: 40, width: 40}} source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity>
-                <Text style={styles.titleText}>User Profile</Text>
-                <IconButton icon = "account-multiple-plus" style = {{height: 40, width: 40}} onPress = {() => addFriend()} />
-              </View>
-              <View style={styles.row} >
-                <Image style={styles.profilePicture} source={image}></Image>
-                <View style={styles.column}>
-                  <Text style={{fontSize: 20, fontWeight: '500', marginBottom: 10}}>{MyName}</Text>
-                  <Text style={{fontSize: 15, fontWeight: '400', marginBottom: 13}}>Instrumentalist</Text>
-                  <View style={styles.row2}>
-                    <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
-                    <Text>{MyLocation}</Text>
-                  </View>
+    const openLogin = () => {navigation.navigate(Routes.login)}
+
+    let myNotification = new PushNotify(openLogin, null);
+    let title = "Test Title";
+    let message = "I think that this might work for me";
+
+    return (
+      <View style={styles.MainContainer}>
+          <View style={styles.topBorder}>
+            <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
+              <TouchableOpacity onPress = {() => myNotification.scheduleNotification(null, title, message)}><Image style={{height: 40, width: 40}} source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity>
+              <Text style={styles.titleText}>User Profile</Text>
+              <IconButton icon = "account-multiple-plus" style = {{height: 40, width: 40}} onPress = {() => addFriend()} />
+            </View>
+            <View style={styles.row} >
+              <Image style={styles.profilePicture} source={image}></Image>
+              <View style={styles.column}>
+                <Text style={{fontSize: 20, fontWeight: '500', marginBottom: 10}}>{MyName}</Text>
+                <Text style={{fontSize: 15, fontWeight: '400', marginBottom: 13}}>Instrumentalist</Text>
+                <View style={styles.row2}>
+                  <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
+                  <Text>{MyLocation}</Text>
                 </View>
               </View>
-            <View style={[styles.row, {marginLeft: 80, marginRight: 80, top: "30%"}]}>
-              <Image style={{height: 30, width: 30}} source={require('../../../assets/filledspark.png')}></Image>
-              <Image style={{height: 30, width: 30}} source={require('../../../assets/filledspark.png')}></Image>
-              <Image style={{height: 30, width: 30}} source={require('../../../assets/filledspark.png')}></Image>
-              <Image style={{height: 30, width: 30}} source={require('../../../assets/emptyspark.png')}></Image>
-              <Image style={{height: 30, width: 30}} source={require('../../../assets/emptyspark.png')}></Image>
             </View>
-            </View>
-            <View style={styles.content}>
-              <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
-            </View>
-        </View>
-      );
+          <View style={[styles.row, {marginLeft: 20, marginRight: 20, top: "30%"}]}>
+            <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
+            <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
+            <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
+            <Image style={{height: 40, width: 40}} source={require('../../../assets/emptyStar.png')}></Image>
+            <Image style={{height: 40, width: 40}} source={require('../../../assets/emptyStar.png')}></Image>
+          </View>
+          </View>
+          <View style={styles.content}>
+            <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
+          </View>
+      </View>
+    );
 }
 
 const styles = StyleSheet.create({

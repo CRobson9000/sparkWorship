@@ -1,4 +1,11 @@
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
+import React, {useRef} from 'react';
+import * as BackgroundFetch from 'expo-background-fetch';
+import * as TaskManager from 'expo-task-manager';
+
+// push notification imports
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 
 class Observable {
     constructor(start, observer){
@@ -109,5 +116,77 @@ class FirebaseButler {
 
         return dataPromise;
     }
-} 
-export { Observable, TDO, FirebaseButler };
+}
+
+class PushNotify {
+    constructor(onReceive, userId) {
+        Notifications.setNotificationHandler({
+            handleNotification: async () => ({
+                shouldShowAlert: true,
+                shouldPlaySound: false,
+                shouldSetBadge: false,
+            })
+        });
+        this.onReceive = onReceive;
+        this.userId = userId;
+
+        this.responseListener = null;
+    }
+
+    getDaysTillSparkNotification(targetSparkTDO) {
+        let daysInMonthArray = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+        // get the current date
+        let currentDate = new Date();
+        let currentDay = currentDate.getDate();
+        let currentMonth =  currentDate.getMonth();
+    
+        let targetDay = targetSparkTDO.getPart("day");
+        let targetMonth = targetSparkTDO.getPart("month") - 1; // subtract one to get the correct index in daysInMonth (January is 0)
+        
+        // get the number of days from the month after the current month until the first day of the spark month
+        let accumulator = currentMonth + 1;
+        let runningDays = 0;
+        while (accumulator != targetMonth) {
+          if (accumulator == daysInMonthArray.length) {
+            accumulator = 0;
+          }
+          runningDays += daysInMonthArray[accumulator];
+          accumulator++;
+        } 
+    
+        // add the number of days left in the current month to the running total
+        runningDays += daysInMonthArray[currentMonth] - currentDay;
+        // add the number of days from the first day of the spark month until the target spark day (targetDay) to the running total
+        runningDays += targetDay + 1;
+        // plus one to send a day after the spark
+        return runningDays;
+    }
+    
+    scheduleNotification = async(sparkTDO, title, message, userId) => {
+        this.responseListener = Notifications.addNotificationResponseReceivedListener(response => {
+            if (this.onReceive) {
+                this.onReceive();
+                Notifications.removeNotificationSubscription(this.responseListener);
+            }
+        })
+        
+        //get expo push token based on id
+        let pushToken = await Notifications.getExpoPushTokenAsync({experienceId: userId});
+
+        // let daysUntilSpark = getDaysTillSparkNotification(sparkTDO);
+        // number of milliseconds until 5:30 the day after the curent spark is over 
+        // let millisecondsTillSend = 60 * 30 * 60 * 5 * 24 * daysUntilSpark;
+        let secondsTillSend = 3;
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                to: pushToken,
+                title: title,
+                body: message,
+            },
+            trigger: { seconds: secondsTillSend },
+        });
+    }
+}
+
+export { Observable, TDO, FirebaseButler, PushNotify };

@@ -6,8 +6,9 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List, IconButton } from 'react-native-paper';
 import { stylesSummary } from "../../styles/summary.js";
 import { Input, Slider, DropDown } from '../../components/components';
-import { Observable, TDO, FirebaseButler } from '../../components/classes';
+import { Observable, TDO, FirebaseButler, PushNotify } from '../../components/classes';
 import { stylesPortrait } from "../../styles/portrait";
+import Routes from "../Navigation/constants/Routes";
 
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 
@@ -86,37 +87,8 @@ export default function SparkSummary({ route, navigation }) {
       </View>
     </ScrollView>
     );
-    // <Image source="../../../assets/miniEri.png"   />
-
 
     const VolunteersRoute = () => (
-        // <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
-        //   <View style={{alignItems: "center", justifyContent: "center"}}>
-        //     <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Requests</Text>
-        //   </View>
-        //     <List.Section style={{marginTop: "6%"}}>
-        //       <List.Accordion style={styles.accordian} title="Person 1">
-        //         <TouchableOpacity style={{width: "100%", flexDirection:"row", justifyContent:"space-between"}}>
-        //           <List.Subheader style={styles.accordionSubheading}>
-        //             <Text>Egg</Text>
-        //             <Text>Big</Text>
-        //           </List.Subheader>
-        //       </TouchableOpacity>
-        //         <List.Subheader style={styles.accordionSubheading}>Reject</List.Subheader>
-        //       </List.Accordion>
-        //       <List.Accordion style={styles.accordian} title="Person 2">
-        //       <List.Subheader style={styles.accordionSubheading}>Accept</List.Subheader>
-        //         <List.Subheader style={styles.accordionSubheading}>Reject</List.Subheader>
-        //       </List.Accordion>
-        //       <List.Accordion style={styles.accordian} title="Person 3">
-        //       <List.Subheader style={styles.accordionSubheading}>Accept</List.Subheader>
-        //         <List.Subheader style={styles.accordionSubheading}>Reject</List.Subheader>
-        //       </List.Accordion>
-        //       {/* <List.Image variant="image" source={require("../../../assets/miniEri.png")} />  */}
-        //     </List.Section>
-            
-        // </ScrollView>
-
         <ScrollView>
           <View style={[sparkViewStyles.sparkVerticalTest]}>
             <View style={{alignItems: "center", justifyContent: "center"}}>
@@ -252,7 +224,7 @@ export default function SparkSummary({ route, navigation }) {
 
     const RequestsRoute = () => {
       
-      const acceptRequest = (role, id) => {
+      const acceptRequest = async(role, id) => {
         //define "final" for the role selected to be the id of the user selected
         const db = getDatabase();
         const acceptRef = ref(db, `Sparks/${currentSparkId}/roles/${role}/final`);
@@ -260,7 +232,14 @@ export default function SparkSummary({ route, navigation }) {
     
         //send notification to the user
     
-        //log the action
+        // schedule a notification to be sent about the survey after the spark is complete
+        let sparkOBJ = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/info/times/spark`);
+        let sparkTDO = new TDO(null, null, null, null, null, null, sparkOBJ["TDO"]);
+        const navigateToSurvey = () => {
+          navigation.navigate(Routes.sparkSurvey);
+        }
+        let sparkOverNotify = new PushNotify(navigateToSurvey);
+        sparkOverNotify.scheduleNotification(sparkTDO, "Spark Survey", "Please tell us how this spark went!");
     
         //add spark to user's section as a spark they are playing for
         const addSparkRef = ref(db, `Users/${id}/sparks/playing`);
@@ -350,6 +329,8 @@ export default function SparkSummary({ route, navigation }) {
     //    />
     //);
     
+      
+      
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
         { key: 'first', title: 'Location' },
@@ -384,6 +365,11 @@ export default function SparkSummary({ route, navigation }) {
       const db = getDatabase();
       const attendSparkRef = ref(db, `Users/${userId}/sparks/attending`)
       push(attendSparkRef, currentSparkIdAttend);
+    }
+
+    async function testRequest() {
+      let sparkOverNotify = new PushNotify(() => navigation.navigate(Routes.sparkSurvey));
+      sparkOverNotify.scheduleNotification(null, "My Test", "Hello this is a test", userId);
     }
 
     const [MySparkName, setMySparkName] = React.useState("Spark Name");
@@ -433,7 +419,8 @@ export default function SparkSummary({ route, navigation }) {
     <View style={styles.MainContainer}>
     <View style={styles.topBorder}>
       <View style={[styles.row2, {justifyContent: 'center', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
-        <Text style={styles.titleText}>{MySparkName}</Text>
+        <IconButton onPress = {() => testRequest()}style = {{position: "absolute", left: "2%"}}icon = "head-check" size = {30}/>
+        <Text style={styles.titleText}>{(MySparkName) ? MySparkName : "My Spark"}</Text>
         <IconButton onPress = {() => attendSpark()}style = {{position: "absolute", left: "85%"}}icon = "checkbox-marked-circle-plus-outline"/>
       </View>
       <View style={styles.row}>

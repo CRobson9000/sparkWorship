@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableHighlight, Text, View, TouchableOpacity, FlatList, SafeAreaView, Image } from 'react-native';
+import { StyleSheet, TouchableHighlight, Text, View, TextInput, FlatList } from 'react-native';
 import React, {useRef, useEffect} from 'react';
 import { Input, Slider } from '../../components/components';
 import { FirebaseButler, Observable, TDO } from '../../components/classes';
@@ -8,7 +8,7 @@ import ProfileImage from '../../components/profileImage.js';
 
 export default function Message({ route, navigation }) {
   let props = route.params;
-  let currentUser = props?.userId;
+  let userId = props?.userId;
 
   // attributes brought from Chatlist Screen
   let peopleLookup = props?.peopleLookup;
@@ -16,40 +16,78 @@ export default function Message({ route, navigation }) {
   let convoData = props?.convoData;
   let conversationId = useRef(props.convoId || null);
 
-  const [messages, setMessages] = React.useState(Object.values(convoData?.["messages"] || []) || []);
-  let currentMessage = useRef("");
+  const [messages, setMessages] = React.useState([]);
+  const input = useRef("");
+  const [currentMessage, setCurrentMessage] = React.useState("");
+
+  //helper method to invert an array
+  function invert(array) {
+    let finalArray = [];
+    for (let index in array) {
+      finalArray.unshift(array[index]);
+    }
+    return finalArray;
+  }
 
   const renderMessage = (object, index, separators) => {
     //convert firebase obj to TDO
     let TDOobject = object.item.sentTDO.TDO;
-    let tdo = new TDO (null, null, null, null, null, null, TDOobject
-    );
+    let tdo = new TDO (null, null, null, null, null, null, TDOobject);
+    let senderId = object.item.sender;
 
-    console.log("OBJ", object.item.sender);
+    // Function to determine whether to display the profile pic on the left or right side of the message
+    const leftOrRight = () => {
+      if (senderId == userId) {
+        return (
+          <View style={{flexDirection:"row", justifyContent: "space-evenly"}}>
+            <View style = {{flex: 1, flexDirection: "column"}}>
+              <ProfileImage userId = {object.item.sender} size = {"small"}/>
+              <View style = {styles.time}>
+              {/* Date should not be displayed for every single message. There should just be one date for all messages in that day */}
+              {/* <Text style = {{margin: "2%"}}>{tdo.getFormattedDate()}</Text> */}
+                <Text style = {{margin: "2%"}}>{tdo.getFormattedTime()}</Text>
+              </View>
+            </View>
+            <View style = {[styles.textMessage, {marginLeft: "2%"}]}>
+              {/* When the other person sends a message, the message box should be a light gray rather than the light orange. */}
+              <Text>{object.item.message}</Text>
+            </View>
+          </View>
+        );
+      }
+      else {
+        return (
+          <View style={{flexDirection:"row", justifyContent: "space-evenly"}}>
+            <View style = {[styles.textMessage, {backgroundColor: "#E7E6E6"}]}>
+              <Text>{object.item.message}</Text>
+            </View>
+            {/* Profile picture of the sender should be on the right side of the message and the profile picture of the receiver
+              should be on the left side of the message when they send a message */ }
+            <View style = {{flex: 1, flexDirection: "column"}}>
+              <ProfileImage userId = {object.item.sender} size = {"small"}/>
+              <View style = {styles.time}>
+              {/* Date should not be displayed for every single message. There should just be one date for all messages in that day */}
+              {/* <Text style = {{margin: "2%"}}>{tdo.getFormattedDate()}</Text> */}
+                <Text style = {{margin: "2%"}}>{tdo.getFormattedTime()}</Text>
+              </View>
+            </View>
+          </View>
+        );
+      }
+    }
 
     return(
       <View style = {styles.message}>
-        <View style={{flexDirection:"row", justifyContent: "flex-start"}}>
-          {/* When the other person sends a message, the message box should be a light gray rather than the light orange. */}
-          <View style = {styles.textMessage}><Text>{object.item.message}</Text></View>
-          {/* Profile picture of the sender should be on the right side of the message and the profile picture of the receiver
-              should be on the left side of the message when they send a message */ }
-            <ProfileImage userId = {object.item.sender} size = {"small"}/>
-          {/* <View style = {styles.sender}><Text>{object.item.sender}</Text></View> */}
-        </View>
-        <View style = {styles.time}>
-        {/* Date should not be displayed for every single message. There should just be one date for all messages in that day */}
-        {/* <Text style = {{margin: "2%"}}>{tdo.getFormattedDate()}</Text> */}
-          <Text style = {{margin: "2%"}}>{tdo.getFormattedTime()}</Text>
-        </View>
+        {
+          leftOrRight()
+        }          
       </View>
     );
   }
 
   async function sendMessage() {
-    console.log("Conversation Id", conversationId.current);
     //if there's a message, send it
-    if (currentMessage.current != "" && currentMessage.current.trim() != "") {
+    if (currentMessage != "" && currentMessage.trim() != "") {
       // get database
       const db = getDatabase();
 
@@ -58,17 +96,17 @@ export default function Message({ route, navigation }) {
         const reference = ref(db, "Messaging");
         let idsArray = Object.keys(peopleLookup);
         let conversationObject = await push(reference, {
-          people: [...idsArray, currentUser]
+          people: [...idsArray, userId]
         }); 
         let conversationIdArray = conversationObject.toString().split("/");
         conversationId.current = conversationIdArray[conversationIdArray.length - 1];
 
         //get current conversations array
-        let currentConvoArray = await FirebaseButler.fbGet(`Users/${currentUser}/conversations`) || [];
+        let currentConvoArray = await FirebaseButler.fbGet(`Users/${userId}/conversations`) || [];
         currentConvoArray.push(conversationId.current);
 
         //set new the current conversations array
-        const newConvoRef = ref(db, `Users/${currentUser}/conversations`);
+        const newConvoRef = ref(db, `Users/${userId}/conversations`);
         set(newConvoRef, currentConvoArray);
         for (let peopleIndex in Object.keys(peopleLookup)) {
           const recipientRef = ref(db, `Users/${Object.keys(peopleLookup)[peopleIndex]}/conversations`);
@@ -90,29 +128,35 @@ export default function Message({ route, navigation }) {
       //set update message in firebase
       const messageRef = ref(db, `Messaging/${conversationId.current}/messages`);
       await push(messageRef, {
-        message: currentMessage.current,
-        sender: currentUser,
+        message: currentMessage,
+        sender: userId,
         sentTDO
       });
       
       // update local copy of message
-      messages.unshift({
-        message: currentMessage.current,
-        sender: currentUser,
+      let finalMessages = [...messages];
+      finalMessages.unshift({
+        message: currentMessage,
+        sender: userId,
         sentTDO
       });
 
-      setMessages([...messages]);
+      setMessages([...finalMessages]); 
+      setCurrentMessage("");
 
-      
     }
   }
 
   //only run this method on the first render of the page
   useEffect(() => {
-    //clear myMessage
-    currentMessage.current = "";
-  }, [messages]);
+    const unsubscribe = navigation.addListener('focus', () => {
+        let startingMessages = [];
+        if (convoData) startingMessages = Object.values(convoData?.["messages"]) || [] ;
+        let inverted = invert(startingMessages);
+        setMessages([...inverted]);
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   return(
     <View style={styles.container}>
@@ -129,37 +173,44 @@ export default function Message({ route, navigation }) {
             />
         </View>
         <View style={styles.messagingContainer}>
-            <Input placeHolderText={"Type Message"} func = {(val) => currentMessage.current = val}/>
+            {/* <Input start={currentMessage} placeHolderText={"Type Message"} func = {(val) => currentMessage = val}/> */}
+            <TextInput 
+              onChangeText = {(val) => setCurrentMessage(val)}
+              value = {currentMessage}
+              style = {{flex: 1, padding: "2%", textAlign: "left"}}
+              placeholder = {"type your message..."}
+            />
             <TouchableHighlight style = {styles.button} onPress = {() => sendMessage()}>
               <Text style={styles.sendText}> Send </Text>
             </TouchableHighlight>
         </View>
-
     </View>
 )}
 
 const styles = StyleSheet.create({
 
     container: {
-        height: "100%",
+        flex: 1,
         backgroundColor: "white"
     },
 
     topBorder: {
-        height: "13%",
+        height: "15%",
         backgroundColor: "#DBE9EC",
     },
 
     content: {
-        height: "74%"
+        height: "70%"
     },
 
     messagingContainer: {
-        height: "13%",
+        height: "15%",
+        width: "100%",
         backgroundColor: "#DBE9EC",
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "center",
         alignItems: "center",
+        padding: "5%"
     },
 
     nameText: {
@@ -175,9 +226,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         flex: 1,
         borderRadius: 20,
-        marginLeft: "5%",
-        marginRight: "5%",
-        marginBottom: "5%",
+        margin: "5%"
     },
       
     sender: {
@@ -214,8 +263,6 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 5,
-        marginRight: 30
     },
 
     sendText: {

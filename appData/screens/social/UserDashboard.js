@@ -87,24 +87,22 @@ export default function UserDashboard({ route, navigation }) {
     let startingSparksPath = `Users/${userId}/sparks/attending`;
     let attendingSparksOBJs = await FirebaseButler.fbGet(startingSparksPath) || {};
     let playingSparkOBJs = await FirebaseButler.fbGet(`Users/${userId}/sparks/playing`) || {}; 
-
     let sparksOBJs = {...attendingSparksOBJs, ...playingSparkOBJs};
 
-    if (sparksOBJs) {
+    if (Object.values(sparksOBJs).length > 0) {
       let sparkIds = Object.values(sparksOBJs);
       let localMarkedDates = {};
       //each each id, get the actual spark data for that specific spark in firebase (found in Sparks)
       for (let index in sparkIds) {
         let sparkId = sparkIds[index];
-        let sparkTDOPath = `Sparks/${sparkId}/info/times/spark`;
-        let sparkNamePath = `Sparks/${sparkId}/info/name`;
-
-        let sparkTDO = await FirebaseButler.fbGet(sparkTDOPath);
-        let sparkName = await FirebaseButler.fbGet(sparkNamePath);
+        // console.log("Spark Id", sparkId);
+        let sparkInfo = await FirebaseButler.fbGet(`Sparks/${sparkId}/info`);
+        // console.log("Spark Info", sparkInfo);
+        let sparkTDO = sparkInfo.times.spark
 
         //add the needed spark data to local sparks array
-        let sparkObject = sparkTDO;
-        sparkObject['name'] = sparkName;
+        let sparkObject = sparkTDO; // spark with time object: TD0: times
+        sparkObject['name'] = sparkInfo.name;   // then add other info on the same level as TDO
         sparkObject['id'] = sparkId
         allSparks['current'].push(sparkObject);
 

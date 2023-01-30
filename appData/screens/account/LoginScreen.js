@@ -1,8 +1,13 @@
 import { Image, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import React from 'react';
+import React, { useRef } from 'react';
 import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
 import Routes from '../Navigation/constants/Routes.js';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Provider } from 'react-native-paper';
+import { Toast } from '../../components/components';
+import { getDatabase, ref, set } from 'firebase/database';
+
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
 
 // import Routes.UserDashboard from '../dashboard/UserDashboard';
 
@@ -22,28 +27,54 @@ export default function LoginScreen({ navigation }) {
   //global variables
   let username;
   let userPassword;
+  const toastRef = useRef("");
 
   function signIn(navigation) {
     const auth = getAuth();
-    signInWithEmailAndPassword(auth, username, userPassword).then((userCredential) => {
+    signInWithEmailAndPassword(auth, username, userPassword).then(async(userCredential) => {
         // Signed in with a valid username and password 
         const user = userCredential.user;
+
+        //await registerForPushNotificationsAsync(user.uid);
+
         navigation.navigate("Navigator", {userId: user.uid});
     }).catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
-        //console.log(errorCode);
-        console.log(errorMessage);
+        toastRef.current.showToast(errorMessage, 3000, "red");
     });
   }
 
-  //--------------------
-  //   OBSERVERS
-  //--------------------
-    
-  //--------------------
-  //   LISTENERS
-  //--------------------
+  // uncomment this for existing users
+  // async function registerForPushNotificationsAsync(uid) {
+  //   let token;
+  //   if (Device.isDevice) {
+  //     const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  //     let finalStatus = existingStatus;
+  //     if (existingStatus !== 'granted') {
+  //       const { status } = await Notifications.requestPermissionsAsync();
+  //       finalStatus = status;
+  //     }
+  //     if (finalStatus !== 'granted') {
+  //       alert('Failed to get push token for push notification!');
+  //       return;
+  //     }
+  //     token = (await Notifications.getExpoPushTokenAsync({experienceId: uid})).data;
+  //     console.log("My Token", token);
+  //   } else {
+  //     alert('Must use physical device for Push Notifications');
+  //   }
+  
+  //   if (Platform.OS === 'android') {
+  //     Notifications.setNotificationChannelAsync('default', {
+  //       name: 'default',
+  //       importance: Notifications.AndroidImportance.MAX,
+  //       vibrationPattern: [0, 250, 250, 250],
+  //       lightColor: '#FF231F7C',
+  //     });
+  //   }
+  
+  //   return token;
+  // }
 
   /*------------------------------------------------*/
   /*----------FRONT-END APP CODE ----------*/
@@ -120,7 +151,7 @@ export default function LoginScreen({ navigation }) {
 
         {/* Container for everything below the logo */}
         <View style={stylesPortrait.contentContainer}>
-        <Text style={[stylesPortrait.username]}>Email</Text>
+          <Text style={[stylesPortrait.username]}>Email</Text>
           <Input secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
 
           <Text style={[stylesPortrait.password]}>Password</Text>
@@ -138,6 +169,10 @@ export default function LoginScreen({ navigation }) {
           <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate(Routes.registration)}>
             <Text style={[stylesPortrait.centerText]}>Register New User</Text>
           </TouchableOpacity>
+
+          <Provider>
+            <Toast ref = {toastRef}/>
+          </Provider>
         </View>
       </View>
     </TouchableWithoutFeedback>
