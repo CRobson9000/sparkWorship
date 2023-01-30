@@ -527,7 +527,7 @@ export default function ProfileScreen({route, navigation}) {
       }
       
       //set placeholder value
-      let placeHolderVal = "Select and instrument..."
+      let placeHolderVal = "Select Instrument"
       
       if (currentInstrument?.instrumentName) {
         //console.log("Instrument was loaded");
@@ -542,15 +542,15 @@ export default function ProfileScreen({route, navigation}) {
         <Provider>
           <View style = {{zIndex: 1}}>
             <Portal>
-              <Dialog visible={stateVisible} onDismiss={hideDialog}>
-                <Dialog.Title>Add an Instrument</Dialog.Title>
-                <Dialog.Content style = {{height: "80%", justifyContent: "center", alignItems: "center", borderRadius: 5}}>
+              <Dialog style = {{backgroundColor: "rgb(219, 233, 236)", height: "105%", bottom: "2%"}} visible={stateVisible} onDismiss={hideDialog}>
+                <Dialog.Title style= {{alignSelf: "center", color: "black", fontSize: 20}}>Add Instrument</Dialog.Title>
+                <Dialog.Content style = {{height: "85%", justifyContent: "center", alignItems: "center", borderRadius: 5}}>
                   <Dialog.ScrollArea style = {{width: "100%"}}>
                     <ScrollView>
-                      <Text style={styleSheet.text}>Instrument</Text>
                       <View style = {{flex: 0.8}}>
                         <Dropdown
                             data = {dropDownItems}
+                            style = {styleSheet.dropDown2}
                             dropdownPosition = {"top"}
                             search = {false}
                             maxHeight = {"40%"}
@@ -558,22 +558,22 @@ export default function ProfileScreen({route, navigation}) {
                             onChange = {(value) => setInstrument(value)}
                             placeholder = {placeHolderVal}
                             value = {placeHolderVal}
-                            placeholderStyle = {{textAlign: "center"}}
+                            placeholderStyle = {{textAlign: "center", fontSize: 12, color: "white"}}
                             renderItem = {renderDropDownItem}
                         />
                       </View>
 
-                      <Text style={styleSheet.text}>Worship Experience</Text>
+                      <Text style={styleSheet.text4}>Worship Experience</Text>
                       <Input start = {(currentInstrument ? currentInstrument.worshipExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => worshipExperience = val}/>
 
-                      <Text style={styleSheet.text}>General Experience</Text>
+                      <Text style={styleSheet.text4}>General Experience</Text>
                       <Input start = {(currentInstrument ? currentInstrument.generalExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => generalExperience = val}/>
 
-                      <Text style={styleSheet.text}> Additional Notes </Text>
+                      <Text style={styleSheet.text4}> Additional Notes </Text>
                       <Input start = {(currentInstrument ? currentInstrument.additionalExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => additionalNotes = val}/>
 
                       <View style={{flexDirection:"row", alignItems: "center", justifyContent: "center"}}>
-                        <Text style={styleSheet.text}> Main Instrument? </Text>
+                        <Text style={styleSheet.text1}> Main Instrument? </Text>
                         <Checkbox
                           status={checked ? 'checked' : 'unchecked'}
                           onPress={() => {
@@ -649,12 +649,12 @@ export default function ProfileScreen({route, navigation}) {
 
     return (
       <View style={styleSheet.content}>
-        <DialogBox />
+        <DialogBox/>
         <View style = {{zIndex: -3, justifyContent: "center", alignItems: "center"}}>
           <Text style={styleSheet.stageText}>Musical Background</Text>
           <FlatList 
             data = {instruments}
-            style = {{height: "60%", width: "80%"}}
+            style = {{height: "100%", width: "85%"}}
             renderItem = {renderInstrument}
           />
           <TouchableOpacity style={styleSheet.screen2Buttons} onPress={() => showDialog()}><Text style={styleSheet.buttonText}>+ Add Instrument</Text></TouchableOpacity>

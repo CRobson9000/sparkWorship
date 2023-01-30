@@ -111,6 +111,17 @@ const styleSheet = StyleSheet.create({
       width: "100%",
       height: "100%"
     },
+
+    // Dialog Box instrument dropdown
+    dropDown2: {
+      backgroundColor: "rgb(0, 97, 117)",
+      borderRadius: 10,
+      width: "60%",
+      marginTop: "6%",
+      padding: "5%",
+      height: "45%",
+      alignSelf: "center"
+    },
   
     // Birthday input box
     birthdayInputBox: {
@@ -181,6 +192,13 @@ const styleSheet = StyleSheet.create({
       fontSize: 15,
       left: "10%"
     },
+
+    // Label for Dialog Box
+    text4: {
+      paddingBottom: "3%",
+      fontSize: 15,
+      left: "4%"
+    },
   
     // All input boxes except city, zip code and birthday
     inputBox: {
@@ -205,6 +223,7 @@ const styleSheet = StyleSheet.create({
       borderRadius: 10,
       paddingLeft: "5%",
       marginBottom: "5%",
+      height: 35,
       flexWrap: 'wrap'
     },
   
@@ -212,8 +231,8 @@ const styleSheet = StyleSheet.create({
       backgroundColor: "rgb(0, 97, 117)",
       justifyContent: "center",
       alignItems: "center",
-      height: "12%",
-      width: "40%",
+      height: "8%",
+      width: "35%",
       borderRadius: 10
     },
   
