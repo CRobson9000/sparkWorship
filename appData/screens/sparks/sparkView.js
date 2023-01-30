@@ -122,14 +122,14 @@ export default function SparkView({ route, navigation }) {
     }, [])
     
     return(
-        <View style={stylesPortrait.container}>
+        <View style={[stylesPortrait.container, {alignItems: "center", backgroundColor: "white"}]}>
             {/* <View style={[sparkViewStyles.sparkViewTopBorder]}>
                 <Text style={{color: "white", textAlign:"center", fontSize: screenHeight/30, fontFamily:"RNSMiles", paddingTop: 28}}>Spark Worship</Text>
             </View> */}
             <View style={[sparkViewStyles.sparkContainer]}>
                 <FlatList 
                     data = {Object.values(sparks)}
-                    style = {{flex: 1}}
+                    style = {{flex: 1, backgroundColor: "white"}}
                     renderItem = {renderSpark}
                 />
                 {/* <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary)} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
@@ -261,7 +261,7 @@ const sparkViewStyles = StyleSheet.create({
     {
         width:"85%",
         height:"100%",
-        backgroundColor: "rgba(255,255,255,1)",
+        backgroundColor: "white",
         flexDirection: "column", 
         justifyContent: "space-between", 
         alignItems: "center"
