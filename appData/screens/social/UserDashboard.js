@@ -95,9 +95,9 @@ export default function UserDashboard({ route, navigation }) {
       //each each id, get the actual spark data for that specific spark in firebase (found in Sparks)
       for (let index in sparkIds) {
         let sparkId = sparkIds[index];
-        console.log("Spark Id", sparkId);
+        // console.log("Spark Id", sparkId);
         let sparkInfo = await FirebaseButler.fbGet(`Sparks/${sparkId}/info`);
-        console.log("Spark Info", sparkInfo);
+        // console.log("Spark Info", sparkInfo);
         let sparkTDO = sparkInfo.times.spark
 
         //add the needed spark data to local sparks array

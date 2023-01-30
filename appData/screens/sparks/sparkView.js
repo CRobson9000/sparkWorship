@@ -25,33 +25,34 @@ export default function SparkView({ route, navigation }) {
     //spark code
     const renderSpark = (object) => {
         let item = object.item;
+        if (item.info) {
+            //Date Time string formatting
+            let sparkTimeObj = item.info?.times?.spark.TDO;
+            let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
+            let finalTime = sparkTDO.getFormattedTime();
+            let finalDate = sparkTDO.getFormattedDateFormal();
+            let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
 
-        //Date Time string formatting
-        let sparkTimeObj = item.info.times.spark.TDO;
-        let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
-        let finalTime = sparkTDO.getFormattedTime();
-        let finalDate = sparkTDO.getFormattedDateFormal();
-        let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
+            //Location formatting
+            let locationObj = item.info?.location;
+            let locationString = `${locationObj.address} ${locationObj.city}, ${locationObj.state} ${locationObj.zip}`;
+            
+            return (
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary, {userId})} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
+                    <View style={{width:"87%"}}>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name || "No Name"} </Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{finalDateTime}</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{locationString}</Text>
+                    </View>
+                    <View style={{width:"13%", alignItems:"center"}}>
+                        <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
 
-        //Location formatting
-        let locationObj = item.info.location;
-        let locationString = `${locationObj.address} ${locationObj.city}, ${locationObj.state} ${locationObj.zip}`;
-        
-        return (
-            <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary, {userId})} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
-                <View style={{width:"87%"}}>
-                    <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name || "No Name"} </Text>
-                    <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>
-                    <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{finalDateTime}</Text>
-                    <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{locationString}</Text>
-                </View>
-                <View style={{width:"13%", alignItems:"center"}}>
-                    <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
-
-                    </Image>
-                </View>
-            </TouchableOpacity>
-        )
+                        </Image>
+                    </View>
+                </TouchableOpacity>
+            )
+        }
     }
 
     function filterMyRole(spark, role) {
@@ -109,7 +110,7 @@ export default function SparkView({ route, navigation }) {
 
     function printFilterSparks() {
         let filteredSparks = Object.values(sparks).filter((spark) => filterMyRole(spark, "Piano"));
-        console.log("Filtered Sparks", filteredSparks);
+        // console.log("Filtered Sparks", filteredSparks);
     }
 
     //Location code

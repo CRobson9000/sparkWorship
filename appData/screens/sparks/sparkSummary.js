@@ -8,6 +8,7 @@ import { stylesSummary } from "../../styles/summary.js";
 import { Input, Slider, DropDown } from '../../components/components';
 import { Observable, TDO, FirebaseButler, PushNotify } from '../../components/classes';
 import { stylesPortrait } from "../../styles/portrait";
+import Routes from "../Navigation/constants/Routes";
 
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 
@@ -365,6 +366,11 @@ export default function SparkSummary({ route, navigation }) {
       push(attendSparkRef, currentSparkIdAttend);
     }
 
+    async function testRequest() {
+      let sparkOverNotify = new PushNotify(() => navigation.navigate(Routes.sparkSurvey));
+      sparkOverNotify.scheduleNotification(null, "My Test", "Hello this is a test", userId);
+    }
+
     const [MySparkName, setMySparkName] = React.useState("Spark Name");
 
     async function setSparkName() {
@@ -412,7 +418,7 @@ export default function SparkSummary({ route, navigation }) {
     <View style={styles.MainContainer}>
     <View style={styles.topBorder}>
       <View style={[styles.row2, {justifyContent: 'center', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
-        <IconButton onPress = {() => attendSpark()}style = {{position: "absolute", left: "2%"}}icon = "head-check" size = {30}/>
+        <IconButton onPress = {() => testRequest()}style = {{position: "absolute", left: "2%"}}icon = "head-check" size = {30}/>
         <Text style={styles.titleText}>{(MySparkName) ? MySparkName : "My Spark"}</Text>
         <IconButton onPress = {() => attendSpark()}style = {{position: "absolute", left: "85%"}}icon = "checkbox-marked-circle-plus-outline"/>
       </View>

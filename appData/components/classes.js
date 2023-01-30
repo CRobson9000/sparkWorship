@@ -1,5 +1,7 @@
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 import React, {useRef} from 'react';
+import * as BackgroundFetch from 'expo-background-fetch';
+import * as TaskManager from 'expo-task-manager';
 
 // push notification imports
 import * as Device from 'expo-device';
@@ -117,7 +119,7 @@ class FirebaseButler {
 }
 
 class PushNotify {
-    constructor(onReceive, onSetNotification) {
+    constructor(onReceive, userId) {
         Notifications.setNotificationHandler({
             handleNotification: async () => ({
                 shouldShowAlert: true,
@@ -125,24 +127,16 @@ class PushNotify {
                 shouldSetBadge: false,
             })
         });
-
-        this.responseListener = useRef();
         this.onReceive = onReceive;
-        // set listeners and responders
-        // const notificationListener = useRef();
-        // const responseListener = useRef();
-        
-        // notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-        //     if (onSetNotification) {
-        //         onSetNotification();
-        //         // Notifications.removeNotificationSubscription(notificationListener.current);
-        //     }
-        // });
+        this.userId = userId;
+
+        this.responseListener = null;
     }
 
     getDaysTillSparkNotification(targetSparkTDO) {
         let daysInMonthArray = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-        // Spark Date: February 
+
+        // get the current date
         let currentDate = new Date();
         let currentDay = currentDate.getDate();
         let currentMonth =  currentDate.getMonth();
@@ -168,71 +162,30 @@ class PushNotify {
         // plus one to send a day after the spark
         return runningDays;
     }
-
-    // setResponseListener(onRe) {
-    //     this.responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-    //         console.log("Response", response);
-    //         if (onReceive) {
-    //             onReceive();
-    //             Notifications.removeNotificationSubscription(responseListener.current);
-    //         }
-    //     });        
-    // }
-
-    // removeResponseListener() {
-
-    // }
     
-    scheduleNotification(sparkTDO, title, message) {
-        // let daysUntilSpark = getDaysTillSparkNotification(sparkTDO);
-        // the spark notification will send at 5:30 the day after the spark is completed
-        Notifications.scheduleNotificationAsync({
-            content: {
-            title: title,
-            body: message,
-            },
-            trigger: {
-            seconds: 3/*60 * 30 * 60 * 5 * 24 * daysUntilSpark,*/
-            },
-        });
-
-        this.responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+    scheduleNotification = async(sparkTDO, title, message, userId) => {
+        this.responseListener = Notifications.addNotificationResponseReceivedListener(response => {
             if (this.onReceive) {
                 this.onReceive();
-                Notifications.removeNotificationSubscription(this.responseListener.current);
+                Notifications.removeNotificationSubscription(this.responseListener);
             }
+        })
+        
+        //get expo push token based on id
+        let pushToken = await Notifications.getExpoPushTokenAsync({experienceId: userId});
+
+        // let daysUntilSpark = getDaysTillSparkNotification(sparkTDO);
+        // number of milliseconds until 5:30 the day after the curent spark is over 
+        // let millisecondsTillSend = 60 * 30 * 60 * 5 * 24 * daysUntilSpark;
+        let secondsTillSend = 3;
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                to: pushToken,
+                title: title,
+                body: message,
+            },
+            trigger: { seconds: secondsTillSend },
         });
-    }
-      
-    async registerForPushNotificationsAsync() {
-        let token;
-        if (Device.isDevice) {
-          const { status: existingStatus } = await Notifications.getPermissionsAsync();
-          let finalStatus = existingStatus;
-          if (existingStatus !== 'granted') {
-            const { status } = await Notifications.requestPermissionsAsync();
-            finalStatus = status;
-          }
-          if (finalStatus !== 'granted') {
-            alert('Failed to get push token for push notification!');
-            return;
-          }
-          token = (await Notifications.getExpoPushTokenAsync()).data;
-          console.log("My Token", token);
-        } else {
-          alert('Must use physical device for Push Notifications');
-        }
-      
-        if (Platform.OS === 'android') {
-          Notifications.setNotificationChannelAsync('default', {
-            name: 'default',
-            importance: Notifications.AndroidImportance.MAX,
-            vibrationPattern: [0, 250, 250, 250],
-            lightColor: '#FF231F7C',
-          });
-        }
-      
-        return token;
     }
 }
 
