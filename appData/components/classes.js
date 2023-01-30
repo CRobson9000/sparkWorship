@@ -1,10 +1,7 @@
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 import React, {useRef} from 'react';
-import * as BackgroundFetch from 'expo-background-fetch';
-import * as TaskManager from 'expo-task-manager';
 
 // push notification imports
-import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 
 class Observable {
