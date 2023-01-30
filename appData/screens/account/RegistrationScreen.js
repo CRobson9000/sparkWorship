@@ -137,11 +137,11 @@ export default function RegistrationScreen({ navigation }) {
             backgroundColor:'#DBE9EC',
             justifyContent: 'center',
             alignItems: 'center',
-            left: 110,
+            left: Dimensions.get('window').width * 0.25,
             top: 100
           }}
         >
-          <Text style={{color: "white"}}> Register </Text>
+          <Text style={{color: "#006175", fontFamily: "RNSMiles"}}> Register </Text>
         </TouchableHighlight>
 
         {/* Mini circles */}
@@ -218,7 +218,7 @@ export default function RegistrationScreen({ navigation }) {
             <Input placeHolderText={"Password"} secure={false} func={(val) => password = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
             <Input placeHolderText={"Confirm Password"} secure={false} func={(val) => confirmPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
             <TouchableOpacity onPress = {() => signUp(navigation)} style={stylesPortrait.button}>
-              <Text style={{color: "white"}}>Create new User</Text>
+              <Text style={{color: "white", fontFamily: "RNSMiles"}}>Create new User</Text>
             </TouchableOpacity>
           </ScrollView>
           <Provider>

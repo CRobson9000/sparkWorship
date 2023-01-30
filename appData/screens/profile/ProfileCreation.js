@@ -1,5 +1,5 @@
 import React, {useRef, useEffect, useLayoutEffect} from 'react';
-import { Text, View, TextInput, ScrollView, TouchableOpacity, Image, FlatList } from "react-native";
+import { Text, View, TextInput, ScrollView, TouchableOpacity, Image, FlatList, Dimensions } from "react-native";
 import { Input, Slider } from '../../components/components';
 import { Observable, FirebaseButler } from '../../components/classes';
 import { getDatabase, ref, set, get } from 'firebase/database';
@@ -9,6 +9,9 @@ import { Dialog, Portal, Provider, Checkbox, List, IconButton, Menu, ProgressBar
 import Routes from '../Navigation/constants/Routes.js';
 import ProfileImage from '../../components/profileImage.js';
 import { styleSheet } from "../../styles/profileCreationStyles.js";
+
+const screenWidth = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 export default function ProfileScreen({route, navigation}) {
   //set environment variables
@@ -712,7 +715,7 @@ export default function ProfileScreen({route, navigation}) {
               </TouchableOpacity> */}
               <ProfileImage userId = {userId} changeable = {true} size = {"large"}/>
               <View style={styleSheet.column3}>
-                <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: 170, height: 20, borderRadius: 10, marginBottom: "15%"}} progress={(currentIndex + 1) / 5}/>
+                <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2.4 , height: 20, borderRadius: 10, marginBottom: "15%"}} progress={(currentIndex + 1) / 5}/>
                 <Text style={styleSheet.smallText1}>Click your profile picture to change</Text>
               </View>
             </View>

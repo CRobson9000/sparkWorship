@@ -38,7 +38,7 @@ export default function UserHub({ route, navigation }) {
                     <TouchableHighlight style={{height: 40, width: 40}} onPress = {() => navigation.navigate(Routes.publicProfile, {userId, selectedUserId: "wVgW65Og51OCuC7lD8LtRJBWuUC2"})}>
                           <Image style={{height: "100%", width: "100%"}} source={require('../../../assets/userHub1.png')}></Image>
                       </TouchableHighlight>
-                    <Text style={{marginLeft: "5%", lineHeight: 30, color: "#006175"}}> 
+                    <Text style={{marginLeft: "5%", lineHeight: 30, color: "#006175", fontFamily: "RNSMiles"}}> 
                       Dave Birdy
                     </Text>  
                   </View>
@@ -49,7 +49,7 @@ export default function UserHub({ route, navigation }) {
                     imperdiet est nisi interdum neque.
                     {'\n'}
                     {'\n'}
-                    Intrument: Guitar 
+                    Instrument: Guitar 
                     {'\n'}
                     Location: Mechanicsburg, PA</Text></View>
                 <Image style={{height: 15, width: 15}} source={require('../../../assets/heart.png')}></Image>
@@ -62,7 +62,7 @@ export default function UserHub({ route, navigation }) {
                     <TouchableHighlight style={{height: 40, width: 40}} onPress = {() => navigation.navigate(Routes.publicProfile, {userId, selectedUserId: "24Ir2DjDbdd1M0p8WoQGDMPdPbe2"})}>
                           <Image style={{height: "100%", width: "100%"}} source={require('../../../assets/userHub2.png')}></Image>
                       </TouchableHighlight>
-                    <Text style={{marginLeft: "5%", lineHeight: 30, color: "#006175"}}> 
+                    <Text style={{marginLeft: "5%", lineHeight: 30, color: "#006175", fontFamily: "RNSMiles"}}> 
                       Mark Zuck
                     </Text>  
                   </View>
@@ -73,7 +73,7 @@ export default function UserHub({ route, navigation }) {
                     imperdiet est nisi interdum neque.
                     {'\n'}
                     {'\n'}
-                    Intrument: Piano 
+                    Instrument: Piano 
                     {'\n'}
                     Location: Mechanicsburg, PA</Text></View>
                 <Image style={{height: 15, width: 15}} source={require('../../../assets/heart.png')}></Image>
@@ -86,7 +86,7 @@ export default function UserHub({ route, navigation }) {
                     <TouchableHighlight style={{height: 40, width: 40}} onPress = {() => navigation.navigate(Routes.publicProfile, {userId, selectedUserId: "pgFfrUx2ryd7h7iE00fD09RAJyG3"})}>
                           <Image style={{height: "100%", width: "100%"}} source={require('../../../assets/userHub3.png')}></Image>
                       </TouchableHighlight>
-                    <Text style={{marginLeft: "5%", lineHeight: 30, color: "#006175"}}> 
+                    <Text style={{marginLeft: "5%", lineHeight: 30, color: "#006175", fontFamily: "RNSMiles"}}> 
                       Devin Robson
                     </Text>  
                   </View>
@@ -97,7 +97,7 @@ export default function UserHub({ route, navigation }) {
                     imperdiet est nisi interdum neque.
                     {'\n'}
                     {'\n'}
-                    Intrument: Drums 
+                    Instrument: Drums 
                     {'\n'}
                     Location: Mechanicsburg, PA</Text></View>
                 <Image style={{height: 15, width: 15}} source={require('../../../assets/heart.png')}></Image>

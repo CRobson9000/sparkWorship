@@ -1,6 +1,9 @@
 import { StyleSheet } from 'react-native';
 import colors from '../../config/colors';
+import { Dimensions } from 'react-native';
 
+const screenWidth = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 const stylesPortrait = StyleSheet.create({
     container: 
@@ -55,24 +58,27 @@ const stylesPortrait = StyleSheet.create({
     topText: {
         color: "#006175",
         fontWeight: "bold",
-        fontSize: 20
+        fontSize: 20,
+        fontFamily: "RNSMiles"
     },
     username :
     {
         color: "#006175", 
-        textAlign: 'left', 
+        textAlign: 'left',
+        fontFamily: 'RNSMiles', 
         left: 45, 
         bottom: 10
     },
     password :
     {
         color: "#006175", 
-        textAlign: 'left', 
+        textAlign: 'left',
+        fontFamily: 'RNSMiles', 
         left: 45, 
         bottom: 10
     },
     inputBox: {
-        height: "7.5%",
+        height: "9%",
         marginHorizontal: "10%",
         marginBottom: "5%",
         borderWidth: 1,
@@ -109,8 +115,8 @@ const stylesPortrait = StyleSheet.create({
         alignItems: "center",
         borderRadius: 15,
         borderColor: "#006175",
-        height: "7.5%",
-        marginBottom: "10%",
+        height: height * 0.06,
+        marginBottom: height * 0.1,
         borderWidth: 3
     },
 

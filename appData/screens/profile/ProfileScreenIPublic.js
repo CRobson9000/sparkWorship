@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List, IconButton } from 'react-native-paper';
 import Routes from '../Navigation/constants/Routes';
@@ -308,6 +308,16 @@ export default function PSPersonal({ route, navigation }) {
                   <Text>{MyLocation}</Text>
                 </View>
               </View>
+            {/* <View style={[styles.row, {marginLeft: 80, marginRight: 80, top: "30%"}]}>
+              <Image style={{height: 30, width: 30}} source={require('../../../assets/filledspark.png')}></Image>
+              <Image style={{height: 30, width: 30}} source={require('../../../assets/filledspark.png')}></Image>
+              <Image style={{height: 30, width: 30}} source={require('../../../assets/filledspark.png')}></Image>
+              <Image style={{height: 30, width: 30}} source={require('../../../assets/emptyspark.png')}></Image>
+              <Image style={{height: 30, width: 30}} source={require('../../../assets/emptyspark.png')}></Image>
+            </View> */}
+            </View>
+            <View style={styles.content}>
+              <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
             </View>
           <View style={[styles.row, {marginLeft: 20, marginRight: 20, top: "30%"}]}>
             <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
