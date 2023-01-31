@@ -49,14 +49,6 @@ class TDO {
         }
         else {
             this.TDO = object
-
-            //convert object vals to ints from strings
-            // console.log(typeof this.TDO.minutes)
-            // if (typeof this.TDO.minutes == "string") {
-            //     for (let time in object) {
-            //         this.TDO[time] = parseInt(this.TDO[time]);
-            //     }
-            // }
         }
     }
     setDate(month, day, year) {
@@ -92,7 +84,10 @@ class TDO {
         else {
             hour = this.TDO.hours;
         }
-        return `${hour}:${this.TDO.minutes}${(am) ? 'AM' : 'PM'}`
+
+        let minutes = "" + this.TDO.minutes;
+        if (minutes.length == 1) minutes = `0${minutes}`;
+        return `${hour}:${minutes}${(am) ? 'AM' : 'PM'}`
     }
 }
 

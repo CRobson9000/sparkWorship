@@ -675,9 +675,6 @@ export default function ProfileScreen({route, navigation}) {
 
   function limitScroll(){
     if (currentIndex < 0) {
-      setCurrentIndex(myScreens.length - 1);
-    }
-    else if (currentIndex > myScreens.length - 1) {
       setCurrentIndex(0);
     }
   }
@@ -710,9 +707,6 @@ export default function ProfileScreen({route, navigation}) {
           <View style={styleSheet.topBorder}>
             <Text style={styleSheet.titleText}>Profile Creation</Text>
             <View style={styleSheet.topRow}>
-              {/* <TouchableOpacity style = {styleSheet.profilePictureContainer} onPress = {() => uploadPhoto()}>
-                <Image style={styleSheet.profilePicImage} source={image}></Image>
-              </TouchableOpacity> */}
               <ProfileImage userId = {userId} changeable = {true} size = {"large"}/>
               <View style={styleSheet.column3}>
                 <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2.4 , height: 20, borderRadius: 10, marginBottom: "15%"}} progress={(currentIndex + 1) / 5}/>

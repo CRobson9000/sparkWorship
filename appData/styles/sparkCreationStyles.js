@@ -46,7 +46,7 @@ const styleSheet = StyleSheet.create({
       backgroundColor: "#F2905B",
       borderRadius: 10,
       width: "85%",
-      height: "8%",
+      height: "10%",
       alignSelf: "center",
       marginBottom: "4%", 
       padding: 10
@@ -85,6 +85,11 @@ const styleSheet = StyleSheet.create({
       borderRadius: 10,
       width: "100%",
       height: "100%"
+    },
+
+    roleSelectDropDown: {
+      padding: "5%",
+      flex: 1
     },
 
     // Zip Code input box
@@ -129,7 +134,7 @@ const styleSheet = StyleSheet.create({
 
     boxTwo: {
         backgroundColor: "rgb(0, 97, 117)",
-        height: "12%",
+        height: "15%",
         width: "85%",
         flexDirection: "row",
         justifyContent: "space-evenly",
@@ -168,7 +173,7 @@ const styleSheet = StyleSheet.create({
       marginTop: "3%",
       marginBottom: "4%",
       backgroundColor: "#006175",
-      height: "10%",
+      height: "15%",
       width: "85%",
       borderRadius: 10
     },
@@ -177,14 +182,14 @@ const styleSheet = StyleSheet.create({
       alignSelf: "center",
       marginTop: "3%",
       backgroundColor: "rgb(0, 97, 117)",
-      height: "10%",
+      height: "15%",
       width: "85%",
       borderRadius: 10
     },
 
     boxOne:{
       backgroundColor: "#F2905B",
-      height: "13%",
+      height: "15%",
       width: "85%",
       flexDirection: "row",
       justifyContent: "space-between",
@@ -202,7 +207,7 @@ const styleSheet = StyleSheet.create({
     },
 
     timeDateInput: {
-      fontSize:24,
+      fontSize:18,
       justifyContent:"center",
     },
 

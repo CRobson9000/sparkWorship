@@ -12,7 +12,7 @@ const styleSheet = StyleSheet.create({
     },
   
     topBorder:{
-      height: height/2.9,
+      height: height/3.3,
       width: "100%",
       backgroundColor: "rgb(219, 233, 236)",
       marginBottom: "5%"
@@ -85,7 +85,7 @@ const styleSheet = StyleSheet.create({
       justifyContent: "space-between",
       height: "10%",
       width: '85%',
-      marginTop: "10%"
+      marginTop: "20%"
     },
   
     // "Previous" and "Next" buttons on each screen
@@ -167,7 +167,8 @@ const styleSheet = StyleSheet.create({
       backgroundColor: "#F2905B",
       borderRadius: 10,
       height: "100%",
-      paddingLeft: "10%"
+      paddingLeft: "10%",
+      fontSize: 12
     },
   
     // Column for City, State and Zip Code
@@ -213,7 +214,8 @@ const styleSheet = StyleSheet.create({
       height: "8%",
       alignSelf: "center",
       marginBottom: "4%", 
-      padding: 10
+      padding: 10,
+      fontSize: 12
     },
   
     // Text for all buttons

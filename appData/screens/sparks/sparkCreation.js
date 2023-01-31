@@ -5,11 +5,12 @@ import { Dropdown } from 'react-native-element-dropdown';
 
 import { styleSheet } from "../../styles/sparkCreationStyles";
 
-import { Input, Slider, DropDown } from '../../components/components';
+import { Input, Slider } from '../../components/components';
 import { Observable, TDO } from '../../components/classes';
 import { getDatabase, ref, set, get, push } from 'firebase/database';
 
 import Routes from "../Navigation/constants/Routes";
+import ProfileImage from '../../components/profileImage.js';
 
 const screenWidth = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -88,7 +89,7 @@ export default function SparkCreation({ route, navigation }) {
         let sparkIdStart = push(addReference, {status: "proposed"});
         let sparkIdArray = sparkIdStart.toString().split("/");
         let sparkId = sparkIdArray[sparkIdArray.length - 1];
-        console.log(sparkId);
+        // console.log(sparkId);
 
         // //-------------------------------------------
         // // populate database with values from update
@@ -164,7 +165,6 @@ export default function SparkCreation({ route, navigation }) {
             )
             set(publishedTimeReference, publishedTimeTDO);
         }
-
         //setup roles space
         if (rolesArray["current"].length != 0) {
             for (let i = 0; i < rolesArray["current"].length; i++) {
@@ -172,6 +172,10 @@ export default function SparkCreation({ route, navigation }) {
                 await setUpRoleSpace(sparkId, role);
             }
         }
+
+        // set spark leader role in firebase
+        const leaderRef = ref(db, `Sparks/${sparkId}/roles/Spark Leader`);
+        await set(leaderRef, userId);
 
         navigation.navigate("Navigator");
     }
@@ -240,7 +244,10 @@ export default function SparkCreation({ route, navigation }) {
                             itemTextStyle = {{color: "black", fontSize: 2}}
                             onChange = {(value) => setUserState(value)}
                             placeholder = {userState}
-                            value = {userState}/>
+                            value = {userState}
+                            containerStyle = {{top: -30}}
+                            dropdownPosition = {"bottom"}
+                        />
                     </View>
                     <View style={styleSheet.column2}>
                         <Text style={styleSheet.text3}>Zip Code</Text>
@@ -351,7 +358,7 @@ export default function SparkCreation({ route, navigation }) {
 
         useEffect(() => {
             populateDropDown();
-            console.log(rolesArray);
+            // console.log(rolesArray);
             setRoles(() => [...rolesArray["current"]])
         }, []);
 
@@ -360,7 +367,7 @@ export default function SparkCreation({ route, navigation }) {
         // -----------------------
         
         //variable which determines what is added when the "Add" button is pressed
-        let roleSelect = "";
+        const [roleSelect, setRoleSelect] = React.useState("Select a role");
 
         function addRole() {
             if (roleSelect != "") {
@@ -392,13 +399,18 @@ export default function SparkCreation({ route, navigation }) {
             <View style={[styleSheet.content]}>
                 <Text style={styleSheet.stageText}>Roles</Text>
                 <View style={[styleSheet.roleTopBox, styleSheet.boxTwo]}>
-                    <DropDown
-                        placeholder = {"Select Role"}
+                    <Dropdown
+                        style={styleSheet.roleSelectDropDown} 
+                        data={dropDownItems} 
+                        renderItem={renderDropDownItem}
+                        maxHeight = {"40%"}
+                        onChange = {(value) => setRoleSelect(value)}
+                        placeholder = {roleSelect}
                         placeholderStyle = {{color: "white"}}
-                        items = {dropDownItems}
-                        func = {(item)=> roleSelect = item}
-                        itemTextStyle = {{color: "black", fontSize: 2}}
-                        rerenderParent = {() => setSelected(!selected)}/>
+                        value = {roleSelect}
+                        containerStyle = {{top: -30}}
+                        dropdownPosition = {"bottom"}
+                    />
                     <TouchableOpacity activeOpacity={1} style={styleSheet.addButton} onPress = {() => addRole()}>
                         <Text style={{fontSize: 15, color: "white"}}>Add</Text>
                     </TouchableOpacity>
@@ -422,31 +434,23 @@ export default function SparkCreation({ route, navigation }) {
             <View style={styleSheet.content}>
                 <Text style={styleSheet.stageText}>Volunteers</Text>
                 <View style={styleSheet.volunteerTopBox}>
-                    <TextInput placeholder='Enter Volunteer Name' style={{fontSize: 15}}></TextInput>
+                    <TextInput placeholder='Enter Volunteer Name' placeholderTextColor="white" style={{fontSize: 15}}></TextInput>
                 </View>
                 <View style={[styleSheet.boxOne]}>
                     <Text style={[styleSheet.boxText]}>Friend Name</Text>
-                    <Image style={{width: "17%", height: height/15, marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
-
-                    </Image>
+                    <ProfileImage style = {{marginRight: "5%"}} size = {"small"} userId = {null}/>
                 </View>
-                <View style={[styleSheet.boxTwo]}>
+                <View style={[styleSheet.boxOne]}>
                     <Text style={[styleSheet.boxText]}>Friend Name</Text>
-                    <Image style={{width: "17%", height: height/15, marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
-
-                    </Image>
+                    <ProfileImage style = {{marginRight: "5%"}} size = {"small"} userId = {null}/>
                 </View>
-                <View style={[styleSheet.boxTwo]}>
-                    <Text style={[styleSheet.boxText]}>Profile Name</Text>
-                    <Image style={{width: "17%", height: height/15, marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
-
-                    </Image>
+                <View style={[styleSheet.boxOne]}>
+                    <Text style={[styleSheet.boxText]}>Friend Name</Text>
+                    <ProfileImage style = {{marginRight: "5%"}} size = {"small"} userId = {null}/>
                 </View>
                 <View style={[styleSheet.boxOne, styleSheet.inviteVeryBottomBox]}>
-                    <Text style={[styleSheet.boxText]}>Profile Name</Text>
-                    <Image style={{width: "17%", height: height/15, marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
-
-                    </Image>
+                    <Text style={[styleSheet.boxText]}>Friend Name</Text>
+                    <ProfileImage style = {{marginRight: "5%"}} size = {"small"} userId = {null}/>
                 </View>
             </View>
         );
@@ -458,16 +462,22 @@ export default function SparkCreation({ route, navigation }) {
     ];
 
     //sets the current index, which determines which phase the user is on
-    const [currentIndex, setCurrentIndex] = React.useState(1);
+    const [currentIndex, setCurrentIndex] = React.useState(0);
+    const [progress, setProgress] = React.useState(0);
 
     function limitScroll(){
         if (currentIndex < 0) {
-        setCurrentIndex(myScreens.length - 1);
+            setCurrentIndex(0);
         }
-        else if (currentIndex > myScreens.length - 1) {
-        setCurrentIndex(0);
-        }
+        // else if (currentIndex > myScreens.length - 1) {
+        // setCurrentIndex(0);
+        // }
     }
+
+    useEffect(() => {
+        let currentProgress = (currentIndex + 1) / (4.0 * 2);
+        setProgress(currentProgress);
+    }, [currentIndex])
 
     //---------------------------------------------------------------------------
     // Section of code to put functions to be run after a component is re-rendered
@@ -486,7 +496,7 @@ export default function SparkCreation({ route, navigation }) {
         <View style={styleSheet.MainContainer}>
             <View style={styleSheet.topBorder}>
                 <Text style={styleSheet.titleText}>Spark Creation</Text>
-                <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2, height: 20, borderRadius: 10, marginTop: height/40, alignSelf: "center"}} progress={(currentIndex + 1) / 4}/>
+                <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2, height: 20, borderRadius: 10, marginTop: height/40, alignSelf: "center"}} progress={progress}/>
             </View>
             <Slider currentIndex = {currentIndex} screens = {myScreens} />
 

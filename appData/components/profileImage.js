@@ -22,6 +22,8 @@ class ProfileImage extends Component {
         //images are not changeable by default
         this.changeable = false;
 
+        this.style = props.style;
+
         this.state = {
             image: require("../../assets/ProfileNavIcon.png"),
         }
@@ -34,8 +36,8 @@ class ProfileImage extends Component {
         // set height and width variables
         if (props.size) {
             if (props.size == "small") {
-                this.height = 60 
-                this.width = 60
+                this.height = 50 
+                this.width = 50
                 this.borderWidth = 3
             }
             else if (props.size == "medium") {
@@ -49,15 +51,14 @@ class ProfileImage extends Component {
         }
 
         //Set the default image styles.  They can be overwritten by the style prop.  
-        if (!this.style) {
-            this.style = StyleSheet.create({
-                profilePicture: {
-                    borderRadius: this.width,
-                    borderColor: '#F2905B',
-                    borderWidth: this.borderWidth || 5
-                },
-            }); 
-        }
+        this.style = StyleSheet.create({ 
+            profilePicture: {
+                ...this.style,
+                borderRadius: this.width,
+                borderColor: '#F2905B',
+                borderWidth: this.borderWidth || 5
+            }
+        });
 
         // set the image photo
         this.getPhoto();
@@ -73,7 +74,7 @@ class ProfileImage extends Component {
         })
         .catch((error) => {
             // could not find a spark cover image so display the default instead
-            this.setState({image: require("../../assets/ProfileNavIcon.png")});
+            this.setState({image: require("../../assets/Picture1.png")});
         })
     }
 

@@ -176,11 +176,10 @@ export default function Message({ route, navigation }) {
             />
         </View>
         <View style={styles.messagingContainer}>
-            {/* <Input start={currentMessage} placeHolderText={"Type Message"} func = {(val) => currentMessage = val}/> */}
             <TextInput 
               onChangeText = {(val) => setCurrentMessage(val)}
               value = {currentMessage}
-              style = {{flex: 1, padding: "2%", textAlign: "left"}}
+              style = {{flex: 1, padding: "2%", textAlign: "left", flexWrap: "wrap"}}
               placeholder = {"type your message..."}
             />
             <TouchableHighlight style = {styles.button} onPress = {() => sendMessage()}>
