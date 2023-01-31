@@ -55,6 +55,33 @@ export default function SparkView({ route, navigation }) {
                     </View>
                 </TouchableOpacity>
             )
+
+            // let sparkTimeObj = item.info.times.spark.TDO;
+            // let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
+            // let finalTime = sparkTDO.getFormattedTime();
+            // let finalDate = sparkTDO.getFormattedDateFormal();
+            // let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
+
+            // //Location formatting
+            // let locationObj = item.info.location;
+            // let locationString = `${locationObj.address} ${locationObj.city}, ${locationObj.state} ${locationObj.zip}`;
+            
+            // return (
+            //     <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary, {userId})} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
+            //         <View style={{width:"87%"}}>
+            //             <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name || "No Name"} </Text>
+            //             {/* <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>
+            //             <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{finalDateTime}</Text>
+            //             <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{locationString}</Text> */}
+            //             <Text style={{marginLeft: "87%", marginTop: "2%"}}> More</Text>
+            //         </View>
+            //         <View style={{width:"13%", alignItems:"center"}}>
+            //             <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/Picture1.png")}>
+
+            //             </Image>
+            //         </View>
+            //     </TouchableOpacity>
+            // )
         }
     }
 
@@ -261,7 +288,7 @@ const sparkViewStyles = StyleSheet.create({
     {
         width:"85%",
         height:"100%",
-        backgroundColor: "white",
+        backgroundColor: colors.secondary,
         flexDirection: "column", 
         justifyContent: "space-between", 
         alignItems: "center"
@@ -277,8 +304,6 @@ const sparkViewStyles = StyleSheet.create({
         backgroundColor: "#DBE9EC",
         flex: 1,
         padding: "3%",
-        // height: "16%",
-        // width: "80%",
         borderRadius: 30,
         flexDirection: "row",
         justifyContent: "space-between",
@@ -302,8 +327,12 @@ const sparkViewStyles = StyleSheet.create({
         fontSize: screenHeight/70
     },
     topText:{
-        marginLeft:"6%",
-        fontFamily: "RNSMiles"
+        // fontSize: 12
+        fontFamily: "RNSMiles",
+        fontWeight: "bold",
+        // marginLeft:"6%",
+        marginTop: "40%",
+        marginLeft: "45%"
     },
     notTopText:{
         marginLeft: "12%"
@@ -347,8 +376,10 @@ const sparkViewStyles = StyleSheet.create({
         borderWidth: 3
     },
     profPic:{
-        height: "45%",
-        width: "120%", 
-        marginRight: "30%"
+        height: "80%",
+        width: "120%",
+        marginTop: "100%", 
+        marginRight: "650%",
+        marginBottom: "250%",
     }
 });
