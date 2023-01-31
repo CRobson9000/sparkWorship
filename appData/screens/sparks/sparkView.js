@@ -25,33 +25,36 @@ export default function SparkView({ route, navigation }) {
     //spark code
     const renderSpark = (object) => {
         let item = object.item;
+        if (item.info) {
 
-        //Date Time string formatting
-        let sparkTimeObj = item.info.times.spark.TDO;
-        let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
-        let finalTime = sparkTDO.getFormattedTime();
-        let finalDate = sparkTDO.getFormattedDateFormal();
-        let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
+            //Date Time string formatting
+            let sparkTimeObj = item.info?.times.spark.TDO;
+            let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
+            let finalTime = sparkTDO.getFormattedTime();
+            let finalDate = sparkTDO.getFormattedDateFormal();
+            let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
+    
+            //Location formatting
+            let locationObj = item.info?.location;
+            let locationString = `${locationObj.address} ${locationObj.city}, ${locationObj.state} ${locationObj.zip}`;
+            
+            return (
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary, {userId})} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
+                    <View style={{width:"87%"}}>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name || "No Name"} </Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{finalDateTime}</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{locationString}</Text>
+                    </View>
+                    <View style={{width:"13%", alignItems:"center"}}>
+                        <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
+    
+                        </Image>
+                    </View>
+                </TouchableOpacity>
+            )
+        }
 
-        //Location formatting
-        let locationObj = item.info.location;
-        let locationString = `${locationObj.address} ${locationObj.city}, ${locationObj.state} ${locationObj.zip}`;
-        
-        return (
-            <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary, {userId})} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
-                <View style={{width:"87%"}}>
-                    <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name || "No Name"} </Text>
-                    <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>
-                    <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{finalDateTime}</Text>
-                    <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{locationString}</Text>
-                </View>
-                <View style={{width:"13%", alignItems:"center"}}>
-                    <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
-
-                    </Image>
-                </View>
-            </TouchableOpacity>
-        )
     }
 
     function filterMyRole(spark, role) {
@@ -66,38 +69,78 @@ export default function SparkView({ route, navigation }) {
     }
     
 
-    function filterByDistance(spark, distance) {
+    async function filterByDistance(spark, distance) {
         //get location data from user (from userId)
 
         //build url with location data from spark (up top)
 
         //use url and these distances to get the distance between them (use code below)
+        
 
-        // const db = getDatabase();
-        // ref(db, `Users/${userId}/info/instruments`);
-
-        // var axios = require('axios');
-        // var config = {
-        //     method: 'get',
-        //     url: 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=Washington%2C%20DC&destinations=New%20York%20City%2C%20NY&units=imperial&key=AIzaSyCusL6lRbILhO9P7AyHSwpT-ZS6N5diyBQ',
-        //     headers: { }
-        // };
-
-        // axios(config)
-        // .then(function (response) {
-        //     console.log(JSON.stringify(response.data));
+        
+        let userState = await FirebaseButler.fbGet(`Users/${userId}/info/state`);
+        let userCity = await FirebaseButler.fbGet(`Users/${userId}/info/city`);
 
 
+        // let sparkCity = spark.info?.location.city;
+        // let sparkState = spark.info?.location.state;
+
+        let sparkCity = "Hagerstown";
+        let sparkState = "Maryland";
+
+
+        var axios = require('axios');
+        var config = {
+             method: 'get',
+             url: 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='+ userCity +'%2C%20'+ userState +'&destinations='+ sparkCity +'%2C%20'+ sparkState +'&units=imperial&key=AIzaSyCusL6lRbILhO9P7AyHSwpT-ZS6N5diyBQ',
+             headers: { }
+         };
+
+         axios(config)
+        .then(function (response) {
+             let result = response.data;
+            //  console.log("result", result);
+             let distanceString = result["rows"][0]["elements"][0]["distance"]["text"];
+            // let distanceString = ;
+            console.log("String", distanceString);
             //compare found distance in response to the distance parameter in this function
 
             
-        // })
-        // .catch(function (error) {
-        //     console.log(error);
-        // });
+
+            let object = {
+                "destination_addresses": ["Mechanicsburg, PA, USA"],
+                "origin_addresses": ["Ephrata, PA 17522, USA"],
+                "rows": [
+                    {
+                        "elements":[
+                            {
+                                "distance": {
+                                "text":"50.8 mi",
+                                "value":81768
+                                },
+                                "duration":{
+                                    "text":"59 mins",
+                                    "value":3516
+                                },
+                                "status":"OK"
+                            }
+                        ]
+                    }
+                ],
+                "status":"OK"
+            }
+
+
+
+
+         })
+         .catch(function (error) {
+             console.log(error);
+         });
     }
 
     //Run filter:  let filteredSparks = sparks.filter((spark) => filterMyRole(spark, <insertRole>));
+    //Run filter:  let filteredSparks = sparks.filter((spark) => filterByDistance(spark, distance));
 
     printFilterSparks();
 
@@ -108,8 +151,9 @@ export default function SparkView({ route, navigation }) {
     }
 
     function printFilterSparks() {
-        let filteredSparks = Object.values(sparks).filter((spark) => filterMyRole(spark, "Piano"));
-        console.log("Filtered Sparks", filteredSparks);
+        let filteredSparks = Object.entries(sparks).filter((spark) => filterMyRole(spark, "Piano"));
+        let distanceSparks = Object.values(sparks).filter((spark) => filterByDistance(spark, 10));
+        // console.log("Filtered Sparks", filteredSparks);
     }
 
     //Location code
