@@ -17,6 +17,7 @@ import { Input } from '../../components/components.js';
 //import for navigation
 import Routes from '../Navigation/constants/Routes.js';
 
+import ProfileImage from '../../components/profileImage.js';
 
 export default function UserHub({ route, navigation }) {
 
@@ -35,11 +36,11 @@ export default function UserHub({ route, navigation }) {
               <TouchableOpacity activeOpacity={1} style={[stylesPortrait.dashboardButton]}>
                 <View>
                   <View style = {{flexDirection: "row"}}>
-                    <TouchableHighlight style={{height: 40, width: 40}} onPress = {() => navigation.navigate(Routes.publicProfile, {userId, selectedUserId: "wVgW65Og51OCuC7lD8LtRJBWuUC2"})}>
-                          <Image style={{height: "100%", width: "100%"}} source={require('../../../assets/Picture1.png')}></Image>
-                      </TouchableHighlight>
+                    <TouchableHighlight style={{height: 50, width: 50}} onPress = {() => navigation.navigate(Routes.publicProfile, {userId, selectedUserId: "XULgbwAM0HNd8CdVu6Mja1pGrYF3"})}>
+                      <ProfileImage userId = {"XULgbwAM0HNd8CdVu6Mja1pGrYF3"} size = {"small"}/>
+                    </TouchableHighlight>
                     <Text style={{marginLeft: "5%", lineHeight: 30, color: "#000000", fontWeight: "bold", fontSize: 15, fontFamily: "RNSMiles"}}> 
-                      Dave Birdy
+                      Jen Johnson
                     </Text>  
                   </View>
                   <Text style={{lineHeight: 30, color: "#000000"}}> 
@@ -59,11 +60,11 @@ export default function UserHub({ route, navigation }) {
               <TouchableOpacity activeOpacity={1} style={[stylesPortrait.dashboardButton]}>
                 <View>
                   <View style = {{flexDirection: "row"}}> 
-                    <TouchableHighlight style={{height: 40, width: 40}} onPress = {() => navigation.navigate(Routes.publicProfile, {userId, selectedUserId: "24Ir2DjDbdd1M0p8WoQGDMPdPbe2"})}>
-                          <Image style={{height: "100%", width: "100%"}} source={require('../../../assets/Picture1.png')}></Image>
-                      </TouchableHighlight>
+                    <TouchableHighlight style={{height: 50, width: 50}} onPress = {() => navigation.navigate(Routes.publicProfile, {userId, selectedUserId: "RJ85S4CIw3eMyVvXbce6oCnNehJ2"})}>
+                        <ProfileImage userId = {"RJ85S4CIw3eMyVvXbce6oCnNehJ2"} size = {"small"}/>
+                    </TouchableHighlight>
                       <Text style={{marginLeft: "5%", lineHeight: 30, color: "#000000", fontWeight: "bold", fontSize: 15, fontFamily: "RNSMiles"}}> 
-                      Mark Zuck
+                      David Schmitt
                     </Text>  
                   </View>
                   <Text style={{lineHeight: 30, color: "#000000"}}> 
@@ -82,11 +83,11 @@ export default function UserHub({ route, navigation }) {
               <TouchableOpacity activeOpacity={1} style={[stylesPortrait.dashboardButton]}>
                 <View>
                   <View style = {{flexDirection: "row"}}> 
-                    <TouchableHighlight style={{height: 40, width: 40}} onPress = {() => navigation.navigate(Routes.publicProfile, {userId, selectedUserId: "pgFfrUx2ryd7h7iE00fD09RAJyG3"})}>
-                          <Image style={{height: "100%", width: "100%"}} source={require('../../../assets/Picture1.png')}></Image>
-                      </TouchableHighlight>
+                    <TouchableHighlight style={{height: 50, width: 50}} onPress = {() => navigation.navigate(Routes.publicProfile, {userId, selectedUserId: "QtqEJiGOSKPlP6LsUsRYtaloZba2"})}>
+                        <ProfileImage userId = {"QtqEJiGOSKPlP6LsUsRYtaloZba2"} size = {"small"}/>
+                    </TouchableHighlight>
                     <Text style={{marginLeft: "5%", lineHeight: 30, color: "#000000", fontWeight: "bold", fontSize: 15, fontFamily: "RNSMiles"}}> 
-                      Devin Robson
+                      Laura Scott
                     </Text>  
                   </View>
                   <Text style={{lineHeight: 30, color: "#000000"}}> 

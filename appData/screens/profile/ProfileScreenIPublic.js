@@ -8,21 +8,27 @@ import { getDatabase, ref, set, get, push } from 'firebase/database';
 import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storageRef } from '../../../config/additionalMethods';
 
+import ProfileImage from '../../components/profileImage.js';
+
+const screenWidth = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
+
 export default function PSPersonal({ route, navigation }) {
 
     let props = route.params;
 
     let selectedUserId = props?.selectedUserId || null;
-    let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3"
+    let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+    let selectedUserName = props?.selectedUserName || null;
 
-    const FirstRoute = () => (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <Text style={{borderColor: "#F2905B", borderWidth: 10, width: '85%', alignSelf: "center", height: 300, top: 50, borderRadius: 10, padding: 20, flexWrap: "wrap"}}>{MyBio}</Text>
-    </View>
+    const BiographyRoute = () => (
+      <View style={{ flex: 1, backgroundColor: 'white' }}>
+        <Text style={{borderColor: "#F2905B", borderWidth: 10, width: '85%', alignSelf: "center", height: 300, top: 50, borderRadius: 10, padding: 20, flexWrap: "wrap"}}>{MyBio}</Text>
+      </View>
     );
-
-
-    const SecondRoute = () => {
+  
+  
+    const MusicRoute = () => {
       function instrumentRender(object) {
         return(
           <List.Accordion
@@ -32,7 +38,7 @@ export default function PSPersonal({ route, navigation }) {
           >   
             <View style={accordianStyles.listItemContainer}>
               <View style={accordianStyles.listItemHeader}>
-                <Text style={{fontWeight: "bold", fontSize: 15}}> General Experience </Text>
+                <Text style={[accordianStyles.accordionHeaderText]}> General Experience </Text>
               </View>
               <View style={accordianStyles.listItemContent}>
                 <Text style={accordianStyles.contentText}>
@@ -43,7 +49,7 @@ export default function PSPersonal({ route, navigation }) {
 
             <View style={accordianStyles.listItemContainer}>
               <View style={accordianStyles.listItemHeader}>
-                <Text style={{fontWeight: "bold", fontSize: 15}}> Worship Experience </Text>
+                <Text style={[accordianStyles.accordionHeaderText]}> Worship Experience </Text>
               </View>
               <View style={accordianStyles.listItemContent}>
                 <Text style={accordianStyles.contentText}>
@@ -54,7 +60,7 @@ export default function PSPersonal({ route, navigation }) {
 
             <View style={accordianStyles.listItemContainer}>
               <View style={accordianStyles.listItemHeader}>
-                <Text style={{fontWeight: "bold", fontSize: 15}}> Additional Notes </Text>
+                <Text style={[accordianStyles.accordionHeaderText]}> Additional Notes </Text>
               </View>
               <View style={accordianStyles.listItemContent}>
                 <Text style={accordianStyles.contentText}>
@@ -66,7 +72,7 @@ export default function PSPersonal({ route, navigation }) {
           </List.Accordion>
         );
       }
-      return(
+      return( 
         <View style={{ flex: 1, backgroundColor: 'white'}}>
             <List.Section title="Instruments">
               <FlatList
@@ -112,24 +118,24 @@ export default function PSPersonal({ route, navigation }) {
       );
     }
       
-    const ThirdRoute = () => (
+    const ChurchRoute = () => (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-          <Text style={{borderColor: "#F2905B", borderWidth: 7, width: '85%', alignSelf: "center", height: 75, top: 50, borderRadius: 10, fontSize: 25, textAlign: 'center', padding: 10}}>{MyChurchName}</Text>
-          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: 20, textAlign: 'center', padding: 10, marginTop: 20}}>{MyDenomination}</Text>
-          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: 20, textAlign: 'center', padding: 10, marginTop: 20}}>{MyChurchLocation}</Text>
+          <Text style={{borderColor: "#F2905B", borderWidth: 7, width: '85%', alignSelf: "center", height: 75, top: 50, borderRadius: 10, fontSize: height/40, textAlign: 'center', padding: 10}}>{MyChurchName}</Text>
+          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: height/42, textAlign: 'center', padding: 10, marginTop: 20}}>{MyDenomination}</Text>
+          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: height/42, textAlign: 'center', padding: 10, marginTop: 20}}>{MyChurchLocation}</Text>
         </View>
       );
 
-    const FourthRoute = () => (
-        <View style={{ flex: 1, backgroundColor: 'white' }}>
-          <View style={[styles.socialsBox, {marginTop: 35}]}/>
-          <View style={styles.socialsBox}/>
-          <View style={styles.socialsBox}/>
-          <View style={styles.socialsBox}/>
-        </View>
-      );
-      
-      
+    const SocialsRoute = () => (
+      <View style={{ flex: 1, backgroundColor: 'white' }}>
+        <View style={[styles.socialsBox, {marginTop: 35}]}/>
+        <View style={styles.socialsBox}/>
+        <View style={styles.socialsBox}/>
+        <View style={styles.socialsBox}/>
+      </View>
+    );
+    
+    
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
         { key: 'first', title: 'Biography' },
@@ -139,10 +145,10 @@ export default function PSPersonal({ route, navigation }) {
     ]);
     
     const renderScene = SceneMap({
-        first: FirstRoute,
-        second: SecondRoute,
-        third: ThirdRoute,
-        fourth: FourthRoute
+        first: BiographyRoute,
+        second: MusicRoute,
+        third: ChurchRoute,
+        fourth: SocialsRoute
     });
 
     const renderTabBar = props => (
@@ -150,7 +156,7 @@ export default function PSPersonal({ route, navigation }) {
         {...props}
         indicatorStyle={{ backgroundColor: '#006175' }}
         scrollEnabled= {true}
-        labelStyle={{color:"#000000"}}
+        labelStyle={{color:"#006175"}}
         style={{ backgroundColor: 'rgb(219, 233, 236)'}}
       />
     );
@@ -228,25 +234,6 @@ export default function PSPersonal({ route, navigation }) {
       }
     }
 
-    const [image, setImage] = React.useState(null);
-
-    async function getPhoto() {
-      //set the url of a default photo, which will be shown in there is no image found
-      let defaultPic = require("../../../assets/ProfileNavIcon.png");
-      
-      //get the photo from firebase storage
-      const storage = getStorage();
-      getDownloadURL(storageRef(storage, `userData/${selectedUserId}/userCoverPhoto`))
-      .then((url) => {
-        //display the image that was found using its url
-        setImage({uri: url});
-      })
-      .catch((error) => {
-        // could not find a spark cover image so display the default instead
-        setImage(defaultPic);
-      })
-    }
-
     // ------------
     // Friend Code
     // ------------
@@ -281,142 +268,141 @@ export default function PSPersonal({ route, navigation }) {
       setDenomination();
       setChurchLocation();
       setInstruments();
-      getPhoto();
     }, [])
-
-    const openLogin = () => {navigation.navigate(Routes.login)}
-
-    let myNotification = new PushNotify(openLogin, null);
-    let title = "Test Title";
-    let message = "I think that this might work for me";
 
     return (
       <View style={styles.MainContainer}>
           <View style={styles.topBorder}>
-            <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
-              <TouchableOpacity onPress = {() => myNotification.scheduleNotification(null, title, message)}><Image style={{height: 40, width: 40}} source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity>
+          <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
+              <IconButton
+                icon = "message-plus"
+                onPress = {
+                  () => {
+                    let peopleLookup = {}
+                    peopleLookup[selectedUserId] = MyName;
+                    navigation.navigate(Routes.messaging, {...props, peopleLookup, peopleString: MyName})
+                  }
+                }
+              />
               <Text style={styles.titleText}>User Profile</Text>
               <IconButton icon = "account-multiple-plus" style = {{height: 40, width: 40}} onPress = {() => addFriend()} />
             </View>
             <View style={styles.row} >
-              <Image style={styles.profilePicture} source={image}></Image>
+              <ProfileImage size = "large" userId = {selectedUserId} />
               <View style={styles.column}>
-                <Text style={{fontSize: 20, fontWeight: '500', marginBottom: 10}}>{MyName}</Text>
-                <Text style={{fontSize: 15, fontWeight: '400', marginBottom: 13}}>Instrumentalist</Text>
+                <Text style={{fontSize: height/35, fontWeight: '500', marginBottom: 10}}>{MyName}</Text>
+                <Text style={{fontSize: height/45, fontWeight: '400', marginBottom: 13}}>Instrumentalist</Text>
                 <View style={styles.row2}>
                   <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
                   <Text>{MyLocation}</Text>
                 </View>
               </View>
-            {/* <View style={[styles.row, {marginLeft: 80, marginRight: 80, top: "30%"}]}>
-              <Image style={{height: 30, width: 30}} source={require('../../../assets/filledspark.png')}></Image>
-              <Image style={{height: 30, width: 30}} source={require('../../../assets/filledspark.png')}></Image>
-              <Image style={{height: 30, width: 30}} source={require('../../../assets/filledspark.png')}></Image>
-              <Image style={{height: 30, width: 30}} source={require('../../../assets/emptyspark.png')}></Image>
-              <Image style={{height: 30, width: 30}} source={require('../../../assets/emptyspark.png')}></Image>
-            </View> */}
+            </View>
+            <View style={[styles.row, {marginLeft: 70, marginRight: 70, top: "20%", alignItems: "center"}]}>
+              <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
+              <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
+              <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
+              <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
+              <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
+              <Text style={{marginLeft: 15, fontSize: 14, color: "#006175"}}>324 sparks</Text>
+            </View>
             </View>
             <View style={styles.content}>
               <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
             </View>
-          <View style={[styles.row, {marginLeft: 20, marginRight: 20, top: "30%"}]}>
-            <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
-            <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
-            <Image style={{height: 40, width: 40}} source={require('../../../assets/filledStar.png')}></Image>
-            <Image style={{height: 40, width: 40}} source={require('../../../assets/emptyStar.png')}></Image>
-            <Image style={{height: 40, width: 40}} source={require('../../../assets/emptyStar.png')}></Image>
-          </View>
-          </View>
-          <View style={styles.content}>
-            <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
-          </View>
       </View>
     );
 }
 
 const styles = StyleSheet.create({
-    MainContainer: {
-      backgroundColor: "white",
-      height: "100%",
-    },
+  MainContainer: {
+    backgroundColor: "white",
+    height: "100%",
+  },
 
-    topBorder:{
-      height: "40%",
-      width: "100%",
-      backgroundColor: "rgb(219, 233, 236)",
-    },
+  topBorder:{
+    height: "35%",
+    width: "100%",
+    backgroundColor: "rgb(219, 233, 236)",
+  },
 
-    content: {
-      height: '58%'
-    },
+  content: {
+    height: '65%'
+  },
 
-    titleText: {
-      fontSize: 25,
-      textAlign: 'center',
-      fontWeight: '500'
-    },
+  titleText: {
+    fontSize: height/40,
+    textAlign: 'center',
+    color: "#006175",
+    fontFamily: "RNSMiles"
+  },
 
-    row: {
-      flexDirection: 'row',
-      top: '22%',
-      justifyContent: 'space-evenly'
-    },
+  row: {
+    flexDirection: 'row',
+    top: '15%',
+    justifyContent: 'space-evenly'
+  },
 
-    row2: {
-      flexDirection: 'row',
-    },
+  row2: {
+    flexDirection: 'row',
+  },
 
-    column: {
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
+  column: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 
-    profilePicture: {
-      height: "120%",
-      width: "36%",
-      borderRadius: 20
-    },
+  profilePictureContainer: {
+    height: 100, 
+    width: 100
+  },
 
-    accordian: {
-      backgroundColor: '#F2905B',
-      padding: 10,
-      marginLeft: '5%',
-      marginRight: '5%', 
-      marginBottom: '4%',
-      borderRadius: 10
-    },
+  profilePicture: {
+    height: "100%", 
+    width: "100%", 
+    borderRadius: "100%"
+  },
 
-    navigation: {
-      backgroundColor: "rgb(219, 233, 236)",
-      height: "7%"
-    }, 
-    
-    genres: {
-      backgroundColor: '#006175',
-      borderRadius: 55,
-      height: 105, 
-      width: 105,
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
+  accordian: {
+    backgroundColor: '#F2905B',
+    padding: 10,
+    marginLeft: '5%',
+    marginRight: '5%', 
+    marginBottom: '4%',
+    borderRadius: 10
+  },
 
-    socialsBox: {
-      backgroundColor: "#F2905B",
-      borderRadius: 10,
-      width: "85%",
-      height: 60,
-      marginBottom: "6%",
-      alignSelf: "center",
-      flexDirection: "row",
-      alignContent: 'center'
-    },
+  navigation: {
+    backgroundColor: "rgb(219, 233, 236)",
+    height: "7%"
+  }, 
+  
+  genres: {
+    backgroundColor: '#006175',
+    borderRadius: 55,
+    height: 105, 
+    width: 105,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 
-    socialsLogo: {
-      height: "70%",
-      width: "10%",
-      left: "20%"
-    },
+  socialsBox: {
+    backgroundColor: "#F2905B",
+    borderRadius: 10,
+    width: "85%",
+    height: 60,
+    marginBottom: "6%",
+    alignSelf: "center",
+    flexDirection: "row",
+    alignContent: 'center'
+  },
+
+  socialsLogo: {
+    height: "70%",
+    width: "10%",
+    left: "20%"
+  },
 
 })
 
@@ -459,5 +445,10 @@ const accordianStyles = StyleSheet.create({
     width: "100%",
     top: "5%",
     height: "30%"
+  },
+  accordionHeaderText: {
+    fontSize: 15,
+    fontFamily: "RNSMiles"
   }
+
 });

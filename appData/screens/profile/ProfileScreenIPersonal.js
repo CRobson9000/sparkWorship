@@ -9,10 +9,7 @@ import ProfileImage from '../../components/profileImage.js';
 const screenWidth = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 export default function PSPersonal({ route, navigation }) {
-
-
     let props = route.params;
-
     let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
 
     const BiographyRoute = () => (
