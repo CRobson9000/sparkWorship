@@ -38,7 +38,6 @@ export default function SparkView({ route, navigation }) {
             let finalDate = sparkTDO.getFormattedDateFormal();
             let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
             let sparkId = Object.keys(sparks)[object.index];
-            console.log(sparkId);
 
             //Location formatting
             let locationObj = item.info.location;
@@ -107,9 +106,10 @@ export default function SparkView({ route, navigation }) {
         //use url and these distances to get the distance between them (use code below)
         
 
-        
-        let userState = await FirebaseButler.fbGet(`Users/${userId}/info/state`);
-        let userCity = await FirebaseButler.fbGet(`Users/${userId}/info/city`);
+        let userState = "PA";
+        let userCity = "Lancaster";
+        // let userState = await FirebaseButler.fbGet(`Users/${userId}/info/state`);
+        // let userCity = await FirebaseButler.fbGet(`Users/${userId}/info/city`);
 
 
         let sparkCity = spark.info?.location.city;
@@ -128,9 +128,9 @@ export default function SparkView({ route, navigation }) {
 
          axios(config)
         .then(function (response) {
-             let result = response.data;
-            //  console.log("result", result);
-             let distanceString = result["rows"][0]["elements"][0]["distance"]["text"];
+            let result = response.data;
+            //console.log("result", result);
+            let distanceString = result["rows"][0]["elements"][0]["distance"]["text"];
             // let distanceString = ;
             console.log("String", distanceString);
             //compare found distance in response to the distance parameter in this function
