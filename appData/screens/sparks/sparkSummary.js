@@ -9,6 +9,7 @@ import { Input, Slider, DropDown } from '../../components/components';
 import { Observable, TDO, FirebaseButler, PushNotify } from '../../components/classes';
 import { stylesPortrait } from "../../styles/portrait";
 import Routes from "../Navigation/constants/Routes";
+import ProfileImage from "../../components/profileImage";
 
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 
@@ -223,23 +224,20 @@ export default function SparkSummary({ route, navigation }) {
       );
 
     const RequestsRoute = () => {
-      
       const acceptRequest = async(role, id) => {
         //define "final" for the role selected to be the id of the user selected
         const db = getDatabase();
         const acceptRef = ref(db, `Sparks/${currentSparkId}/roles/${role}/final`);
         set(acceptRef, id);
     
-        //send notification to the user
-    
-        // schedule a notification to be sent about the survey after the spark is complete
+        // schedule a notification to be sent about the survey to the user which was just accepted
         let sparkOBJ = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/info/times/spark`);
         let sparkTDO = new TDO(null, null, null, null, null, null, sparkOBJ["TDO"]);
         const navigateToSurvey = () => {
           navigation.navigate(Routes.sparkSurvey);
         }
         let sparkOverNotify = new PushNotify(navigateToSurvey);
-        sparkOverNotify.scheduleNotification(sparkTDO, "Spark Survey", "Please tell us how this spark went!");
+        sparkOverNotify.scheduleNotification(sparkTDO, "Peer Survey", "Please tell us how this spark went!", userId);
     
         //add spark to user's section as a spark they are playing for
         const addSparkRef = ref(db, `Users/${id}/sparks/playing`);
@@ -365,11 +363,15 @@ export default function SparkSummary({ route, navigation }) {
       const db = getDatabase();
       const attendSparkRef = ref(db, `Users/${userId}/sparks/attending`)
       push(attendSparkRef, currentSparkIdAttend);
+
+      // schedule notification to arrive after the spark is complete
+      let sparkOverNotify = new PushNotify(() => navigation.navigate(Routes.sparkSurvey));
+      sparkOverNotify.scheduleNotification(null, "How was your experience?", "Please fill out this survery to let us know how things went!", userId); 
     }
 
     async function testRequest() {
-      let sparkOverNotify = new PushNotify(() => navigation.navigate(Routes.sparkSurvey));
-      sparkOverNotify.scheduleNotification(null, "My Test", "Hello this is a test", userId);
+      let sparkOverNotify = new PushNotify(() => navigation.navigate(Routes.publicProfile, {selectedUserId: "5cYHMVySLmOGyeZZeqA3oQ0DkO82"}));
+      sparkOverNotify.scheduleNotification(null, "Spark Request", "You just received a request for your spark!", userId);
     }
 
     const [MySparkName, setMySparkName] = React.useState("Spark Name");
@@ -420,17 +422,19 @@ export default function SparkSummary({ route, navigation }) {
     <View style={styles.topBorder}>
       <View style={[styles.row2, {justifyContent: 'center', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
         <IconButton onPress = {() => testRequest()}style = {{position: "absolute", left: "2%"}}icon = "head-check" size = {30}/>
-        <Text style={styles.titleText}>{(MySparkName) ? MySparkName : "My Spark"}</Text>
+        {/* <Text style={styles.titleText}></Text> */}
         <IconButton onPress = {() => attendSpark()}style = {{position: "absolute", left: "85%"}}icon = "checkbox-marked-circle-plus-outline"/>
       </View>
+      <View style = {styles.row}>
+        <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>{(MySparkName) ? `${MySparkName}'s Spark` : "My Spark"}</Text>
+      </View>
       <View style={styles.row}>
-        <Image style={styles.profilePicture} source={require('../../../assets/blankprofilepic.png')}></Image>
+        <ProfileImage size = {"medium"} userId = {null}/>
         <View style={styles.column}>
-          <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>Spark Name</Text>
           <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13}}>Date and Time</Text>
           <View style={styles.row2}>
             <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
-            <Text>{MyAddress} {MyCity}, {MyState}</Text>
+            <Text style = {{flexWrap: "wrap", width: "70%"}}>{MyAddress} {MyCity}, PA</Text>
           </View>
         </View>
       </View>
@@ -459,13 +463,13 @@ const styles = StyleSheet.create({
   },
 
   topBorder:{
-    height: "40%",
+    height: "35%",
     width: "100%",
     backgroundColor: "rgb(219, 233, 236)",
   },
 
   content: {
-    height: '60%'
+    height: '65%'
   },
 
   titleText: {

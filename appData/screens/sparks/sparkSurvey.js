@@ -24,13 +24,11 @@ export default function Message({ route, navigation }) {
 
   return(
     <View style={styles.container}>
-        <View style={styles.topBorder}>
-            {/* Name will need to be rendered */}
-            <Text style={styles.nameText}> Survey Screen </Text>
+        {/* <View style={styles.topBorder}>
         </View>
-        {/* <View style={styles.content}>
-            
+        <View style={styles.content}>            
         </View> */}
+        <Text style={styles.nameText}> Survey Screen </Text>
     </View>
 )}
 
@@ -38,7 +36,9 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: "white"
+        backgroundColor: "white",
+        justifyContent: "center",
+        alignItems: "center"
     },
 
     topBorder: {

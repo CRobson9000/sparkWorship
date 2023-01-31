@@ -267,7 +267,7 @@ export default function ProfileScreen({route, navigation}) {
       set(churchStateRef, globalChurchState.current);
     }
     // Once everything is finalized, navigate to user profile screen
-    navigation.navigate(Routes.personalProfile, route.params);
+    navigation.navigate("Navigator", route.params);
   }
 
   //dropDown renderItem function
@@ -545,7 +545,7 @@ export default function ProfileScreen({route, navigation}) {
         <Provider>
           <View style = {{zIndex: 1}}>
             <Portal>
-              <Dialog style = {{backgroundColor: "rgb(219, 233, 236)", height: "105%", bottom: "2%"}} visible={stateVisible} onDismiss={hideDialog}>
+              <Dialog style = {{backgroundColor: "rgb(219, 233, 236)", position: "absolute", height: "105%", width: "100%", bottom: "2%"}} visible={stateVisible} onDismiss={hideDialog}>
                 <Dialog.Title style= {{alignSelf: "center", color: "black", fontSize: 20}}>Add Instrument</Dialog.Title>
                 <Dialog.Content style = {{height: "85%", justifyContent: "center", alignItems: "center", borderRadius: 5}}>
                   <Dialog.ScrollArea style = {{width: "100%"}}>

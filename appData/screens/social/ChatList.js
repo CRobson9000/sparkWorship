@@ -106,12 +106,12 @@ export default function ChatList({ route, navigation }){
                 />                
             </View>
 
-            <IconButton 
+            {/* <IconButton 
                 icon = {"plus-circle"}
                 size = { 50 }
                 style = {styles.addMessage}
                 onPress = {() => navigation.navigate(Routes.messaging, {...props, peopleLookup: {oDiZMc2STiPpGUEJth0AVc6UIwl2: "Attender Joe"}, peopleString: "Attender Joe"})}
-            />
+            /> */}
 
             {/* <View style={styles.navigation}>
                 <Image style={styles.navigationBar} source={require('../../assets/navigation.png')}/>

@@ -35,24 +35,24 @@ export default function SparkView({ route, navigation }) {
             let finalTime = sparkTDO.getFormattedTime();
             let finalDate = sparkTDO.getFormattedDateFormal();
             let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
+            let sparkId = Object.keys(sparks)[object.index];
+            console.log(sparkId);
 
             //Location formatting
             let locationObj = item.info.location;
             let locationString = `${locationObj.address} ${locationObj.city}, ${locationObj.state} ${locationObj.zip}`;
             
             return (
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary, {userId})} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary, {userId, currentSparkId: sparkId})} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
                     <View style={{width:"87%"}}>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name || "No Name"} </Text>
-                        {/* <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{finalDateTime}</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{locationString}</Text> */}
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {`${item?.info?.name}'s Spark` || "No Name"} </Text>
+                        {/* <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text> */}
+                        {/* <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{finalDateTime}</Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{locationString}</Text>  */}
                         <Text style={{marginLeft: "85%", marginTop: "2%"}}> More</Text>
                     </View>
                     <View style={{width:"13%", alignItems:"center"}}>
-                        <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/Picture1.png")}>
-
-                        </Image>
+                        <ProfileImage style = {sparkViewStyles.profPic} userId = {null} size = {"medium"}/>
                     </View>
                 </TouchableOpacity>
             )
@@ -332,7 +332,7 @@ const sparkViewStyles = StyleSheet.create({
         fontWeight: "bold",
         // marginLeft:"6%",
         marginTop: "40%",
-        marginLeft: "45%"
+        marginLeft: "35%"
     },
     notTopText:{
         marginLeft: "12%"
@@ -376,8 +376,6 @@ const sparkViewStyles = StyleSheet.create({
         borderWidth: 3
     },
     profPic:{
-        height: "80%",
-        width: "120%",
         marginTop: "100%", 
         marginRight: "650%",
         marginBottom: "250%",

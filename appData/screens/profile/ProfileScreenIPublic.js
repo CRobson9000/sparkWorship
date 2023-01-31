@@ -19,7 +19,6 @@ export default function PSPersonal({ route, navigation }) {
 
     let selectedUserId = props?.selectedUserId || null;
     let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
-    let selectedUserName = props?.selectedUserName || null;
 
     const BiographyRoute = () => (
       <View style={{ flex: 1, backgroundColor: 'white' }}>
