@@ -403,8 +403,8 @@ export default function SparkCreation({ route, navigation }) {
                         <Text style={{fontSize: 15, color: "white"}}>Add</Text>
                     </TouchableOpacity>
                 </View>
-                <View style = {sparkViewStyles.roleContainer}>
-                    <View style={[sparkViewStyles.roleBox]}>
+                <View style = {styleSheet.roleContainer}>
+                    <View style={[styleSheet.roleBox]}>
                         <Text style={{color: "black", fontSize: height/47, padding: "5%"}}>Spark Leader</Text>
                     </View>
                     <FlatList 
@@ -424,26 +424,26 @@ export default function SparkCreation({ route, navigation }) {
                 <View style={styleSheet.volunteerTopBox}>
                     <TextInput placeholder='Enter Volunteer Name' style={{fontSize: 15}}></TextInput>
                 </View>
-                <View style={[sparkViewStyles.boxOne]}>
-                    <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
+                <View style={[styleSheet.boxOne]}>
+                    <Text style={[styleSheet.boxText]}>Friend Name</Text>
                     <Image style={{width: "17%", height: height/15, marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
 
                     </Image>
                 </View>
-                <View style={[sparkViewStyles.boxTwo]}>
-                    <Text style={[sparkViewStyles.boxText]}>Friend Name</Text>
+                <View style={[styleSheet.boxTwo]}>
+                    <Text style={[styleSheet.boxText]}>Friend Name</Text>
                     <Image style={{width: "17%", height: height/15, marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
 
                     </Image>
                 </View>
-                <View style={[sparkViewStyles.boxTwo]}>
-                    <Text style={[sparkViewStyles.boxText]}>Profile Name</Text>
+                <View style={[styleSheet.boxTwo]}>
+                    <Text style={[styleSheet.boxText]}>Profile Name</Text>
                     <Image style={{width: "17%", height: height/15, marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
 
                     </Image>
                 </View>
-                <View style={[sparkViewStyles.boxOne, sparkViewStyles.inviteVeryBottomBox]}>
-                    <Text style={[sparkViewStyles.boxText]}>Profile Name</Text>
+                <View style={[styleSheet.boxOne, styleSheet.inviteVeryBottomBox]}>
+                    <Text style={[styleSheet.boxText]}>Profile Name</Text>
                     <Image style={{width: "17%", height: height/15, marginRight: "5%"}} source={require("../../../assets/EriToken.png")}>
 
                     </Image>
@@ -483,9 +483,9 @@ export default function SparkCreation({ route, navigation }) {
     // Front End Code
     //------------------------------
     return(
-        <View style={sparkViewStyles.MainContainer}>
-            <View style={sparkViewStyles.topBorder}>
-                <Text style={sparkViewStyles.titleText}>Spark Creation</Text>
+        <View style={styleSheet.MainContainer}>
+            <View style={styleSheet.topBorder}>
+                <Text style={styleSheet.titleText}>Spark Creation</Text>
                 <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2, height: 20, borderRadius: 10, marginTop: height/40, alignSelf: "center"}} progress={(currentIndex + 1) / 4}/>
             </View>
             <Slider currentIndex = {currentIndex} screens = {myScreens} />
