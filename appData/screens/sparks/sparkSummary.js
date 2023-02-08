@@ -3,16 +3,19 @@ import { enableRipple } from '@syncfusion/ej2-base';
 //import DropDownPicker from 'react-native-dropdown-picker';
 import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import { List, IconButton } from 'react-native-paper';
+import { List, IconButton, ProgressBar } from 'react-native-paper';
 import { stylesSummary } from "../../styles/summary.js";
 import { Input, Slider, DropDown } from '../../components/components';
 import { Observable, TDO, FirebaseButler, PushNotify } from '../../components/classes';
 import { stylesPortrait } from "../../styles/portrait";
 import Routes from "../Navigation/constants/Routes";
-import ProfileImage from "../../components/profileImage";
+import ProfileImage from "../../components/profileImage.js";
+import { styleSheet } from "../../styles/profileCreationStyles.js";
 
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 
+const screenWidth = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 export default function SparkSummary({ route, navigation }) {
 
@@ -60,6 +63,7 @@ export default function SparkSummary({ route, navigation }) {
     {label: 'Banana', value: 'banana'}
   ]);
 
+  //stay
   const LocationRoute = () => (
     <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
         <View style={[sparkViewStyles.sparkContainer]}>
@@ -418,34 +422,18 @@ export default function SparkSummary({ route, navigation }) {
     }, [])
 
   return(
-    <View style={styles.MainContainer}>
-    <View style={styles.topBorder}>
-      <View style={[styles.row2, {justifyContent: 'center', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
-        <IconButton onPress = {() => testRequest()}style = {{position: "absolute", left: "2%"}}icon = "head-check" size = {30}/>
-        {/* <Text style={styles.titleText}></Text> */}
-        <IconButton onPress = {() => attendSpark()}style = {{position: "absolute", left: "85%"}}icon = "checkbox-marked-circle-plus-outline"/>
-      </View>
-      <View style = {styles.row}>
-        <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>{(MySparkName) ? `${MySparkName}'s Spark` : "My Spark"}</Text>
-      </View>
-      <View style={styles.row}>
-        <ProfileImage size = {"medium"} userId = {null}/>
-        <View style={styles.column}>
-          <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13}}>Date and Time</Text>
-          <View style={styles.row2}>
-            <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
-            <Text style = {{flexWrap: "wrap", width: "70%"}}>{MyAddress} {MyCity}, PA</Text>
+    <View style={styleSheet.MainContainer}> 
+          <View style={styleSheet.topBorder}>
+            <Text style={styleSheet.titleText}>Profile Creation</Text>
+            <View style={styleSheet.topRow}>
+              <ProfileImage userId = {userId} changeable = {true} size = {"large"}/>
+              <View style={styleSheet.column3}>
+                <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2.4 , height: 20, borderRadius: 10, marginBottom: "15%"}} progress={(currentIndex + 1) / 5}/>
+                <Text style={styleSheet.smallText1}>Click your profile picture to change</Text>
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
-    <View style={[styles.row, {marginLeft: 100, marginRight: 100, top: "30%"}]}>
-      <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
-      <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
-      <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
-      <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
-      <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
-    </View>
-    </View>
+          <Slider currentIndex = {currentIndex} screens = {myScreens} />
     <View style={styles.content}>
       <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
     </View>
