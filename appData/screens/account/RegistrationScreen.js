@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useLayoutEffect } from 'react';
 import { getAuth, createUserWithEmailAndPassword } from "@firebase/auth";
 
 //import statements for styles
@@ -9,8 +9,8 @@ import { stylesPortrait } from "../../styles/portrait";
 import { Dimensions, TouchableHighlight } from 'react-native';
 
 //import components
-import { Input, Toast } from '../../components/components.js';
-import Routes from '../Navigation/constants/Routes'
+import { Input, Toast, KeyboardView } from '../../components/components.js';
+import Routes from '../Navigation/constants/Routes';
 
 //database processing import statements
 import { getDatabase, ref, set } from 'firebase/database';
@@ -123,11 +123,36 @@ export default function RegistrationScreen({ navigation }) {
     )
   }
 
+  // keyboard scrolling code:  we want to disable scrolling in the keyboard is off
+  const [keyboardScroll, setKeyboardScroll] = React.useState(false);
+  const keyboardView = useRef(null);
+  // const keyboardRef = useRef();
+  // useLayoutEffect(() => {
+  //   keyboardView.current.scrollTo({x: 0, y: 0, animation: false});
+  // })
+  // useEffect(() => {
+  //   Keyboard.addListener(
+  //     'keyboardDidShow',
+  //     () => {
+  //       setKeyboardScroll(true);
+  //     },
+  //   );
+
+  //   Keyboard.addListener(
+  //     'keyboardDidHide',
+  //     () => {
+  //       keyboardRef.scrollToPosition(0, 0);
+  //       setKeyboardScroll(false);
+  //     }
+  //   )
+  // }, []);
+
   /*------------------------------------------------*/
   /*----------FRONT-END APP CODE ----------*/
   /*------------------------------------------------*/
     
   return (
+    <KeyboardView>
       <View style={stylesPortrait.container}>
         <TouchableHighlight
           style = {{
@@ -226,6 +251,7 @@ export default function RegistrationScreen({ navigation }) {
           </Provider>
         </View>
       </View>
+    </KeyboardView>
   );
 }
 

@@ -13,6 +13,14 @@ function BottomTabNavigator( { route, navigation } ) {
   return (
     <Tab.Navigator 
       screenOptions= {({route}) => ({
+        headerStyle: {
+          flexDirection: "row", 
+          paddingTop: "25%",
+          width: "100%",
+          justifyContent: "center", 
+          alignItems: "flex-end", 
+          backgroundColor: "rgb(219, 233, 236)"
+        },
         headerShown: true,
         tabBarShowLabel: false,
         tabBarIcon: ({color, size, focused}) => {
@@ -37,9 +45,9 @@ function BottomTabNavigator( { route, navigation } ) {
     
         header: ({navigation, route, options}) => {
           return (
-            <View style = {{flexDirection: "row", padding: "10%", width: "100%", justifyContent: "center", alignItems: "center", backgroundColor: "rgb(219, 233, 236)"}}>
+            <View style = {[options.headerStyle]}>
               <Image style={{position: "absolute", height: 60, width: 220}} source={require('../../../assets/logo2.png')}/>
-              <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}icon = "chat-processing" style = {{position: "absolute", right: "5%"}}/>
+              <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}icon = "chat-processing" style = {{position: "absolute", right: "5%", color: "black"}}/>
             </View>
           );
         }

@@ -11,8 +11,8 @@ const height = Dimensions.get('window').height;
 export default function PSPersonal({ route, navigation }) {
     let props = route.params;
     let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
-
-    const BiographyRoute = () => (
+ 
+    const SparkRoute = () => (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <Text style={{borderColor: "#F2905B", borderWidth: 10, width: '85%', alignSelf: "center", height: 300, top: 50, borderRadius: 10, padding: 20, flexWrap: "wrap"}}>{MyBio}</Text>
     </View>
@@ -69,74 +69,54 @@ export default function PSPersonal({ route, navigation }) {
               <FlatList
                 data = {myInstruments}
                 style = {{height: "100%", width: "100%"}}
-                renderItem = {instrumentRender}
-                ListFooterComponent= {() => {
-                  return (
-                    <View style = {{padding: 20}}>
-                      <Text style={{fontSize: 14, left: 15}}>Skilled Genres</Text>
-                      <View style={[styles.row2, {top: 20, justifyContent: 'space-evenly'}]}>
-                        <View style={styles.genres}>
-                          <Text style={{fontSize: 16, color: 'white'}}>Rock</Text>
-                        </View>
-                        <View style={styles.genres}>
-                          <Text style={{fontSize: 16, color: 'white'}}>Country</Text>
-                        </View>
-                        <View style={styles.genres}>
-                          <Text style={{fontSize: 16, color: 'white'}}>Jazz</Text>
-                        </View>
-                      </View>
-                    </View>
-                  )
-                }}
-              />
-              {/* <List.Accordion style={styles.accordian} title="Guitar">
-                <List.Subheader style={{left: 15}}>General Experience</List.Subheader>
-                <List.Subheader style={{left: 15}}>Worship Experience</List.Subheader>
-                <List.Subheader style={{left: 15}}>Additional Notes</List.Subheader>
-              </List.Accordion>
-              <List.Accordion style={styles.accordian} title="Piano">
-                <List.Subheader style={{left: 15}}>General Experience</List.Subheader>
-                <List.Subheader style={{left: 15}}>Worship Experience</List.Subheader>
-                <List.Subheader style={{left: 15}}>Additional Notes</List.Subheader>
-              </List.Accordion>
-              <List.Accordion style={styles.accordian} title="Trumpet">
-                <List.Subheader style={{left: 15}}>General Experience</List.Subheader>
-                <List.Subheader style={{left: 15}}>Worship Experience</List.Subheader>
-                <List.Subheader style={{left: 15}}>Additional Notes</List.Subheader>
-              </List.Accordion> */}
+                renderItem = {instrumentRender}/>
             </List.Section>
           </View>
       );
     }
       
     const ChurchRoute = () => (
-        <View style={{ flex: 1, backgroundColor: 'white' }}>
-          <Text style={{borderColor: "#F2905B", borderWidth: 7, width: '85%', alignSelf: "center", height: 75, top: 50, borderRadius: 10, fontSize: height/40, textAlign: 'center', padding: 10}}>{MyChurchName}</Text>
-          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: height/42, textAlign: 'center', padding: 10, marginTop: 20}}>{MyDenomination}</Text>
-          <Text style={{borderColor: "#006175", borderWidth: 7, width: '75%', alignSelf: "center", height: 65, top: 50, borderRadius: 10, fontSize: height/42, textAlign: 'center', padding: 10, marginTop: 20}}>{MyChurchLocation}</Text>
+        <View style={styles.content}>
+          <Image style={styles.churchIcon} source={require('../../../assets/churchIcon.png')}/>
+          <Text style={{alignSelf: "center", marginTop: "5%", fontSize: height/40, textAlign: 'center'}}>{MyChurchName}</Text>
+          <Text style={{alignSelf: "center", marginTop: "5%", fontSize: height/45, textAlign: 'center'}}>Denomination: {MyDenomination}</Text>
+          <Text style={{alignSelf: "center", marginTop: "5%", fontSize: height/45, textAlign: 'center'}}>{MyChurchLocation}</Text>
+          <Text style={{alignSelf: "center", marginTop: "5%", fontSize: height/45, textAlign: 'center', color: "rgb(0, 97, 117)"}}>www.gracepoint.com</Text>
         </View>
       );
 
     const SocialsRoute = () => (
-        <View style={{ flex: 1, backgroundColor: 'white' }}>
-          <View style={[styles.socialsBox, {marginTop: 35}]}/>
-          <View style={styles.socialsBox}/>
-          <View style={styles.socialsBox}/>
-          <View style={styles.socialsBox}/>
+        <View style={styles.content}>
+          <View style={[styles.socialsBox, {marginTop: 35}]}>
+            <Image style={[styles.socialsLogo, {height: 45}]} source={require('../../../assets/tiktoklogo.png')}/>
+            <Text>tiktok_handle</Text>
+          </View>
+          <View style={styles.socialsBox}>
+            <Image style={styles.socialsLogo} source={require('../../../assets/instagramlogo.png')}/>
+            <Text>instagram_handle</Text>
+          </View>
+          <View style={styles.socialsBox}>
+            <Image style={styles.socialsLogo} source={require('../../../assets/facebooklogo.png')}/>
+            <Text>facebook_handle</Text>
+          </View>
+          <View style={styles.socialsBox}>
+            <Image style={[styles.socialsLogo, {height: 32}]} source={require('../../../assets/twitterlogo.png')}/>
+            <Text>twitter_handle</Text>
+          </View>
         </View>
       );
       
       
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
-        { key: 'first', title: 'Biography' },
+        { key: 'first', title: 'Sparks' },
         { key: 'second', title: 'Music' },
         { key: 'third', title: 'Church' },
         { key: 'fourth', title: 'Socials' },
     ]);
     
     const renderScene = SceneMap({
-        first: BiographyRoute,
+        first: SparkRoute,
         second: MusicRoute,
         third: ChurchRoute,
         fourth: SocialsRoute
@@ -260,13 +240,12 @@ export default function PSPersonal({ route, navigation }) {
       return (
         <View style={styles.MainContainer}>
             <View style={styles.topBorder}>
-              <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, top: '10%', alignItems: 'center'}]}>
+              <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, alignItems: 'center'}]}>
                 <TouchableOpacity onPress = {() => logFriends()}><Image style={{height: 40, width: 40}} source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity>
                 <Text style={styles.titleText}>My Profile</Text>
                 <TouchableOpacity onPress = {() => navigation.navigate(Routes.profileCreation, props)}><Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}></Image></TouchableOpacity>
               </View>
               <View style={styles.row} >
-                {/* <Image style={styles.profilePicture} source={image}></Image> */}
                 <ProfileImage size = "large" userId = {userId} />
                 <View style={styles.column}>
                   <Text style={{fontSize: height/35, fontWeight: '500', marginBottom: 10}}>{MyName}</Text>
@@ -300,7 +279,7 @@ const styles = StyleSheet.create({
     },
 
     topBorder:{
-      height: "40%",
+      height: "35%",
       width: "100%",
       backgroundColor: "rgb(219, 233, 236)",
     },
@@ -309,38 +288,35 @@ const styles = StyleSheet.create({
       height: '60%'
     },
 
+    churchIcon: {
+      alignSelf: "center",
+      height: 100,
+      width: 100,
+      marginTop: "7%",
+      marginBottom: "3%"
+    },
+
     titleText: {
       fontSize: height/40,
       textAlign: 'center',
-      color: "#006175",
-      fontFamily: "RNSMiles"
+      color: "black"
     },
 
     row: {
       flexDirection: 'row',
-      top: '15%',
+      marginTop: "5%",
       justifyContent: 'space-evenly'
     },
 
     row2: {
       flexDirection: 'row',
+      paddingTop: "3%"
     },
 
     column: {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center'
-    },
-
-    profilePictureContainer: {
-      height: 100, 
-      width: 100
-    },
-
-    profilePicture: {
-      height: "100%", 
-      width: "100%", 
-      borderRadius: "100%"
     },
 
     accordian: {
@@ -352,20 +328,7 @@ const styles = StyleSheet.create({
       borderRadius: 10
     },
 
-    navigation: {
-      backgroundColor: "rgb(219, 233, 236)",
-      height: "7%"
-    }, 
-    
-    genres: {
-      backgroundColor: '#006175',
-      borderRadius: 55,
-      height: 105, 
-      width: 105,
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-
+    // The orange box that holds the social media logo and the user's handle
     socialsBox: {
       backgroundColor: "#F2905B",
       borderRadius: 10,
@@ -374,13 +337,15 @@ const styles = StyleSheet.create({
       marginBottom: "6%",
       alignSelf: "center",
       flexDirection: "row",
-      alignContent: 'center'
+      alignItems: 'center'
     },
 
+    // Formatting for the social media logos on the socials page
     socialsLogo: {
-      height: "70%",
-      width: "10%",
-      left: "20%"
+      height: 40,
+      width: 40,
+      marginLeft: "5%",
+      marginRight: "5%"
     },
 
 })
@@ -398,7 +363,8 @@ const accordianStyles = StyleSheet.create({
   listItemContainer: {
     backgroundColor: "white",
     paddingTop: "2%",
-    paddingBottom: "2%"
+    paddingBottom: "2%",
+    width: "85%"
   },
   listItemHeader: {
     padding: "2%",

@@ -1,4 +1,4 @@
-import { Image, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Image, Text, View, TouchableOpacity, TextInput, Keyboard } from 'react-native';
 import React, { useRef } from 'react';
 import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
 import Routes from '../Navigation/constants/Routes.js';
@@ -9,6 +9,8 @@ import { getDatabase, ref, set } from 'firebase/database';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 // import Routes.UserDashboard from '../dashboard/UserDashboard';
 
 //import statements for styles
@@ -16,7 +18,8 @@ import { stylesPortrait } from "../../styles/portrait.js";
 import { Dimensions, TouchableHighlight } from 'react-native';
 
 //import components
-import { Input } from '../../components/components.js'
+import { Input, KeyboardView } from '../../components/components.js';
+
 
 export default function LoginScreen({ navigation }) {
 
@@ -81,8 +84,8 @@ export default function LoginScreen({ navigation }) {
   /*------------------------------------------------*/
  
   return (
-    <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
-      <View style={stylesPortrait.container}>
+    <KeyboardView style = {{paddingBottom: "30%"}}>
+      <View style={[stylesPortrait.container, {backgroundColor: 'white'}]}>
         <TouchableHighlight
           style = {{
             borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
@@ -175,7 +178,7 @@ export default function LoginScreen({ navigation }) {
           </Provider>
         </View>
       </View>
-    </TouchableWithoutFeedback>
+    </KeyboardView>
   );
 }
 

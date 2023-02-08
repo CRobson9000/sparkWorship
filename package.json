@@ -42,6 +42,7 @@
     "react-native-gifted-chat": "^1.0.4",
     "react-native-google-matrix": "^0.0.3",
     "react-native-ico-material-design": "^3.3.1",
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-maps": "0.30.2",
     "react-native-navigation-bar": "^0.2.1",
     "react-native-paper": "^5.0.0-rc.6",
