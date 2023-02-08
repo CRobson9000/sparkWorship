@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, useRef } from 'react';
 import { TextInput, View, TouchableOpacity } from 'react-native';
 import { StyleSheet, Text, FlatList } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { Menu, IconButton, Snackbar } from 'react-native-paper';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 class Input extends Component{
       
@@ -184,4 +185,30 @@ class Toast extends Component {
 
 }
 
-export { Input, Slider, DropDown, Toast }
+class KeyboardView extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      enableScroll: false
+    }
+    this.style = props.style
+  }
+
+  render() {
+    return (
+      <KeyboardAwareScrollView
+        bounces = {false}
+        scrollEnabled = {true}
+        contentContainerStyle={{...this.style, width: "100%", backgroundColor: "white"}}
+        onKeyboardDidHide = {() => {
+          this.setState({enableScroll: false})
+        }}
+        onKeyboardDidShow = {() => this.setState({enableScroll: true})}        
+      >
+      {this.props.children}
+      </KeyboardAwareScrollView>
+    )
+  }
+}
+
+export { Input, Slider, DropDown, Toast, KeyboardView }
