@@ -10,7 +10,7 @@ import { Observable, TDO, FirebaseButler, PushNotify } from '../../components/cl
 import { stylesPortrait } from "../../styles/portrait";
 import Routes from "../Navigation/constants/Routes";
 import ProfileImage from "../../components/profileImage.js";
-import { styleSheet } from "../../styles/profileCreationStyles.js";
+import { styleSheet } from "../../styles/newSparkCreationStyles.js";
 
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 
@@ -70,62 +70,25 @@ export default function SparkSummary({ route, navigation }) {
           <View style={[sparkViewStyles.sparkVerticalContainer]}>
                 <View style={[sparkViewStyles.topLocationContainer]}>
                     <Text style={{paddingLeft:"2%"}}>Address</Text>
-                    <Input start = {inputs.address.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.address.setVal(val)}/>
+                    <Input start = {inputs.address.getVal()} inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.address.setVal(val)}/>
                 </View>
                 <View style={[sparkViewStyles.locationContainer]}>
                     <Text style={{paddingLeft:"2%"}}>City</Text>
-                    <Input start = {inputs.city.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.city.setVal(val)}/>
+                    <Input start = {inputs.city.getVal()} inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.city.setVal(val)}/>
                 </View>
                 <View style={[sparkViewStyles.locationContainer]}>
                     <Text style={{paddingLeft:"2%"}}>Zip</Text>
-                    <Input start = {inputs.zip.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.zip.setVal(val)}/>
+                    <Input start = {inputs.zip.getVal()} inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.zip.setVal(val)}/>
                 </View>
                 <View style={[sparkViewStyles.locationContainer]}>
                     <Text style={{paddingLeft:"2%"}}>State</Text>
-                    <Input start = {inputs.state.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.state.setVal(val)}/>
+                    <Input start = {inputs.state.getVal()} inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.state.setVal(val)}/>
                 </View>
-                <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => sendPayload()}>
-                    <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Submit</Text>
-                </TouchableOpacity>
                   
           </View>
       </View>
     </ScrollView>
     );
-
-    const VolunteersRoute = () => (
-        <ScrollView>
-          <View style={[sparkViewStyles.sparkVerticalTest]}>
-            <View style={{alignItems: "center", justifyContent: "center"}}>
-                <Text style={{fontSize:28, paddingTop:"4%", paddingBottom:"6%", fontWeight:'500'}}>Volunteers</Text>
-            </View>
-            <View style={[sparkViewStyles.boxOne]}>
-              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-              </Image>
-              <Text style={[sparkViewStyles.originalBoxText]}>Spark Leader: Colin Robson (you)</Text>
-            </View>
-            <View style={[sparkViewStyles.boxOne]}>
-              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-              </Image>
-              <Text style={[sparkViewStyles.originalBoxText]}>Azianna Yang: Bass</Text>
-            </View>
-            <View style={[sparkViewStyles.boxOne]}>
-              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-              </Image>
-              <Text style={[sparkViewStyles.originalBoxText]}>Colin Robson: Piano</Text>
-            </View>
-            <View style={[sparkViewStyles.boxOne]}>
-              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-              </Image>
-              <Text style={[sparkViewStyles.originalBoxText]}>Austin Dorsey: Vocals</Text>
-            </View>
-          </View>
-        </ScrollView>
-      );
       
     const SetListRoute = () => (
       <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
@@ -330,7 +293,7 @@ export default function SparkSummary({ route, navigation }) {
       
     //    />
     //);
-    
+    let [currentIndex, setCurrentIndex] = React.useState(1);
       
       
     const [index, setIndex] = React.useState(0);
@@ -338,8 +301,7 @@ export default function SparkSummary({ route, navigation }) {
         { key: 'first', title: 'Location' },
         { key: 'second', title: 'Times' },
         { key: 'third', title: 'Set List' },
-        { key: 'fourth', title: 'Volunteers' },
-        { key: 'fifth', title: 'Requests' },
+        { key: 'fourth', title: 'Requests' },
     //  { key: 'sixth', title: 'Test'}
     ]);
     
@@ -347,8 +309,7 @@ export default function SparkSummary({ route, navigation }) {
         first: LocationRoute,
         second: TimesRoute,
         third: SetListRoute,
-        fourth: VolunteersRoute,
-        fifth: RequestsRoute,
+        fourth: RequestsRoute,
     //  sixth: SixthRoute
     });
 
@@ -421,10 +382,14 @@ export default function SparkSummary({ route, navigation }) {
       setState();
     }, [])
 
+    let myScreens = [
+      <LocationRoute />, <TimesRoute />, <SetListRoute />, <RequestsRoute />
+    ];
+  
   return(
     <View style={styleSheet.MainContainer}> 
           <View style={styleSheet.topBorder}>
-            <Text style={styleSheet.titleText}>Profile Creation</Text>
+            <Text style={styleSheet.titleText}>Spark Edit</Text>
             <View style={styleSheet.topRow}>
               <ProfileImage userId = {userId} changeable = {true} size = {"large"}/>
               <View style={styleSheet.column3}>
@@ -457,7 +422,7 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    height: '65%'
+    height: '80%'
   },
 
   titleText: {
@@ -556,19 +521,20 @@ const sparkViewStyles = StyleSheet.create({
       justifyContent: "center", 
       alignItems: "center"
   },
-  
+
+  topLocationContainer:{
+    width:"90%",
+    flexDirection:"column", 
+    height:"10%",
+    marginTop: "7%"
+  },
+
   locationContainer:
   {
       width:"90%",
       flexDirection:"column", 
       height:"10%",
       marginTop: "12%"
-  },
-  topLocationContainer:{
-      width:"85%",
-      flexDirection:"column", 
-      height:"10%",
-      marginTop: "7%"
   },
   timeContainer:{
       flexDirection:"row",
@@ -612,6 +578,8 @@ const sparkViewStyles = StyleSheet.create({
       color: "white",
       width: "100%",
   },
+
+
   locationInputBox:{
       textAlign: 'left',
       paddingLeft: '2%',
