@@ -1,6 +1,6 @@
 import React, {useRef, useEffect, useLayoutEffect} from 'react';
 import { Text, View, TextInput, ScrollView, TouchableOpacity, Image, FlatList, Dimensions } from "react-native";
-import { Input, Slider } from '../../components/components';
+import { Input, Slider, KeyboardView } from '../../components/components';
 import { Observable, FirebaseButler } from '../../components/classes';
 import { getDatabase, ref, set, get } from 'firebase/database';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -311,7 +311,7 @@ export default function ProfileScreen({route, navigation}) {
     }, [globalUserState])
 
     return (
-      <View style={styleSheet.content}>
+      <KeyboardView style={styleSheet.content}>
         <Text style={styleSheet.stageText}>General Information</Text>
         <Text style={styleSheet.text1}>Name</Text>
         <Input start = {inputs?.name?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.name.setVal(val)}/>
@@ -362,13 +362,13 @@ export default function ProfileScreen({route, navigation}) {
                 <Input start = {inputs?.zipCode?.getVal()} inputStyle = {styleSheet.inputBox2} func = {(val) => inputs.zipCode.setVal(val)}></Input>
             </View>
         </View>
-      </View>
+      </KeyboardView>
     );
   }
 
   const Screen2 = (props) => {
     return (
-        <View style={styleSheet.content}>
+        <KeyboardView style={styleSheet.content}>
             <Text style={styleSheet.stageText}>Reset Password</Text>
             <Text style={styleSheet.text1}>Password</Text>
             <Input /*start = {inputs.password.getVal()}*/ inputStyle = {styleSheet.inputBox} /*func = {(val) => inputs.password.setVal(val)}*//>
@@ -379,7 +379,7 @@ export default function ProfileScreen({route, navigation}) {
             <Text style={styleSheet.text1}>Phone Number</Text>
             <Input start = {inputs.phoneNumber.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.phoneNumber.setVal(val)}/>
             <TouchableOpacity style={styleSheet.screen2Buttons} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Enable Two-Step Authentication</Text></TouchableOpacity>
-        </View>
+        </KeyboardView>
     );
   }
 
@@ -399,7 +399,7 @@ export default function ProfileScreen({route, navigation}) {
     }, [globalChurchState])
 
     return (
-      <View style={styleSheet.content}>
+      <KeyboardView style={styleSheet.content}>
         <Text style={styleSheet.stageText}>Home Church</Text>
         <Text style={styleSheet.smallText2}>This section is optional. You may skip by clicking Next.</Text>
         <Text style={styleSheet.text1}>Church Name</Text>
@@ -431,7 +431,7 @@ export default function ProfileScreen({route, navigation}) {
                     <Input start = {inputs.churchZipCode.getVal()} inputStyle = {styleSheet.inputBox2} func = {(val) => inputs.churchZipCode.setVal(val)}></Input>
                 </View>
             </View>
-      </View>
+      </KeyboardView>
     );
   }
 
@@ -454,39 +454,66 @@ export default function ProfileScreen({route, navigation}) {
     );
   }
 
-  const Screen5 = (props) => {
+  // ----------------
+  // Dialog Box code
+  // ----------------
+  const [visible, setVisible] = React.useState(null);
+  function showDialog(id) {
+    if (id !== undefined) setVisible(id);
+    else setVisible(-1);
+  };
+  const hideDialog = () => setVisible(null);
+
+  //dropDown code
+  const [dropDownItems, setDropDownItems] = React.useState([]);
+
+  async function populateDropDown() {
+    //populate roles with instruments and other roles from models
+    const db = getDatabase();
+
+    //Get instruments from "models" in firebase
+    let instrumentsFromModel = await FirebaseButler.fbGet("Models/instruments");
+    setDropDownItems(instrumentsFromModel);
+  }
+
+  // Set up variables to add to an instrument
+  const [checked, setChecked] = React.useState(false);
+  const [instrumentSelect, setInstrument] = React.useState("");
+  let worshipExperience = "";
+  let generalExperience = "";
+  let additionalNotes = "";
+  const [instruments, setInstruments] = React.useState([]);
+
+  //dialog box content code
+  const DialogBox = (props) => {
+    let currentInstrument = null;
+    let stateVisible;
+    if (visible == null) {
+      stateVisible = false
+    } 
+    else {
+      stateVisible = true;
+      if (currentInstrument != -1) {
+        currentInstrument = instruments[visible];
+      }
+    }
+    
+    //set placeholder value
+    let placeHolderVal = "Select Instrument"
+    
+    if (currentInstrument?.instrumentName) {
+      //console.log("Instrument was loaded");
+      placeHolderVal = currentInstrument.instrumentName;
+    }
+    if (instrumentSelect) {
+      //console.log("Instrument was selected");
+      placeHolderVal = instrumentSelect
+    }
+
     // --------------------
     // Add instrument code
     // --------------------
-
-    //dialog box code
-    const [visible, setVisible] = React.useState(null);
-    function showDialog(id) {
-      if (id !== undefined) setVisible(id);
-      else setVisible(-1);
-    };
-    const hideDialog = () => setVisible(null);
-
-    //dropDown code
-    const [dropDownItems, setDropDownItems] = React.useState([]);
-
-    async function populateDropDown() {
-      //populate roles with instruments and other roles from models
-      const db = getDatabase();
-
-      //Get instruments from "models" in firebase
-      let instrumentsFromModel = await FirebaseButler.fbGet("Models/instruments");
-      setDropDownItems(instrumentsFromModel);
-    }
-
-    // Set up variables to add to an instrument
-    const [checked, setChecked] = React.useState(false);
-    const [instrumentSelect, setInstrument] = React.useState("");
-    let worshipExperience = "";
-    let generalExperience = "";
-    let additionalNotes = "";
-    const [instruments, setInstruments] = React.useState([]);
-
+    
     //functional methods for adding an instrument
     function addInstrument(id) {
       if (instrumentSelect != "") {
@@ -515,88 +542,64 @@ export default function ProfileScreen({route, navigation}) {
       }
     }
 
-    //dialog box content code
-    const DialogBox = (props) => {
-      let currentInstrument = null;
-      let stateVisible;
-      if (visible == null) {
-        stateVisible = false
-      } 
-      else {
-        stateVisible = true;
-        if (currentInstrument != -1) {
-          currentInstrument = instruments[visible];
-        }
-      }
-      
-      //set placeholder value
-      let placeHolderVal = "Select Instrument"
-      
-      if (currentInstrument?.instrumentName) {
-        //console.log("Instrument was loaded");
-        placeHolderVal = currentInstrument.instrumentName;
-      }
-      if (instrumentSelect) {
-        //console.log("Instrument was selected");
-        placeHolderVal = instrumentSelect
-      }
+    return (
+      <Provider>
+        <View style = {{zIndex: 1}}>
+          <Portal>
+            <Dialog style = {{backgroundColor: "rgb(219, 233, 236)", position: "absolute", height: "105%", width: "100%", bottom: "2%"}} visible={stateVisible} onDismiss={hideDialog}>
+              <Dialog.Title style= {{alignSelf: "center", color: "black", fontSize: 20}}>Add Instrument</Dialog.Title>
+              <Dialog.Content style = {{height: "85%", justifyContent: "center", alignItems: "center", borderRadius: 5}}>
+                <Dialog.ScrollArea style = {{width: "100%"}}>
+                  <ScrollView>
+                    <View style = {{flex: 0.8}}>
+                      <Dropdown
+                          data = {dropDownItems}
+                          style = {styleSheet.dropDown2}
+                          dropdownPosition = {"top"}
+                          search = {false}
+                          maxHeight = {"40%"}
+                          itemTextStyle = {{color: "black", fontSize: 5}}
+                          onChange = {(value) => setInstrument(value)}
+                          placeholder = {placeHolderVal}
+                          value = {placeHolderVal}
+                          placeholderStyle = {{textAlign: "center", fontSize: 12, color: "white"}}
+                          renderItem = {renderDropDownItem}
+                      />
+                    </View>
 
-      return (
-        <Provider>
-          <View style = {{zIndex: 1}}>
-            <Portal>
-              <Dialog style = {{backgroundColor: "rgb(219, 233, 236)", position: "absolute", height: "105%", width: "100%", bottom: "2%"}} visible={stateVisible} onDismiss={hideDialog}>
-                <Dialog.Title style= {{alignSelf: "center", color: "black", fontSize: 20}}>Add Instrument</Dialog.Title>
-                <Dialog.Content style = {{height: "85%", justifyContent: "center", alignItems: "center", borderRadius: 5}}>
-                  <Dialog.ScrollArea style = {{width: "100%"}}>
-                    <ScrollView>
-                      <View style = {{flex: 0.8}}>
-                        <Dropdown
-                            data = {dropDownItems}
-                            style = {styleSheet.dropDown2}
-                            dropdownPosition = {"top"}
-                            search = {false}
-                            maxHeight = {"40%"}
-                            itemTextStyle = {{color: "black", fontSize: 5}}
-                            onChange = {(value) => setInstrument(value)}
-                            placeholder = {placeHolderVal}
-                            value = {placeHolderVal}
-                            placeholderStyle = {{textAlign: "center", fontSize: 12, color: "white"}}
-                            renderItem = {renderDropDownItem}
-                        />
-                      </View>
+                    <Text style={styleSheet.text4}>Worship Experience</Text>
+                    <Input start = {(currentInstrument ? currentInstrument.worshipExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => worshipExperience = val}/>
 
-                      <Text style={styleSheet.text4}>Worship Experience</Text>
-                      <Input start = {(currentInstrument ? currentInstrument.worshipExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => worshipExperience = val}/>
+                    <Text style={styleSheet.text4}>General Experience</Text>
+                    <Input start = {(currentInstrument ? currentInstrument.generalExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => generalExperience = val}/>
 
-                      <Text style={styleSheet.text4}>General Experience</Text>
-                      <Input start = {(currentInstrument ? currentInstrument.generalExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => generalExperience = val}/>
+                    <Text style={styleSheet.text4}> Additional Notes </Text>
+                    <Input start = {(currentInstrument ? currentInstrument.additionalExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => additionalNotes = val}/>
 
-                      <Text style={styleSheet.text4}> Additional Notes </Text>
-                      <Input start = {(currentInstrument ? currentInstrument.additionalExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => additionalNotes = val}/>
+                    <View style={{flexDirection:"row", alignItems: "center", justifyContent: "center"}}>
+                      <Text style={styleSheet.text1}> Main Instrument? </Text>
+                      <Checkbox
+                        status={checked ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                          setChecked(!checked);
+                        }}
+                      />
+                    </View>
+                  </ScrollView>
+                </Dialog.ScrollArea>
+                <TouchableOpacity style={styleSheet.dialogButton} onPress = {() => addInstrument(visible)}>
+                  <Text style={styleSheet.buttonText}>{(currentInstrument) ? 'Update' : 'Add'}</Text>
+                </TouchableOpacity>
+              </Dialog.Content>
+            </Dialog>
+          </Portal>
+        </View>
+      </Provider>
+    );
+  }
 
-                      <View style={{flexDirection:"row", alignItems: "center", justifyContent: "center"}}>
-                        <Text style={styleSheet.text1}> Main Instrument? </Text>
-                        <Checkbox
-                          status={checked ? 'checked' : 'unchecked'}
-                          onPress={() => {
-                            setChecked(!checked);
-                          }}
-                        />
-                      </View>
-                    </ScrollView>
-                  </Dialog.ScrollArea>
-                  <TouchableOpacity style={styleSheet.dialogButton} onPress = {() => addInstrument(visible)}>
-                    <Text style={styleSheet.buttonText}>{(currentInstrument) ? 'Update' : 'Add'}</Text>
-                  </TouchableOpacity>
-                </Dialog.Content>
-              </Dialog>
-            </Portal>
-          </View>
-        </Provider>
-      );
-    }
 
+  const Screen5 = (props) => {
     // -------------------------------
     // Instrument list rendering code
     // -------------------------------
@@ -652,7 +655,6 @@ export default function ProfileScreen({route, navigation}) {
 
     return (
       <View style={styleSheet.content}>
-        <DialogBox/>
         <View style = {{zIndex: -3, justifyContent: "center", alignItems: "center"}}>
           <Text style={styleSheet.stageText}>Musical Background</Text>
           <FlatList 
@@ -703,6 +705,7 @@ export default function ProfileScreen({route, navigation}) {
   /*------------------------------------------------*/
   // if (done) {
   return (
+    <View style={{paddingBottom: 0}}>
       <View style={styleSheet.MainContainer}> 
           <View style={styleSheet.topBorder}>
             <Text style={styleSheet.titleText}>Profile Creation</Text>
@@ -720,7 +723,11 @@ export default function ProfileScreen({route, navigation}) {
               <TouchableOpacity style={styleSheet.constantButtons} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Previous</Text></TouchableOpacity>
               <TouchableOpacity style={styleSheet.constantButtons} onPress = {() => (currentIndex == myScreens.length - 1) ? sendPayload() : setCurrentIndex(currentIndex + 1)}><Text style={styleSheet.buttonText}>{(currentIndex == myScreens.length - 1) ? "Submit" : "Next"}</Text></TouchableOpacity>
           </View>
+
+          {/* Elements with absolute positioning */}
+          <DialogBox/>
       </View>
-    );
+    </View>
+  );
   // }
 }

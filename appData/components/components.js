@@ -3,7 +3,7 @@ import { TextInput, View, TouchableOpacity } from 'react-native';
 import { StyleSheet, Text, FlatList } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { Menu, IconButton, Snackbar } from 'react-native-paper';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { KeyboardAwareScrollView, KeyboardAwareFlatList, KeyboardAwareListView } from 'react-native-keyboard-aware-scroll-view'
 
 class Input extends Component{
       
@@ -189,25 +189,48 @@ class KeyboardView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      enableScroll: false
+      height: "100%"
     }
     this.style = props.style
+    this.content = props.content || null;
+    this.flatList = props.flatList;
   }
 
   render() {
-    return (
-      <KeyboardAwareScrollView
-        bounces = {false}
-        scrollEnabled = {true}
-        contentContainerStyle={{...this.style, width: "100%", backgroundColor: "white"}}
-        onKeyboardDidHide = {() => {
-          this.setState({enableScroll: false})
-        }}
-        onKeyboardDidShow = {() => this.setState({enableScroll: true})}        
-      >
-      {this.props.children}
-      </KeyboardAwareScrollView>
-    )
+    if (!this.flatList) {
+      return (
+        <KeyboardAwareScrollView
+          contentContainerStyle={{...this.style, height: this.state.height, width: "100%", backgroundColor: "white"}}
+          onKeyboardDidHide = {() => {
+            this.setState({height: "100%"})
+          }}
+          onKeyboardDidShow = {() => 
+            this.setState({height: null})
+          }        
+        >
+          {this.props.children}
+        </KeyboardAwareScrollView>
+      )
+    }
+    else {
+      return (
+        <KeyboardAwareFlatList
+          containerStyle = {{...this.style, height: this.state.height, width: "100%", backgroundColor: "white"}}
+          onKeyboardDidHide = {() => {
+            this.setState({height: "100%"})
+          }}
+          onKeyboardDidShow = {() => 
+            this.setState({height: null})
+          }
+          data = {[this.props.children]}
+          renderItem = {(object) => {
+            return(
+              object.item
+            );
+          }}
+        />
+      )
+    }
   }
 }
 
