@@ -183,6 +183,7 @@ export default function Message({ route, navigation }) {
               value = {currentMessage}
               style = {{flex: 1, padding: "2%", textAlign: "left", flexWrap: "wrap"}}
               placeholder = {"type your message..."}
+              multiline = {true}
             />
             <TouchableHighlight style = {styles.button} onPress = {() => sendMessage()}>
               <Text style={styles.sendText}> Send </Text>

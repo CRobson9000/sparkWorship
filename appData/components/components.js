@@ -35,8 +35,8 @@ class Input extends Component{
         onChangeText={(newText) => {this.textChanged(newText)}}
         value={this.state.text}
         placeholder={this.props.placeHolderText}
+        multiline={this.props.multiline || false}
         secureTextEntry={this.props.secure}
-        multiline={true}
       />
     );
   }

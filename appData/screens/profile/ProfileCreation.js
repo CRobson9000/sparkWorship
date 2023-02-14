@@ -246,7 +246,6 @@ export default function ProfileScreen({route, navigation}) {
       const churchZipCodeReference = ref(db, `Users/${userId}/info/churchZipCode`);
       set(churchZipCodeReference, update["churchZipCode"]);
     }
-    console.log("Bool", !arraysAreEqual(instrumentsArray["current"], inputs["instrumentsArray"]));
     if (instrumentsArray["current"].length > 0  && !arraysAreEqual(instrumentsArray["current"], inputs["instrumentsArray"])) {
       const setInstrumentsRef = ref(db, `Users/${userId}/info/instruments`);
       set(setInstrumentsRef, instrumentsArray["current"]);
@@ -369,6 +368,7 @@ export default function ProfileScreen({route, navigation}) {
   const Screen2 = (props) => {
     return (
         <KeyboardView style={styleSheet.content}>
+          <ScrollView>
             <Text style={styleSheet.stageText}>Reset Password</Text>
             <Text style={styleSheet.text1}>Password</Text>
             <Input /*start = {inputs.password.getVal()}*/ inputStyle = {styleSheet.inputBox} /*func = {(val) => inputs.password.setVal(val)}*//>
@@ -379,6 +379,7 @@ export default function ProfileScreen({route, navigation}) {
             <Text style={styleSheet.text1}>Phone Number</Text>
             <Input start = {inputs.phoneNumber.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.phoneNumber.setVal(val)}/>
             <TouchableOpacity style={styleSheet.screen2Buttons} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Enable Two-Step Authentication</Text></TouchableOpacity>
+          </ScrollView>
         </KeyboardView>
     );
   }
@@ -498,20 +499,6 @@ export default function ProfileScreen({route, navigation}) {
         setDropDownItems(instrumentsFromModel);
       }
 
-      console.log("Index", instrumentProps.instrumentIndex);
-      console.log("Current Instrument", currentInstrument);
-      
-      // let stateVisible;
-      // if (visible == null) {
-      //   stateVisible = false
-      // } 
-      // else {
-      //   stateVisible = true;
-      //   if (currentInstrument != -1) {
-      //     currentInstrument = instruments[visible];
-      //   }
-      // }
-
       //set placeholder value
       let placeHolderVal = "Select Instrument"
 
@@ -530,7 +517,6 @@ export default function ProfileScreen({route, navigation}) {
 
       //functional methods for adding an instrument
       function addInstrument(id) {
-        console.log("Instrument Select", instrumentSelect);
         if (instrumentSelect != "") {
           let finalInstrument = {
             instrumentName: instrumentSelect,
@@ -561,10 +547,6 @@ export default function ProfileScreen({route, navigation}) {
         populateDropDown();
       }, []);
 
-      // useEffect(() => {
-      //   instrumentProps.instrumentIndex = null;
-      // }, [currentInstrument])
-
       return (
         <KeyboardView backgroundColor = {"rgb(219, 233, 236)"} style = {{height: "100%", width: "100%"}}>      
           <ScrollView contentContainerStyle = {{margin: "5%", paddingBottom: "20%"}}>
@@ -585,28 +567,28 @@ export default function ProfileScreen({route, navigation}) {
             </View>
 
             <Text style={styleSheet.text4}>Worship Experience</Text>
-            {/* <Input start = {(currentInstrument ? currentInstrument.worshipExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => worshipExperience = val}/> */}
             <TextInput
               style = { styleSheet.instrumentDialogInput } 
               value = { worshipExperience } 
               placeholder = { worshipExperience }
               onChangeText={(text) => setWorshipExperience(text)}
+              multiline={true}
             />
             <Text style={styleSheet.text4}>General Experience</Text>
-            {/* <Input start = {(currentInstrument ? currentInstrument.generalExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => generalExperience = val}/> */}
             <TextInput
               style = { styleSheet.instrumentDialogInput } 
               value = { generalExperience } 
               placeholder = { generalExperience }
               onChangeText={(text) => setGeneralExperience(text)}
+              multiline={true}
             />
             <Text style={styleSheet.text4}> Additional Notes </Text>
-            {/* <Input start = {(currentInstrument ? currentInstrument.additionalExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => additionalNotes = val}/> */}
             <TextInput
               style = { styleSheet.instrumentDialogInput } 
               value = { additionalNotes } 
               placeholder = { additionalNotes }
               onChangeText={(text) => setAdditionalNotes(text)}
+              multiline={true}
             />
             {/* <View style={{flexDirection:"row", alignItems: "center", justifyContent: "center"}}>
               <Text style={styleSheet.text1}> Main Instrument? </Text>

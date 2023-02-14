@@ -19,7 +19,7 @@ const styleSheet = StyleSheet.create({
     },
   
     content: {
-      height: "50%",
+      flex: 1,
       width: "100%"
     },
   
