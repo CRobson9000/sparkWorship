@@ -225,22 +225,31 @@ const styleSheet = StyleSheet.create({
     },
   
     instrumentDialogInput: {
-      flex: 0.8,
+      flex: 1,
       backgroundColor: "#F2905B",
       borderRadius: 10,
       paddingLeft: "5%",
       marginBottom: "5%",
-      height: 35,
+      paddingTop: "5%",
+      paddingBottom: "5%",
       flexWrap: 'wrap'
     },
   
     dialogButton: {
-      backgroundColor: "rgb(0, 97, 117)",
       justifyContent: "center",
       alignItems: "center",
-      height: "8%",
+      height: "100%",
       width: "35%",
       borderRadius: 10
+    },
+
+    dialogButtonRow: {
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      width: "100%",
+      marginTop: "5%",
+      marginBottom: "5%",
+      height: "7%"
     },
   
     profilePictureContainer: {
@@ -320,8 +329,8 @@ const styleSheet = StyleSheet.create({
       width: "100%",
       top: "5%",
       height: "30%"
-    }
-
+    },
+    
 });  
   
 export { styleSheet }

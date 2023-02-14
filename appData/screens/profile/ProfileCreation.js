@@ -1,6 +1,6 @@
 import React, {useRef, useEffect, useLayoutEffect} from 'react';
 import { Text, View, TextInput, ScrollView, TouchableOpacity, Image, FlatList, Dimensions } from "react-native";
-import { Input, Slider, KeyboardView } from '../../components/components';
+import { Input, Slider, KeyboardView, DialogBox } from '../../components/components';
 import { Observable, FirebaseButler } from '../../components/classes';
 import { getDatabase, ref, set, get } from 'firebase/database';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -109,7 +109,7 @@ export default function ProfileScreen({route, navigation}) {
           }
         }
       }
-  
+      
       //set instrument data
       if (fbProfileData.instruments) {
         let startingInstruments = fbProfileData.instruments;
@@ -455,151 +455,184 @@ export default function ProfileScreen({route, navigation}) {
   }
 
   // ----------------
-  // Dialog Box code
+  // Dialog Box Content for Screen 5
   // ----------------
-  const [visible, setVisible] = React.useState(null);
-  function showDialog(id) {
-    if (id !== undefined) setVisible(id);
-    else setVisible(-1);
-  };
-  const hideDialog = () => setVisible(null);
-
-  //dropDown code
-  const [dropDownItems, setDropDownItems] = React.useState([]);
-
-  async function populateDropDown() {
-    //populate roles with instruments and other roles from models
-    const db = getDatabase();
-
-    //Get instruments from "models" in firebase
-    let instrumentsFromModel = await FirebaseButler.fbGet("Models/instruments");
-    setDropDownItems(instrumentsFromModel);
+  const myDialog = useRef(null);
+  const [disable, setDisable] = React.useState("auto");
+  const [contentOpacity, setContentOpacity] = React.useState(1);
+  function openDialog(dialog, options) {
+    setDisable("none");
+    setContentOpacity(0.2);
+    if (options) dialog.setupDialog(options.height, options.width, options.title, options.content);
+    dialog.showDialog();
   }
 
-  // Set up variables to add to an instrument
-  const [checked, setChecked] = React.useState(false);
-  const [instrumentSelect, setInstrument] = React.useState("");
-  let worshipExperience = "";
-  let generalExperience = "";
-  let additionalNotes = "";
-  const [instruments, setInstruments] = React.useState([]);
-
-  //dialog box content code
-  const DialogBox = (props) => {
-    let currentInstrument = null;
-    let stateVisible;
-    if (visible == null) {
-      stateVisible = false
-    } 
-    else {
-      stateVisible = true;
-      if (currentInstrument != -1) {
-        currentInstrument = instruments[visible];
-      }
-    }
-    
-    //set placeholder value
-    let placeHolderVal = "Select Instrument"
-    
-    if (currentInstrument?.instrumentName) {
-      //console.log("Instrument was loaded");
-      placeHolderVal = currentInstrument.instrumentName;
-    }
-    if (instrumentSelect) {
-      //console.log("Instrument was selected");
-      placeHolderVal = instrumentSelect
-    }
-
-    // --------------------
-    // Add instrument code
-    // --------------------
-    
-    //functional methods for adding an instrument
-    function addInstrument(id) {
-      if (instrumentSelect != "") {
-        let finalInstrument = {
-          instrumentName: instrumentSelect,
-          worshipExperience,
-          generalExperience,
-          additionalNotes,
-          mainInstrument: checked
-        };
-        
-        //add instrument if id == -1 (this is when we add an instrument for the first time)
-        if (id == -1) {
-          instrumentsArray["current"].push(finalInstrument);
-        }
-        //update the array with new information if an id is passed in
-        else {
-          instrumentsArray["current"][id] = finalInstrument;
-        }
-
-        //reset instrument select
-        setInstrument(null);
-        //update instruments array
-        setInstruments(() => [...instrumentsArray["current"]]);
-        hideDialog();
-      }
-    }
-
-    return (
-      <Provider>
-        <View style = {{zIndex: 1}}>
-          <Portal>
-            <Dialog style = {{backgroundColor: "rgb(219, 233, 236)", position: "absolute", height: "105%", width: "100%", bottom: "2%"}} visible={stateVisible} onDismiss={hideDialog}>
-              <Dialog.Title style= {{alignSelf: "center", color: "black", fontSize: 20}}>Add Instrument</Dialog.Title>
-              <Dialog.Content style = {{height: "85%", justifyContent: "center", alignItems: "center", borderRadius: 5}}>
-                <Dialog.ScrollArea style = {{width: "100%"}}>
-                  <ScrollView>
-                    <View style = {{flex: 0.8}}>
-                      <Dropdown
-                          data = {dropDownItems}
-                          style = {styleSheet.dropDown2}
-                          dropdownPosition = {"top"}
-                          search = {false}
-                          maxHeight = {"40%"}
-                          itemTextStyle = {{color: "black", fontSize: 5}}
-                          onChange = {(value) => setInstrument(value)}
-                          placeholder = {placeHolderVal}
-                          value = {placeHolderVal}
-                          placeholderStyle = {{textAlign: "center", fontSize: 12, color: "white"}}
-                          renderItem = {renderDropDownItem}
-                      />
-                    </View>
-
-                    <Text style={styleSheet.text4}>Worship Experience</Text>
-                    <Input start = {(currentInstrument ? currentInstrument.worshipExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => worshipExperience = val}/>
-
-                    <Text style={styleSheet.text4}>General Experience</Text>
-                    <Input start = {(currentInstrument ? currentInstrument.generalExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => generalExperience = val}/>
-
-                    <Text style={styleSheet.text4}> Additional Notes </Text>
-                    <Input start = {(currentInstrument ? currentInstrument.additionalExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => additionalNotes = val}/>
-
-                    <View style={{flexDirection:"row", alignItems: "center", justifyContent: "center"}}>
-                      <Text style={styleSheet.text1}> Main Instrument? </Text>
-                      <Checkbox
-                        status={checked ? 'checked' : 'unchecked'}
-                        onPress={() => {
-                          setChecked(!checked);
-                        }}
-                      />
-                    </View>
-                  </ScrollView>
-                </Dialog.ScrollArea>
-                <TouchableOpacity style={styleSheet.dialogButton} onPress = {() => addInstrument(visible)}>
-                  <Text style={styleSheet.buttonText}>{(currentInstrument) ? 'Update' : 'Add'}</Text>
-                </TouchableOpacity>
-              </Dialog.Content>
-            </Dialog>
-          </Portal>
-        </View>
-      </Provider>
-    );
+  function closeDialog(dialog) {
+    setDisable("auto");
+    setContentOpacity(1);
+    dialog.hideDialog();
   }
-
 
   const Screen5 = (props) => {
+    // Set up variables to add to an instrument
+    const [instruments, setInstruments] = React.useState([]);
+
+    // dialog content
+    const InstrumentContent = (instrumentProps) => {  
+      // Set starting variables
+      const [dropDownItems, setDropDownItems] = React.useState([]);
+      let currentInstrument = instruments[instrumentProps?.instrumentIndex] || null; 
+
+      const [checked, setChecked] = React.useState(false);
+      const [instrumentSelect, setInstrument] = React.useState(currentInstrument?.instrumentName || null);
+      const [worshipExperience, setWorshipExperience] = React.useState(currentInstrument?.worshipExperience || null);
+      const [generalExperience, setGeneralExperience] = React.useState(currentInstrument?.generalExperience || null);
+      const [additionalNotes, setAdditionalNotes] = React.useState(currentInstrument?.additionalNotes || null);
+          
+      async function populateDropDown() {
+        //populate roles with instruments and other roles from models
+        const db = getDatabase();
+    
+        //Get instruments from "models" in firebase
+        let instrumentsFromModel = await FirebaseButler.fbGet("Models/instruments");
+        setDropDownItems(instrumentsFromModel);
+      }
+
+      console.log("Index", instrumentProps.instrumentIndex);
+      console.log("Current Instrument", currentInstrument);
+      
+      // let stateVisible;
+      // if (visible == null) {
+      //   stateVisible = false
+      // } 
+      // else {
+      //   stateVisible = true;
+      //   if (currentInstrument != -1) {
+      //     currentInstrument = instruments[visible];
+      //   }
+      // }
+
+      //set placeholder value
+      let placeHolderVal = "Select Instrument"
+
+      if (currentInstrument?.instrumentName) {
+        //console.log("Instrument was loaded");
+        placeHolderVal = currentInstrument.instrumentName;
+      }
+      if (instrumentSelect) {
+        //console.log("Instrument was selected");
+        placeHolderVal = instrumentSelect
+      }
+
+      // --------------------
+      // Add instrument code
+      // --------------------
+
+      //functional methods for adding an instrument
+      function addInstrument(id) {
+        console.log("Instrument Select", instrumentSelect);
+        if (instrumentSelect != "") {
+          let finalInstrument = {
+            instrumentName: instrumentSelect,
+            worshipExperience,
+            generalExperience,
+            additionalNotes,
+            mainInstrument: checked
+          };
+          
+          //add instrument if id == -1 (this is when we add an instrument for the first time)
+          if (id === undefined || id === null) {
+            instrumentsArray["current"].push(finalInstrument);
+          }
+          //update the array with new information if an id is passed in
+          else {
+            instrumentsArray["current"][id] = finalInstrument;
+          }
+
+          //reset instrument select
+          setInstrument(null);
+          //update instruments array
+          setInstruments(() => [...instrumentsArray["current"]]);
+          closeDialog(myDialog.current);
+        }
+      }
+
+      useEffect(() => {
+        populateDropDown();
+      }, []);
+
+      // useEffect(() => {
+      //   instrumentProps.instrumentIndex = null;
+      // }, [currentInstrument])
+
+      return (
+        <KeyboardView backgroundColor = {"rgb(219, 233, 236)"} style = {{height: "100%", width: "100%"}}>      
+          <ScrollView contentContainerStyle = {{margin: "5%", paddingBottom: "20%"}}>
+            <View style = {{flex: 1, width: "100%"}}>
+              <Dropdown
+                  data = {dropDownItems}
+                  style = {styleSheet.dropDown2}
+                  dropdownPosition = {"top"}
+                  search = {false}
+                  maxHeight = {"40%"}
+                  itemTextStyle = {{color: "black", fontSize: 5}}
+                  onChange = {(value) => setInstrument(value)}
+                  placeholder = {placeHolderVal}
+                  value = {placeHolderVal}
+                  placeholderStyle = {{textAlign: "center", fontSize: 12, color: "white"}}
+                  renderItem = {renderDropDownItem}
+              />
+            </View>
+
+            <Text style={styleSheet.text4}>Worship Experience</Text>
+            {/* <Input start = {(currentInstrument ? currentInstrument.worshipExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => worshipExperience = val}/> */}
+            <TextInput
+              style = { styleSheet.instrumentDialogInput } 
+              value = { worshipExperience } 
+              placeholder = { worshipExperience }
+              onChangeText={(text) => setWorshipExperience(text)}
+            />
+            <Text style={styleSheet.text4}>General Experience</Text>
+            {/* <Input start = {(currentInstrument ? currentInstrument.generalExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => generalExperience = val}/> */}
+            <TextInput
+              style = { styleSheet.instrumentDialogInput } 
+              value = { generalExperience } 
+              placeholder = { generalExperience }
+              onChangeText={(text) => setGeneralExperience(text)}
+            />
+            <Text style={styleSheet.text4}> Additional Notes </Text>
+            {/* <Input start = {(currentInstrument ? currentInstrument.additionalExperience : "")} inputStyle = {styleSheet.instrumentDialogInput} func = {(val) => additionalNotes = val}/> */}
+            <TextInput
+              style = { styleSheet.instrumentDialogInput } 
+              value = { additionalNotes } 
+              placeholder = { additionalNotes }
+              onChangeText={(text) => setAdditionalNotes(text)}
+            />
+            {/* <View style={{flexDirection:"row", alignItems: "center", justifyContent: "center"}}>
+              <Text style={styleSheet.text1}> Main Instrument? </Text>
+              <Checkbox
+                status={checked ? 'checked' : 'unchecked'}
+                onPress={() => {
+                  setChecked(!checked);
+                }}
+              />
+            </View> */}
+          </ScrollView>
+          <View style = {styleSheet.dialogButtonRow}>
+            <TouchableOpacity style={[styleSheet.dialogButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress = {() => addInstrument(instrumentProps.instrumentIndex)}>
+              <Text style={styleSheet.buttonText}>{(currentInstrument) ? 'Update' : 'Add'}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styleSheet.dialogButton, {backgroundColor: "red"}]} onPress = {() => closeDialog(myDialog.current)}>
+              <Text style={styleSheet.buttonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardView>
+      )
+    }
+
+    useEffect(() => {
+      setInstruments([...instrumentsArray["current"]])
+    }, []);
     // -------------------------------
     // Instrument list rendering code
     // -------------------------------
@@ -610,7 +643,9 @@ export default function ProfileScreen({route, navigation}) {
           title={object.item.instrumentName}
           style = {styleSheet.header}
           titleStyle = {styleSheet.headerText}
-          onLongPress = {() => showDialog(object.index)}
+          onLongPress = {() => {
+            openDialog(myDialog.current, {height: 75, width: 90, title: "Add Instrument", content: <InstrumentContent instrumentIndex = {object.index}/>})
+          }}
         >
           <View style={styleSheet.listItemContainer}>
             <View style={styleSheet.listItemHeader}>
@@ -648,11 +683,6 @@ export default function ProfileScreen({route, navigation}) {
       );
     }
 
-    useEffect(() => {
-      populateDropDown();
-      setInstruments(() => [...instrumentsArray["current"]])
-    }, []);
-
     return (
       <View style={styleSheet.content}>
         <View style = {{zIndex: -3, justifyContent: "center", alignItems: "center"}}>
@@ -662,7 +692,10 @@ export default function ProfileScreen({route, navigation}) {
             style = {{height: "100%", width: "85%"}}
             renderItem = {renderInstrument}
           />
-          <TouchableOpacity style={styleSheet.screen2Buttons} onPress={() => showDialog()}><Text style={styleSheet.buttonText}>+ Add Instrument</Text></TouchableOpacity>
+          <TouchableOpacity style={styleSheet.screen2Buttons} onPress={() => {
+            // console.log(myDialog);
+            openDialog(myDialog.current, {height: 75, width: 90, title: "Add Instrument", content: <InstrumentContent />})
+          }}><Text style={styleSheet.buttonText}>+ Add Instrument</Text></TouchableOpacity>
         </View>
       </View>
     );
@@ -705,29 +738,29 @@ export default function ProfileScreen({route, navigation}) {
   /*------------------------------------------------*/
   // if (done) {
   return (
-    <View style={{paddingBottom: 0}}>
       <View style={styleSheet.MainContainer}> 
-          <View style={styleSheet.topBorder}>
-            <Text style={styleSheet.titleText}>Profile Creation</Text>
-            <View style={styleSheet.topRow}>
-              <ProfileImage userId = {userId} changeable = {true} size = {"large"}/>
-              <View style={styleSheet.column3}>
-                <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2.4 , height: 20, borderRadius: 10, marginBottom: "15%"}} progress={(currentIndex + 1) / 5}/>
-                <Text style={styleSheet.smallText1}>Click your profile picture to change</Text>
+          <View pointerEvents = {disable} style = {{height: "100%", width: "100%", opacity: contentOpacity}}>
+            <View style={styleSheet.topBorder}>
+              <Text style={styleSheet.titleText}>Profile Creation</Text>
+              <View style={styleSheet.topRow}>
+                <ProfileImage userId = {userId} changeable = {true} size = {"large"}/>
+                <View style={styleSheet.column3}>
+                  <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2.4 , height: 20, borderRadius: 10, marginBottom: "15%"}} progress={(currentIndex + 1) / 5}/>
+                  <Text style={styleSheet.smallText1}>Click your profile picture to change</Text>
+                </View>
               </View>
             </View>
-          </View>
-          <Slider currentIndex = {currentIndex} screens = {myScreens} />
+            <Slider currentIndex = {currentIndex} screens = {myScreens} />
 
-          <View style={styleSheet.bottomRow}>
-              <TouchableOpacity style={styleSheet.constantButtons} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Previous</Text></TouchableOpacity>
-              <TouchableOpacity style={styleSheet.constantButtons} onPress = {() => (currentIndex == myScreens.length - 1) ? sendPayload() : setCurrentIndex(currentIndex + 1)}><Text style={styleSheet.buttonText}>{(currentIndex == myScreens.length - 1) ? "Submit" : "Next"}</Text></TouchableOpacity>
+            <View style={styleSheet.bottomRow}>
+                <TouchableOpacity style={styleSheet.constantButtons} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Previous</Text></TouchableOpacity>
+                <TouchableOpacity style={styleSheet.constantButtons} onPress = {() => (currentIndex == myScreens.length - 1) ? sendPayload() : setCurrentIndex(currentIndex + 1)}><Text style={styleSheet.buttonText}>{(currentIndex == myScreens.length - 1) ? "Submit" : "Next"}</Text></TouchableOpacity>
+            </View>
           </View>
 
           {/* Elements with absolute positioning */}
-          <DialogBox/>
+          <DialogBox ref = {myDialog} />
       </View>
-    </View>
   );
   // }
 }
