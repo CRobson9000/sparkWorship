@@ -6,6 +6,10 @@ import Routes from '../Navigation/constants/Routes';
 import { FirebaseButler } from '../../components/classes';
 import ProfileImage from '../../components/profileImage.js';
 
+import { IconButton } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Ionicons';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+
 const screenWidth = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 export default function PSPersonal({ route, navigation }) {
@@ -241,9 +245,17 @@ export default function PSPersonal({ route, navigation }) {
         <View style={styles.MainContainer}>
             <View style={styles.topBorder}>
               <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, alignItems: 'center'}]}>
-                <TouchableOpacity onPress = {() => logFriends()}><Image style={{height: 40, width: 40}} source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity>
+                {/* <TouchableOpacity onPress = {() => logFriends()}><Image style={{height: 40, width: 40}} 
+                source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity> */}
+                <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}
+              icon = "users-outline" style = {{position: "absolute", left: "0%"}}/>
+                <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}
+              icon = "pencil-outline" style = {{position: "absolute", right: "0%"}}/>
                 <Text style={styles.titleText}>My Profile</Text>
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.profileCreation, props)}><Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}></Image></TouchableOpacity>
+                {/* friend list & profile edit icon */}
+                {/* <TouchableOpacity onPress = {() => navigation.navigate(Routes.profileCreation, props)}>
+                  <Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}</Image>
+                  </TouchableOpacity> */}
               </View>
               <View style={styles.row} >
                 <ProfileImage size = "large" userId = {userId} />

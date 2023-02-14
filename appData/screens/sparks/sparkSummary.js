@@ -65,19 +65,19 @@ export default function SparkSummary({ route, navigation }) {
         <View style={[sparkViewStyles.sparkContainer]}>
           <View style={[sparkViewStyles.sparkVerticalContainer]}>
                 <View style={[sparkViewStyles.topLocationContainer]}>
-                    <Text style={{paddingLeft:"2%"}}>Address</Text>
+                    <Text style={{paddingLeft:"0%"}}>Address</Text>
                     <Input start = {inputs.address.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.address.setVal(val)}/>
                 </View>
                 <View style={[sparkViewStyles.locationContainer]}>
-                    <Text style={{paddingLeft:"2%"}}>City</Text>
+                    <Text style={{paddingLeft:"3%"}}>City</Text>
                     <Input start = {inputs.city.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.city.setVal(val)}/>
                 </View>
                 <View style={[sparkViewStyles.locationContainer]}>
-                    <Text style={{paddingLeft:"2%"}}>Zip</Text>
+                    <Text style={{paddingLeft:"3%"}}>Zip</Text>
                     <Input start = {inputs.zip.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.zip.setVal(val)}/>
                 </View>
                 <View style={[sparkViewStyles.locationContainer]}>
-                    <Text style={{paddingLeft:"2%"}}>State</Text>
+                    <Text style={{paddingLeft:"3%"}}>State</Text>
                     <Input start = {inputs.state.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.state.setVal(val)}/>
                 </View>
                 <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => sendPayload()}>
@@ -421,30 +421,44 @@ export default function SparkSummary({ route, navigation }) {
     <View style={styles.MainContainer}>
     <View style={styles.topBorder}>
       <View style={[styles.row2, {justifyContent: 'center', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
-        <IconButton onPress = {() => testRequest()}style = {{position: "absolute", left: "2%"}}icon = "head-check" size = {30}/>
+        {/* REMOVE TESTREQUEST BUTTON AND REPLACE WITH ATTENDSPARK BUTTON */}
+        {/* <IconButton onPress = {() => testRequest()}style = {{position: "absolute", left: "2%"}}icon = "head-check" size = {30}/> */}
         {/* <Text style={styles.titleText}></Text> */}
         <IconButton onPress = {() => attendSpark()}style = {{position: "absolute", left: "85%"}}icon = "checkbox-marked-circle-plus-outline"/>
       </View>
       <View style = {styles.row}>
-        <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>{(MySparkName) ? `${MySparkName}'s Spark` : "My Spark"}</Text>
+        <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175", marginLeft: 39}}>{(MySparkName) ? `${MySparkName}'s Spark` : "My Spark"}</Text>
       </View>
       <View style={styles.row}>
         <ProfileImage size = {"medium"} userId = {null}/>
         <View style={styles.column}>
-          <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13}}>Date and Time</Text>
+          <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13, marginRight: 150}}>Date and Time</Text>
           <View style={styles.row2}>
-            <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
-            <Text style = {{flexWrap: "wrap", width: "70%"}}>{MyAddress} {MyCity}, PA</Text>
+            <Image style={{height: 20, width: 20, marginRight: 20}} source={require('../../../assets/locationpin.png')}></Image>
+            <Text style = {{flexWrap: "wrap", width: "70%", marginRight: 5}}>{MyAddress} {MyCity}, PA</Text>
           </View>
         </View>
       </View>
-    <View style={[styles.row, {marginLeft: 100, marginRight: 100, top: "30%"}]}>
-      <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
-      <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
-      <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
-      <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
-      <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
+      <View style={[styles.row, {marginLeft: 80, marginRight: 50, top: "30%"}]}>
+      <Button
+          // onPress={onPressLearnMore}
+          title="Attend Spark"
+          // color="#841584"
+          accessibilityLabel="Learn more about this purple button"/>
+          <Button
+          // onPress={onPressLearnMore}
+          title="Next"
+          // color="#841584"
+          accessibilityLabel="Learn more about this purple button"/>
     </View>
+     {/* REMOVE AND KEEP ONLY ON PUBLIC PROFILE  */}
+    {/* <View style={[styles.row, {marginLeft: 100, marginRight: 100, top: "30%"}]}>
+      <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
+      <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
+      <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
+      <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
+      <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
+    </View> */}
     </View>
     <View style={styles.content}>
       <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>

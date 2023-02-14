@@ -5,7 +5,7 @@ import {UserDashboard, SparkView, Messaging, PSPersonal, SparkCreation, UserHub}
 import { IconButton } from 'react-native-paper';
 import Routes from './constants/Routes';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 
 const Tab = createBottomTabNavigator();
 
@@ -47,8 +47,11 @@ function BottomTabNavigator( { route, navigation } ) {
           return (
             <View style = {[options.headerStyle]}>
               <Image style={{position: "absolute", height: 60, width: 220}} source={require('../../../assets/logo2.png')}/>
-              <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}icon = "chat-processing" style = {{position: "absolute", right: "5%", color: "black"}}/>
+              {/* <FeatherIcon icon="message-circle" size="24" style = {{position: "absolute", right: "5%"}} /> */}
+              <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}
+              icon = "message-outline" style = {{position: "absolute", right: "5%"}}/>
             </View>
+            // iconName = focused ? 'ios-chatbubble-outline' : 'ios-chatbubble-outline';
           );
         }
       })}
