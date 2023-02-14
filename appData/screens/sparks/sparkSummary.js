@@ -3,7 +3,8 @@ import { enableRipple } from '@syncfusion/ej2-base';
 //import DropDownPicker from 'react-native-dropdown-picker';
 import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import { List, IconButton, ProgressBar } from 'react-native-paper';
+import { IconButton, ProgressBar } from 'react-native-paper';
+import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
 import { stylesSummary } from "../../styles/summary.js";
 import { Input, Slider, DropDown } from '../../components/components';
 import { Observable, TDO, FirebaseButler, PushNotify } from '../../components/classes';
@@ -65,6 +66,7 @@ export default function SparkSummary({ route, navigation }) {
 
   //stay
   const LocationRoute = () => (
+    
     <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
         <View style={[sparkViewStyles.sparkContainer]}>
             <View style={[sparkViewStyles.sparkVerticalContainer]}>
@@ -90,6 +92,7 @@ export default function SparkSummary({ route, navigation }) {
                     <Text style={{paddingLeft:"2%"}}>When At Address</Text>
                     <Input inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]}/>
                 </View>
+                {/** Solves issue... have to check on other phones */}
                 <View style={[sparkViewStyles.locationContainer]}>
                    {/** Blank view for formatting */}
                     <Text style={{color:"white"}}>a</Text>
@@ -108,10 +111,36 @@ export default function SparkSummary({ route, navigation }) {
       
     const SetListRoute = () => (
       <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
-      <View style={{alignItems: "center", justifyContent: "center"}}>
-        <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Set List</Text>
-      </View>
-        <List.Section style={{marginTop: "6%"}}>
+        <View style={{alignItems: "center", justifyContent: "center"}}>
+          <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Set List</Text>
+        </View>
+        <View style={{alignItems: "center", justifyContent: "center"}}>
+          <Collapse style={{width:"100%", paddingTop: "2%"}}>
+            <CollapseHeader style={{alignItems:"center", justifyContent:"center", backgroundColor:"#F2905B", width: "100%"}}>
+              <Text style={{color:"white", fontSize:32, paddingVertical:"2%"}}>FORWARD</Text>
+            </CollapseHeader>
+            <CollapseBody style={{alignItems:"center", borderBottomColor: "black", borderBottomWidth: 2}}>
+                <View style={{alignItems:"center"}}>
+                    <Text style={{fontSize:32, paddingVertical:"2%"}}>Aaron Bennet</Text>
+                    <Text style={{fontSize:32, paddingVertical:"2%"}}>Claire Barclay</Text>
+                    <Text style={{fontSize:32, paddingVertical:"2%"}}>Kelso Brittany</Text>
+                    <Text style={{fontSize:32, paddingVertical:"3%"}}>+</Text>
+                </View>
+            </CollapseBody>
+          </Collapse>
+          <TouchableOpacity>
+            <Text style={{fontSize:48}}>+</Text>
+          </TouchableOpacity>
+        </View>
+
+
+    </ScrollView>
+      );
+
+    /**
+     * Old SetList Code
+     * 
+     *   <List.Section style={{marginTop: "6%"}}>
           <List.Accordion style={styles.accordian} title="Song 1">
             <List.Subheader style={styles.accordionSubheading}>Lyrics</List.Subheader>
             <List.Subheader style={styles.accordionSubheading}>Chord Charts</List.Subheader>
@@ -128,8 +157,7 @@ export default function SparkSummary({ route, navigation }) {
             <List.Subheader style={styles.accordionSubheading}>Notes</List.Subheader>
           </List.Accordion>
         </List.Section>
-    </ScrollView>
-      );
+     */
 
     const TimesRoute = () => (
       <ScrollView>
