@@ -67,7 +67,9 @@ export default function SparkSummary({ route, navigation }) {
   const LocationRoute = () => (
     <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
         <View style={[sparkViewStyles.sparkContainer]}>
-          <View style={[sparkViewStyles.sparkVerticalContainer]}>
+            <View style={[sparkViewStyles.sparkVerticalContainer]}>
+              <ScrollView style={{width:"100%"}}>
+              <View style={[sparkViewStyles.sparkVerticalContainer]}>
                 <View style={[sparkViewStyles.topLocationContainer]}>
                     <Text style={{paddingLeft:"2%"}}>Address</Text>
                     <Input start = {inputs.address.getVal()} inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.address.setVal(val)}/>
@@ -84,9 +86,23 @@ export default function SparkSummary({ route, navigation }) {
                     <Text style={{paddingLeft:"2%"}}>State</Text>
                     <Input start = {inputs.state.getVal()} inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.state.setVal(val)}/>
                 </View>
-                  
+                <View style={[sparkViewStyles.bigLocationContainer]}>
+                    <Text style={{paddingLeft:"2%"}}>When At Address</Text>
+                    <Input inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]}/>
+                </View>
+                <View style={[sparkViewStyles.locationContainer]}>
+                   {/** Blank view for formatting */}
+                    <Text style={{color:"white"}}>a</Text>
+                    <Input inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]}/>
+                </View>
+                <View style={[sparkViewStyles.bigLocationContainer]}>
+                    <Text style={{paddingLeft:"2%"}}>When At Address</Text>
+                    <Input inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]}/>
+                </View>
+                </View>
+              </ScrollView>
+              </View>
           </View>
-      </View>
     </ScrollView>
     );
       
@@ -533,7 +549,13 @@ const sparkViewStyles = StyleSheet.create({
   {
       width:"90%",
       flexDirection:"column", 
-      height:"10%",
+      height:"9%",
+      marginTop: "12%"
+  },
+  bigLocationContainer:{
+      width:"90%",
+      flexDirection:"column", 
+      height:"20%",
       marginTop: "12%"
   },
   timeContainer:{
