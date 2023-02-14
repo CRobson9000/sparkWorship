@@ -182,7 +182,7 @@ const styleSheet = StyleSheet.create({
     text1: {
       paddingBottom: "2%",
       fontSize: 15,
-      left: "9%",
+      left: "5%",
     },
   
     // Label for gender and birthday
