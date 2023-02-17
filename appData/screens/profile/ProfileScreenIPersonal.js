@@ -7,6 +7,10 @@ import { FirebaseButler } from '../../components/classes';
 import ProfileImage from '../../components/profileImage.js';
 import { profileStyles } from "../../styles/profileViewStyles.js";
 
+import { IconButton } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Ionicons';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+
 const screenWidth = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 export default function PSPersonal({ route, navigation }) {
