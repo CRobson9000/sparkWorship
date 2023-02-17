@@ -1,27 +1,33 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const screenHeight = Dimensions.get('window').height;
 
 const styleSheet = StyleSheet.create({
     
     MainContainer: {
-      backgroundColor: "white",
+      position: "absolute",
+      width: "100%", 
       height: "100%",
+      backgroundColor: "white",
+      top: 0
     },
 
     content: {
-      height: "50%",
+      height: "100%",
       width: "100%"
     },
 
     topBorder: {
+      position: "absolute",
+      top: 0,
       height: "25%",
       width: "100%",
+      justifyContent: "center",
       backgroundColor: "rgb(219, 233, 236)",
-      marginBottom: "5%"
     },
 
     // Spark Creation title in top section
     titleText: {
-      marginTop: "13%",
       padding: "5%",
       textAlign: "center",
       fontSize: 20
@@ -54,12 +60,13 @@ const styleSheet = StyleSheet.create({
 
     // Constant area that holds the "Previous" and "Next" Buttons
     bottomRow: {
+      position: "absolute",
       flexDirection: "row",
-      alignSelf: 'center',
-      justifyContent: "space-between",
+      alignItems: 'center',
+      justifyContent: "space-evenly",
       height: "10%",
-      width: '85%',
-      marginTop: "10%"
+      width: '100%',
+      bottom: 0
     },
 
     // Text for all buttons
@@ -73,9 +80,9 @@ const styleSheet = StyleSheet.create({
       backgroundColor: "rgb(0, 97, 117)",
       justifyContent: "center",
       alignItems: "center",
-      height: "45%",
-      width: "45%",
-      top: "10%",
+      height: "55%",
+      width: "35%",
+      // top: "10%",
       borderRadius: 10
     },
     
@@ -134,7 +141,7 @@ const styleSheet = StyleSheet.create({
 
     boxTwo: {
         backgroundColor: "rgb(0, 97, 117)",
-        height: "15%",
+        height: "20%",
         width: "85%",
         flexDirection: "row",
         justifyContent: "space-evenly",
@@ -182,7 +189,7 @@ const styleSheet = StyleSheet.create({
       alignSelf: "center",
       marginTop: "3%",
       backgroundColor: "rgb(0, 97, 117)",
-      height: "15%",
+      height: "20%",
       width: "85%",
       borderRadius: 10
     },

@@ -2,8 +2,8 @@ import React, { Component, useRef } from 'react';
 import { TextInput, View, TouchableOpacity } from 'react-native';
 import { StyleSheet, Text, FlatList } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import { Menu, IconButton, Snackbar } from 'react-native-paper';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { Menu, IconButton, Snackbar, Dialog, Provider, Portal } from 'react-native-paper';
+import { KeyboardAwareScrollView, KeyboardAwareFlatList, KeyboardAwareListView } from 'react-native-keyboard-aware-scroll-view'
 
 class Input extends Component{
       
@@ -35,6 +35,7 @@ class Input extends Component{
         onChangeText={(newText) => {this.textChanged(newText)}}
         value={this.state.text}
         placeholder={this.props.placeHolderText}
+        multiline={this.props.multiline || false}
         secureTextEntry={this.props.secure}
       />
     );
@@ -189,26 +190,105 @@ class KeyboardView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      enableScroll: false
+      height: "100%"
     }
+    this.backgroundColor = props.backgroundColor || null;
     this.style = props.style
+    this.content = props.content || null;
+    this.flatList = props.flatList;
   }
 
   render() {
-    return (
-      <KeyboardAwareScrollView
-        bounces = {false}
-        scrollEnabled = {true}
-        contentContainerStyle={{...this.style, width: "100%", backgroundColor: "white"}}
-        onKeyboardDidHide = {() => {
-          this.setState({enableScroll: false})
-        }}
-        onKeyboardDidShow = {() => this.setState({enableScroll: true})}        
-      >
-      {this.props.children}
-      </KeyboardAwareScrollView>
-    )
+    if (!this.flatList) {
+      return (
+        <KeyboardAwareScrollView
+          contentContainerStyle={{...this.style, height: this.state.height, width: "100%", backgroundColor: this.backgroundColor || "white"}}
+          onKeyboardDidHide = {() => {
+            this.setState({height: "100%"})
+          }}
+          onKeyboardDidShow = {() => 
+            this.setState({height: null})
+          }        
+        >
+          {this.props.children}
+        </KeyboardAwareScrollView>
+      )
+    }
+    else {
+      return (
+        <KeyboardAwareFlatList
+          containerStyle = {{...this.style, height: this.state.height, width: "100%", backgroundColor: "white"}}
+          onKeyboardDidHide = {() => {
+            this.setState({height: "100%"})
+          }}
+          onKeyboardDidShow = {() => 
+            this.setState({height: null})
+          }
+          data = {[this.props.children]}
+          renderItem = {(object) => {
+            return(
+              object.item
+            );
+          }}
+        />
+      )
+    }
   }
 }
 
-export { Input, Slider, DropDown, Toast, KeyboardView }
+//dialog box content code
+class DialogBox extends Component {
+  constructor(props) {
+    super(props);
+
+    // this.cotent = props.content;
+    this.state = {
+      visible: false,
+      height: 0,
+      width: 0,
+      title: null,
+      content: null
+    }
+  }
+
+  setupDialog(height, width, title, content) {
+    this.setState({height, width, title, content})
+  }
+
+  showDialog() {
+    this.setState({visible: true});
+  }
+
+  hideDialog() {
+    this.setState({visible: false});
+  }
+
+  // <Dialog style = {{backgroundColor: "rgb(219, 233, 236)", position: "absolute", height: "105%", width: "100%", bottom: "2%"}} visible={this.state.visible} onDismiss={this.hideDialog}>
+//       <Dialog.Title style= {{alignSelf: "center", color: "black", fontSize: 20}}>Add Instrument</Dialog.Title>
+//       <Dialog.Content>
+//         <Text> This is my dialog! </Text>
+//       </Dialog.Content>
+//     </Dialog>
+
+  render() {
+    return (
+      <View style = {{
+        position: "absolute", 
+        height: (this.state.visible) ? `${this.state.height}%` : 0, 
+        width: (this.state.visible) ? `${this.state.width}%` : 0, 
+        top: `${(100 - this.state.height) / 2}%`, 
+        left: `${(100 - this.state.width) / 2}%`, 
+        borderRadius: 20,
+        backgroundColor: "rgb(219, 233, 236)"
+      }}>
+        <View style={{height: "10%", width: "100%", justifyContent: "center", alignItems: "center"}}>
+          <Text style={{color: "black", fontSize: 25}}> {this.state.title} </Text>
+        </View>
+        <View style = {{height: "85%", width: "100%"}}>          
+          {this.state.content}
+        </View>
+      </View>  
+    );
+  }
+}
+export { Input, Slider, DropDown, Toast, KeyboardView, DialogBox }
