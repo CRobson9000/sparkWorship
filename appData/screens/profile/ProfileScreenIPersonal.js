@@ -268,29 +268,6 @@ export default function PSPersonal({ route, navigation }) {
     }, [])
 
       return (
-<<<<<<< HEAD
-        <View style={styles.MainContainer}>
-            <View style={styles.topBorder}>
-              <View style={[styles.row2, {justifyContent: 'space-between', marginLeft: 20, marginRight: 20, alignItems: 'center'}]}>
-                {/* <TouchableOpacity onPress = {() => logFriends()}><Image style={{height: 40, width: 40}} 
-                source={require('../../../assets/friendicon.png')}></Image></TouchableOpacity> */}
-                <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}
-              icon = "users-outline" style = {{position: "absolute", left: "0%"}}/>
-                <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}
-              icon = "pencil-outline" style = {{position: "absolute", right: "0%"}}/>
-                <Text style={styles.titleText}>My Profile</Text>
-                {/* friend list & profile edit icon */}
-                {/* <TouchableOpacity onPress = {() => navigation.navigate(Routes.profileCreation, props)}>
-                  <Image style={{height: 40, width: 40}} source={require('../../../assets/editprofileicon.png')}</Image>
-                  </TouchableOpacity> */}
-              </View>
-              <View style={styles.row} >
-                <ProfileImage size = "large" userId = {userId} />
-                <View style={styles.column}>
-                  <Text style={{fontSize: height/35, fontWeight: '500', marginBottom: 10}}>{MyName}</Text>
-                  <Text style={{fontSize: height/45, fontWeight: '400', marginBottom: 13}}>Instrumentalist</Text>
-                  <View style={styles.row2}>
-=======
         <View style={profileStyles.MainContainer}>
             <View style={profileStyles.topBorder}>
                 <View style={profileStyles.column1}>
@@ -299,7 +276,6 @@ export default function PSPersonal({ route, navigation }) {
                   </View>
                   <Text style={profileStyles.nameText}>{MyName}</Text>
                   <View style={[profileStyles.row2, {alignItems: "center", alignSelf: "center"}]}>
->>>>>>> staging
                     <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
                     <Text>   {MyLocation}</Text>
                   </View>
