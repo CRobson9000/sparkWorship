@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableHighlight, Text, View, TextInput, FlatList, Dimensions } from 'react-native';
 import React, {useRef, useEffect} from 'react';
-import { Input, Slider } from '../../components/components';
+import { Input, Slider, KeyboardView } from '../../components/components';
 import { FirebaseButler, Observable, TDO } from '../../components/classes';
 
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
@@ -168,12 +168,14 @@ export default function Message({ route, navigation }) {
             <Text style={styles.nameText}>{peopleString}</Text>
         </View>
         <View style={styles.content}>
-            <FlatList 
-              style = {styles.flatList}
-              data = {messages}
-              renderItem = {renderMessage}
-              inverted = {true}
-            />
+          <KeyboardView flatList = {true}>
+              <FlatList 
+                style = {styles.flatList}
+                data = {messages}
+                renderItem = {renderMessage}
+                inverted = {true}
+              />
+          </KeyboardView>
         </View>
         <View style={styles.messagingContainer}>
             <TextInput 
@@ -181,6 +183,7 @@ export default function Message({ route, navigation }) {
               value = {currentMessage}
               style = {{flex: 1, padding: "2%", textAlign: "left", flexWrap: "wrap"}}
               placeholder = {"type your message..."}
+              multiline = {true}
             />
             <TouchableHighlight style = {styles.button} onPress = {() => sendMessage()}>
               <Text style={styles.sendText}> Send </Text>
@@ -197,22 +200,30 @@ const styles = StyleSheet.create({
     },
 
     topBorder: {
+        position: "absolute",
+        top: 0,
         height: "15%",
+        width: "100%",
         backgroundColor: "#DBE9EC",
     },
 
     content: {
-        height: "76%"
+        width: "100%",
+        height: "70%",
+        position: "absolute",
+        top: "15%"
     },
 
     messagingContainer: {
-        height: height/9.5,
+        height: "15%",
         width: "100%",
         backgroundColor: "#DBE9EC",
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        padding: "4%"
+        padding: "4%",
+        position: "absolute",
+        bottom: 0
     },
 
     nameText: {

@@ -4,6 +4,7 @@ import Routes from '../Navigation/constants/Routes.js';
 import ProfileImage from '../../components/profileImage.js';
 import { FirebaseButler } from '../../components/classes';
 import { IconButton } from 'react-native-paper';
+import { KeyboardView } from '../../components/components.js'
 
 export default function ChatList({ route, navigation }){
     // Set the context
@@ -90,8 +91,7 @@ export default function ChatList({ route, navigation }){
                 <Image style={styles.logo} source={require('../../../assets/logo2.png')}/>
             </View>
 
-            <View style={styles.content}>
-
+            <KeyboardView flatList = {true} style={styles.content}>
                 <View style={styles.searchBar}>
                     <View style={styles.row2}>
                         <Image style={styles.searchIcon} source={require('../../../assets/searchIcon.png')}/>
@@ -100,22 +100,11 @@ export default function ChatList({ route, navigation }){
                 </View>
 
                 <FlatList 
-                    style = {{flex: 1}}
+                    style = {{ height: "100%" }}
                     data = {conversations}
                     renderItem = {renderConversation}
                 />                
-            </View>
-
-            {/* <IconButton 
-                icon = {"plus-circle"}
-                size = { 50 }
-                style = {styles.addMessage}
-                onPress = {() => navigation.navigate(Routes.messaging, {...props, peopleLookup: {oDiZMc2STiPpGUEJth0AVc6UIwl2: "Attender Joe"}, peopleString: "Attender Joe"})}
-            /> */}
-
-            {/* <View style={styles.navigation}>
-                <Image style={styles.navigationBar} source={require('../../assets/navigation.png')}/>
-            </View> */}
+            </KeyboardView>
         </View>
     )
 }
@@ -124,9 +113,10 @@ export default function ChatList({ route, navigation }){
 const styles = StyleSheet.create({
 
     MainContainer: {
-        top: 0,
         backgroundColor: "white",
-        flex: 1,
+        height: "100%",
+        width: "100%",
+        alignItems: "center"
     },
 
     topBorder: {
@@ -139,10 +129,10 @@ const styles = StyleSheet.create({
     },
 
     content: {
-        alignItems: "flex-start",
-        marginLeft: "5%",
+        alignItems: "center",
         backgroundColor: "white",
-        height: "75%",
+        paddingBottom: "5%",
+        height: "85%",
         width: "100%",
         justifyContent: 'center'
     },

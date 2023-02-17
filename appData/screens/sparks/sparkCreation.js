@@ -5,7 +5,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 
 import { styleSheet } from "../../styles/sparkCreationStyles";
 
-import { Input, Slider } from '../../components/components';
+import { Input, Slider, KeyboardView } from '../../components/components';
 import { Observable, TDO } from '../../components/classes';
 import { getDatabase, ref, set, get, push } from 'firebase/database';
 
@@ -227,7 +227,7 @@ export default function SparkCreation({ route, navigation }) {
         }, [globalUserState])
 
         return(
-            <View style={styleSheet.content}>
+            <KeyboardView style={styleSheet.content}>
                 <Text style={styleSheet.stageText}>Location</Text>
                 <Text style={styleSheet.text1}>Street Address</Text>
                 <Input start = {inputs?.address?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.address.setVal(val)}/>
@@ -255,14 +255,14 @@ export default function SparkCreation({ route, navigation }) {
                     </View>
                 </View>
                 
-            </View>
+            </KeyboardView>
         )
     }
 
     // Time Entry
     const Screen2 = () => {
         return (
-            <View style={[styleSheet.content]}>
+            <KeyboardView style={styleSheet.content}>
                 <Text style={styleSheet.stageText}>Date and Time</Text>
                 <Text style={[styleSheet.text1]}>Spark Date</Text>
                 <View style={styleSheet.timeDateRow}>
@@ -318,7 +318,7 @@ export default function SparkCreation({ route, navigation }) {
                         <Input placeHolderText={"PM"} start = {inputs.publishedAmPM.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.publishedAmPM.setVal(val)}/>
                     </View>
                 </View>
-            </View>
+            </KeyboardView>
         );
     } 
 
@@ -396,7 +396,7 @@ export default function SparkCreation({ route, navigation }) {
 
         //front end screen
         return (
-            <View style={[styleSheet.content]}>
+            <KeyboardView style={styleSheet.content} flatList = {true}>
                 <Text style={styleSheet.stageText}>Roles</Text>
                 <View style={[styleSheet.roleTopBox, styleSheet.boxTwo]}>
                     <Dropdown
@@ -424,14 +424,14 @@ export default function SparkCreation({ route, navigation }) {
                         style = {{height: "100%", width: "100%", marginTop: "3%"}}
                         renderItem = {renderItem}/>
                 </View> 
-            </View>
+            </KeyboardView>
         );
     }
 
     // Friend Entry
     const Screen4 = () => {
         return (
-            <View style={styleSheet.content}>
+            <KeyboardView style={styleSheet.content} flatList = {true}>
                 <Text style={styleSheet.stageText}>Volunteers</Text>
                 <View style={styleSheet.volunteerTopBox}>
                     <TextInput placeholder='Enter Volunteer Name' placeholderTextColor="white" style={{fontSize: 15}}></TextInput>
@@ -452,7 +452,7 @@ export default function SparkCreation({ route, navigation }) {
                     <Text style={[styleSheet.boxText]}>Friend Name</Text>
                     <ProfileImage style = {{marginRight: "5%"}} size = {"small"} userId = {null}/>
                 </View>
-            </View>
+            </KeyboardView>
         );
     }
 
@@ -493,19 +493,21 @@ export default function SparkCreation({ route, navigation }) {
     // Front End Code
     //------------------------------
     return(
-        <View style={styleSheet.MainContainer}>
-            <View style={styleSheet.topBorder}>
-                <Text style={styleSheet.titleText}>Spark Creation</Text>
-                <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2, height: 20, borderRadius: 10, marginTop: height/40, alignSelf: "center"}} progress={progress}/>
-            </View>
-            <Slider currentIndex = {currentIndex} screens = {myScreens} />
-
-            <View style={[styleSheet.bottomRow]}>
-                <TouchableOpacity style={styleSheet.constantButtons} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Previous</Text></TouchableOpacity>
-                <TouchableOpacity style={styleSheet.constantButtons} onPress = {() => (currentIndex == myScreens.length - 1) ? sendPayload() : setCurrentIndex(currentIndex + 1)}><Text style={styleSheet.buttonText}>{(currentIndex == myScreens.length - 1) ? "Submit" : "Next"}</Text></TouchableOpacity>
-            </View>
-        </View>  
-
+        // <KeyboardView>
+            <View style={styleSheet.MainContainer}>
+                <View style={styleSheet.topBorder}>
+                    <Text style={styleSheet.titleText}>Spark Creation</Text>
+                    <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2, height: 20, borderRadius: 10, marginTop: "5%", alignSelf: "center"}} progress={progress}/>
+                </View>
+                <View style = {{position: "absolute", paddingTop: "10%", top: "25%", height: "65%", width: "100%", backgroundColor: "white", justifyContent: "center"}}>
+                    <Slider currentIndex = {currentIndex} screens = {myScreens} />
+                </View>
+                <View style={[styleSheet.bottomRow]}>
+                    <TouchableOpacity style={styleSheet.constantButtons} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Previous</Text></TouchableOpacity>
+                    <TouchableOpacity style={styleSheet.constantButtons} onPress = {() => (currentIndex == myScreens.length - 1) ? sendPayload() : setCurrentIndex(currentIndex + 1)}><Text style={styleSheet.buttonText}>{(currentIndex == myScreens.length - 1) ? "Submit" : "Next"}</Text></TouchableOpacity>
+                </View>
+            </View>  
+        // </KeyboardView>
     );
 }
 
