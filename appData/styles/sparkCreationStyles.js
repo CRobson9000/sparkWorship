@@ -144,7 +144,7 @@ const styleSheet = StyleSheet.create({
 
     boxTwo: {
         backgroundColor: "rgb(0, 97, 117)",
-        height: "20%",
+        height: screenHeight/12,
         width: "85%",
         flexDirection: "row",
         justifyContent: "space-evenly",
