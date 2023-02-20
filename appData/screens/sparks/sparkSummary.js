@@ -1,12 +1,10 @@
-import React, {useEffect} from 'react';
-import { enableRipple } from '@syncfusion/ej2-base';
-//import DropDownPicker from 'react-native-dropdown-picker';
-import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Dropdown } from 'react-native-element-dropdown';
+import { StyleSheet, View, Text, TextInput, Image, Button, ScrollView, TouchableOpacity, TouchableHighlight, Dimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { IconButton, ProgressBar } from 'react-native-paper';
 import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
-import { stylesSummary } from "../../styles/summary.js";
-import { Input, Slider, DropDown } from '../../components/components';
+import { DialogBox, KeyboardView } from '../../components/components';
 import { Observable, TDO, FirebaseButler, PushNotify } from '../../components/classes';
 import { stylesPortrait } from "../../styles/portrait";
 import Routes from "../Navigation/constants/Routes";
@@ -14,7 +12,16 @@ import ProfileImage from "../../components/profileImage.js";
 import { styleSheet } from "../../styles/newSparkCreationStyles.js";
 import Icon from 'react-native-vector-icons/Ionicons';
 
+// photo upload imports
+import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
+import * as DocumentPicker from 'expo-document-picker';
+import * as Linking from 'expo-linking';
+
+// had to make a weird file to "redefine" ref since it already exists from firebase/database
+import { storageRef } from '../../../config/additionalMethods'
+
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
+import { FlatList } from 'react-native-gesture-handler';
 
 const screenWidth = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -26,117 +33,554 @@ export default function SparkSummary({ route, navigation }) {
   let currentSparkId = props?.currentSparkId || "-NHSPNV5tXpWmVtr6M3h";
   let currentSparkIdAttend = "-NFQzJtPbk7zfcY0Iy2l";
 
-  let inputs = {
-    address: new Observable("", () => updatePayload(inputs.address.getVal(), "address")),
-    city: new Observable("", () => updatePayload(inputs.city.getVal(), "city")),
-    state: new Observable("", () => updatePayload(inputs.state.getVal(), "state")),
-    zip: new Observable("", () => updatePayload(inputs.zip.getVal(), "zip")),
+  const update = useRef({});
 
-    publishedDay: new Observable("", () => updatePayload(inputs.publishedDay.getVal(), "publishedDay")),
-    publishedMonth: new Observable("", () => updatePayload(inputs.publishedMonth.getVal(), "publishedMonth")),
-    publishedYear: new Observable("", () => updatePayload(inputs.publishedYear.getVal(), "publishedYear")),
-    publishedHours: new Observable("", () => updatePayload(inputs.publishedHours.getVal(), "publishedHours")),
-    publishedMinutes: new Observable("", () => updatePayload(inputs.publishedMinutes.getVal(), "publishedMinutes")),
-    publishedAmPM: new Observable("", () => updatePayload(inputs.publishedAmPM.getVal(), "publishedAmPM")),
+  // -------------------------
+  // global variables for tabs
+  // -------------------------
+  // Location Tab
+  const globalAddress = useRef("12345678");
+  const globalZip = useRef("");
+  const globalCity = useRef("");
+  const globalState = useRef("");
+  const globalAdditionalDirections = useRef("");
 
-    rehearsalDay: new Observable("", () => updatePayload(inputs.rehearsalDay.getVal(), "rehearsalDay")),
-    rehearsalMonth: new Observable("", () => updatePayload(inputs.rehearsalMonth.getVal(), "rehearsalMonth")),
-    rehearsalYear: new Observable("", () => updatePayload(inputs.rehearsalYear.getVal(), "rehearsalYear")),
-    rehearsalHours: new Observable("", () => updatePayload(inputs.rehearsalHours.getVal(), "rehearsalHours")),
-    rehearsalMinutes: new Observable("", () => updatePayload(inputs.rehearsalMinutes.getVal(), "rehearsalMinutes")),
-    rehearsalAmPM: new Observable("", () => updatePayload(inputs.rehearsalAmPM.getVal(), "rehearsalAmPM")),
+  const db = getDatabase();
+  const storage = getStorage();
 
-    sparkDay: new Observable("", () => updatePayload(inputs.sparkDay.getVal(), "sparkDay")),
-    sparkMonth: new Observable("", () => updatePayload(inputs.sparkMonth.getVal(), "sparkMonth")),
-    sparkYear: new Observable("", () => updatePayload(inputs.sparkYear.getVal(), "sparkYear")),
-    sparkHours: new Observable("", () => updatePayload(inputs.sparkHours.getVal(), "sparkHours")),
-    sparkMinutes: new Observable("", () => updatePayload(inputs.sparkMinutes.getVal(), "sparkMinutes")),
-    sparkAmPM: new Observable("", () => updatePayload(inputs.sparkAmPM.getVal(), "sparkAmPM"))
-  };
-  const updatePayload = (updateVal, updateName) =>
-  {
-      update[updateName] = updateVal;
-  };
+  // Set List Tab
+  const globalSongs = useRef([]);
 
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState(null);
-  const [items, setItems] = React.useState([
-    {label: 'Apple', value: 'apple'},
-    {label: 'Banana', value: 'banana'}
-  ]);
+  // Helper Functions for tab code
+  const renderDropDownItem = (item) => {
+    return (
+      <View style={{padding: "5%", justifyContent: "center", alignItems: "center", flex: 1}}>
+        <Text> {item} </Text>
+      </View>
+    )
+  }
 
-  //stay
-  const LocationRoute = () => (
+  // Dialog Boxes
+  const addSongDialog = useRef(null);
+  const addAttachmentDialog = useRef(null);
+  
+  // Dialog box code
+  const [disable, setDisable] = React.useState("auto");
+  const [contentOpacity, setContentOpacity] = React.useState(1);
+  function openDialog(dialog, options) {
+    setDisable("none");
+    setContentOpacity(0.2);
+    if (options) dialog.setupDialog(options.height, options.width, options.title, options.content);
+    dialog.showDialog();
+  }
+  function closeDialog(dialog) {
+    setDisable("auto");
+    setContentOpacity(1);
+    dialog.hideDialog();
+  }
+
+  async function saveFile(file, songKey, attachmentId) {
+    // if we've gotten a file, convert it to a blob so it can be stored in cloud storage
+    if (file) {
+      const filePromise = new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          resolve(xhr.response);
+        };
+        xhr.onerror = function (e) {
+          console.log(e);
+          reject(new TypeError("Network request failed"));
+        };
+        xhr.responseType = "blob";
+        xhr.open("GET", file, true);
+        xhr.send(null);
+      });
+
+      filePromise.then((fileBlob) => {
+
+        // ----------------------------------------------------------------
+        // Store result in Cloud Storage and store a reference in firebase
+        // ----------------------------------------------------------------
+
+        if (fileBlob) {
+          // Get main storage
+          const storage = getStorage();
     
-    <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
-        <View style={[sparkViewStyles.sparkContainer]}>
-            <View style={[sparkViewStyles.sparkVerticalContainer]}>
-              <ScrollView style={{width:"100%"}}>
-              <View style={[sparkViewStyles.sparkVerticalContainer]}>
-                <View style={[sparkViewStyles.topLocationContainer]}>
-                    <Text style={{paddingLeft:"2%"}}>Address</Text>
-                    <Input start = {inputs.address.getVal()} inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.address.setVal(val)}/>
-                </View>
-                <View style={[sparkViewStyles.locationContainer]}>
-                    <Text style={{paddingLeft:"2%"}}>City</Text>
-                    <Input start = {inputs.city.getVal()} inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.city.setVal(val)}/>
-                </View>
-                <View style={[sparkViewStyles.locationContainer]}>
-                    <Text style={{paddingLeft:"2%"}}>Zip</Text>
-                    <Input start = {inputs.zip.getVal()} inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.zip.setVal(val)}/>
-                </View>
-                <View style={[sparkViewStyles.locationContainer]}>
-                    <Text style={{paddingLeft:"2%"}}>State</Text>
-                    <Input start = {inputs.state.getVal()} inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.state.setVal(val)}/>
-                </View>
-                <View style={[sparkViewStyles.bigLocationContainer]}>
-                    <Text style={{paddingLeft:"2%"}}>When At Address</Text>
-                    <Input inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]}/>
-                </View>
-                {/** Solves issue... have to check on other phones */}
-                <View style={[sparkViewStyles.locationContainer]}>
-                   {/** Blank view for formatting */}
-                    <Text style={{color:"white"}}>a</Text>
-                    <Input inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]}/>
-                </View>
-                <View style={[sparkViewStyles.bigLocationContainer]}>
-                    <Text style={{paddingLeft:"2%"}}>When At Address</Text>
-                    <Input inputStyle = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]}/>
-                </View>
-                </View>
-              </ScrollView>
-              </View>
-          </View>
-    </ScrollView>
-    );
-      
-    const SetListRoute = () => (
+          // Points to 'sparkData/<currentID>'
+          const sparkFileRef = storageRef(storage, `sparkData/${currentSparkId}/${songKey}/${attachmentId}`);
+          uploadBytes(sparkFileRef, fileBlob).then((finalSnap) => {
+            console.log("File upload was successful!");
+          })
+          .catch((error) => {
+            // Upload to firebase failed so call an error or message
+            console.log("failed to upload file blob to firebase");
+          });
+        }
+      })
+      .catch((error) => {
+        // Conversion to blob failed so throw an error or message
+        console.log("failed to convert file to blob");
+      }) 
+    }
+    else {
+      console.log("No file to upload");
+    }
+  }
+
+  async function saveSpark() {
+    let updateVals = Object.values(update.current);
+    for (let i = 0; i < updateVals.length; i++) {
+      // update data in firebase realtime database
+      let overallKey = Object.keys(update.current)[i];
+      let values = updateVals[i];
+
+      if (overallKey == "location") {
+        for (let j = 0; j < Object.values(values); j++) {
+          let specificKey = Object.keys(values)[j];
+          let specificValue = Object.values(values)[j];
+          const itemRef = ref(db, `Sparks/${currentSparkId}/info/${overallKey}/${specificKey}`);
+          await set(itemRef, specificValue);
+        }
+      }
+
+      if (overallKey == "songs") {
+        const itemRef = ref(db, `Sparks/${currentSparkId}/info/${overallKey}`);
+        await set(itemRef, values);
+
+        // loop through the songs and add the files to cloud storage
+        for (let song of values) {
+          let attachments = song.attachments;
+          for (let attachment of attachments) {
+            if (attachment.attachmentType == "file") await saveFile(attachment.value, attachment.songKey, attachment.attachmentId)
+          }
+        }
+      }
+    }
+  }
+
+  async function getSparkData() {
+    let sparkData = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/info`);
+    // console.log("Spark Data", sparkData);
+    let sparkArray = Object.values(sparkData);
+    for (let i = 0; i < sparkArray.length; i++) {
+      let key = Object.keys(sparkData)[i];
+      let value = sparkArray[i];
+
+      if (key == "location") {
+        globalAddress.current = value?.address || "";
+        globalCity.current = value?.city || "";
+        globalAdditionalDirections.current = value?.additionalDirections || "";
+        globalState.current = value?.state || "";
+        globalZip.current = value?.zip || "";
+      }
+      else if (key == "songs") {
+        globalSongs.current = value;  
+      }
+    }
+  }
+
+  useEffect(() => {
+    getSparkData();
+  }, [])
+
+  const LocationRoute = () => {
+    const [address, setAddress] = React.useState("");
+    const [city, setCity] = React.useState("");
+    const [state, setState] = React.useState("");
+    const [zip, setZip] = React.useState("");
+    const [additionalDirections, setAdditionalDirections] = React.useState("");
+
+    let states = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
+
+    // keep the global copy of each variable up to date with the local copy.
+    useEffect(() => {
+      if (address != "") {
+        globalAddress.current = address
+      }
+    }, [address])
+    useEffect(() => {
+      if (globalCity != "") {
+        globalCity.current = city
+      }
+    }, [city])
+    useEffect(() => {
+      if (globalState != "") {
+        globalState.current = state
+      }
+    }, [state])
+    useEffect(() => {
+      if (globalZip != "") {
+        globalZip.current = zip
+      }
+    }, [zip])
+    useEffect(() => {
+      if (globalAdditionalDirections != "") {
+        globalAdditionalDirections.current = additionalDirections
+      }
+    }, [additionalDirections])
+
+    useEffect(() => {
+      setAddress(globalAddress.current);
+    }, [globalAddress])
+
+    useEffect(() => {
+      setState(globalState.current);
+    }, [globalState])
+
+    useEffect(() => {
+      setZip(globalZip.current);
+    }, [globalZip])
+
+    useEffect(() => {
+      setZip(globalCity.current);
+    }, [globalCity])
+
+    useEffect(() => {
+      setAdditionalDirections(globalAdditionalDirections.current);
+    }, [globalAddress])
+
+    return (
       <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
-        <View style={{alignItems: "center", justifyContent: "center"}}>
-          <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Set List</Text>
-        </View>
-        <View style={{alignItems: "center", justifyContent: "center"}}>
-          <Collapse style={{width:"100%", paddingTop: "2%"}}>
-            <CollapseHeader style={{alignItems:"center", justifyContent:"center", backgroundColor:"#F2905B", width: "100%"}}>
-              <Text style={{color:"white", fontSize:32, paddingVertical:"2%"}}>FORWARD</Text>
-            </CollapseHeader>
-            <CollapseBody style={{alignItems:"center", borderBottomColor: "black", borderBottomWidth: 2}}>
-                <View style={{alignItems:"center"}}>
-                    <Text style={{fontSize:32, paddingVertical:"2%"}}>Aaron Bennet</Text>
-                    <Text style={{fontSize:32, paddingVertical:"2%"}}>Claire Barclay</Text>
-                    <Text style={{fontSize:32, paddingVertical:"2%"}}>Kelso Brittany</Text>
-                    <Text style={{fontSize:32, paddingVertical:"3%"}}>+</Text>
+          <View style={[sparkViewStyles.sparkContainer]}>
+              <View style={[sparkViewStyles.sparkVerticalContainer]}>
+                <ScrollView contentContainerStyle = {{paddingBottom: "20%"}} style={{width:"100%"}}>
+                <View style={[sparkViewStyles.sparkVerticalContainer]}>
+                  <View style={[sparkViewStyles.topLocationContainer]}>
+                      <Text style={{paddingLeft:"2%"}}>Address</Text>
+                      <TextInput 
+                        value = {address} 
+                        placeholder = {address}
+                        style = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} 
+                        onChangeText = {text => {
+                          update.current["location"]["address"] = text;
+                          setAddress(text);
+                        }}
+                      />
+                  </View>
+                  <View style={[sparkViewStyles.locationContainer]}>
+                      <Text style={{paddingLeft:"2%"}}>City</Text>
+                      <TextInput 
+                        value = {city} 
+                        placeholder = {city}
+                        style = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} 
+                        onChangeText = {(text) => {
+                          update.current["location"]["city"] = text;
+                          setCity(text)
+                        }}
+                      />                  
+                  </View>
+                  <View style={[sparkViewStyles.locationContainer]}>
+                      <Text style={{paddingLeft:"2%"}}>Zip</Text>
+                      <TextInput 
+                        value = {zip} 
+                        placeholder = {zip}
+                        style = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} 
+                        onChangeText = {(text) => {
+                          update.current["location"]["zip"] = text;
+                          setZip(text)
+                        }}
+                      />                  
+                  </View>
+                  <View style={[sparkViewStyles.locationContainer]}>
+                      <Text style={{paddingLeft:"2%"}}>State</Text>
+                      <Dropdown
+                        style={styles.dropDown} 
+                        data={states} 
+                        renderItem={renderDropDownItem}
+                        maxHeight = {"40%"}
+                        itemTextStyle = {{color: "black", fontSize: 2}}
+                        onChange = {(value) => {
+                          update.current["location"]["state"] = value;
+                          setState(value)
+                        }}
+                        placeholder = {state}
+                        value = {state}
+                      />
+                  </View>
+                  {/* <View style={[sparkViewStyles.bigLocationContainer]}>
+                    <Text style={{paddingLeft:"2%"}}>When At Address</Text>                     
+                  </View> */}
+                  {/** Solves issue... have to check on other phones */}
+                  <View style={[sparkViewStyles.bigLocationContainer]}>
+                      <Text style={{paddingLeft:"2%"}}>When At Address</Text>
+                      <TextInput 
+                        value = {additionalDirections} 
+                        placeholder = {additionalDirections}
+                        style = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} 
+                        onChangeText = {(text) => setAdditionalDirections(text)}
+                      />                  
+                    </View>
+                 </View>
+                </ScrollView>
                 </View>
-            </CollapseBody>
-          </Collapse>
-          <TouchableOpacity>
-            <Text style={{fontSize:48}}>+</Text>
-          </TouchableOpacity>
-        </View>
+            </View>
+      </ScrollView>
+    )
+  }
+      
+  const SetListRoute = () => {
+    const [songs, setSongs] = React.useState(null);
 
+    // useEffect(() => {
+    //   if (songs != null) {
+    //     globalSongs.current = songs;
+    //   }
+    // }, [songs])
 
-    </ScrollView>
+    useEffect(() => {
+      setSongs(globalSongs.current);
+    }, [globalSongs])
+
+    function openAttachment(attachment) {
+      /* if we are opening a web link, we can use the linking.  Otherwise, we have to retrieve the download link from
+         google firebase.  If that link doesn't exist, we'll prompt the user to save their spark, which will push the download links
+         up to cloud storage */
+      if (attachment?.attachmentType == "link") {
+        Linking.openURL(object.item.value);
+      }
+      else {
+        getDownloadURL(storageRef(storage, `sparkData/${currentSparkId}/${attachment.songKey}/${attachment.attachmentId}`))
+        .then((url) => {
+          Linking.openURL(url);
+        })
+        .catch((error) => {
+          // could not find a spark cover image so display the default instead
+          console.log("Could not open file.  You may need to save your spark to access this file!");
+        })
+      }
+    }
+
+    const AddAttachmentContent = (props) => {
+      const [fileName, setFileName] = React.useState(null);
+      const [file, setFile] = React.useState(null);
+      const [type, setType] = React.useState(null);
+      const [link, setLink] = React.useState(null);
+      const [attachmentName, setAttachmentName] = React.useState(null);
+
+      async function uploadFile() {
+        // prompt imput for file
+        let result = await DocumentPicker.getDocumentAsync({copyToCacheDirectory: true});
+        console.log('File', result);
+        if (result.type != "cancel" && result.uri) {
+          setFile(result.uri);
+          setFileName(result.name);
+        }
+      }
+
+      function addAttachment(songKey) {
+        if ((file || link) && type && attachmentName) {
+          let attachmentType;
+          if (file) attachmentType = "file";
+          else attachmentType = "link";
+
+          //create a firebase key to get the attachment from
+          const attachmentId = push(ref(db), null).key;
+          let attachment = {
+            songKey,
+            attachmentId,
+            attachmentName,
+            type,
+            attachmentType,
+            value: file || link
+          }
+          globalSongs.current[props.index].attachments.push(attachment);
+          update.current["songs"] = songs;
+          closeDialog(addAttachmentDialog.current);
+        }
+      }
+
+      return (
+        <KeyboardView backgroundColor = {"rgb(219, 233, 236)"} style = {{height: "100%", width: "100%"}}> 
+          <ScrollView contentContainerStyle = {{margin: "5%", paddingBottom: "30%"}}>
+            <Text> Attachment Name </Text>
+            <TextInput 
+              value = {attachmentName} 
+              placeholder = {attachmentName}
+              style = {[styles.dialogBoxInputs, {height: "10%"}]} 
+              onChangeText = {(text) => setAttachmentName(text)}
+            />  
+            <Text style = {{fontSize: 12, margin: "5%"}}> Type </Text>
+            <Dropdown
+              style={styles.dialogDropDown} 
+              data={["Lyrics", "Note", "Chord Chart", "Music"]} 
+              renderItem={renderDropDownItem}
+              maxHeight = {"40%"}
+              itemTextStyle = {{color: "black", fontSize: 2}}
+              onChange = {(value) =>  setType(value)}
+              placeholder = {type}
+              value = {type}
+            />
+
+            <Text style = {{fontSize: 12, margin: "5%"}}> Upload a File </Text>
+            <View style = {{width: "100%", height: "20%", alignItems: "center"}}>
+              <TouchableHighlight onPress = {() => uploadFile()} style = {styles.uploadButtonDialog}>
+                  <Text> Choose a file </Text>
+              </TouchableHighlight> 
+            </View>
+            <Text style = {{flexWrap: "wrap", fontSize: 15, margin: "2%"}}> {`File Name: ${(fileName) ? fileName : "You have not choosen a file"}`} </Text>
+            <Text style = {{width: "100%", textAlign: "center", fontSize: 20, margin: "5%"}}> Or </Text>
+
+            <Text style = {{fontSize: 12, margin: "5%"}}> Input a Link </Text>
+            <TextInput 
+              value = {link} 
+              placeholder = {link}
+              style = {[styles.dialogBoxInputs, {height: "10%"}]} 
+              onChangeText = {(text) => setLink(text)}
+              multiline
+            />  
+          </ScrollView>  
+          <View style = {styles.dialogButtonRow}>
+            <TouchableOpacity style={[styles.dialogButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress = {() => addAttachment(props.songKey)}>
+              <Text style={styles.buttonText}>Add</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.dialogButton, {backgroundColor: "red"}]} onPress = {() => closeDialog(addAttachmentDialog.current)}>
+              <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardView>     
+      )
+    }
+
+    const AddSongContent = () => {
+      const [songName, setSongName] = React.useState(null);
+      const [key, setKey] = React.useState(null);
+
+      function addSong() {
+        if (songName && key) {
+          const songKey = push(ref(db), null).key;
+          update.current["songs"] = songs;
+          globalSongs.current.push({songKey, songName, key, attachments: []})
+          closeDialog(addSongDialog.current);
+        }
+      }
+
+      return (
+        <KeyboardView backgroundColor = {"rgb(219, 233, 236)"} style = {{height: "100%", width: "100%"}}> 
+          <ScrollView contentContainerStyle = {{margin: "5%", paddingBottom: "20%"}}>
+            <Text> Song Name </Text>
+            <TextInput 
+              value = {songName} 
+              placeholder = {songName}
+              style = {styles.dialogBoxInputs} 
+              onChangeText = {(text) => setSongName(text)}
+            />  
+            <Text> Song Key </Text>
+            <TextInput 
+              value = {key} 
+              placeholder = {key}
+              style = {styles.dialogBoxInputs} 
+              onChangeText = {(text) => setKey(text)}
+            />   
+          </ScrollView>  
+          <View style = {styles.dialogButtonRow}>
+            <TouchableOpacity style={[styles.dialogButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress = {() => addSong()}>
+              <Text style={styles.buttonText}>Add</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.dialogButton, {backgroundColor: "red"}]} onPress = {() => closeDialog(addSongDialog.current)}>
+              <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardView>     
+      )
+    }
+
+    const renderSong = (object) => {
+      return (
+        <Collapse style={{width:"100%", paddingTop: "2%"}}>
+          <CollapseHeader style={{alignItems:"flex-start", justifyContent:"center", backgroundColor:"#F2905B", width: "100%", paddingLeft: "5%"}}>
+            <Text style={{color:"white", fontSize:20, paddingVertical:"2%"}}>Song Name: {object.item.songName}</Text>
+            <Text style={{color:"white", fontSize:20, paddingVertical:"2%"}}>Key: {object.item.key}</Text>
+          </CollapseHeader>
+          <CollapseBody style={{alignItems:"center", height: height / 4, borderBottomColor: "black", borderBottomWidth: 2}}>
+            <TouchableOpacity 
+              onPress = {() => openDialog(addAttachmentDialog.current, {
+                height: 75, 
+                width: 90, 
+                title: "Add Attachment", 
+                content: <AddAttachmentContent songKey = {object.item.songKey} index = {object.index} />
+              })}
+              style = {{padding: "2%", width: "100%", justifyContent: "center", alignItems: "center"}}
+            >
+              <Text style={{color: "black", fontSize:15}}>+</Text>
+            </TouchableOpacity>
+            <View style={{alignItems:"center"}}>
+              <AttachmentContent attachments = {object.item.attachments}/>
+            </View>
+          </CollapseBody>
+        </Collapse>
       );
+    }
+
+    const renderAttachment = (object) => {
+      return (
+        <TouchableHighlight onPress = {() => openAttachment(object.item)}style = {styles.attachment}>
+          <Text style = {{fontSize: 20}}> {object.item.type}: {object.item.attachmentName} </Text>
+        </TouchableHighlight>
+      )
+    }
+
+    const SongContent = (props) => {
+      if (songs && songs.length != 0) {
+        return (
+          <View style = {{height: "55%", width: "100%"}}>
+            <FlatList
+              style = {{flex: 1}}
+              data = {songs}
+              renderItem = {renderSong}
+            />
+          </View>
+        )
+      }
+      else {
+        return (
+          <View style = {{height: "55%", width: "100%", justifyContent: "center", alignItems: "center"}}>
+            <Text> There are no songs in this spark </Text>
+          </View>
+        )
+      }
+    }
+
+    const AttachmentContent = (props) => {
+      if (props.attachments && props.attachments.length != 0) {
+        return (
+          <View style = {{height: "90%", width: "100%"}}>
+            <FlatList
+              style = {{flex: 1}}
+              data = {props.attachments}
+              renderItem = {renderAttachment}
+            />
+          </View>
+        )
+      }
+      else {
+        return (
+          <View style = {{height: "55%", width: "100%", justifyContent: "center", alignItems: "center"}}>
+            <Text> There are no attachments for this song </Text>
+          </View>
+        )
+      }
+    }
+
+    return (
+      <View>
+        <View style={{height: "15%", width: "100%", alignItems: "center", justifyContent: "center"}}>
+          <Text style={{fontSize:28, fontWeight:'500'}}>Set List</Text>
+        </View>
+        <SongContent />
+        <TouchableOpacity 
+          onPress = {() => openDialog(addSongDialog.current, {
+            height: 75, 
+            width: 90, 
+            title: "Add Song", 
+            content: <AddSongContent />
+          })}
+          style = {{height: "15%", width: "100%", justifyContent: "center", alignItems: "center"}}
+        >
+          <Text style={{fontSize:48}}>+</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
     /**
      * Old SetList Code
@@ -161,79 +605,80 @@ export default function SparkSummary({ route, navigation }) {
      */
 
     const TimesRoute = () => (
-      <ScrollView>
-      <View style={[sparkViewStyles.sparkVerticalContainer]}>
-      <View style={[sparkViewStyles.centerContents]}>
-        <View style={{alignItems: "center", justifyContent: "center"}}>
-            <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Times</Text>
-        </View>
-        <View style={{alignItems: "center", justifyContent: "center", marginTop:"6%"}}>
-            <Text style={[sparkViewStyles.inbetweenText]}>Spark Begins On</Text>
-        </View>
+      <Text> Available Soon! </Text>
+  //     <ScrollView>
+  //     <View style={[sparkViewStyles.sparkVerticalContainer]}>
+  //     <View style={[sparkViewStyles.centerContents]}>
+  //       <View style={{alignItems: "center", justifyContent: "center"}}>
+  //           <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Times</Text>
+  //       </View>
+  //       <View style={{alignItems: "center", justifyContent: "center", marginTop:"6%"}}>
+  //           <Text style={[sparkViewStyles.inbetweenText]}>Spark Begins On</Text>
+  //       </View>
           
-          <View style={[sparkViewStyles.timeContainer]}>
-              {/* <Input placeHolderText={"MM"} start = {inputs.sparkMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMonth.setVal(val)}/> */}
-              <Text style = {{fontSize: 30}}>05</Text>
-              <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-              <Text style = {{fontSize: 30}}>10</Text>
-              {/* <Input placeHolderText={"DD"} start = {inputs.sparkDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkDay.setVal(val)}/> */}
-              <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-              <Text style = {{fontSize: 30}}>22</Text>
-              {/* <Input placeHolderText={"YY"} start = {inputs.sparkYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkYear.setVal(val)}/> */}
-              <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
-              <Text style = {{fontSize: 30}}>5</Text>
-              {/* <Input placeHolderText={"12"} start = {inputs.sparkHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkHours.setVal(val)}/> */}
-              <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
-              <Text style = {{fontSize: 30}}>30</Text>
-              {/* <Input placeHolderText={"30"} start = {inputs.sparkMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMinutes.setVal(val)}/> */}
-              <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
-              <Text style = {{fontSize: 30}}>PM</Text>
-              {/* <Input placeHolderText={"PM"} start = {inputs.sparkAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkAmPM.setVal(val)}/> */}
-          </View>
-      </View>
-      <View style={[sparkViewStyles.centerContents, sparkViewStyles.middleMan]}>
-        <View style={{alignItems: "center", justifyContent: "center"}}>
-            <Text style={[sparkViewStyles.inbetweenText]}>First Rehearsal On</Text>
-        </View>
-          <View style={[sparkViewStyles.timeContainer]}>
-              {/* <Input placeHolderText={"MM"} start = {inputs.rehearsalMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMonth.setVal(val)}/> */}
-              <Text style = {{fontSize: 30}}>05</Text>
-              <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-              {/* <Input placeHolderText={"DD"} start = {inputs.rehearsalDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalDay.setVal(val)}/> */}
-              <Text style = {{fontSize: 30}}>05</Text>
-              <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-              {/* <Input placeHolderText={"YY"} start = {inputs.rehearsalYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalYear.setVal(val)}/> */}
-              <Text style = {{fontSize: 30}}>22</Text>
-              <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
-              {/* <Input placeHolderText={"12"} start = {inputs.rehearsalHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalHours.setVal(val)}/> */}
-              <Text style = {{fontSize: 30}}>06</Text>
-              <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
-              {/* <Input placeHolderText={"30"} start = {inputs.rehearsalMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMinutes.setVal(val)}/> */}
-              <Text style = {{fontSize: 30}}>45</Text>
-              <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
-              <Text style = {{fontSize: 30}}>PM</Text>
-              {/* <Input placeHolderText={"PM"} start = {inputs.rehearsalAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalAmPM.setVal(val)}/> */}
-          </View>
-      </View>
-      <View style={[sparkViewStyles.centerContents]}>
-          <Text style={[sparkViewStyles.inbetweenText]}>Roles to be Filled By</Text>
-          <View style={[sparkViewStyles.timeContainer]}>
-              <Input placeHolderText={"MM"} start = {inputs.publishedMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedMonth.setVal(val)}/>
-              <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-              <Input placeHolderText={"DD"} start = {inputs.publishedDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedDay.setVal(val)}/>
-              <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-              <Input placeHolderText={"YY"} start = {inputs.publishedYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedYear.setVal(val)}/>
-              <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
-              <Input placeHolderText={"12"} start = {inputs.publishedHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedHours.setVal(val)}/>
-              <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
-              <Input placeHolderText={"30"} start = {inputs.publishedMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedMinutes.setVal(val)}/>
-              <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
-              <Input placeHolderText={"PM"} start = {inputs.publishedAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedAmPM.setVal(val)}/>
-          </View>
-      </View>
-  </View>
-  </ScrollView>
-      );
+  //         <View style={[sparkViewStyles.timeContainer]}>
+  //             {/* <Input placeHolderText={"MM"} start = {inputs.sparkMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMonth.setVal(val)}/> */}
+  //             <Text style = {{fontSize: 30}}>05</Text>
+  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+  //             <Text style = {{fontSize: 30}}>10</Text>
+  //             {/* <Input placeHolderText={"DD"} start = {inputs.sparkDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkDay.setVal(val)}/> */}
+  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+  //             <Text style = {{fontSize: 30}}>22</Text>
+  //             {/* <Input placeHolderText={"YY"} start = {inputs.sparkYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkYear.setVal(val)}/> */}
+  //             <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
+  //             <Text style = {{fontSize: 30}}>5</Text>
+  //             {/* <Input placeHolderText={"12"} start = {inputs.sparkHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkHours.setVal(val)}/> */}
+  //             <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
+  //             <Text style = {{fontSize: 30}}>30</Text>
+  //             {/* <Input placeHolderText={"30"} start = {inputs.sparkMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMinutes.setVal(val)}/> */}
+  //             <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
+  //             <Text style = {{fontSize: 30}}>PM</Text>
+  //             {/* <Input placeHolderText={"PM"} start = {inputs.sparkAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkAmPM.setVal(val)}/> */}
+  //         </View>
+  //     </View>
+  //     <View style={[sparkViewStyles.centerContents, sparkViewStyles.middleMan]}>
+  //       <View style={{alignItems: "center", justifyContent: "center"}}>
+  //           <Text style={[sparkViewStyles.inbetweenText]}>First Rehearsal On</Text>
+  //       </View>
+  //         <View style={[sparkViewStyles.timeContainer]}>
+  //             {/* <Input placeHolderText={"MM"} start = {inputs.rehearsalMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMonth.setVal(val)}/> */}
+  //             <Text style = {{fontSize: 30}}>05</Text>
+  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+  //             {/* <Input placeHolderText={"DD"} start = {inputs.rehearsalDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalDay.setVal(val)}/> */}
+  //             <Text style = {{fontSize: 30}}>05</Text>
+  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+  //             {/* <Input placeHolderText={"YY"} start = {inputs.rehearsalYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalYear.setVal(val)}/> */}
+  //             <Text style = {{fontSize: 30}}>22</Text>
+  //             <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
+  //             {/* <Input placeHolderText={"12"} start = {inputs.rehearsalHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalHours.setVal(val)}/> */}
+  //             <Text style = {{fontSize: 30}}>06</Text>
+  //             <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
+  //             {/* <Input placeHolderText={"30"} start = {inputs.rehearsalMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMinutes.setVal(val)}/> */}
+  //             <Text style = {{fontSize: 30}}>45</Text>
+  //             <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
+  //             <Text style = {{fontSize: 30}}>PM</Text>
+  //             {/* <Input placeHolderText={"PM"} start = {inputs.rehearsalAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalAmPM.setVal(val)}/> */}
+  //         </View>
+  //     </View>
+  //     <View style={[sparkViewStyles.centerContents]}>
+  //         <Text style={[sparkViewStyles.inbetweenText]}>Roles to be Filled By</Text>
+  //         <View style={[sparkViewStyles.timeContainer]}>
+  //             <Input placeHolderText={"MM"} start = {inputs.publishedMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedMonth.setVal(val)}/>
+  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+  //             <Input placeHolderText={"DD"} start = {inputs.publishedDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedDay.setVal(val)}/>
+  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
+  //             <Input placeHolderText={"YY"} start = {inputs.publishedYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedYear.setVal(val)}/>
+  //             <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
+  //             <Input placeHolderText={"12"} start = {inputs.publishedHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedHours.setVal(val)}/>
+  //             <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
+  //             <Input placeHolderText={"30"} start = {inputs.publishedMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedMinutes.setVal(val)}/>
+  //             <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
+  //             <Input placeHolderText={"PM"} start = {inputs.publishedAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedAmPM.setVal(val)}/>
+  //         </View>
+  //     </View>
+  // </View>
+  // </ScrollView>
+    );
 
     const RequestsRoute = () => {
       const acceptRequest = async(role, id) => {
@@ -484,54 +929,59 @@ export default function SparkSummary({ route, navigation }) {
   
   return(
     <View style={styles.MainContainer}>
-    <View style={styles.topBorder}>
-      <View style={[styles.row2, {justifyContent: 'center', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
-        {/* REMOVE TESTREQUEST BUTTON AND REPLACE WITH ATTENDSPARK BUTTON */}
-        {/* <IconButton onPress = {() => testRequest()}style = {{position: "absolute", left: "2%"}}icon = "head-check" size = {30}/> */}
-        {/* <Text style={styles.titleText}></Text> */}
-        <IconButton onPress = {() => attendSpark()}style = {{position: "absolute", left: "85%"}}icon = "checkbox-marked-circle-plus-outline"/>
-      </View>
-      <View style = {styles.row}>
-        <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175", marginLeft: 39}}>{(MySparkName) ? `${MySparkName}'s Spark` : "My Spark"}</Text>
-      </View>
-      <View style={styles.row}>
-        <ProfileImage size = {"medium"} userId = {null}/>
-        <View style={styles.column}>
-          <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13, marginRight: 150}}>Date and Time</Text>
-          <View style={styles.row2}>
-            <Image style={{height: 20, width: 20, marginRight: 20}} source={require('../../../assets/locationpin.png')}></Image>
-            <Text style = {{flexWrap: "wrap", width: "70%", marginRight: 5}}>{MyAddress} {MyCity}, PA</Text>
+      <View pointerEvents = {disable} style = {{height: "100%", width: "100%", opacity: contentOpacity}}>
+        <View style={styles.topBorder}>
+          <View style={[styles.row2, {justifyContent: 'center', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
+            {/* REMOVE TESTREQUEST BUTTON AND REPLACE WITH ATTENDSPARK BUTTON */}
+            {/* <IconButton onPress = {() => testRequest()}style = {{position: "absolute", left: "2%"}}icon = "head-check" size = {30}/> */}
+            {/* <Text style={styles.titleText}></Text> */}
+            <IconButton onPress = {() => saveSpark()}style = {{position: "absolute", left: 0}}icon = "content-save-check"/>
+            <IconButton onPress = {() => attendSpark()}style = {{position: "absolute", left: "85%"}}icon = "checkbox-marked-circle-plus-outline"/>
           </View>
-        </View>
-      </View>
-      <View style={[styles.row, {marginLeft: 80, marginRight: 50, top: "30%"}]}>
-      <Button
-          // onPress={onPressLearnMore}
-          title="Attend Spark"
-          // color="#841584"
-          accessibilityLabel="Learn more about this purple button"/>
+          <View style = {styles.row}>
+            <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175", marginLeft: 39}}>{(MySparkName) ? `${MySparkName}'s Spark` : "My Spark"}</Text>
+          </View>
+          <View style={styles.row}>
+            <ProfileImage size = {"medium"} userId = {null}/>
+            <View style={styles.column}>
+              <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13, marginRight: 150}}>Date and Time</Text>
+              <View style={styles.row2}>
+                <Image style={{height: 20, width: 20, marginRight: 20}} source={require('../../../assets/locationpin.png')}></Image>
+                <Text style = {{flexWrap: "wrap", width: "70%", marginRight: 5}}>{MyAddress} {MyCity}, PA</Text>
+              </View>
+            </View>
+          </View>
+          <View style={[styles.row, {marginLeft: 80, marginRight: 50, top: "30%"}]}>
           <Button
-          // onPress={onPressLearnMore}
-          title="Next"
-          // color="#841584"
-          accessibilityLabel="Learn more about this purple button"/>
+              // onPress={onPressLearnMore}
+              title="Attend Spark"
+              // color="#841584"
+              accessibilityLabel="Learn more about this purple button"/>
+              <Button
+              // onPress={onPressLearnMore}
+              title="Next"
+              // color="#841584"
+              accessibilityLabel="Learn more about this purple button"/>
+        </View>
+        {/* REMOVE AND KEEP ONLY ON PUBLIC PROFILE  */}
+        {/* <View style={[styles.row, {marginLeft: 100, marginRight: 100, top: "30%"}]}>
+          <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
+          <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
+          <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
+          <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
+          <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
+        </View> */}
+        </View>
+        <View style={styles.content}>
+          <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
+        </View>
+        {/* <View style={styles.navigation}>
+          <Image style={{width: '100%', height: '100%'}} source={require('../../../assets/navigation.png')}></Image>
+        </View> */}
+      </View>
+      <DialogBox ref = {addSongDialog} />
+      <DialogBox ref = {addAttachmentDialog} />
     </View>
-     {/* REMOVE AND KEEP ONLY ON PUBLIC PROFILE  */}
-    {/* <View style={[styles.row, {marginLeft: 100, marginRight: 100, top: "30%"}]}>
-      <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
-      <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
-      <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
-      <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
-      <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
-    </View> */}
-    </View>
-    <View style={styles.content}>
-      <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
-    </View>
-    {/* <View style={styles.navigation}>
-      <Image style={{width: '100%', height: '100%'}} source={require('../../../assets/navigation.png')}></Image>
-    </View> */}
-</View>
   );
 };
 
@@ -539,6 +989,40 @@ const styles = StyleSheet.create({
   MainContainer: {
     backgroundColor: "white",
     height: "100%",
+  },
+
+  buttonText: {
+    color: "white",
+    fontSize: 12,
+  },
+
+  dialogButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    width: "35%",
+    borderRadius: 10
+  },
+
+  dialogButtonRow: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    width: "100%",
+    marginTop: "5%",
+    marginBottom: "5%",
+    height: "7%"
+  },
+
+  dialogDropDown: {
+    backgroundColor: "#F2905B",
+    borderRadius: 10,
+    height: "10%"
+  },
+
+  attachment: {
+    width: "100%",
+    paddingTop: "5%",
+    paddingBottom: "5%",
   },
 
   topBorder:{
@@ -555,6 +1039,28 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     color: "#006175"
+  },
+
+  dialogBoxInputs: {
+    flexWrap: "wrap",
+    flexGrow: 1,
+    backgroundColor: "#F2905B",
+    borderRadius: 10,
+    width: "100%",
+    height: "25%",
+    alignSelf: "center",
+    margin: "4%", 
+    padding: "3%",
+    fontSize: 12
+  },
+
+  uploadButtonDialog: {
+    backgroundColor: "#F2905B",
+    borderRadius: 10,
+    padding: "5%",
+    alignSelf: "center",
+    padding: "3%",
+    fontSize: 12
   },
 
   row: {
@@ -624,6 +1130,13 @@ const styles = StyleSheet.create({
     height: "70%",
     width: "10%",
     left: "20%"
+  },
+
+  dropDown: {
+    backgroundColor: "#F2905B",
+    borderRadius: 10,
+    width: "100%",
+    height: "100%"
   },
 
 })
@@ -858,4 +1371,5 @@ const sparkViewStyles = StyleSheet.create({
     height: "24%",
     marginLeft: "3%"
   }
+  
 });

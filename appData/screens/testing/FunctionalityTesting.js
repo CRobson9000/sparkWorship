@@ -121,6 +121,7 @@ export default function MyTest({ route, navigation }) {
     if (!resourceUrl) {
       getDownloadURL(storageRef(storage, `sparkData/${currentSparkId}/${songId}/${type}`))
       .then((url) => {
+        console.log("Url", url);
         // open link
         Linking.openURL(url);
       })
@@ -157,7 +158,7 @@ export default function MyTest({ route, navigation }) {
         </TouchableHighlight>
       </View>
       <View style = {styles.section}>
-        <TouchableHighlight onPress = {() => openFile("mySong", "lyrics", "https://docs.expo.dev/versions/latest/sdk/webview/")}>
+        <TouchableHighlight onPress = {() => openFile("mySong", "lyrics")}>
           <Text> Open file </Text>
         </TouchableHighlight>
       </View>
