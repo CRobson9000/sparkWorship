@@ -517,29 +517,23 @@ export default function SparkSummary({ route, navigation }) {
         <IconButton onPress = {() => attendSpark()}style = {{position: "absolute", left: "85%"}}icon = "checkbox-marked-circle-plus-outline"/>
       </View>
       <View style = {styles.row}>
-        <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175", marginLeft: 39}}>{(MySparkName) ? `${MySparkName}'s Spark` : "My Spark"}</Text>
+        <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175", marginLeft: "19%"}}>{(MySparkName) ? `${MySparkName}'s Spark` : "My Spark"}</Text>
       </View>
       <View style={styles.row}>
-        <ProfileImage size = {"medium"} userId = {null}/>
+        <View style={{marginLeft:"4%"}}>
+          <ProfileImage size = {"medium"} userId = {null}/>
+        </View>
         <View style={styles.column}>
-          <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13, marginRight: 150}}>Date and Time</Text>
+          <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13, marginRight: screenWidth/60}}>Date and Time</Text>
           <View style={styles.row2}>
-            <Image style={{height: 20, width: 20, marginRight: 20}} source={require('../../../assets/locationpin.png')}></Image>
-            <Text style = {{flexWrap: "wrap", width: "70%", marginRight: 5}}>{MyAddress} {MyCity}, PA</Text>
+            <Image style={{height: 20, width: 20, marginRight: "2%"}} source={require('../../../assets/locationpin.png')}></Image>
+            <Text style = {{flexWrap: "wrap", width: "75%", marginRight: "1%"}}>{MyAddress} {MyCity}, PA</Text>
           </View>
         </View>
       </View>
-      <View style={[styles.row, {marginLeft: 80, marginRight: 50, top: "30%"}]}>
-      <Button
-          // onPress={onPressLearnMore}
-          title="Attend Spark"
-          // color="#841584"
-          accessibilityLabel="Learn more about this purple button"/>
-          <Button
-          // onPress={onPressLearnMore}
-          title="Next"
-          // color="#841584"
-          accessibilityLabel="Learn more about this purple button"/>
+      <View style={[styles.row, {marginLeft: screenWidth/5, marginRight: screenWidth/50, top: "30%"}]}>
+        <TouchableOpacity style={profileStyles.constantButtons}><Text style={profileStyles.buttonText}>Attend Spark</Text></TouchableOpacity>
+        <TouchableOpacity style={profileStyles.constantButtons}><Text style={profileStyles.buttonText}>Next</Text></TouchableOpacity>
     </View>
      {/* REMOVE AND KEEP ONLY ON PUBLIC PROFILE  */}
     {/* <View style={[styles.row, {marginLeft: 100, marginRight: 100, top: "30%"}]}>
