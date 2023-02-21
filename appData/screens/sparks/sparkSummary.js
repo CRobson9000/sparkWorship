@@ -60,30 +60,25 @@ export default function SparkSummary({ route, navigation }) {
     {label: 'Banana', value: 'banana'}
   ]);
 
+  const ReadLocationRoute = () => (
+      <View style={[sparkViewStyles.sparkVerticalContainer]}>
+        <ScrollView contentContainerStyle = {{flex: 1, alignItems: "center", paddingBottom: "50%"}}>
+          <Image style={{height: 70, width: 70, marginTop: "7%"}} source={require('../../../assets/locationpin2.png')}/>
+          <Text style={{fontSize: 25, marginTop: "5%"}}>Location Title</Text>
+          <Text style={{fontSize: 18, marginTop: "2%"}}>Street Address</Text>
+          <Text style={{fontSize: 18, marginTop: "2%"}}>City, State Zip Code</Text>
+          <Text style={{marginRight: "51%", marginTop: "7%"}}>Special Instructions</Text>
+          <View style={{borderColor: "#F2905B", borderRadius: 10, borderWidth: 2, height: "30%", width: "85%", marginTop: "2%"}}/>
+          <TouchableOpacity style={{width: "85%", height: "18%", marginTop: "6%", backgroundColor: "rgb(0, 97, 117)", borderRadius: 10, alignItems: "center", justifyContent: "center"}}>
+            <Text style={{color: "white"}}>Google Maps</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
+  );  
+  
   const LocationRoute = () => (
-    <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
-        <View style={[sparkViewStyles.sparkContainer]}>
-          <View style={[sparkViewStyles.sparkVerticalContainer]}>
-            {/*<View style={[sparkViewStyles.topLocationContainer]}>
-                    <Text style={{paddingLeft:"0%"}}>Address</Text>
-                    <Input start = {inputs.address.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.address.setVal(val)}/>
-                </View>
-                <View style={[sparkViewStyles.locationContainer]}>
-                    <Text style={{paddingLeft:"3%"}}>City</Text>
-                    <Input start = {inputs.city.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.city.setVal(val)}/>
-                </View>
-                <View style={[sparkViewStyles.locationContainer]}>
-                    <Text style={{paddingLeft:"3%"}}>Zip</Text>
-                    <Input start = {inputs.zip.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.zip.setVal(val)}/>
-                </View>
-                <View style={[sparkViewStyles.locationContainer]}>
-                    <Text style={{paddingLeft:"3%"}}>State</Text>
-                    <Input start = {inputs.state.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.state.setVal(val)}/>
-                </View>
-                <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => sendPayload()}>
-                    <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Submit</Text>
-                </TouchableOpacity> */}
-
+        <View style={[sparkViewStyles.sparkVerticalContainer]}>
+          <ScrollView contentContainerStyle = {{flex: 1, alignItems: "center", paddingBottom: "50%"}}>
             <Image style={{height: 70, width: 70, marginTop: "7%"}} source={require('../../../assets/locationpin2.png')}/>
             <Text style={{fontSize: 25, marginTop: "5%"}}>Location Title</Text>
             <Text style={{fontSize: 18, marginTop: "2%"}}>Street Address</Text>
@@ -93,32 +88,31 @@ export default function SparkSummary({ route, navigation }) {
             <TouchableOpacity style={{width: "85%", height: "18%", marginTop: "6%", backgroundColor: "rgb(0, 97, 117)", borderRadius: 10, alignItems: "center", justifyContent: "center"}}>
               <Text style={{color: "white"}}>Google Maps</Text>
             </TouchableOpacity>
-          </View>
-      </View>
-    </ScrollView>
+          </ScrollView>
+        </View>
     );
 
     const VolunteersRoute = () => (
-        <ScrollView>
-          <View style={[sparkViewStyles.sparkVerticalTest]}>
+        <View style={[sparkViewStyles.sparkVerticalTest]}>
+          <ScrollView contentContainerStyle = {{flex: 1}}>
             <View style={[sparkViewStyles.boxOne, {marginTop: "8%"}]}>
-              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/userHub1.png")}/>
+              <ProfileImage size = {"small"} userId = {null}/>
               <Text style={{marginLeft: "5%"}}>Spark Leader: Colin Robson</Text>
             </View>
             <View style={[sparkViewStyles.boxOne]}>
-              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/userHub3.png")}/>
+              <ProfileImage size = {"small"} userId = {null}/>
               <Text style={{marginLeft: "5%"}}>Bass: Azianna Yang</Text>
             </View>
             <View style={[sparkViewStyles.boxOne]}>
-              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/userHub1.png")}/>
+              <ProfileImage size = {"small"} userId = {null}/>
               <Text style={{marginLeft: "5%"}}>Piano: Colin Robson</Text>
             </View>
             <View style={[sparkViewStyles.boxOne]}>
-              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/userHub3.png")}/>
+              <ProfileImage size = {"small"} userId = {null}/>
               <Text style={{marginLeft: "5%"}}>Vocals: Austin Dorsey</Text>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </View>
       );
       
     const SetListRoute = () => (
@@ -481,7 +475,8 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    height: '65%'
+    // height: '78%'
+    flex: 1
   },
 
   titleText: {
@@ -576,7 +571,7 @@ const sparkViewStyles = StyleSheet.create({
   sparkContainer:
   {
       width:"100%",
-      height:"90%",
+      height: "100%",
       backgroundColor: "rgba(255,255,255,1)",
       flexDirection: "row", 
       justifyContent: "center", 
@@ -604,16 +599,14 @@ const sparkViewStyles = StyleSheet.create({
   },
   sparkVerticalContainer:
   {
-      width:"100%",
-      height:"100%",
-      backgroundColor: "rgba(255,255,255,1)",
-      flexDirection: "column", 
-      justifyContent: "space-between", 
-      alignItems: "center"
+    padding: "5%",
+    flex: 1,
+    backgroundColor: "rgba(255,255,255,1)",
+    alignItems: "center"
   },
   sparkVerticalTest:{
     width:"100%",
-    height:"200%",
+    height:"100%",
     backgroundColor: "rgba(255,255,255,1)",
     flexDirection: "column", 
     alignItems: "center"
@@ -725,8 +718,9 @@ const sparkViewStyles = StyleSheet.create({
       backgroundColor: "#F2905B",
       marginBottom: "5%",
       borderRadius: 10,
-      height: "20%",
-      width: "85%",
+      padding: "2%",
+      height: "15%",
+      // width: "85%",
       flexDirection: "row",
       alignItems: "center",
   },
