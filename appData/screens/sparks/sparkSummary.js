@@ -921,9 +921,48 @@ export default function SparkSummary({ route, navigation }) {
       
     //    />
     //);
+
+    const ReadLocationRoute = () => (
+      <View style={[sparkViewStyles.sparkVerticalContainer]}>
+        <ScrollView contentContainerStyle = {{flex: 1, alignItems: "center", paddingBottom: "50%"}}>
+          <Image style={{height: 70, width: 70, marginTop: "7%"}} source={require('../../../assets/locationpin2.png')}/>
+          <Text style={{fontSize: 25, marginTop: "5%"}}>Location Title</Text>
+          <Text style={{fontSize: 18, marginTop: "2%"}}>Street Address</Text>
+          <Text style={{fontSize: 18, marginTop: "2%"}}>City, State Zip Code</Text>
+          <Text style={{marginRight: "51%", marginTop: "7%"}}>Special Instructions</Text>
+          <View style={{borderColor: "#F2905B", borderRadius: 10, borderWidth: 2, height: "30%", width: "85%", marginTop: "2%"}}/>
+          <TouchableOpacity style={{width: "85%", height: "18%", marginTop: "6%", backgroundColor: "rgb(0, 97, 117)", borderRadius: 10, alignItems: "center", justifyContent: "center"}}>
+            <Text style={{color: "white"}}>Google Maps</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
+    );
+
+    const ReadVolunteersRoute = () => (
+      <View style={[sparkViewStyles.sparkVerticalTest]}>
+        <ScrollView contentContainerStyle = {{flex: 1}}>
+          <View style={[sparkViewStyles.boxOne, {marginTop: "8%"}]}>
+            <ProfileImage size = {"small"} userId = {null}/>
+            <Text style={{marginLeft: "5%"}}>Spark Leader: Colin Robson</Text>
+          </View>
+          <View style={[sparkViewStyles.boxOne]}>
+            <ProfileImage size = {"small"} userId = {null}/>
+            <Text style={{marginLeft: "5%"}}>Bass: Azianna Yang</Text>
+          </View>
+          <View style={[sparkViewStyles.boxOne]}>
+            <ProfileImage size = {"small"} userId = {null}/>
+            <Text style={{marginLeft: "5%"}}>Piano: Colin Robson</Text>
+          </View>
+          <View style={[sparkViewStyles.boxOne]}>
+            <ProfileImage size = {"small"} userId = {null}/>
+            <Text style={{marginLeft: "5%"}}>Vocals: Austin Dorsey</Text>
+          </View>
+        </ScrollView>
+      </View>
+    );
+
     let [currentIndex, setCurrentIndex] = React.useState(1);
-      
-      
+        
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
         { key: 'first', title: 'Location' },
@@ -1101,7 +1140,9 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    height: '80%'
+    // height: '80%'
+    width: "100%",
+    flex: 1
   },
 
   titleText: {
@@ -1160,6 +1201,7 @@ const styles = StyleSheet.create({
     marginLeft: '5%',
     marginRight: '5%', 
   },
+
   accordionSubheading: {
     left:15,
     backgroundColor: "#F2905B",
@@ -1170,6 +1212,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     color: "#FFFFFF"
   },
+
   navigation: {
     backgroundColor: "rgb(219, 233, 236)",
     height: "7%"
@@ -1240,7 +1283,7 @@ const sparkViewStyles = StyleSheet.create({
   sparkContainer:
   {
       width:"100%",
-      height:"90%",
+      height: "100%",
       backgroundColor: "rgba(255,255,255,1)",
       flexDirection: "row", 
       justifyContent: "center", 
@@ -1275,16 +1318,14 @@ const sparkViewStyles = StyleSheet.create({
   },
   sparkVerticalContainer:
   {
-      width:"100%",
-      height:"100%",
-      backgroundColor: "rgba(255,255,255,1)",
-      flexDirection: "column", 
-      justifyContent: "space-between", 
-      alignItems: "center"
+    padding: "5%",
+    flex: 1,
+    backgroundColor: "rgba(255,255,255,1)",
+    alignItems: "center"
   },
   sparkVerticalTest:{
     width:"100%",
-    height:"200%",
+    height:"100%",
     backgroundColor: "rgba(255,255,255,1)",
     flexDirection: "column", 
     alignItems: "center"
@@ -1395,11 +1436,13 @@ const sparkViewStyles = StyleSheet.create({
   },
   boxOne:
   {
-      backgroundColor: "#F9CBB1",
-      //height: "30%",
-      width: "80%",
+      backgroundColor: "#F2905B",
+      marginBottom: "5%",
+      borderRadius: 10,
+      padding: "2%",
+      height: "15%",
+      // width: "85%",
       flexDirection: "row",
-      justifyContent: "space-between",
       alignItems: "center",
   },
   boxText:{
@@ -1416,32 +1459,37 @@ const sparkViewStyles = StyleSheet.create({
     marginRight: "5%"
   },
   profileImage:{
-    width: "15%", 
-    height: "51%",
-    marginLeft: "3%"
+    width: "12.5%", 
+    height: "59%",
+    marginLeft: "6%"
   },
+
   accordionImage:{
     width: "8%", 
     height: "30%",
     marginVertical: "0%"
   },
+
   accordionImageRight:{
     width: "8%", 
     height: "30%",
     marginRight: "2%",
     marginVertical: "0%"
   },
+
   acceptButton:{
     width: "8%", 
     height: "30%",
     marginVertical: "0%"
   },
+
   denyButton:{
     width: "8%", 
     height: "30%",
     marginRight: "2%",
     marginVertical: "0%"
   },
+
   sideOfAccordionImage:{
     width: "15%", 
     height: "24%",
