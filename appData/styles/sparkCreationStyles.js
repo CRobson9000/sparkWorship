@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 const screenHeight = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
 
 const styleSheet = StyleSheet.create({
     
@@ -30,20 +31,22 @@ const styleSheet = StyleSheet.create({
     titleText: {
       padding: "5%",
       textAlign: "center",
-      fontSize: 20
+      fontFamily:"RNSMiles",
+      fontSize: screenHeight/35
     }, 
 
     // Title on each screen
     stageText: {
       textAlign: "center",
-      fontSize: 20,
+      fontFamily: "RNSMiles",
+      fontSize: screenHeight/35,
       marginBottom: "4%" 
     },
 
     // Labels for all input boxes except Zip Code 
     text1: {
       paddingBottom: "2%",
-      fontSize: 15,
+      fontSize: screenHeight/47,
       left: "9%",
     },
 
@@ -127,7 +130,7 @@ const styleSheet = StyleSheet.create({
     // Label for City, State and Zip Code
     text3: {
       paddingBottom: "6%",
-      fontSize: 15,
+      fontSize: screenHeight/47,
       left: "5%"
     },
 
@@ -141,7 +144,7 @@ const styleSheet = StyleSheet.create({
 
     boxTwo: {
         backgroundColor: "rgb(0, 97, 117)",
-        height: "20%",
+        height: screenHeight/12,
         width: "85%",
         flexDirection: "row",
         justifyContent: "space-evenly",
@@ -217,7 +220,7 @@ const styleSheet = StyleSheet.create({
       fontSize:18,
       justifyContent:"center",
     },
-
+//
     timeDateRow: {
       width: "80%",
       flexDirection:"row",

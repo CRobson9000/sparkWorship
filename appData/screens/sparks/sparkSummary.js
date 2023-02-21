@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
-import { StyleSheet, View, Text, TextInput, Image, Button, ScrollView, TouchableOpacity, TouchableHighlight, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Image, Button, ScrollView, TouchableOpacity, TouchableHighlight, FlatList, Dimensions } from 'react-native';
+
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import { IconButton, ProgressBar } from 'react-native-paper';
+import { IconButton, ProgressBar, List } from 'react-native-paper';
 import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
 import { DialogBox, KeyboardView } from '../../components/components';
 import { Observable, TDO, FirebaseButler, PushNotify } from '../../components/classes';
@@ -10,6 +11,7 @@ import { stylesPortrait } from "../../styles/portrait";
 import Routes from "../Navigation/constants/Routes";
 import ProfileImage from "../../components/profileImage.js";
 import { styleSheet } from "../../styles/newSparkCreationStyles.js";
+import { profileStyles } from "../../styles/profileViewStyles.js";
 import Icon from 'react-native-vector-icons/Ionicons';
 
 // photo upload imports
@@ -21,7 +23,6 @@ import * as Linking from 'expo-linking';
 import { storageRef } from '../../../config/additionalMethods'
 
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
-import { FlatList } from 'react-native-gesture-handler';
 
 const screenWidth = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -129,6 +130,7 @@ export default function SparkSummary({ route, navigation }) {
 
   async function saveSpark() {
     let updateVals = Object.values(update.current);
+    console.log("Update", updateVals);
     for (let i = 0; i < updateVals.length; i++) {
       // update data in firebase realtime database
       let overallKey = Object.keys(update.current)[i];
@@ -317,6 +319,41 @@ export default function SparkSummary({ route, navigation }) {
       </ScrollView>
     )
   }
+
+  // const SetListRoute = () => (
+  //   <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
+  //     <List.Section title = "Set List">
+        // <List.Accordion title="Rock of Ages" style = {profileStyles.accordian} titleStyle = {profileStyles.headerText}>
+        //   <View style={profileStyles.listItemContainer}>
+        //     <View style={profileStyles.listItemHeader}>
+        //       <Text style={[profileStyles.accordionHeaderText]}> Lyrics </Text>
+        //     </View>
+        //     <View style={profileStyles.listItemContent}>
+        //       <Text>RockOfAgesLyrics.pdf</Text>
+        //     </View>
+        //   </View>
+        //   <View style={profileStyles.listItemContainer}>
+        //     <View style={profileStyles.listItemHeader}>
+        //       <Text style={[profileStyles.accordionHeaderText]}> Sheet Music </Text>
+        //     </View>
+        //     <View style={profileStyles.listItemContent}>
+        //       <Text>RockOfAgesSongSheet.pdf</Text>
+        //     </View>
+        //   </View>
+        //   <View style={sparkViewStyles.listItemContainer}>
+        //     <View style={{width:"100%", alignItems:"center", marginBottom:"5%"}}>
+        //       <Text style={{fontSize:32}}>
+        //         +
+        //       </Text>
+        //     </View>
+        //   </View>
+        // </List.Accordion>
+  //       <View style={{width:"100%", alignItems:"center"}}>
+  //         <Text style={{fontSize:32}}>
+  //           +
+  //         </Text>
+  //       </View>
+  //     </List.Section>
       
   const SetListRoute = () => {
     const [songs, setSongs] = React.useState(null);
@@ -328,6 +365,7 @@ export default function SparkSummary({ route, navigation }) {
     // }, [songs])
 
     useEffect(() => {
+      // console.log("Global Songs"/*, globalSongs.current*/);
       setSongs(globalSongs.current);
     }, [globalSongs])
 
@@ -336,7 +374,7 @@ export default function SparkSummary({ route, navigation }) {
          google firebase.  If that link doesn't exist, we'll prompt the user to save their spark, which will push the download links
          up to cloud storage */
       if (attachment?.attachmentType == "link") {
-        Linking.openURL(object.item.value);
+        Linking.openURL(attachment.value);
       }
       else {
         getDownloadURL(storageRef(storage, `sparkData/${currentSparkId}/${attachment.songKey}/${attachment.attachmentId}`))
@@ -384,7 +422,8 @@ export default function SparkSummary({ route, navigation }) {
             value: file || link
           }
           globalSongs.current[props.index].attachments.push(attachment);
-          update.current["songs"] = songs;
+          update.current["songs"] = globalSongs.current;
+          // console.log(update.current);
           closeDialog(addAttachmentDialog.current);
         }
       }
@@ -484,14 +523,40 @@ export default function SparkSummary({ route, navigation }) {
       )
     }
 
+    // <List.Accordion title="Rock of Ages" style = {profileStyles.accordian} titleStyle = {profileStyles.headerText}>
+    // <View style={profileStyles.listItemContainer}>
+    //   <View style={profileStyles.listItemHeader}>
+    //     <Text style={[profileStyles.accordionHeaderText]}> Lyrics </Text>
+    //   </View>
+    //   <View style={profileStyles.listItemContent}>
+    //     <Text>RockOfAgesLyrics.pdf</Text>
+    //   </View>
+    // </View>
+  //   <View style={profileStyles.listItemContainer}>
+  //     <View style={profileStyles.listItemHeader}>
+  //       <Text style={[profileStyles.accordionHeaderText]}> Sheet Music </Text>
+  //     </View>
+  //     <View style={profileStyles.listItemContent}>
+  //       <Text>RockOfAgesSongSheet.pdf</Text>
+  //     </View>
+  //   </View>
+  //   <View style={sparkViewStyles.listItemContainer}>
+  //     <View style={{width:"100%", alignItems:"center", marginBottom:"5%"}}>
+  //       <Text style={{fontSize:32}}>
+  //         +
+  //       </Text>
+  //     </View>
+  //   </View>
+  // </List.Accordion>
+
     const renderSong = (object) => {
       return (
-        <Collapse style={{width:"100%", paddingTop: "2%"}}>
-          <CollapseHeader style={{alignItems:"flex-start", justifyContent:"center", backgroundColor:"#F2905B", width: "100%", paddingLeft: "5%"}}>
-            <Text style={{color:"white", fontSize:20, paddingVertical:"2%"}}>Song Name: {object.item.songName}</Text>
-            <Text style={{color:"white", fontSize:20, paddingVertical:"2%"}}>Key: {object.item.key}</Text>
+        <Collapse style={{width:"100%", flex: 1}}>
+          <CollapseHeader style={profileStyles.accordian}>
+            <Text style={profileStyles.headerText}>{object.item.songName}</Text>
+            {/* <Text style={{color:"white", fontSize:20, paddingVertical:"2%"}}>Key: {object.item.key}</Text> */}
           </CollapseHeader>
-          <CollapseBody style={{alignItems:"center", height: height / 4, borderBottomColor: "black", borderBottomWidth: 2}}>
+          <CollapseBody style={[profileStyles.listItemContainer, {flex: 1}]}>
             <TouchableOpacity 
               onPress = {() => openDialog(addAttachmentDialog.current, {
                 height: 75, 
@@ -511,11 +576,29 @@ export default function SparkSummary({ route, navigation }) {
       );
     }
 
+    // <View style={profileStyles.listItemContainer}>
+    //   <View style={profileStyles.listItemHeader}>
+    //     <Text style={[profileStyles.accordionHeaderText]}> Lyrics </Text>
+    //   </View>
+    //   <View style={profileStyles.listItemContent}>
+    //     <Text>RockOfAgesLyrics.pdf</Text>
+    //   </View>
+    // </View>
     const renderAttachment = (object) => {
       return (
-        <TouchableHighlight onPress = {() => openAttachment(object.item)}style = {styles.attachment}>
-          <Text style = {{fontSize: 20}}> {object.item.type}: {object.item.attachmentName} </Text>
-        </TouchableHighlight>
+        <View style = {{padding: "2%"}}>
+          <TouchableHighlight onPress = {() => openAttachment(object.item)} style={[profileStyles.listItemHeader]}>
+            <View style = {{padding: "2%", flexDirection: "row"}}>
+              <Text style={[profileStyles.accordionHeaderText]}> {object.item.type}: </Text>
+              <Text style = {{fontSize: 15}}> {object.item.attachmentName} </Text>
+            </View>
+          </TouchableHighlight>
+          {/* <View style={profileStyles.listItemContent}>
+            <TouchableHighlight onPress = {() => openAttachment(object.item)}style = {styles.attachment}>
+              <Text style = {{fontSize: 15}}> {object.item.attachmentName} </Text>
+            </TouchableHighlight>
+          </View> */}
+        </View>
       )
     }
 
@@ -543,7 +626,7 @@ export default function SparkSummary({ route, navigation }) {
     const AttachmentContent = (props) => {
       if (props.attachments && props.attachments.length != 0) {
         return (
-          <View style = {{height: "90%", width: "100%"}}>
+          <View style = {{flex: 1}}>
             <FlatList
               style = {{flex: 1}}
               data = {props.attachments}
@@ -562,10 +645,10 @@ export default function SparkSummary({ route, navigation }) {
     }
 
     return (
-      <View>
-        <View style={{height: "15%", width: "100%", alignItems: "center", justifyContent: "center"}}>
+      <List.Section title = "Set List">
+        {/* <View style={{height: "15%", width: "100%", alignItems: "center", justifyContent: "center"}}>
           <Text style={{fontSize:28, fontWeight:'500'}}>Set List</Text>
-        </View>
+        </View> */}
         <SongContent />
         <TouchableOpacity 
           onPress = {() => openDialog(addSongDialog.current, {
@@ -578,7 +661,7 @@ export default function SparkSummary({ route, navigation }) {
         >
           <Text style={{fontSize:48}}>+</Text>
         </TouchableOpacity>
-      </View>
+      </List.Section>
     );
   }
 
@@ -703,53 +786,57 @@ export default function SparkSummary({ route, navigation }) {
     
       return (
         <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
-        <View style={{alignItems: "center", justifyContent: "center"}}>
-          <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Set List</Text>
-        </View>
-        <View style={{alignItems: "center", justifyContent: "center"}}>
-          <Collapse style={{paddingTop: "2%"}}>
-            <CollapseHeader style={{alignItems:"center", justifyContent:"center", backgroundColor:"#F2905B", width: "100%"}}>
-              <Text style={{color:"white", fontSize:32, paddingVertical:"2%", paddingHorizontal: "30%"}}>Piano</Text>
-            </CollapseHeader>
-            <CollapseBody style={{alignItems:"center", borderBottomColor: "black", borderBottomWidth: 2}}>
-                <View style={{alignItems:"center"}}>
-                    <View style={[sparkViewStyles.accordianItems]}>
-                      <View style={[sparkViewStyles.profileView]}>
-                        <ProfileImage userId = {userId} changeable = {false} size = {"small"}/>
-                        <Text style={{fontSize:16, paddingHorizontal:"2%"}}>Aaron Bennet</Text>
-                      </View>
-                      <View style={{flexDirection:"row", alignItems:"center"}}>
-                        <Icon name="add" size={25} />
-                        <Icon name="close-outline" size={25} />
-                      </View>
-                    </View>
-                    <View style={[sparkViewStyles.accordianItems]}>
-                      <View style={[sparkViewStyles.profileView]}>
-                        <ProfileImage userId = {userId} changeable = {false} size = {"small"}/>
-                        <Text style={{fontSize:16, paddingHorizontal:"2%"}}>Claire Barclay</Text>
-                      </View>
-                      <View style={{flexDirection:"row", alignItems:"center"}}>
-                        <Icon name="add" size={25} />
-                        <Icon name="close-outline" size={25} />
-                      </View>
-                    </View>
-                    <View style={[sparkViewStyles.accordianItems]}>
-                      <View style={[sparkViewStyles.profileView]}>
-                        <ProfileImage userId = {userId} changeable = {false} size = {"small"}/>
-                        <Text style={{fontSize:16, paddingHorizontal:"2%"}}>Kelso Brittany</Text>
-                      </View>
-                      <View style={{flexDirection:"row", alignItems:"center"}}>
-                        <Icon name="add" size={25} />
-                        <Icon name="close-outline" size={25} />
-                      </View>
-                    </View>
+        <List.Section title = "Requests">
+          <List.Accordion title="Piano" style = {profileStyles.accordian} titleStyle = {profileStyles.headerText}>
+            <View style={profileStyles.listItemContainer}>
+              <View style={profileStyles.listItemContent}>
+                <View style={[sparkViewStyles.accordianItems]}>
+                  <View style={[sparkViewStyles.profileView]}>
+                    <ProfileImage userId = {userId} changeable = {false} size = {"small"}/>
+                    <Text style={{fontSize:16, paddingHorizontal:"2%"}}>Aaron Bennet</Text>
+                  </View>
+                  <View style={{flexDirection:"row", alignItems:"center"}}>
+                    <Icon name="add" size={28} />
+                    <Icon name="close-outline" size={28} />
+                  </View>
                 </View>
-            </CollapseBody>
-          </Collapse>
-          <TouchableOpacity>
-            <Text style={{fontSize:48}}>+</Text>
-          </TouchableOpacity>
-        </View>
+              </View>
+            </View>
+            <View style={profileStyles.listItemContainer}>
+              <View style={profileStyles.listItemContent}>
+                <View style={[sparkViewStyles.accordianItems]}>
+                  <View style={[sparkViewStyles.profileView]}>
+                    <ProfileImage userId = {userId} changeable = {false} size = {"small"}/>
+                    <Text style={{fontSize:16, paddingHorizontal:"2%"}}>Claire Barclay</Text>
+                  </View>
+                  <View style={{flexDirection:"row", alignItems:"center"}}>
+                    <Icon name="add" size={28} />
+                    <Icon name="close-outline" size={28} />
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View style={profileStyles.listItemContainer}>
+              <View style={profileStyles.listItemContent}>
+                <View style={[sparkViewStyles.accordianItems]}>
+                  <View style={[sparkViewStyles.profileView]}>
+                    <ProfileImage userId = {userId} changeable = {false} size = {"small"}/>
+                    <Text style={{fontSize:16, paddingHorizontal:"2%"}}>Kelso Brittany</Text>
+                  </View>
+                  <View style={{flexDirection:"row", alignItems:"center"}}>
+                    <Icon name="add" size={28} />
+                    <Icon name="close-outline" size={28} />
+                  </View>
+                </View>
+              </View>
+            </View>
+          </List.Accordion>
+          <View style={{width:"100%", alignItems:"center"}}>
+            <Text style={{fontSize:32}}>
+              +
+            </Text>
+          </View>
+        </List.Section>
 
         </ScrollView>
         
@@ -921,6 +1008,7 @@ export default function SparkSummary({ route, navigation }) {
       setAddress();
       setCity();
       setState();
+      // setInstruments();
     }, [])
 
     let myScreens = [
@@ -939,45 +1027,28 @@ export default function SparkSummary({ route, navigation }) {
             <IconButton onPress = {() => attendSpark()}style = {{position: "absolute", left: "85%"}}icon = "checkbox-marked-circle-plus-outline"/>
           </View>
           <View style = {styles.row}>
-            <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175", marginLeft: 39}}>{(MySparkName) ? `${MySparkName}'s Spark` : "My Spark"}</Text>
+            <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175", marginLeft: "19%"}}>{(MySparkName) ? `${MySparkName}'s Spark` : "My Spark"}</Text>
           </View>
           <View style={styles.row}>
-            <ProfileImage size = {"medium"} userId = {null}/>
+            <View style={{marginLeft:"4%"}}>
+              <ProfileImage size = {"medium"} userId = {null}/>
+            </View>
             <View style={styles.column}>
-              <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13, marginRight: 150}}>Date and Time</Text>
+              <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13, marginRight: screenWidth/60}}>Date and Time</Text>
               <View style={styles.row2}>
-                <Image style={{height: 20, width: 20, marginRight: 20}} source={require('../../../assets/locationpin.png')}></Image>
-                <Text style = {{flexWrap: "wrap", width: "70%", marginRight: 5}}>{MyAddress} {MyCity}, PA</Text>
+                <Image style={{height: 20, width: 20, marginRight: "2%"}} source={require('../../../assets/locationpin.png')}></Image>
+                <Text style = {{flexWrap: "wrap", width: "75%", marginRight: "1%"}}>{MyAddress} {MyCity}, PA</Text>
               </View>
             </View>
           </View>
-          <View style={[styles.row, {marginLeft: 80, marginRight: 50, top: "30%"}]}>
-          <Button
-              // onPress={onPressLearnMore}
-              title="Attend Spark"
-              // color="#841584"
-              accessibilityLabel="Learn more about this purple button"/>
-              <Button
-              // onPress={onPressLearnMore}
-              title="Next"
-              // color="#841584"
-              accessibilityLabel="Learn more about this purple button"/>
-        </View>
-        {/* REMOVE AND KEEP ONLY ON PUBLIC PROFILE  */}
-        {/* <View style={[styles.row, {marginLeft: 100, marginRight: 100, top: "30%"}]}>
-          <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
-          <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
-          <Image style={{height: 25, width: 25}} source={require('../../../assets/filledspark.png')}></Image>
-          <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
-          <Image style={{height: 25, width: 25}} source={require('../../../assets/emptyspark.png')}></Image>
-        </View> */}
+          <View style={[styles.row, {marginLeft: screenWidth/5, marginRight: screenWidth/50, top: "30%"}]}>
+            <TouchableOpacity style={profileStyles.constantButtons}><Text style={profileStyles.buttonText}>Attend Spark</Text></TouchableOpacity>
+            <TouchableOpacity style={profileStyles.constantButtons}><Text style={profileStyles.buttonText}>Next</Text></TouchableOpacity>
+          </View>
         </View>
         <View style={styles.content}>
           <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
         </View>
-        {/* <View style={styles.navigation}>
-          <Image style={{width: '100%', height: '100%'}} source={require('../../../assets/navigation.png')}></Image>
-        </View> */}
       </View>
       <DialogBox ref = {addSongDialog} />
       <DialogBox ref = {addAttachmentDialog} />
@@ -1021,8 +1092,6 @@ const styles = StyleSheet.create({
 
   attachment: {
     width: "100%",
-    paddingTop: "5%",
-    paddingBottom: "5%",
   },
 
   topBorder:{
@@ -1142,6 +1211,13 @@ const styles = StyleSheet.create({
 })
 
 const sparkViewStyles = StyleSheet.create({
+
+  listItemContainer: {
+    backgroundColor: "white",
+    backgroundColor: "#F9CBB1",
+    width: "85%",
+    marginLeft: "7%"
+  },
 
   accordianItems: {
     flexDirection:"row", 
