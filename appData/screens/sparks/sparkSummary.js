@@ -10,6 +10,7 @@ import { Observable, TDO, FirebaseButler, PushNotify } from '../../components/cl
 import { stylesPortrait } from "../../styles/portrait";
 import Routes from "../Navigation/constants/Routes";
 import ProfileImage from "../../components/profileImage";
+import { profileStyles } from "../../styles/profileViewStyles.js";
 
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 
@@ -440,7 +441,11 @@ export default function SparkSummary({ route, navigation }) {
         </View>
       </View>
       <View style={[styles.row, {marginLeft: 80, marginRight: 50, top: "30%"}]}>
-      <Button
+      <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => navigation.navigate(Routes.userDashboard, props)}>
+                  <Text style={profileStyles.buttonText}>Attend</Text></TouchableOpacity>
+                <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => navigation.navigate(Routes.sparkView, props)}>
+                  <Text style={profileStyles.buttonText}>Next</Text></TouchableOpacity>
+      {/* <Button
           // onPress={onPressLearnMore}
           title="Attend Spark"
           // color="#841584"
@@ -449,7 +454,7 @@ export default function SparkSummary({ route, navigation }) {
           // onPress={onPressLearnMore}
           title="Next"
           // color="#841584"
-          accessibilityLabel="Learn more about this purple button"/>
+          accessibilityLabel="Learn more about this purple button"/> */}
     </View>
      {/* REMOVE AND KEEP ONLY ON PUBLIC PROFILE  */}
     {/* <View style={[styles.row, {marginLeft: 100, marginRight: 100, top: "30%"}]}>

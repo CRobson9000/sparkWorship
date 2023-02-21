@@ -193,121 +193,13 @@ export default function SparkView({ route, navigation }) {
                 <Text style={{color: "white", textAlign:"center", fontSize: screenHeight/30, fontFamily:"RNSMiles", paddingTop: 28}}>Spark Worship</Text>
             </View> */}
             <View style={[sparkViewStyles.sparkContainer]}>
+                
                 <FlatList 
                     data = {Object.values(sparks)}
                     style = {{flex: 1, backgroundColor: "white"}}
                     renderItem = {renderSpark}
                 />
-                {/* <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary)} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
-                    <View style={{width:"87%"}}>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>Sunrise Worship Service</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Starting at 7AM on Apr 6th</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Cannon Hill, PA, 19512</Text>
-                    </View>
-                    <View style={{width:"13%", alignItems:"center"}}>
-                        <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
-
-                        </Image>
-                        <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
-
-                        </Image>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={[sparkViewStyles.boxTwo]}>
-                <View style={{width:"87%"}}>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>Song of Creation</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Cannoneers</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Starting at 6PM on May 16th</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Cannon Hill, PA, 19512</Text>
-                    </View>
-                    <View style={{width:"13%", alignItems:"center"}}>
-                        <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
-
-                        </Image>
-                        <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
-
-                        </Image>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary)} style={[sparkViewStyles.boxOne]}>
-                <View style={{width:"87%"}}>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>Pentatonix Live (Acappella)</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Pentatonix</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Starting at 7AM on Dec 24th</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Cannon Hill, PA, 19512</Text>
-                    </View>
-                    <View style={{width:"13%", alignItems:"center"}}>
-                        <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
-
-                        </Image>
-                        <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
-
-                        </Image>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary)} style={[sparkViewStyles.boxTwo]}>
-                <View style={{width:"87%"}}>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>New Year’s Worship (Solo)</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Gabriel Himself</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Starting at 11AM Dec 31st</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>New York City, NY, 10036</Text>
-                    </View>
-                    <View style={{width:"13%", alignItems:"center"}}>
-                        <View
-                            style={{
-                            width: 5,
-                            height: 5,
-                            borderRadius: Math.round(Dimensions.get('window').width / 2),
-                            backgroundColor: '#F2905B',
-                        }}></View>
-                        <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
-
-                        </Image>
-                        <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
-
-                        </Image>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary)} style={[sparkViewStyles.boxOne, sparkViewStyles.veryBottomBox]}>
-                <View style={{width:"87%"}}>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}>World’s End Choir (Choral)</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring The Universe</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Starting Jan 5th 2023</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>New Jerusalem, NJ, 77777</Text>
-                    </View>
-                    <View style={{width:"13%", alignItems:"center"}}>
-                        <View
-                            style={{
-                            width: 5,
-                            height: 5,
-                            borderRadius: Math.round(Dimensions.get('window').width / 2),
-                            backgroundColor: '#F2905B',
-                        }}></View>
-                        <Image style={{width: "100%", height: "50%", marginRight: "5%"}}>
-
-                        </Image>
-                        <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
-
-                        </Image>
-                    </View>
-                </TouchableOpacity> */}
-            </View>
-            {/* <View style={[sparkViewStyles.bottomContainer]}>
-                <Image style={{width: "7.5%", height: "45%", marginLeft: "6.5%"}} source={require("../../../assets/Home.png")}> 
-                </Image>
-                <Image style={{width: "7.5%", height: "45%"}} source={require("../../../assets/Vector.png")}> 
-                </Image>
-                <Image style={{width: "7.5%", height: "45%"}} source={require("../../../assets/Chat.png")}> 
-                </Image>
-                <Image style={{width: "7.5%", height: "45%"}} source={require("../../../assets/Plus.png")}> 
-                </Image>
-                <Image style={{width: "7.5%", height: "45%", marginRight: "6.5%"}} source={require("../../../assets/Profile.png")}> 
-                </Image>
-            </View> */}
-
-            
-        </View>
+            </View></View>
     );
 }
 
