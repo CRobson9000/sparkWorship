@@ -199,7 +199,8 @@ export default function SparkView({ route, navigation }) {
                     style = {{flex: 1, backgroundColor: "white"}}
                     renderItem = {renderSpark}
                 />
-            </View></View>
+            </View>
+            </View>
     );
 }
 
@@ -219,7 +220,7 @@ const sparkViewStyles = StyleSheet.create({
     {
         width:"85%",
         height:"100%",
-        backgroundColor: colors.secondary,
+        backgroundColor: "colors.secondary",
         flexDirection: "column", 
         justifyContent: "space-between", 
         alignItems: "center"

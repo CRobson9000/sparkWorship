@@ -35,6 +35,7 @@ export default function SparkSummary({ route, navigation }) {
   let currentSparkIdAttend = "-NFQzJtPbk7zfcY0Iy2l";
 
   const update = useRef({});
+  const [readMode, setReadMode] = React.useState(true);
 
   // -------------------------
   // global variables for tabs
@@ -158,6 +159,10 @@ export default function SparkSummary({ route, navigation }) {
         }
       }
     }
+  }
+
+  function toggleReadWrite() {
+    setReadMode(!readMode);
   }
 
   async function getSparkData() {
@@ -358,12 +363,6 @@ export default function SparkSummary({ route, navigation }) {
   const SetListRoute = () => {
     const [songs, setSongs] = React.useState(null);
 
-    // useEffect(() => {
-    //   if (songs != null) {
-    //     globalSongs.current = songs;
-    //   }
-    // }, [songs])
-
     useEffect(() => {
       // console.log("Global Songs"/*, globalSongs.current*/);
       setSongs(globalSongs.current);
@@ -551,28 +550,31 @@ export default function SparkSummary({ route, navigation }) {
 
     const renderSong = (object) => {
       return (
-        <Collapse style={{width:"100%", flex: 1}}>
-          <CollapseHeader style={profileStyles.accordian}>
-            <Text style={profileStyles.headerText}>{object.item.songName}</Text>
-            {/* <Text style={{color:"white", fontSize:20, paddingVertical:"2%"}}>Key: {object.item.key}</Text> */}
-          </CollapseHeader>
-          <CollapseBody style={[profileStyles.listItemContainer, {flex: 1}]}>
-            <TouchableOpacity 
-              onPress = {() => openDialog(addAttachmentDialog.current, {
-                height: 75, 
-                width: 90, 
-                title: "Add Attachment", 
-                content: <AddAttachmentContent songKey = {object.item.songKey} index = {object.index} />
-              })}
-              style = {{padding: "2%", width: "100%", justifyContent: "center", alignItems: "center"}}
-            >
-              <Text style={{color: "black", fontSize:15}}>+</Text>
-            </TouchableOpacity>
-            <View style={{alignItems:"center"}}>
-              <AttachmentContent attachments = {object.item.attachments}/>
-            </View>
-          </CollapseBody>
-        </Collapse>
+        <View style={[{margin: "5%"}]}>
+          <Collapse style={{flex: 1}}>
+            <CollapseHeader style = {[profileStyles.accordian, {padding: "5%"}]}>
+              <Text style = {{fontSize: 15}}>{object.item.songName}</Text>
+              <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
+              {/* <Text style={{color:"white", fontSize:20, paddingVertical:"2%"}}>Key: {object.item.key}</Text> */}
+            </CollapseHeader>
+            <CollapseBody style={[profileStyles.listItemContainer, {flex: 1}]}>
+              <TouchableOpacity 
+                onPress = {() => openDialog(addAttachmentDialog.current, {
+                  height: 75, 
+                  width: 90, 
+                  title: "Add Attachment", 
+                  content: <AddAttachmentContent songKey = {object.item.songKey} index = {object.index} />
+                })}
+                style = {{padding: "2%", width: "100%", justifyContent: "center", alignItems: "center"}}
+              >
+                <Text style={{color: "black", fontSize:15}}>+</Text>
+              </TouchableOpacity>
+              <View style={{alignItems:"center"}}>
+                <AttachmentContent attachments = {object.item.attachments}/>
+              </View>
+            </CollapseBody>
+          </Collapse>
+        </View>
       );
     }
 
@@ -605,7 +607,7 @@ export default function SparkSummary({ route, navigation }) {
     const SongContent = (props) => {
       if (songs && songs.length != 0) {
         return (
-          <View style = {{height: "55%", width: "100%"}}>
+          <View style = {{height: "75%", width: "100%"}}>
             <FlatList
               style = {{flex: 1}}
               data = {songs}
@@ -649,7 +651,6 @@ export default function SparkSummary({ route, navigation }) {
         {/* <View style={{height: "15%", width: "100%", alignItems: "center", justifyContent: "center"}}>
           <Text style={{fontSize:28, fontWeight:'500'}}>Set List</Text>
         </View> */}
-        <SongContent />
         <TouchableOpacity 
           onPress = {() => openDialog(addSongDialog.current, {
             height: 75, 
@@ -657,10 +658,11 @@ export default function SparkSummary({ route, navigation }) {
             title: "Add Song", 
             content: <AddSongContent />
           })}
-          style = {{height: "15%", width: "100%", justifyContent: "center", alignItems: "center"}}
+          style = {{height: "15%", bottom: 0, width: "100%", justifyContent: "center", alignItems: "center"}}
         >
-          <Text style={{fontSize:48}}>+</Text>
+          <Text style={{fontSize:32}}>+</Text>
         </TouchableOpacity>
+        <SongContent />
       </List.Section>
     );
   }
@@ -688,7 +690,9 @@ export default function SparkSummary({ route, navigation }) {
      */
 
     const TimesRoute = () => (
-      <Text> Available Soon! </Text>
+      <View style = {{flex: 1, justifyContent: "center", alignItems: "center"}}>
+        <Text> Available Soon! </Text>
+      </View>
   //     <ScrollView>
   //     <View style={[sparkViewStyles.sparkVerticalContainer]}>
   //     <View style={[sparkViewStyles.centerContents]}>
@@ -831,11 +835,11 @@ export default function SparkSummary({ route, navigation }) {
               </View>
             </View>
           </List.Accordion>
-          <View style={{width:"100%", alignItems:"center"}}>
+          {/* <View style={{width:"100%", alignItems:"center"}}>
             <Text style={{fontSize:32}}>
               +
             </Text>
-          </View>
+          </View> */}
         </List.Section>
 
         </ScrollView>
@@ -938,7 +942,7 @@ export default function SparkSummary({ route, navigation }) {
       </View>
     );
 
-    const ReadVolunteersRoute = () => (
+    const VolunteersRoute = () => (
       <View style={[sparkViewStyles.sparkVerticalTest]}>
         <ScrollView contentContainerStyle = {{flex: 1}}>
           <View style={[sparkViewStyles.boxOne, {marginTop: "8%"}]}>
@@ -961,23 +965,155 @@ export default function SparkSummary({ route, navigation }) {
       </View>
     );
 
+    const ReadSetListRoute = () => {
+      const [songs, setSongs] = React.useState(null);
+  
+      useEffect(() => {
+        // console.log("Global Songs"/*, globalSongs.current*/);
+        setSongs(globalSongs.current);
+      }, [globalSongs])
+  
+      function openAttachment(attachment) {
+        /* if we are opening a web link, we can use the linking.  Otherwise, we have to retrieve the download link from
+           google firebase.  If that link doesn't exist, we'll prompt the user to save their spark, which will push the download links
+           up to cloud storage */
+        if (attachment?.attachmentType == "link") {
+          Linking.openURL(attachment.value);
+        }
+        else {
+          getDownloadURL(storageRef(storage, `sparkData/${currentSparkId}/${attachment.songKey}/${attachment.attachmentId}`))
+          .then((url) => {
+            Linking.openURL(url);
+          })
+          .catch((error) => {
+            // could not find a spark cover image so display the default instead
+            console.log("Could not open file.  You may need to save your spark to access this file!");
+          })
+        }
+      }
+    
+      const renderSong = (object) => {
+        return (
+          <View style={[{marginBottom: "5%"}]}>
+            <Collapse style={{width:"100%", padding: "5%"}}>
+              <CollapseHeader style={[profileStyles.accordian, {padding: "5%", flexDirection: "row"}]}>
+                <Text style = {{fontSize: 15}}>{object.item.songName}</Text>
+                <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
+                {/* <Text style={{color:"white", fontSize:20, paddingVertical:"2%"}}>Key: {object.item.key}</Text> */}
+              </CollapseHeader>
+              <CollapseBody style={[profileStyles.listItemContainer, {flex: 1}]}>
+                <View style={{alignItems:"center"}}>
+                  <AttachmentContent attachments = {object.item.attachments}/>
+                </View>
+              </CollapseBody>
+            </Collapse>
+          </View>
+        );
+      }
+  
+      const renderAttachment = (object) => {
+        return (
+          <View style = {{padding: "2%"}}>
+            <TouchableHighlight onPress = {() => openAttachment(object.item)} style={[profileStyles.listItemHeader]}>
+              <View style = {{padding: "2%", flexDirection: "row"}}>
+                <Text style={[profileStyles.accordionHeaderText]}> {object.item.type}: </Text>
+                <Text style = {{fontSize: 15}}> {object.item.attachmentName} </Text>
+              </View>
+            </TouchableHighlight>
+            {/* <View style={profileStyles.listItemContent}>
+              <TouchableHighlight onPress = {() => openAttachment(object.item)}style = {styles.attachment}>
+                <Text style = {{fontSize: 15}}> {object.item.attachmentName} </Text>
+              </TouchableHighlight>
+            </View> */}
+          </View>
+        )
+      }
+  
+      const SongContent = (props) => {
+        if (songs && songs.length != 0) {
+          return (
+            <View style = {{height: "100%", width: "100%"}}>
+              <FlatList
+                style = {{flex: 1}}
+                data = {songs}
+                renderItem = {renderSong}
+              />
+            </View>
+          )
+        }
+        else {
+          return (
+            <View style = {{height: "55%", width: "100%", justifyContent: "center", alignItems: "center"}}>
+              <Text> There are no songs in this spark </Text>
+            </View>
+          )
+        }
+      }
+  
+      const AttachmentContent = (props) => {
+        if (props.attachments && props.attachments.length != 0) {
+          return (
+            <View style = {{flex: 1}}>
+              <FlatList
+                style = {{flex: 1}}
+                data = {props.attachments}
+                renderItem = {renderAttachment}
+              />
+            </View>
+          )
+        }
+        else {
+          return (
+            <View style = {{height: "55%", width: "100%", justifyContent: "center", alignItems: "center"}}>
+              <Text> There are no attachments for this song </Text>
+            </View>
+          )
+        }
+      }
+  
+      return (
+        <View style = {{flex: 1}}>
+          <List.Section title = "Set List">
+            {/* <View style={{height: "15%", width: "100%", alignItems: "center", justifyContent: "center"}}>
+              <Text style={{fontSize:28, fontWeight:'500'}}>Set List</Text>
+            </View> */}
+            <SongContent />
+          </List.Section>
+        </View>
+      );
+    }
+
     let [currentIndex, setCurrentIndex] = React.useState(1);
         
     const [index, setIndex] = React.useState(0);
-    const [routes] = React.useState([
+    const [editRoutes] = React.useState([
         { key: 'first', title: 'Location' },
         { key: 'second', title: 'Times' },
         { key: 'third', title: 'Set List' },
-        { key: 'fourth', title: 'Requests' },
-    //  { key: 'sixth', title: 'Test'}
+        { key: 'fourth', title: 'Volunteers' },
+        { key: 'fifth', title: 'Requests' },
     ]);
     
-    const renderScene = SceneMap({
+    const renderEditScene = SceneMap({
         first: LocationRoute,
         second: TimesRoute,
         third: SetListRoute,
-        fourth: RequestsRoute,
-    //  sixth: SixthRoute
+        fourth: VolunteersRoute,
+        fifth: RequestsRoute,
+    });
+
+    const [readRoutes] = React.useState([
+        { key: 'first', title: 'Location' },
+        { key: 'second', title: 'Times' },
+        { key: 'third', title: 'Set List' },
+        { key: 'fourth', title: 'Volunteers' },
+    ]);
+
+    const renderReadScene = SceneMap({
+        first: ReadLocationRoute,
+        second: TimesRoute,
+        third: ReadSetListRoute,
+        fourth: VolunteersRoute,
     });
 
     const renderTabBar = props => (
@@ -1050,9 +1186,13 @@ export default function SparkSummary({ route, navigation }) {
       // setInstruments();
     }, [])
 
-    let myScreens = [
-      <LocationRoute />, <TimesRoute />, <SetListRoute />, <RequestsRoute />
-    ];
+    // let myScreens = [
+    //   <LocationRoute />, <TimesRoute />, <SetListRoute />, <RequestsRoute />
+    // ];
+
+    // let readScreens = [
+    //   <ReadLocationRoute />, <TimesRoute />, <ReadSetListRoute />, <ReadVolunteersRoute /> 
+    // ];
   
   return(
     <View style={styles.MainContainer}>
@@ -1063,6 +1203,7 @@ export default function SparkSummary({ route, navigation }) {
             {/* <IconButton onPress = {() => testRequest()}style = {{position: "absolute", left: "2%"}}icon = "head-check" size = {30}/> */}
             {/* <Text style={styles.titleText}></Text> */}
             <IconButton onPress = {() => saveSpark()}style = {{position: "absolute", left: 0}}icon = "content-save-check"/>
+            <IconButton onPress = {() => toggleReadWrite()}style = {{position: "absolute", left: "42%"}} icon = "pencil"/>
             <IconButton onPress = {() => attendSpark()}style = {{position: "absolute", left: "85%"}}icon = "checkbox-marked-circle-plus-outline"/>
           </View>
           <View style = {styles.row}>
@@ -1086,7 +1227,12 @@ export default function SparkSummary({ route, navigation }) {
           </View>
         </View>
         <View style={styles.content}>
-          <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
+          <TabView 
+            navigationState={{ index, routes: (readMode) ? readRoutes : editRoutes }} 
+            renderScene={(readMode) ? renderReadScene : renderEditScene} 
+            renderTabBar={renderTabBar} 
+            onIndexChange={setIndex}
+          />
         </View>
       </View>
       <DialogBox ref = {addSongDialog} />
@@ -1195,6 +1341,8 @@ const styles = StyleSheet.create({
   },
 
   accordian: {
+    height: "15%",
+    padding: "2%",
     backgroundColor: '#F9CBB1',
     color: "#FFFFFF",
     padding: 10,

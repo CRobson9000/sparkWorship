@@ -85,7 +85,7 @@ export default function UserHub({ route, navigation }) {
           <View style = {musicianStyles.musicianContainer}>
             <FlatList 
               data = {Object.values(musicians)}
-              style = {{flex: 1, width: "90%"}}
+              style = {{flex: 1, width: "100%", backgroundColor: "white"}}
               renderItem = {renderMusician}
             />
           </View>
@@ -215,7 +215,7 @@ const musicianStyles = StyleSheet.create({
   {
     width:"85%",
     height:"100%",
-    backgroundColor: colors.secondary,
+    backgroundColor: "white",
     flexDirection: "column", 
     justifyContent: "space-between", 
     alignItems: "center"

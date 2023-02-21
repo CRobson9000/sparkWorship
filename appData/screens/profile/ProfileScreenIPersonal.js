@@ -53,9 +53,9 @@ export default function PSPersonal({ route, navigation }) {
       function instrumentRender(object) {
         return(
           <List.Accordion
-          title={object.item.instrumentName}
-          style = {profileStyles.accordian}
-          titleStyle = {profileStyles.headerText}
+            title={object.item.instrumentName}
+            style = {profileStyles.accordian}
+            titleStyle = {profileStyles.headerText}
           >   
             <View style={profileStyles.listItemContainer}>
               <View style={profileStyles.listItemHeader}>
@@ -94,14 +94,14 @@ export default function PSPersonal({ route, navigation }) {
         );
       }
       return( 
-        < ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
+        // <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
             <List.Section title="Instruments">
               <FlatList
                 data = {myInstruments}
                 style = {{height: "100%", width: "100%"}}
                 renderItem = {instrumentRender}/>
             </List.Section>
-          </ScrollView>
+          // </ScrollView>
       );
     }
       
