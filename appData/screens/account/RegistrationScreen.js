@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
 import React, { useRef } from 'react';
-import { getAuth, createUserWithEmailAndPassword } from "@firebase/auth";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, sendEmailVerification } from "@firebase/auth";
 
 //import statements for styles
 import { stylesPortrait } from "../../styles/portrait";
@@ -20,6 +20,8 @@ import { Provider } from 'react-native-paper';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 
+
+
 export default function RegistrationScreen({ navigation }) {
 
   /*------------------------------------------------*/
@@ -32,9 +34,10 @@ export default function RegistrationScreen({ navigation }) {
   let password = "";
   let confirmPassword = "";
 
-  const toastRef = useRef("");
+  const toastRef = useRef(null);
 
-  function signUp(navigation) {
+
+  async function signUp(navigation) {
     const auth = getAuth();
     //creates a new user in "authentication" of firebase
     if (password == confirmPassword && role && email && password && username && name) {
@@ -43,7 +46,7 @@ export default function RegistrationScreen({ navigation }) {
           const user = userCredential.user;
           createUserSpace(user.uid).then(() => {
             registerForPushNotificationsAsync(user.uid);
-            navigation.navigate("Navigator", {userId: user.uid}); 
+            emailVerify(user).then(() => navigation.navigate("Navigator", {userId: user.uid}))
           })
       }).catch((error) => {
         const errorMessage = error.message;
@@ -61,6 +64,20 @@ export default function RegistrationScreen({ navigation }) {
       let finalMessage = message.join(", ")
       toastRef.current.showToast(finalMessage);
     }
+  }
+
+  function testEmail() {
+    const auth = getAuth();
+    console.log("User", auth.currentUser);
+
+  }
+
+  async function emailVerify(user) {
+    sendEmailVerification(user)
+    .then(() => {
+      //Email verification sent!
+      //...
+    });
   }
 
   //--------------------
@@ -121,6 +138,17 @@ export default function RegistrationScreen({ navigation }) {
         <Text> {item} </Text>
       </View>
     )
+  }
+
+  async function getCurrentUser(uid) {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+      } else {
+
+      }
+    });
   }
 
   /*------------------------------------------------*/
@@ -198,7 +226,7 @@ export default function RegistrationScreen({ navigation }) {
         {/* Container for everything below the logo */}
         
         <View style={stylesPortrait.contentContainer}>
-          <ScrollView>
+          <ScrollView contentContainerStyle = {{paddingBottom: "20%"}}>
             <Dropdown
                 style = {regStyles.dropDown}
                 data = {["instrumentalist", "attendee"]}
@@ -217,8 +245,8 @@ export default function RegistrationScreen({ navigation }) {
             <Input placeHolderText={"Username"} secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
             <Input placeHolderText={"Password"} secure={false} func={(val) => password = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
             <Input placeHolderText={"Confirm Password"} secure={false} func={(val) => confirmPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
-            <TouchableOpacity onPress = {() => signUp(navigation)} style={stylesPortrait.button}>
-              <Text style={{color: "white", fontFamily: "RNSMiles"}}>Create new User</Text>
+            <TouchableOpacity onPress = {() => {signUp(navigation)}} style={stylesPortrait.button}>
+              <Text style={{color: "white", fontFamily: "RNSMiles"}}>Create New User</Text>
             </TouchableOpacity>
           </ScrollView>
           <Provider>
