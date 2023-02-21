@@ -27,18 +27,18 @@ function BottomTabNavigator( { route, navigation } ) {
           let iconName;
           
           if (route.name == Routes.userDashboard) {
-              iconName = focused ? 'ios-home-sharp' : 'ios-home-outline';
+              iconName = focused ? 'md-home' : 'md-home';
           } else if (route.name == Routes.sparkCreation) {
-            iconName = focused ? 'ios-add' : 'ios-add-outline';
+            iconName = focused ? 'add-circle' : 'add-circle';
           } else if (route.name == Routes.userHub) {
             iconName = focused
-              ? 'flash'
-              : 'flash-outline';
+              ? 'md-flash'
+              : 'md-flash';
           } else if (route.name == Routes.sparkView) {
             // iconName = focused ? 'message-circle' : 'message-circle-outline';
-            iconName = focused ? 'search' : 'search-outline';
+            iconName = focused ? 'md-flame' : 'md-flame';
           } else if (route.name == Routes.personalProfile) {
-            iconName = focused ? 'person' : 'person-outline';
+            iconName = focused ? 'md-person' : 'md-person';
           } 
           return <Icon name={iconName} size={22} color={color} />
         },
@@ -49,7 +49,7 @@ function BottomTabNavigator( { route, navigation } ) {
               <Image style={{position: "absolute", height: 60, width: 220}} source={require('../../../assets/logo2.png')}/>
               {/* <FeatherIcon icon="message-circle" size="24" style = {{position: "absolute", right: "5%"}} /> */}
               <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}
-              icon = "message-outline" style = {{position: "absolute", right: "5%"}}/>
+              icon = "message" style = {{position: "absolute", right: "5%"}}/>
             </View>
             // iconName = focused ? 'ios-chatbubble-outline' : 'ios-chatbubble-outline';
           );

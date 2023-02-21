@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, StyleSheet, Dimensions } from 'react-native';
+import { Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, StyleSheet, Dimensions, Image } from 'react-native';
 import React, { useEffect } from 'react';
 import { useDeviceOrientation } from '@react-native-community/hooks';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -12,6 +12,8 @@ import colors from '../../../config/colors';
 import ProfileImage from '../../components/profileImage.js';
 import { FlatList } from 'react-native-gesture-handler';
 import { FirebaseButler } from "../../components/classes";
+import { ScaleFromCenterAndroid } from 'react-navigation-stack/lib/typescript/src/vendor/TransitionConfigs/TransitionPresets.js';
+import { green100 } from 'react-native-paper/lib/typescript/styles/themes/v2/colors.js';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -29,15 +31,25 @@ export default function UserHub({ route, navigation }) {
       //Location formatting
       let locationString = `${item.city}, ${item.state} ${item.zipCode}`;
       return (
-          <TouchableOpacity onPress = {() => navigation.navigate(Routes.publicProfile, {...props, selectedUserId: musicianId})} style={[musicianStyles.boxOne, musicianStyles.veryTopBox]}>
-              <View style={{width:"87%"}}>
+          <TouchableOpacity onPress = {() => navigation.navigate(Routes.publicProfile, {...props, selectedUserId: musicianId})} style={[musicianStyles.boxOne]}>
+              <View style={{width: "100%", paddingBottom: "10%", alignItems:"center", flexDirection: "column", justifyContent: "center"}}>
+                  <View style={{padding: "2%", margin: "5%"}}>
+                      <ProfileImage userId = {musicianId} size = {"medium"}/>
+                  </View>
                   <Text style={[musicianStyles.boxText, musicianStyles.topText]}> {item.name || "No Name"} </Text>
                   {/* <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text> */}
                   {/*<Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{locationString}</Text>  */}
-                  <Text style={{marginLeft: "85%", marginTop: "2%"}}> More</Text>
-              </View>
-              <View style={{width:"13%", alignItems:"center"}}>
-                  <ProfileImage style = {musicianStyles.profPic} userId = {musicianId} size = {"medium"}/>
+                  <View style={musicianStyles.informationBox}>
+                      <View style={{position: "relative", flexDirection: "row", width: "30%", alignItems: "center"}}>
+                      <Image style={{height: 20, width: 20, position: "relative", /*left: "10%"*/}} source={require('../../../assets/locationpin.png')}></Image>
+                        <Text>Ephrata, PA</Text>
+                      </View>
+                      <View style={musicianStyles.verticalLine}></View>
+                      <View style={{position: "relative", width: "30%", alignItems: "center"}}>
+                        <Text>Piano</Text>
+                      </View>
+                  </View>
+                  {/* <Text style={{position: "relative", left: "40%"}}> More</Text> */}
               </View>
           </TouchableOpacity>
       )
@@ -73,7 +85,7 @@ export default function UserHub({ route, navigation }) {
           <View style = {musicianStyles.musicianContainer}>
             <FlatList 
               data = {Object.values(musicians)}
-              style = {{flex: 1, backgroundColor: "white"}}
+              style = {{flex: 1, width: "90%"}}
               renderItem = {renderMusician}
             />
           </View>
@@ -161,11 +173,22 @@ const musicianStyles = StyleSheet.create({
   {
       backgroundColor: "#DBE9EC",
       flex: 1,
-      padding: "3%",
+      padding: "2%",
       borderRadius: 30,
-      flexDirection: "row",
-      justifyContent: "space-between",
+      flexDirection: "column",
+      // justifyContent: "space-between",
       alignItems: "center",
+      margin: "2%"
+  },
+
+  informationBox:
+  {
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      alignItems: "center",
+      paddingTop: "2%",
+      paddingBottom: "2%",
+      width: "100%",
   },
 
   veryTopBox:{
@@ -173,26 +196,20 @@ const musicianStyles = StyleSheet.create({
   },
 
   boxText:{
-    width: "70%", 
-    marginLeft:"10%",
-    marginTop: "1%",
-    marginBottom: "1%",
+    marginBottom: "2%",
+    padding: "2%",
     fontSize: screenHeight/70
   },
-
+  
   topText:{
     // fontSize: 12
     fontFamily: "RNSMiles",
     fontWeight: "bold",
-    // marginLeft:"6%",
-    marginTop: "40%",
-    marginLeft: "35%"
-  },
+    fontSize: 20
+    },
 
   profPic:{
-    marginTop: "100%", 
-    marginRight: "650%",
-    marginBottom: "250%",
+    
   },
   musicianContainer:
   {
@@ -203,4 +220,12 @@ const musicianStyles = StyleSheet.create({
     justifyContent: "space-between", 
     alignItems: "center"
   },
+  verticalLine: {
+    height: '90%',
+    width: 2,
+    backgroundColor: '#909090',
+    alignItems: "center",
+    position: "relative",
+    // right: "52%"
+  }
 });

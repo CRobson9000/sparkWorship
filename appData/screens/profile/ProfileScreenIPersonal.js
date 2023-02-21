@@ -281,8 +281,10 @@ export default function PSPersonal({ route, navigation }) {
                   </View>
               </View>
             <View style={[profileStyles.row2, {justifyContent: 'space-evenly', marginLeft: 30, marginRight: 30, alignItems: 'center'}]}>
-                <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => logFriends}><Text style={profileStyles.buttonText}>Friends</Text></TouchableOpacity>
-                <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => navigation.navigate(Routes.profileCreation, props)}><Text style={profileStyles.buttonText}>Edit Profile</Text></TouchableOpacity>
+                <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => logFriends}>
+                  <Text style={profileStyles.buttonText}>Friends</Text></TouchableOpacity>
+                <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => navigation.navigate(Routes.profileCreation, props)}>
+                  <Text style={profileStyles.buttonText}>Edit Profile</Text></TouchableOpacity>
               </View>
             </View>
             <View style={profileStyles.content}>
