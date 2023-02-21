@@ -64,7 +64,7 @@ export default function SparkSummary({ route, navigation }) {
     <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
         <View style={[sparkViewStyles.sparkContainer]}>
           <View style={[sparkViewStyles.sparkVerticalContainer]}>
-                <View style={[sparkViewStyles.topLocationContainer]}>
+            {/*<View style={[sparkViewStyles.topLocationContainer]}>
                     <Text style={{paddingLeft:"0%"}}>Address</Text>
                     <Input start = {inputs.address.getVal()} inputStyle = {[sparkViewStyles.newInputBox, sparkViewStyles.locationInputBox]} func = {(val) => inputs.address.setVal(val)}/>
                 </View>
@@ -82,8 +82,17 @@ export default function SparkSummary({ route, navigation }) {
                 </View>
                 <TouchableOpacity activeOpacity={1} style={[sparkViewStyles.testyTouchable]} onPress = {() => sendPayload()}>
                     <Text style={[stylesPortrait.centerText, sparkViewStyles.button]}>Submit</Text>
-                </TouchableOpacity>
-                  
+                </TouchableOpacity> */}
+
+            <Image style={{height: 70, width: 70, marginTop: "7%"}} source={require('../../../assets/locationpin2.png')}/>
+            <Text style={{fontSize: 25, marginTop: "5%"}}>Location Title</Text>
+            <Text style={{fontSize: 18, marginTop: "2%"}}>Street Address</Text>
+            <Text style={{fontSize: 18, marginTop: "2%"}}>City, State Zip Code</Text>
+            <Text style={{marginRight: "51%", marginTop: "7%"}}>Special Instructions</Text>
+            <View style={{borderColor: "#F2905B", borderRadius: 10, borderWidth: 2, height: "30%", width: "85%", marginTop: "2%"}}/>
+            <TouchableOpacity style={{width: "85%", height: "18%", marginTop: "6%", backgroundColor: "rgb(0, 97, 117)", borderRadius: 10, alignItems: "center", justifyContent: "center"}}>
+              <Text style={{color: "white"}}>Google Maps</Text>
+            </TouchableOpacity>
           </View>
       </View>
     </ScrollView>
@@ -92,32 +101,21 @@ export default function SparkSummary({ route, navigation }) {
     const VolunteersRoute = () => (
         <ScrollView>
           <View style={[sparkViewStyles.sparkVerticalTest]}>
-            <View style={{alignItems: "center", justifyContent: "center"}}>
-                <Text style={{fontSize:28, paddingTop:"4%", paddingBottom:"6%", fontWeight:'500'}}>Volunteers</Text>
+            <View style={[sparkViewStyles.boxOne, {marginTop: "8%"}]}>
+              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/userHub1.png")}/>
+              <Text style={{marginLeft: "5%"}}>Spark Leader: Colin Robson</Text>
             </View>
             <View style={[sparkViewStyles.boxOne]}>
-              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-              </Image>
-              <Text style={[sparkViewStyles.originalBoxText]}>Spark Leader: Colin Robson (you)</Text>
+              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/userHub3.png")}/>
+              <Text style={{marginLeft: "5%"}}>Bass: Azianna Yang</Text>
             </View>
             <View style={[sparkViewStyles.boxOne]}>
-              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-              </Image>
-              <Text style={[sparkViewStyles.originalBoxText]}>Azianna Yang: Bass</Text>
+              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/userHub1.png")}/>
+              <Text style={{marginLeft: "5%"}}>Piano: Colin Robson</Text>
             </View>
             <View style={[sparkViewStyles.boxOne]}>
-              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-              </Image>
-              <Text style={[sparkViewStyles.originalBoxText]}>Colin Robson: Piano</Text>
-            </View>
-            <View style={[sparkViewStyles.boxOne]}>
-              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-              </Image>
-              <Text style={[sparkViewStyles.originalBoxText]}>Austin Dorsey: Vocals</Text>
+              <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/userHub3.png")}/>
+              <Text style={{marginLeft: "5%"}}>Vocals: Austin Dorsey</Text>
             </View>
           </View>
         </ScrollView>
@@ -520,6 +518,7 @@ const styles = StyleSheet.create({
     marginLeft: '5%',
     marginRight: '5%', 
   },
+
   accordionSubheading: {
     left:15,
     backgroundColor: "#F2905B",
@@ -530,6 +529,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     color: "#FFFFFF"
   },
+
   navigation: {
     backgroundColor: "rgb(219, 233, 236)",
     height: "7%"
@@ -722,11 +722,12 @@ const sparkViewStyles = StyleSheet.create({
   },
   boxOne:
   {
-      backgroundColor: "#F9CBB1",
-      //height: "30%",
-      width: "80%",
+      backgroundColor: "#F2905B",
+      marginBottom: "5%",
+      borderRadius: 10,
+      height: "20%",
+      width: "85%",
       flexDirection: "row",
-      justifyContent: "space-between",
       alignItems: "center",
   },
   boxText:{
@@ -743,32 +744,37 @@ const sparkViewStyles = StyleSheet.create({
     marginRight: "5%"
   },
   profileImage:{
-    width: "15%", 
-    height: "51%",
-    marginLeft: "3%"
+    width: "12.5%", 
+    height: "59%",
+    marginLeft: "6%"
   },
+
   accordionImage:{
     width: "8%", 
     height: "30%",
     marginVertical: "0%"
   },
+
   accordionImageRight:{
     width: "8%", 
     height: "30%",
     marginRight: "2%",
     marginVertical: "0%"
   },
+
   acceptButton:{
     width: "8%", 
     height: "30%",
     marginVertical: "0%"
   },
+
   denyButton:{
     width: "8%", 
     height: "30%",
     marginRight: "2%",
     marginVertical: "0%"
   },
+
   sideOfAccordionImage:{
     width: "15%", 
     height: "24%",
