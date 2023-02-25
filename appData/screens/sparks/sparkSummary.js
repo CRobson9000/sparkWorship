@@ -1207,9 +1207,9 @@ export default function SparkSummary({ route, navigation }) {
             <IconButton onPress = {() => attendSpark()}style = {{position: "absolute", left: "85%"}}icon = "checkbox-marked-circle-plus-outline"/>
           </View>
           <View style = {styles.row}>
-            <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175", marginLeft: "19%"}}>{(MySparkName) ? `${MySparkName}'s Spark` : "My Spark"}</Text>
+            <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>{(MySparkName) ? `${MySparkName}'s Spark` : "My Spark"}</Text>
           </View>
-          <View style={styles.row}>
+          <View style={[styles.row, {marginLeft: "10%"}]}>
             <View style={{marginLeft:"4%"}}>
               <ProfileImage size = {"medium"} userId = {null}/>
             </View>
