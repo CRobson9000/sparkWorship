@@ -1,9 +1,9 @@
 import { Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, StyleSheet, Dimensions, Image } from 'react-native';
 import React, { useEffect } from 'react';
 import { useDeviceOrientation } from '@react-native-community/hooks';
-import { LinearGradient } from 'expo-linear-gradient';
+// import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, createUserWithEmailAndPassword } from "@firebase/auth";
-import Icon from 'react-native-vector-icons/Ionicons';
+// import Icon from 'react-native-vector-icons/Ionicons';
 
 //import for navigation
 import Routes from '../Navigation/constants/Routes.js';
@@ -12,8 +12,8 @@ import colors from '../../../config/colors';
 import ProfileImage from '../../components/profileImage.js';
 import { FlatList } from 'react-native-gesture-handler';
 import { FirebaseButler } from "../../components/classes";
-import { ScaleFromCenterAndroid } from 'react-navigation-stack/lib/typescript/src/vendor/TransitionConfigs/TransitionPresets.js';
-import { green100 } from 'react-native-paper/lib/typescript/styles/themes/v2/colors.js';
+// import { ScaleFromCenterAndroid } from 'react-navigation-stack/lib/typescript/src/vendor/TransitionConfigs/TransitionPresets.js';
+// import { green100 } from 'react-native-paper/lib/typescript/styles/themes/v2/colors.js';
 
 const screenHeight = Dimensions.get('window').height;
 
