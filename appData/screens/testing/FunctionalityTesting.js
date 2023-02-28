@@ -29,12 +29,10 @@ export default function MyTest({ route, navigation }) {
   const requestToPlay = (role) => {
     //add currentUserId to a requested section of the spark with the currentSparkId
     const db = getDatabase();
-    const roleRef = ref(db, `Sparks/${currentSparkId}/roles/${role}/requested`);
+    const roleRef = ref(db, `Sparks/${currentSparkId}/roles/${role}/requests`);
     push(roleRef, userId);
 
     //send notification to the user
-
-    //log the action
 
   }
 

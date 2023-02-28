@@ -6,7 +6,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { styleSheet } from "../../styles/sparkCreationStyles";
 
 import { Input, Slider, KeyboardView } from '../../components/components';
-import { Observable, TDO } from '../../components/classes';
+import { Observable, TDO, FirebaseButler } from '../../components/classes';
 import { getDatabase, ref, set, get, push } from 'firebase/database';
 
 import Routes from "../Navigation/constants/Routes";
@@ -95,12 +95,13 @@ export default function SparkCreation({ route, navigation }) {
         // // populate database with values from update
         // //------------------------------------------- 
         function setUpRoleSpace(sparkId, role) {
+            // standarize roles to lower case and words separated by underscores
+            role = role.split(' ').join('_');
+            role = role.toLowerCase();
+            // save data in firebase
             let rolePromise = new Promise((resolve, reject) => {
                 const roleReference = ref(db, `Sparks/${sparkId}/roles/${role}`)
-                set(roleReference, {
-                    requested: {id: ""},
-                    final: "" 
-                }).then(() => resolve());
+                push(roleReference, {final: ""}).then(() => resolve());
             })
             return rolePromise;
         }
@@ -116,7 +117,7 @@ export default function SparkCreation({ route, navigation }) {
         }
         if (update["state"]) {
             const stateReference = ref(db, `Sparks/${sparkId}/info/location/state`);
-            set(stateReference, update["state"]);
+            set(stateReference, globalUserState);
         }
         if (update["zip"]) {
             const zipReference = ref(db, `Sparks/${sparkId}/info/location/zip`);
@@ -165,6 +166,7 @@ export default function SparkCreation({ route, navigation }) {
             )
             set(publishedTimeReference, publishedTimeTDO);
         }
+
         //setup roles space
         if (rolesArray["current"].length != 0) {
             for (let i = 0; i < rolesArray["current"].length; i++) {
@@ -174,10 +176,17 @@ export default function SparkCreation({ route, navigation }) {
         }
 
         // set spark leader role in firebase
-        const leaderRef = ref(db, `Sparks/${sparkId}/roles/Spark Leader`);
+        const leaderRef = ref(db, `Sparks/${sparkId}/roles/spark_leader`);
         await set(leaderRef, userId);
 
-        navigation.navigate("Navigator");
+        // set the default name of the spark (<spark leader name>'s spark)
+        const sparkNameRef = ref(db, `Sparks/${sparkId}/info/name`);
+
+        // get spark leader's name        
+        let sparkLeaderName = await FirebaseButler.fbGet(`Users/${userId}/info/name`);
+        await set(sparkNameRef, `${sparkLeaderName}'s Spark`);
+
+        navigation.navigate(Routes.sparkSummary, {userId, currentSparkId: sparkId});
     }
     // --------------
     // Drop Down Code

@@ -30,9 +30,8 @@ export default function SparkView({ route, navigation }) {
     const renderSpark = (object) => {
         let item = object.item;
         if (item.info) {
-
             //Date Time string formatting
-            let sparkTimeObj = item.info?.times.spark.TDO;
+            let sparkTimeObj = item.info?.times?.spark.TDO;
             let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
             let finalTime = sparkTDO.getFormattedTime();
             let finalDate = sparkTDO.getFormattedDateFormal();
@@ -46,7 +45,7 @@ export default function SparkView({ route, navigation }) {
             return (
                 <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary, {userId, currentSparkId: sparkId})} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
                     <View style={{width:"87%"}}>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {`${item?.info?.name}'s Spark` || "No Name"} </Text>
+                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name} </Text>
                         {/* <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text> */}
                         {/* <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{finalDateTime}</Text>
                         <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{locationString}</Text>  */}
@@ -200,7 +199,7 @@ export default function SparkView({ route, navigation }) {
                     renderItem = {renderSpark}
                 />
             </View>
-            </View>
+        </View>
     );
 }
 

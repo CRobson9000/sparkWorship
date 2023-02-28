@@ -40,18 +40,28 @@ export default function SparkSummary({ route, navigation }) {
   // -------------------------
   // global variables for tabs
   // -------------------------
+  // Top Section Info
+  const [sparkName, setSparkName] = React.useState(null);
+  const [sparkLocationString, setSparkLocationString] = React.useState(null);
+  const [sparkLeaderId, setSparkLeaderId] = React.useState(null);
+
   // Location Tab
-  const globalAddress = useRef("12345678");
+  const globalLocationTitle = useRef("");
+  const globalAddress = useRef("");
   const globalZip = useRef("");
   const globalCity = useRef("");
   const globalState = useRef("");
   const globalAdditionalDirections = useRef("");
+  const globalGoogleMapsLink = useRef("");
 
   const db = getDatabase();
   const storage = getStorage();
 
   // Set List Tab
   const globalSongs = useRef([]);
+
+  // Volunteer and Request Tab
+  const globalRoleData = useRef({}); 
 
   // Helper Functions for tab code
   const renderDropDownItem = (item) => {
@@ -130,15 +140,18 @@ export default function SparkSummary({ route, navigation }) {
   }
 
   async function saveSpark() {
+    // ----------------------------------
+    // setup general info about the spark
+    // ----------------------------------
     let updateVals = Object.values(update.current);
     console.log("Update", updateVals);
     for (let i = 0; i < updateVals.length; i++) {
       // update data in firebase realtime database
       let overallKey = Object.keys(update.current)[i];
       let values = updateVals[i];
-
+      
       if (overallKey == "location") {
-        for (let j = 0; j < Object.values(values); j++) {
+        for (let j = 0; j < Object.values(values).length; j++) {
           let specificKey = Object.keys(values)[j];
           let specificValue = Object.values(values)[j];
           const itemRef = ref(db, `Sparks/${currentSparkId}/info/${overallKey}/${specificKey}`);
@@ -159,6 +172,8 @@ export default function SparkSummary({ route, navigation }) {
         }
       }
     }
+    // clear update after all values have been set
+    update.current = {};
   }
 
   function toggleReadWrite() {
@@ -166,12 +181,15 @@ export default function SparkSummary({ route, navigation }) {
   }
 
   async function getSparkData() {
-    let sparkData = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/info`);
-    // console.log("Spark Data", sparkData);
-    let sparkArray = Object.values(sparkData);
-    for (let i = 0; i < sparkArray.length; i++) {
-      let key = Object.keys(sparkData)[i];
-      let value = sparkArray[i];
+    // setup info data
+    let sparkData = await FirebaseButler.fbGet(`Sparks/${currentSparkId}`);
+    let sparkInfoArray = Object.values(sparkData['info']);
+    for (let i = 0; i < sparkInfoArray.length; i++) {
+      let key = Object.keys(sparkData['info'])[i];
+      let value = sparkInfoArray[i];
+      if (key == "name") {
+        setSparkName(value);
+      }
 
       if (key == "location") {
         globalAddress.current = value?.address || "";
@@ -179,11 +197,19 @@ export default function SparkSummary({ route, navigation }) {
         globalAdditionalDirections.current = value?.additionalDirections || "";
         globalState.current = value?.state || "";
         globalZip.current = value?.zip || "";
+        globalLocationTitle.current = value?.locationTitle;
+        globalGoogleMapsLink.current = value?.googleMapsLink;
+        // set location string for top area
+        setSparkLocationString(`${value.address} ${value.city}, ${value.state}`) || "No location set";
       }
       else if (key == "songs") {
         globalSongs.current = value;  
       }
     }
+
+    // setup roles
+    let rolesObject = sparkData['roles'];
+    globalRoleData.current = rolesObject;
   }
 
   useEffect(() => {
@@ -191,40 +217,20 @@ export default function SparkSummary({ route, navigation }) {
   }, [])
 
   const LocationRoute = () => {
+    const [locationTitle, setLocationTitle] = React.useState("")
     const [address, setAddress] = React.useState("");
     const [city, setCity] = React.useState("");
     const [state, setState] = React.useState("");
     const [zip, setZip] = React.useState("");
     const [additionalDirections, setAdditionalDirections] = React.useState("");
+    const [googleMapsLink, setGoogleMapsLink] = React.useState("");
 
     let states = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
 
-    // keep the global copy of each variable up to date with the local copy.
+    // keep local copy up to date with the global copy
     useEffect(() => {
-      if (address != "") {
-        globalAddress.current = address
-      }
-    }, [address])
-    useEffect(() => {
-      if (globalCity != "") {
-        globalCity.current = city
-      }
-    }, [city])
-    useEffect(() => {
-      if (globalState != "") {
-        globalState.current = state
-      }
-    }, [state])
-    useEffect(() => {
-      if (globalZip != "") {
-        globalZip.current = zip
-      }
-    }, [zip])
-    useEffect(() => {
-      if (globalAdditionalDirections != "") {
-        globalAdditionalDirections.current = additionalDirections
-      }
-    }, [additionalDirections])
+      setAddress(globalLocationTitle.current);
+    }, [globalLocationTitle])
 
     useEffect(() => {
       setAddress(globalAddress.current);
@@ -239,12 +245,16 @@ export default function SparkSummary({ route, navigation }) {
     }, [globalZip])
 
     useEffect(() => {
-      setZip(globalCity.current);
+      setCity(globalCity.current);
     }, [globalCity])
 
     useEffect(() => {
       setAdditionalDirections(globalAdditionalDirections.current);
-    }, [globalAddress])
+    }, [globalAdditionalDirections])
+
+    useEffect(() => {
+      setGoogleMapsLink(globalGoogleMapsLink.current);
+    }, [globalGoogleMapsLink])
 
     return (
       <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
@@ -252,6 +262,19 @@ export default function SparkSummary({ route, navigation }) {
               <View style={[sparkViewStyles.sparkVerticalContainer]}>
                 <ScrollView contentContainerStyle = {{paddingBottom: "20%"}} style={{width:"100%"}}>
                 <View style={[sparkViewStyles.sparkVerticalContainer]}>
+                <View style={[sparkViewStyles.locationContainer]}>
+                    <Text style={{paddingLeft:"2%"}}>Location Title</Text>
+                    <TextInput 
+                      value = {locationTitle} 
+                      placeholder = {locationTitle}
+                      style = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} 
+                      onChangeText = {(text) => {
+                        if (!update.current.location) update.current["location"] = {} 
+                        update.current["location"]["locationTitle"] = text;
+                        setLocationTitle(text)
+                      }}
+                    />                  
+                  </View>
                   <View style={[sparkViewStyles.topLocationContainer]}>
                       <Text style={{paddingLeft:"2%"}}>Address</Text>
                       <TextInput 
@@ -259,6 +282,7 @@ export default function SparkSummary({ route, navigation }) {
                         placeholder = {address}
                         style = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} 
                         onChangeText = {text => {
+                          if (!update.current.location) update.current["location"] = {} 
                           update.current["location"]["address"] = text;
                           setAddress(text);
                         }}
@@ -271,6 +295,7 @@ export default function SparkSummary({ route, navigation }) {
                         placeholder = {city}
                         style = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} 
                         onChangeText = {(text) => {
+                          if (!update.current.location) update.current["location"] = {} 
                           update.current["location"]["city"] = text;
                           setCity(text)
                         }}
@@ -283,6 +308,7 @@ export default function SparkSummary({ route, navigation }) {
                         placeholder = {zip}
                         style = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} 
                         onChangeText = {(text) => {
+                          if (!update.current.location) update.current["location"] = {} 
                           update.current["location"]["zip"] = text;
                           setZip(text)
                         }}
@@ -294,27 +320,44 @@ export default function SparkSummary({ route, navigation }) {
                         style={styles.dropDown} 
                         data={states} 
                         renderItem={renderDropDownItem}
-                        maxHeight = {"40%"}
+                        maxHeight = {"100%"}
                         itemTextStyle = {{color: "black", fontSize: 2}}
                         onChange = {(value) => {
+                          if (!update.current.location) update.current["location"] = {} 
                           update.current["location"]["state"] = value;
                           setState(value)
                         }}
+                        dropdownPosition = {"bottom"}
+                        containerStyle = {{top: -30}}
                         placeholder = {state}
                         value = {state}
                       />
                   </View>
-                  {/* <View style={[sparkViewStyles.bigLocationContainer]}>
-                    <Text style={{paddingLeft:"2%"}}>When At Address</Text>                     
-                  </View> */}
-                  {/** Solves issue... have to check on other phones */}
+                  <View style={[sparkViewStyles.locationContainer]}>
+                      <Text style={{paddingLeft:"2%"}}>Google Maps Link</Text>
+                      <TextInput 
+                        value = {googleMapsLink} 
+                        placeholder = {googleMapsLink}
+                        style = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} 
+                        onChangeText = {(text) => {
+                          if (!update.current.location) update.current["location"] = {} 
+                          update.current["location"]["googleMapsLink"] = text;
+                          setGoogleMapsLink(text);
+                        }}
+                      />                  
+                  </View>
                   <View style={[sparkViewStyles.bigLocationContainer]}>
                       <Text style={{paddingLeft:"2%"}}>When At Address</Text>
                       <TextInput 
+                        multiline = {true}
                         value = {additionalDirections} 
                         placeholder = {additionalDirections}
                         style = {[styleSheet.inputBox, sparkViewStyles.locationInputBox]} 
-                        onChangeText = {(text) => setAdditionalDirections(text)}
+                        onChangeText = {(value) => {
+                          if (!update.current.location) update.current["location"] = {};
+                          update.current["location"]["additionalDirections"] = value; 
+                          setAdditionalDirections(value)
+                        }}
                       />                  
                     </View>
                  </View>
@@ -787,11 +830,55 @@ export default function SparkSummary({ route, navigation }) {
         const addSparkRef = ref(db, `Users/${id}/sparks/playing`);
         push(addSparkRef, currentSparkId);
       }
+
+      const renderRoleRequest = (object) => {
+        return (
+          // <View style={[{marginBottom: "5%"}]}>
+            <Collapse style={{width:"100%", padding: "5%"}}>
+              <CollapseHeader style={[profileStyles.accordian, {padding: "5%", margin: 0, flexDirection: "row"}]}>
+                <Text style = {{fontSize: 15}}>Piano</Text>
+                <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
+              </CollapseHeader>
+              <CollapseBody style={[/*profileStyles.listItemContainer,*/ {paddingBottom: "2%", backgroundColor: 'blue'}]}>
+                {/* <View style={{height: 200, width: "100%", backgroundColor: "yellow"}}> */}
+                  <FlatList
+                    style = {{height:  "100%", flexGrow: 0}}
+                    data = {roleRequest}
+                    renderItem = {renderRequest}
+                    listItemContainer = {{flex: 1}}
+                  />
+                {/* </View> */}
+              </CollapseBody>
+            </Collapse>
+          // </View>
+        );
+      }
+
+      const renderRequest = (object) => {
+        return (
+          <View style={[sparkViewStyles.accordianItems]}>
+            <View style={[sparkViewStyles.profileView]}>
+              <ProfileImage userId = {null} changeable = {false} size = {"small"}/>
+              <Text style={{fontSize:16, paddingHorizontal:"2%"}}>Claire Barclay</Text>
+            </View>
+            <View style={{flexDirection:"row", alignItems:"center"}}>
+              <Icon name="add" size={28} />
+              <Icon name="close-outline" size={28} />
+            </View>
+          </View>
+        );
+      }
+
+      let roleRequest = [1, 2, 3, 4, 5];
     
       return (
-        <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
+        // <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
         <List.Section title = "Requests">
-          <List.Accordion title="Piano" style = {profileStyles.accordian} titleStyle = {profileStyles.headerText}>
+          <FlatList
+            data = {roleRequest}
+            renderItem = {renderRoleRequest}
+          /> 
+          {/* <List.Accordion title="Piano" style = {profileStyles.accordian} titleStyle = {profileStyles.headerText}>
             <View style={profileStyles.listItemContainer}>
               <View style={profileStyles.listItemContent}>
                 <View style={[sparkViewStyles.accordianItems]}>
@@ -834,7 +921,7 @@ export default function SparkSummary({ route, navigation }) {
                 </View>
               </View>
             </View>
-          </List.Accordion>
+          </List.Accordion> */}
           {/* <View style={{width:"100%", alignItems:"center"}}>
             <Text style={{fontSize:32}}>
               +
@@ -842,61 +929,7 @@ export default function SparkSummary({ route, navigation }) {
           </View> */}
         </List.Section>
 
-        </ScrollView>
-        
-        /** <ScrollView>
-        <View style={[sparkViewStyles.sparkVerticalTest]}>
-          <View style={{alignItems: "center", justifyContent: "center"}}>
-              <Text style={{fontSize:28, paddingTop:"4%", paddingBottom:"6%", fontWeight:'500'}}>Volunteers</Text>
-          </View>
-          <View style={[sparkViewStyles.boxOne]}>
-            <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-            </Image>
-            <Text style={[sparkViewStyles.originalBoxText]}>Project Lead (you)</Text>
-          </View>
-          <View style={[sparkViewStyles.boxOne]}>
-            <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-            </Image>
-            <Text style={[sparkViewStyles.originalBoxText]}>Accepted Friend</Text>
-          </View>
-          <View style={[sparkViewStyles.boxOne]}>
-            <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-            </Image>
-            <Text style={[sparkViewStyles.boxText]}> Piano: Colin Robson </Text>
-            <TouchableOpacity onPress = {() => acceptRequest("piano", "kicswUalNUNMF4qYmT1OzY7IymG3")} style={[sparkViewStyles.acceptButton]}>
-            <Image source={require("../../../assets/check-mark-24.png")}>
-
-            </Image>
-            </TouchableOpacity>
-            <TouchableOpacity style={[sparkViewStyles.denyButton]}>
-            <Image source={require("../../../assets/x-mark-24.png")}>
-
-            </Image>
-            </TouchableOpacity>
-          </View>
-          <View style={[sparkViewStyles.boxOne]}>
-            <Image style={[sparkViewStyles.profileImage]} source={require("../../../assets/EriToken.png")}>
-
-            </Image>
-            <Text style={[sparkViewStyles.boxText]}>Volunteer 2</Text>
-
-            <TouchableOpacity style={[sparkViewStyles.acceptButton]}>
-            <Image source={require("../../../assets/check-mark-24.png")}>
-
-            </Image>
-            </TouchableOpacity>
-            <TouchableOpacity style={[sparkViewStyles.denyButton]}>
-            <Image source={require("../../../assets/x-mark-24.png")}>
-
-            </Image>
-            </TouchableOpacity>
-
-          </View>
-        </View>
-        </ScrollView> */
+        // </ScrollView>
       );
     }
 
@@ -930,40 +963,105 @@ export default function SparkSummary({ route, navigation }) {
       <View style={[sparkViewStyles.sparkVerticalContainer]}>
         <ScrollView contentContainerStyle = {{flex: 1, alignItems: "center", paddingBottom: "50%"}}>
           <Image style={{height: 70, width: 70, marginTop: "7%"}} source={require('../../../assets/locationpin2.png')}/>
-          <Text style={{fontSize: 25, marginTop: "5%"}}>Location Title</Text>
-          <Text style={{fontSize: 18, marginTop: "2%"}}>Street Address</Text>
-          <Text style={{fontSize: 18, marginTop: "2%"}}>City, State Zip Code</Text>
+          <Text style={{fontSize: 25, marginTop: "5%"}}>{globalLocationTitle?.current || "This spark will be held at:" }</Text>
+          <Text style={{fontSize: 18, marginTop: "2%"}}>{globalAddress.current}</Text>
+          <Text style={{fontSize: 18, marginTop: "2%"}}>
+            {`${globalCity.current}, ${globalState.current} ${globalZip.current}`}
+          </Text>
           <Text style={{marginRight: "51%", marginTop: "7%"}}>Special Instructions</Text>
-          <View style={{borderColor: "#F2905B", borderRadius: 10, borderWidth: 2, height: "30%", width: "85%", marginTop: "2%"}}/>
-          <TouchableOpacity style={{width: "85%", height: "18%", marginTop: "6%", backgroundColor: "rgb(0, 97, 117)", borderRadius: 10, alignItems: "center", justifyContent: "center"}}>
-            <Text style={{color: "white"}}>Google Maps</Text>
+          <View style={{borderColor: "#F2905B", borderRadius: 10, borderWidth: 2, padding: "5%", width: "85%", marginTop: "2%"}}>
+            <Text> {globalAdditionalDirections.current || "No special directions"} </Text>
+          </View>
+          <TouchableOpacity 
+            style={{width: "85%", height: "18%", marginTop: "6%", backgroundColor: "rgb(0, 97, 117)", borderRadius: 10, alignItems: "center", justifyContent: "center"}}
+            onPress = {() => {
+              if (globalGoogleMapsLink.current) Linking.openURL(globalGoogleMapsLink.current)
+              else console.log("There is no link to Google Maps");
+            }}
+          >
+            <Text style={{color: "white"}}> Google Maps </Text>
           </TouchableOpacity>
         </ScrollView>
       </View>
     );
 
-    const VolunteersRoute = () => (
-      <View style={[sparkViewStyles.sparkVerticalTest]}>
-        <ScrollView contentContainerStyle = {{flex: 1}}>
+    const VolunteersRoute = () => {
+      const [volunteers, setVolunteers] = React.useState([]);
+      
+      async function getVolunteersFromRoles() {
+        let finalVolunteersArray = [];
+        for (const [roleName, roleIds] of Object.entries(globalRoleData.current)) {
+          if (roleName != 'spark_leader') {
+            // separate by underscored
+            let fancyRoleNamePart1 = roleName.split('_');
+            let fancyRoleNamePart2 = fancyRoleNamePart1.map(role => role[0].toUpperCase() + role.substring(1));
+            let fancyRoleName = fancyRoleNamePart2.join(' ');
+
+            for (let state of Object.values(roleIds)) {
+              // get user name and add to object
+              let userName = null;
+              if (state?.final) {
+                userName = await FirebaseButler.fbGet(`Users/${state.final}/info/name`); 
+              }
+              finalVolunteersArray.push({role: roleName, fancyRoleName, userId: state?.final, userName})
+            } 
+          }
+        }  
+        setVolunteers([...finalVolunteersArray]);
+      }
+
+      useEffect(() => {
+        getVolunteersFromRoles();
+      }, [globalRoleData])
+
+      const renderVolunteer = (object) => {
+        if (object.item.userId) {
           <View style={[sparkViewStyles.boxOne, {marginTop: "8%"}]}>
-            <ProfileImage size = {"small"} userId = {null}/>
-            <Text style={{marginLeft: "5%"}}>Spark Leader: Colin Robson</Text>
+            <ProfileImage size = "small" userId = {object.item.userId} />
+            <Text style={{marginLeft: "5%"}}>{object.item.fancyRoleName}: {object.item.userName} </Text>
           </View>
-          <View style={[sparkViewStyles.boxOne]}>
-            <ProfileImage size = {"small"} userId = {null}/>
-            <Text style={{marginLeft: "5%"}}>Bass: Azianna Yang</Text>
-          </View>
-          <View style={[sparkViewStyles.boxOne]}>
-            <ProfileImage size = {"small"} userId = {null}/>
-            <Text style={{marginLeft: "5%"}}>Piano: Colin Robson</Text>
-          </View>
-          <View style={[sparkViewStyles.boxOne]}>
-            <ProfileImage size = {"small"} userId = {null}/>
-            <Text style={{marginLeft: "5%"}}>Vocals: Austin Dorsey</Text>
-          </View>
-        </ScrollView>
-      </View>
-    );
+        }
+        else {
+          return (
+            <View style={[sparkViewStyles.boxOne, {marginTop: "8%", justifyContent: "center"}]}>
+              <Text style={{marginLeft: "5%"}}>{object.item.fancyRoleName}: Needs filled! </Text>
+              <IconButton 
+                onPress = {() => requestToPlay(object.item.role)}
+                icon = "checkbox-marked-circle-plus-outline"
+              />
+            </View>
+          )
+        }
+      }
+
+      return (
+        <View style={[sparkViewStyles.sparkVerticalTest]}>
+          <FlatList
+            style = {{flex: 1}}
+            data = {volunteers}
+            renderItem = {renderVolunteer}
+          />
+          {/* <ScrollView contentContainerStyle = {{flex: 1}}>
+            <View style={[sparkViewStyles.boxOne, {marginTop: "8%"}]}>
+              <ProfileImage size = {"small"} userId = {null}/>
+              <Text style={{marginLeft: "5%"}}>Spark Leader: Colin Robson</Text>
+            </View>
+            <View style={[sparkViewStyles.boxOne]}>
+              <ProfileImage size = {"small"} userId = {null}/>
+              <Text style={{marginLeft: "5%"}}>Bass: Azianna Yang</Text>
+            </View>
+            <View style={[sparkViewStyles.boxOne]}>
+              <ProfileImage size = {"small"} userId = {null}/>
+              <Text style={{marginLeft: "5%"}}>Piano: Colin Robson</Text>
+            </View>
+            <View style={[sparkViewStyles.boxOne]}>
+              <ProfileImage size = {"small"} userId = {null}/>
+              <Text style={{marginLeft: "5%"}}>Vocals: Austin Dorsey</Text>
+            </View>
+          </ScrollView> */}
+        </View>
+      );
+    }
 
     const ReadSetListRoute = () => {
       const [songs, setSongs] = React.useState(null);
@@ -999,7 +1097,6 @@ export default function SparkSummary({ route, navigation }) {
               <CollapseHeader style={[profileStyles.accordian, {padding: "5%", flexDirection: "row"}]}>
                 <Text style = {{fontSize: 15}}>{object.item.songName}</Text>
                 <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
-                {/* <Text style={{color:"white", fontSize:20, paddingVertical:"2%"}}>Key: {object.item.key}</Text> */}
               </CollapseHeader>
               <CollapseBody style={[profileStyles.listItemContainer, {flex: 1}]}>
                 <View style={{alignItems:"center"}}>
@@ -1020,11 +1117,6 @@ export default function SparkSummary({ route, navigation }) {
                 <Text style = {{fontSize: 15}}> {object.item.attachmentName} </Text>
               </View>
             </TouchableHighlight>
-            {/* <View style={profileStyles.listItemContent}>
-              <TouchableHighlight onPress = {() => openAttachment(object.item)}style = {styles.attachment}>
-                <Text style = {{fontSize: 15}}> {object.item.attachmentName} </Text>
-              </TouchableHighlight>
-            </View> */}
           </View>
         )
       }
@@ -1074,9 +1166,6 @@ export default function SparkSummary({ route, navigation }) {
       return (
         <View style = {{flex: 1}}>
           <List.Section title = "Set List">
-            {/* <View style={{height: "15%", width: "100%", alignItems: "center", justifyContent: "center"}}>
-              <Text style={{fontSize:28, fontWeight:'500'}}>Set List</Text>
-            </View> */}
             <SongContent />
           </List.Section>
         </View>
@@ -1132,67 +1221,21 @@ export default function SparkSummary({ route, navigation }) {
       const attendSparkRef = ref(db, `Users/${userId}/sparks/attending`)
       push(attendSparkRef, currentSparkIdAttend);
 
-      // schedule notification to arrive after the spark is complete
-      let sparkOverNotify = new PushNotify(() => navigation.navigate(Routes.sparkSurvey));
-      sparkOverNotify.scheduleNotification(null, "How was your experience?", "Please fill out this survery to let us know how things went!", userId); 
+      // TODO: evaluate whether we need this: schedule notification to arrive after the spark is complete
+      // let sparkOverNotify = new PushNotify(() => navigation.navigate(Routes.sparkSurvey));
+      // sparkOverNotify.scheduleNotification(null, "How was your experience?", "Please fill out this survery to let us know how things went!", userId); 
     }
 
-    async function testRequest() {
-      let sparkOverNotify = new PushNotify(() => navigation.navigate(Routes.publicProfile, {selectedUserId: "5cYHMVySLmOGyeZZeqA3oQ0DkO82"}));
-      sparkOverNotify.scheduleNotification(null, "Spark Request", "You just received a request for your spark!", userId);
+    const requestToPlay = (role) => {
+      //add currentUserId to a requested section of the spark with the currentSparkId
+      const db = getDatabase();
+      const roleRef = ref(db, `Sparks/${currentSparkId}/roles/${role}/requests`);
+      push(roleRef, userId);
+  
+      //send notification to the user
+      // let sparkOverNotify = new PushNotify(() => navigation.navigate(Routes.publicProfile, {selectedUserId: "5cYHMVySLmOGyeZZeqA3oQ0DkO82"}));
+      // sparkOverNotify.scheduleNotification(null, "Spark Request", "You just received a request for your spark!", sparkLeaderId);
     }
-
-    const [MySparkName, setMySparkName] = React.useState("Spark Name");
-
-    async function setSparkName() {
-      let sparkName = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/info/name`);
-      setMySparkName(sparkName);
-    }
-
-    // const [MyDate, setMyDate] = React.useState("Date and Time");
-    
-    // async function setDate() {
-    //   let date = await FirebaseButler.fbGet("Sparks/-NFQyokFAqLdeFJLDkSv/info/times/spark/TDO");
-    //   setMyDate(date);
-    // }
-
-    const [MyAddress, setMyAddress] = React.useState("Location");
-
-    async function setAddress() {
-      let address = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/info/location/address`);
-      setMyAddress(address);
-    }
-
-    const [MyCity, setMyCity] = React.useState("");
-
-    async function setCity() {
-      let city = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/info/location/city`);
-      setMyCity(city);
-    }
-
-    const [MyState, setMyState] = React.useState("");
-
-    async function setState() {
-      let state = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/info/location/state`);
-      setMyState(state);
-    }
-
-    useEffect(() => {
-      setSparkName();
-      // setDate();
-      setAddress();
-      setCity();
-      setState();
-      // setInstruments();
-    }, [])
-
-    // let myScreens = [
-    //   <LocationRoute />, <TimesRoute />, <SetListRoute />, <RequestsRoute />
-    // ];
-
-    // let readScreens = [
-    //   <ReadLocationRoute />, <TimesRoute />, <ReadSetListRoute />, <ReadVolunteersRoute /> 
-    // ];
   
   return(
     <View style={styles.MainContainer}>
@@ -1204,25 +1247,27 @@ export default function SparkSummary({ route, navigation }) {
             {/* <Text style={styles.titleText}></Text> */}
             <IconButton onPress = {() => saveSpark()}style = {{position: "absolute", left: 0}}icon = "content-save-check"/>
             <IconButton onPress = {() => toggleReadWrite()}style = {{position: "absolute", left: "42%"}} icon = "pencil"/>
-            <IconButton onPress = {() => attendSpark()}style = {{position: "absolute", left: "85%"}}icon = "checkbox-marked-circle-plus-outline"/>
+            <IconButton onPress = {() => requestToPlay()}style = {{position: "absolute", left: "85%"}}icon = "checkbox-marked-circle-plus-outline"/>
           </View>
           <View style = {styles.row}>
-            <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>{(MySparkName) ? `${MySparkName}'s Spark` : "My Spark"}</Text>
+            <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>{sparkName}</Text>
           </View>
           <View style={[styles.row, {marginLeft: "10%"}]}>
             <View style={{marginLeft:"4%"}}>
-              <ProfileImage size = {"medium"} userId = {null}/>
+              <ProfileImage size = {"medium"} userId = {sparkLeaderId}/>
             </View>
             <View style={styles.column}>
               <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13, marginRight: screenWidth/60}}>Date and Time</Text>
               <View style={styles.row2}>
                 <Image style={{height: 20, width: 20, marginRight: "2%"}} source={require('../../../assets/locationpin.png')}></Image>
-                <Text style = {{flexWrap: "wrap", width: "75%", marginRight: "1%"}}>{MyAddress} {MyCity}, PA</Text>
+                <Text style = {{flexWrap: "wrap", width: "75%", marginRight: "1%"}}>{sparkLocationString}</Text>
               </View>
             </View>
           </View>
           <View style={[styles.row, {marginLeft: screenWidth/5, marginRight: screenWidth/50, top: "30%"}]}>
-            <TouchableOpacity style={profileStyles.constantButtons}><Text style={profileStyles.buttonText}>Attend Spark</Text></TouchableOpacity>
+            <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => attendSpark()}>
+              <Text style={profileStyles.buttonText}>Attend Spark</Text>
+            </TouchableOpacity>
             <TouchableOpacity style={profileStyles.constantButtons}><Text style={profileStyles.buttonText}>Next</Text></TouchableOpacity>
           </View>
         </View>
@@ -1341,11 +1386,9 @@ const styles = StyleSheet.create({
   },
 
   accordian: {
-    height: "15%",
     padding: "2%",
     backgroundColor: '#F9CBB1',
     color: "#FFFFFF",
-    padding: 10,
     marginLeft: '5%',
     marginRight: '5%', 
   },
@@ -1406,6 +1449,7 @@ const sparkViewStyles = StyleSheet.create({
   listItemContainer: {
     backgroundColor: "white",
     backgroundColor: "#F9CBB1",
+    paddingBottom: "2%",
     width: "85%",
     marginLeft: "7%"
   },
@@ -1414,7 +1458,8 @@ const sparkViewStyles = StyleSheet.create({
     flexDirection:"row", 
     alignItems:"center", 
     justifyContent:"space-between",
-    marginTop: "2%"
+    marginTop: "5%",
+    marginBottom: "5%"
   },
   profileView:{
     flexDirection:"row", 
@@ -1455,7 +1500,8 @@ const sparkViewStyles = StyleSheet.create({
   bigLocationContainer:{
       width:"90%",
       flexDirection:"column", 
-      height:"20%",
+      paddingTop: "2%",
+      paddingBottom: "2%",
       marginTop: "12%"
   },
   timeContainer:{
@@ -1503,7 +1549,7 @@ const sparkViewStyles = StyleSheet.create({
   locationInputBox:{
       textAlign: 'left',
       paddingLeft: '2%',
-      fontSize: 18
+      fontSize: 18,
   },
   dateInputBox: {
       height: "10%",
@@ -1587,9 +1633,7 @@ const sparkViewStyles = StyleSheet.create({
       backgroundColor: "#F2905B",
       marginBottom: "5%",
       borderRadius: 10,
-      padding: "2%",
-      height: "15%",
-      // width: "85%",
+      padding: "3%",
       flexDirection: "row",
       alignItems: "center",
   },

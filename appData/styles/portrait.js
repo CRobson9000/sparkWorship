@@ -100,7 +100,6 @@ const stylesPortrait = StyleSheet.create({
     {
         textAlign: 'center',
         color: "#006175",
-        top: 30
     },
     register: 
     {

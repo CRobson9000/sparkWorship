@@ -211,11 +211,11 @@ const styleSheet = StyleSheet.create({
       backgroundColor: "#F2905B",
       borderRadius: 10,
       width: "100%",
-      height: "75%",
+      paddingTop: "2%",
+      paddingBottom: "2%",
       alignSelf: "center",
       marginBottom: "4%", 
-      padding: 0,
-      fontSize: 12
+      fontSize: 12,
     },
 
 
