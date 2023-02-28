@@ -31,11 +31,11 @@ export default function SparkView({ route, navigation }) {
         let item = object.item;
         if (item.info) {
             //Date Time string formatting
-            let sparkTimeObj = item.info?.times?.spark.TDO;
-            let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
-            let finalTime = sparkTDO.getFormattedTime();
-            let finalDate = sparkTDO.getFormattedDateFormal();
-            let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
+            // let sparkTimeObj = item.info?.times?.spark.TDO;
+            // let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
+            // let finalTime = sparkTDO.getFormattedTime();
+            // let finalDate = sparkTDO.getFormattedDateFormal();
+            // let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
             let sparkId = Object.keys(sparks)[object.index];
 
             //Location formatting
@@ -167,7 +167,7 @@ export default function SparkView({ route, navigation }) {
     //Run filter:  let filteredSparks = sparks.filter((spark) => filterMyRole(spark, <insertRole>));
     //Run filter:  let filteredSparks = sparks.filter((spark) => filterByDistance(spark, distance));
 
-    printFilterSparks();
+    // printFilterSparks();
 
     async function getSparks() {
         let fbSparks = await FirebaseButler.fbGet(`Sparks`);
