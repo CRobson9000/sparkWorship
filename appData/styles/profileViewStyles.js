@@ -91,7 +91,7 @@ const profileStyles = StyleSheet.create({
 
   accordian: {
     backgroundColor: '#F2905B',
-    padding: 10,
+    // padding: 10,
     margin: "2%",
     // marginLeft: '5%',
     // marginRight: '5%',

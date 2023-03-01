@@ -40,7 +40,7 @@ export default function SparkView({ route, navigation }) {
 
             //Location formatting
             let locationObj = item.info.location;
-            let locationString = `${locationObj.address} ${locationObj.city}, ${locationObj.state} ${locationObj.zip}`;
+            let locationString = `${locationObj?.address} ${locationObj?.city}, ${locationObj?.state} ${locationObj?.zip}`;
             
             return (
                 <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary, {userId, currentSparkId: sparkId})} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
