@@ -834,18 +834,17 @@ export default function SparkSummary({ route, navigation }) {
       const renderRoleRequest = (object) => {
         return (
           // <View style={[{marginBottom: "5%"}]}>
-            <Collapse style={{padding: '5%',backgroundColor: "purple"}}>
+            <Collapse style={{padding: '5%'}}>
               <CollapseHeader style={[profileStyles.accordian, {padding: "5%", margin: 0, flexDirection: "row"}]}>
                 <Text style = {{fontSize: 15}}>Piano</Text>
                 <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
               </CollapseHeader>
-              <CollapseBody style={[/*profileStyles.listItemContainer,*/ {flex: 1, backgroundColor: 'blue'}]}>
+              <CollapseBody style={[profileStyles.listItemContainer]}>
                 {/* <View style={{height: 200, width: "100%", backgroundColor: "yellow"}}> */}
                   <FlatList
-                    style = {{padding: "2%", backgroundColor: "red"}}
+                    style = {{padding: "2%"}}
                     data = {roleRequest}
                     renderItem = {renderRequest}
-                    listItemContainer = {{flex: 1}}
                   />
                 {/* </View> */}
               </CollapseBody>
