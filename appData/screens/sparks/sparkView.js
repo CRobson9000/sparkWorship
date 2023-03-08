@@ -43,45 +43,15 @@ export default function SparkView({ route, navigation }) {
             let locationString = `${locationObj?.address} ${locationObj?.city}, ${locationObj?.state} ${locationObj?.zip}`;
             
             return (
-                <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary, {userId, currentSparkId: sparkId})} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
-                    <View style={{width:"87%"}}>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name} </Text>
-                        {/* <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text> */}
-                        {/* <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{finalDateTime}</Text>
-                        <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{locationString}</Text>  */}
-                        <Text style={{marginLeft: "85%", marginTop: "2%"}}> More</Text>
-                    </View>
-                    <View style={{width:"13%", alignItems:"center"}}>
-                        <ProfileImage style = {sparkViewStyles.profPic} userId = {null} size = {"medium"}/>
-                    </View>
+                <TouchableOpacity 
+                    onPress = {() => navigation.navigate(Routes.sparkSummary, {userId, currentSparkId: sparkId})} 
+                    style={[sparkViewStyles.boxOne]}
+                >
+                    <ProfileImage userId = {null} size = {"medium"}/>
+                    <Text style={sparkViewStyles.boxText}> {item?.info?.name} </Text>
+                    <Text style={{left: "30%"}}> More</Text>
                 </TouchableOpacity>
-            )
-            //Date Time string formatting
-            // let sparkTimeObj = item.info?.times?.spark.TDO;
-            // let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
-            // let finalTime = sparkTDO.getFormattedTime();
-            // let finalDate = sparkTDO.getFormattedDateFormal();
-            // let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
-
-            // //Location formatting
-            // let locationObj = item.info?.location;
-            // let locationString = `${locationObj.address} ${locationObj.city}, ${locationObj.state} ${locationObj.zip}`;
-            
-            // return (
-            //     <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary, {userId})} style={[sparkViewStyles.boxOne, sparkViewStyles.veryTopBox]}>
-            //         <View style={{width:"87%"}}>
-            //             <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name || "No Name"} </Text>
-            //             <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text>
-            //             <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{finalDateTime}</Text>
-            //             <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{locationString}</Text>
-            //         </View>
-            //         <View style={{width:"13%", alignItems:"center"}}>
-            //             <Image style={[sparkViewStyles.profPic]} source={require("../../../assets/SmallEriToken.png")}>
-
-            //             </Image>
-            //         </View>
-            //     </TouchableOpacity>
-            // )  
+            )  
         }
     }
 
@@ -188,14 +158,10 @@ export default function SparkView({ route, navigation }) {
     
     return(
         <View style={[stylesPortrait.container, {alignItems: "center", backgroundColor: "white"}]}>
-            {/* <View style={[sparkViewStyles.sparkViewTopBorder]}>
-                <Text style={{color: "white", textAlign:"center", fontSize: screenHeight/30, fontFamily:"RNSMiles", paddingTop: 28}}>Spark Worship</Text>
-            </View> */}
             <View style={[sparkViewStyles.sparkContainer]}>
-                
                 <FlatList 
                     data = {Object.values(sparks)}
-                    style = {{flex: 1, backgroundColor: "white"}}
+                    style = {{width: "100%", height: "100%", backgroundColor: "white"}}
                     renderItem = {renderSpark}
                 />
             </View>
@@ -204,17 +170,6 @@ export default function SparkView({ route, navigation }) {
 }
 
 const sparkViewStyles = StyleSheet.create({
-    sparkViewTopBorder:
-    {
-        height: "10%",
-        width: "100%",
-        backgroundColor: "#EC6014",
-    },
-    sparkViewContentContainer:
-    {
-        width: "100%",
-        height: "100%",
-    },
     sparkContainer:
     {
         width:"85%",
@@ -224,91 +179,20 @@ const sparkViewStyles = StyleSheet.create({
         justifyContent: "space-between", 
         alignItems: "center"
     },
-    veryTopBox:{
-        marginTop: "5%",
-    },
-    veryBottomBox:{
-        marginBottom: "5%",
-    },
     boxOne:
     {
         backgroundColor: "#DBE9EC",
-        flex: 1,
         padding: "3%",
         borderRadius: 30,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-    },
-    boxTwo:
-    {
-        backgroundColor: "#B3D0D6",
-        height: "16%",
-        width: "80%",
-        borderRadius: 30,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-    },
-    boxText:{
-        width: "70%", 
-        marginLeft:"10%",
-        marginTop: "1%",
-        marginBottom: "1%",
-        fontSize: screenHeight/70
-    },
-    topText:{
-        // fontSize: 12
-        fontFamily: "RNSMiles",
-        fontWeight: "bold",
-        // marginLeft:"6%",
-        marginTop: "40%",
-        marginLeft: "35%"
-    },
-    notTopText:{
-        marginLeft: "12%"
-    },
-    bottomContainer:{
-        width:"100%",
-        height:"8%",
-        flexDirection: "row", 
-        justifyContent: "space-between", 
-        alignItems: "center",
-        backgroundColor: "rgba(255,255,255,1)",
-    },
-    inputBox: {
-        height: "7.5%",
-        marginHorizontal: "10%",
-        marginBottom: "10%",
-        borderWidth: 1,
-        borderColor: "black",
-        backgroundColor: "rgba(256, 256, 256, 0.6)",
-        paddingLeft: "1%",
-        borderRadius: 8,
-        textAlign: 'center',
-        color: "white"
-    },
-    centerText:
-    {
-        textAlign: 'center',
-        color: "white"
-    },
-
-    button:
-    {
-        backgroundColor: colors.buttonColor,
-        marginHorizontal: "10%",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 15,
-        borderColor: "black",
-        height: "7.5%",
-        marginBottom: "10%",
-        borderWidth: 3
+        margin: "5%"
     },
-    profPic:{
-        marginTop: "100%", 
-        marginRight: "650%",
-        marginBottom: "250%",
+    boxText:{
+        padding: "5%",
+        fontSize: screenHeight/70,
+        fontFamily: "RNSMiles",
+        fontWeight: "bold"
     }
 });
