@@ -67,7 +67,6 @@ export default function UserDashboard({ route, navigation }) {
 
   const renderSpark = (object) => {
     let item = object.item;
-    console.log("item", item);
     //Date Time string formatting
     // let sparkTimeObj = item.info?.times?.spark.TDO;
     // let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
