@@ -44,7 +44,7 @@ export default function SparkView({ route, navigation }) {
             
             return (
                 <TouchableOpacity 
-                    onPress = {() => navigation.navigate(Routes.sparkSummary, {userId, currentSparkId: sparkId})} 
+                    onPress = {() => navigation.navigate(Routes.sparkSummary, {...props, currentSparkId: sparkId})} 
                     style={[sparkViewStyles.boxOne]}
                 >
                     <ProfileImage userId = {null} size = {"medium"}/>

@@ -16,6 +16,7 @@ const height = Dimensions.get('window').height;
 export default function PSPersonal({ route, navigation }) {
     let props = route.params;
     let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+    let role = props?.role || 'attendee';
  
     const SparkRoute = () => (
     <ScrollView style={profileStyles.content}>

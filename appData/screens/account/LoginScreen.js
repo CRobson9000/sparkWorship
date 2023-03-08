@@ -19,6 +19,7 @@ import { Dimensions, TouchableHighlight } from 'react-native';
 
 //import components
 import { Input, KeyboardView } from '../../components/components.js';
+import { FirebaseButler } from '../../components/classes.js';
 
 
 export default function LoginScreen({ navigation }) {
@@ -39,8 +40,8 @@ export default function LoginScreen({ navigation }) {
         const user = userCredential.user;
 
         //await registerForPushNotificationsAsync(user.uid);
-
-        navigation.navigate("Navigator", {userId: user.uid});
+        let role = await FirebaseButler.fbGet(`Users/${user.uid}/role`)
+        navigation.navigate("Navigator", {userId: user.uid, role});
     }).catch((error) => {
         const errorMessage = error.message;
         toastRef.current.showToast(errorMessage, 3000, "red");

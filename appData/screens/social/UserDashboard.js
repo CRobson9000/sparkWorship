@@ -80,7 +80,7 @@ export default function UserDashboard({ route, navigation }) {
     
     return (
       <TouchableOpacity 
-        onPress = {() => navigation.navigate(Routes.sparkSummary, {userId, currentSparkId: item.id})} 
+        onPress = {() => navigation.navigate(Routes.sparkSummary, {...props, currentSparkId: item.id})} 
         style={[sparkViewStyles.boxOne]}
       >
         <ProfileImage userId = {null} size = {"medium"}/>

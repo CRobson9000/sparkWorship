@@ -186,7 +186,7 @@ export default function SparkCreation({ route, navigation }) {
         let sparkLeaderName = await FirebaseButler.fbGet(`Users/${userId}/info/name`);
         await set(sparkNameRef, `${sparkLeaderName}'s Spark`);
 
-        navigation.navigate(Routes.sparkSummary, {userId, currentSparkId: sparkId});
+        navigation.navigate(Routes.sparkSummary, {...props, currentSparkId: sparkId});
     }
     // --------------
     // Drop Down Code

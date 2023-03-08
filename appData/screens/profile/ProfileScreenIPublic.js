@@ -13,11 +13,8 @@ import { profileStyles } from '../../styles/profileViewStyles';
 
 const screenWidth = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-
 export default function PSPersonal({ route, navigation }) {
-
     let props = route.params;
-
     let selectedUserId = props?.selectedUserId || null;
     let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
 
@@ -98,14 +95,12 @@ export default function PSPersonal({ route, navigation }) {
         );
       }
       return( 
-        <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
-            <List.Section title="Instruments">
-              <FlatList
-                data = {myInstruments}
-                style = {{height: "100%", width: "100%"}}
-                renderItem = {instrumentRender}/>
-            </List.Section>
-          </ScrollView>
+        <List.Section title="Instruments">
+          <FlatList
+            data = {myInstruments}
+            style = {{height: "100%", width: "100%"}}
+            renderItem = {instrumentRender}/>
+        </List.Section>
       );
     }
       
@@ -277,23 +272,23 @@ export default function PSPersonal({ route, navigation }) {
 
     return (
       <View style={profileStyles.MainContainer}>
-        <View style={profileStyles.topBorder}>
-            <View style={profileStyles.column1}>
-              <View style={[profileStyles.row2, {justifyContent: 'space-evenly', alignContent: "center"}]}>
-                  <ProfileImage size = "large" userId = {userId} />
-              </View>
-              <Text style={profileStyles.nameText}>{MyName}</Text>
-              <View style={[profileStyles.row2, {alignItems: "center", alignSelf: "center"}]}>
-                <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
-                <Text>   {MyLocation}</Text>
-              </View>
+        <View style={[profileStyles.topBorder, {paddingTop: "15%"}]}>
+          <View style={profileStyles.column1}>
+            <View style={[profileStyles.row2, {justifyContent: 'space-evenly', alignContent: "center"}]}>
+                <ProfileImage size = "large" userId = {userId} />
             </View>
-            <View style={[profileStyles.row2, {justifyContent: 'space-evenly', marginLeft: 30, marginRight: 30, alignItems: 'center'}]}>
-              <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => logFriends}><Text style={profileStyles.buttonText}>Friends</Text></TouchableOpacity>
-              <Image style={{height: 40, width:40}} source={require('../../../assets/addFriendIcon.png')}/>
-              <TouchableOpacity style={profileStyles.constantButtons}><Text style={profileStyles.buttonText}>Message</Text></TouchableOpacity>
+            <Text style={profileStyles.nameText}>{MyName}</Text>
+            <View style={[profileStyles.row2, {alignItems: "center", alignSelf: "center"}]}>
+              <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
+              <Text>   {MyLocation}</Text>
             </View>
           </View>
+          <View style={[profileStyles.row2, {justifyContent: 'space-evenly', marginLeft: 30, marginRight: 30, alignItems: 'center'}]}>
+            <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => logFriends}><Text style={profileStyles.buttonText}>Friends</Text></TouchableOpacity>
+            <Image style={{height: 40, width:40}} source={require('../../../assets/addFriendIcon.png')}/>
+            <TouchableOpacity style={profileStyles.constantButtons}><Text style={profileStyles.buttonText}>Message</Text></TouchableOpacity>
+          </View>
+        </View>
         <View style={profileStyles.content}>
           <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
         </View>

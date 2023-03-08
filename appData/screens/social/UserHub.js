@@ -78,95 +78,17 @@ export default function UserHub({ route, navigation }) {
 
   return (
     <View style={{flex: 1, alignItems: "center", backgroundColor: "white"}}>
- 
-      {/* <View style={stylesPortrait.container}> */}
-        {/* Container for everything below the logo */}
-        {/* <View style={stylesPortrait.contentDashContainer}> */}
-          <View style = {musicianStyles.musicianContainer}>
-            <FlatList 
-              data = {Object.values(musicians)}
-              style = {{flex: 1, width: "100%", backgroundColor: "white"}}
-              renderItem = {renderMusician}
-            />
-          </View>
-        {/* </View> */}
-      {/* </View> */}
-     </View> 
+      {/* Container for everything below the logo */}
+      <View style = {musicianStyles.musicianContainer}>
+        <FlatList 
+          data = {Object.values(musicians)}
+          style = {{flex: 1, width: "100%", backgroundColor: "white"}}
+          renderItem = {renderMusician}
+        />
+      </View>
+    </View> 
   );
 }
-
-{/* <ScrollView style={stylesPortrait.userHubScroll}>
-
-<TouchableOpacity activeOpacity={1} style={[stylesPortrait.dashboardButton]}>
-  <View>
-    <View style = {{flexDirection: "row"}}>
-      <TouchableHighlight style={{height: 50, width: 50}} onPress = {() => navigation.navigate(Routes.publicProfile, {userId, selectedUserId: "XULgbwAM0HNd8CdVu6Mja1pGrYF3"})}>
-        <ProfileImage userId = {"XULgbwAM0HNd8CdVu6Mja1pGrYF3"} size = {"small"}/>
-      </TouchableHighlight>
-      <Text style={{marginLeft: "5%", lineHeight: 30, color: "#000000", fontWeight: "bold", fontSize: 15, fontFamily: "RNSMiles"}}> 
-        Jen Johnson
-      </Text>  
-    </View>
-    <Text style={{lineHeight: 30, color: "#000000"}}> 
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-      Maecenas vitae justo ipsum. Morbi sed mauris ante.Quisque semper,
-      augue fringilla pretium laoreet, tellus metus sodales dui, vitae 
-      imperdiet est nisi interdum neque.
-      {'\n'}
-      {'\n'}
-      Instrument: Guitar 
-      {'\n'}
-      Location: Mechanicsburg, PA</Text></View>
-   <Image style={{height: 15, width: 15}} source={require('../../../assets/heart.png')}></Image>
-   
-</TouchableOpacity>
-
-<TouchableOpacity activeOpacity={1} style={[stylesPortrait.dashboardButton]}>
-  <View>
-    <View style = {{flexDirection: "row"}}> 
-      <TouchableHighlight style={{height: 50, width: 50}} onPress = {() => navigation.navigate(Routes.publicProfile, {userId, selectedUserId: "RJ85S4CIw3eMyVvXbce6oCnNehJ2"})}>
-          <ProfileImage userId = {"RJ85S4CIw3eMyVvXbce6oCnNehJ2"} size = {"small"}/>
-      </TouchableHighlight>
-        <Text style={{marginLeft: "5%", lineHeight: 30, color: "#000000", fontWeight: "bold", fontSize: 15, fontFamily: "RNSMiles"}}> 
-        David Schmitt
-      </Text>  
-    </View>
-    <Text style={{lineHeight: 30, color: "#000000"}}> 
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-      Maecenas vitae justo ipsum. Morbi sed mauris ante.Quisque semper,
-      augue fringilla pretium laoreet, tellus metus sodales dui, vitae 
-      imperdiet est nisi interdum neque.
-      {'\n'}
-      {'\n'}
-      Instrument: Piano 
-      {'\n'}
-      Location: Mechanicsburg, PA</Text></View>
-   <Image style={{height: 15, width: 15}} source={require('../../../assets/heart.png')}></Image>
-</TouchableOpacity>
-
-<TouchableOpacity activeOpacity={1} style={[stylesPortrait.dashboardButton]}>
-  <View>
-    <View style = {{flexDirection: "row"}}> 
-      <TouchableHighlight style={{height: 50, width: 50}} onPress = {() => navigation.navigate(Routes.publicProfile, {userId, selectedUserId: "QtqEJiGOSKPlP6LsUsRYtaloZba2"})}>
-          <ProfileImage userId = {"QtqEJiGOSKPlP6LsUsRYtaloZba2"} size = {"small"}/>
-      </TouchableHighlight>
-      <Text style={{marginLeft: "5%", lineHeight: 30, color: "#000000", fontWeight: "bold", fontSize: 15, fontFamily: "RNSMiles"}}> 
-        Laura Scott
-      </Text>  
-    </View>
-    <Text style={{lineHeight: 30, color: "#000000"}}> 
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-      Maecenas vitae justo ipsum. Morbi sed mauris ante.Quisque semper,
-      augue fringilla pretium laoreet, tellus metus sodales dui, vitae 
-      imperdiet est nisi interdum neque.
-      {'\n'}
-      {'\n'}
-      Instrument: Drums 
-      {'\n'}
-      Location: Mechanicsburg, PA</Text></View>
-   <Image style={{height: 15, width: 15}} source={require('../../../assets/heart.png')}></Image>
-</TouchableOpacity>
-</ScrollView> */}
 
 const musicianStyles = StyleSheet.create({
   boxOne:
