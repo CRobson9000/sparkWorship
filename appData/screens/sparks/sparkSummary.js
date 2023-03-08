@@ -15,7 +15,7 @@ import { profileStyles } from "../../styles/profileViewStyles.js";
 import Icon from 'react-native-vector-icons/Ionicons';
 
 // photo upload imports
-import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, uploadBytes, getDownloadURL, connectStorageEmulator } from "firebase/storage";
 import * as DocumentPicker from 'expo-document-picker';
 import * as Linking from 'expo-linking';
 
@@ -28,7 +28,6 @@ const screenWidth = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 export default function SparkSummary({ route, navigation }) {
-
   let props = route.params;
   let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
   let currentSparkId = props?.currentSparkId || "-NHSPNV5tXpWmVtr6M3h";
@@ -144,7 +143,6 @@ export default function SparkSummary({ route, navigation }) {
     // setup general info about the spark
     // ----------------------------------
     let updateVals = Object.values(update.current);
-    console.log("Update", updateVals);
     for (let i = 0; i < updateVals.length; i++) {
       // update data in firebase realtime database
       let overallKey = Object.keys(update.current)[i];
@@ -811,45 +809,127 @@ export default function SparkSummary({ route, navigation }) {
     );
 
     const RequestsRoute = () => {
+      const [rolesWithRequests, setRolesWithRequests] = React.useState([]);
+
+      function allRolesFinal(roles) {
+        for (let role of roles) {
+          if (role.final == "") return false;
+        }
+        return true;
+      }
+      
+      async function setupRolesAndRequests() {
+        let roles = [];
+        for (const [role, roleData] of Object.entries(globalRoleData.current)) {
+          // only push the role to the list of roles to view requests for if each role's final variable is empty
+          let roleDataNoRequest = JSON.parse(JSON.stringify(roleData));
+          delete roleDataNoRequest.requests;
+          if (!allRolesFinal(Object.values(roleDataNoRequest))) {
+            let fancyRoleNamePart1 = role.split('_');
+            let fancyRoleNamePart2 = fancyRoleNamePart1.map(role => role[0].toUpperCase() + role.substring(1));
+            let fancyRoleName = fancyRoleNamePart2.join(' ');
+            let requests = roleData.requests || [];
+            let requestsWithData = [];
+            if (requests.length != 0) {
+              for (let requestUserId of Object.keys(requests)) {
+                let userName = await FirebaseButler.fbGet(`Users/${requestUserId}/info/name`);
+                requestsWithData.push({requestUserId, userName, parentRole: role});
+              }
+            }
+            roles.push({role: fancyRoleName, requests: requestsWithData});
+          }
+        }
+        setRolesWithRequests([...roles]);
+      }
+      useEffect(() => {
+        setupRolesAndRequests();
+      }, [globalRoleData.current])
+
+      function getAvailableRoleKey(roles) {
+        for (const [roleKey, roleData] of Object.entries(roles)) {
+          if (roleKey != 'requests') {
+            if (roleData.final == "") return roleKey;
+          }
+        }
+      }
+      
       const acceptRequest = async(role, id) => {
         //define "final" for the role selected to be the id of the user selected
         const db = getDatabase();
-        const acceptRef = ref(db, `Sparks/${currentSparkId}/roles/${role}/final`);
-        set(acceptRef, id);
-    
-        // schedule a notification to be sent about the survey to the user which was just accepted
-        let sparkOBJ = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/info/times/spark`);
-        let sparkTDO = new TDO(null, null, null, null, null, null, sparkOBJ["TDO"]);
-        const navigateToSurvey = () => {
-          navigation.navigate(Routes.sparkSurvey);
+        let roleRequestDataObject = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/roles/${role}`)
+        // get an available role key
+        let roleKey = getAvailableRoleKey(roleRequestDataObject);
+        if (roleKey) {
+          const acceptRef = ref(db, `Sparks/${currentSparkId}/roles/${role}/${roleKey}/final`);
+          set(acceptRef, id);
+  
+          // delete request from request array for the current role from local and remote copies
+          delete globalRoleData.current[role].requests[id];
+          const deleteRequestRef = ref(db, `Sparks/${currentSparkId}/roles/${role}/requests`);
+          set(deleteRequestRef, globalRoleData.current[role].requests);
+      
+          // schedule a notification to be sent about the survey to the user which was just accepted
+          let sparkTimeOBJ = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/info/times/spark`);
+          if (sparkTimeOBJ) {
+            let sparkTDO = new TDO(null, null, null, null, null, null, sparkTimeOBJ["TDO"]);
+            const navigateToSurvey = () => {
+              navigation.navigate(Routes.sparkSurvey);
+            }
+            let sparkOverNotify = new PushNotify(navigateToSurvey);
+            sparkOverNotify.scheduleNotification(sparkTDO, "Peer Survey", "Please tell us how this spark went!", userId);
+          }
+      
+          //add spark to user's section as a spark they are playing for
+          const addSparkRef = ref(db, `Users/${id}/sparks/playing`);
+          push(addSparkRef, currentSparkId);
+  
+          // update local copies of everything with new database data
+          setupRolesAndRequests();
         }
-        let sparkOverNotify = new PushNotify(navigateToSurvey);
-        sparkOverNotify.scheduleNotification(sparkTDO, "Peer Survey", "Please tell us how this spark went!", userId);
+        else {
+          console.log("No available roles!");
+        }
+      }
+
+      function rejectRequest(role, id) {
+        const db = getDatabase();
+        // add this user to the rejected array
+        const rejectRef = ref(db, `Sparks/${currentSparkId}/roles/${role}/rejected/${id}`);
+        set(rejectRef, true);
+
+        //delete this user from the current requests array
+        globalRoleData.current[role].requests[id];
+
+        // update request copy in firebase
+        const requestRef = ref(db, `Sparks/${currentSparkId}/roles/${role}/requests`);
+        set(requestRef, globalRoleData.current[role].requests);  
     
-        //add spark to user's section as a spark they are playing for
-        const addSparkRef = ref(db, `Users/${id}/sparks/playing`);
-        push(addSparkRef, currentSparkId);
+        // update local copies of everything with new database data
+        setupRolesAndRequests()      
       }
 
       const renderRoleRequest = (object) => {
         return (
-          // <View style={[{marginBottom: "5%"}]}>
-            <Collapse style={{padding: '5%'}}>
-              <CollapseHeader style={[profileStyles.accordian, {padding: "5%", margin: 0, flexDirection: "row"}]}>
-                <Text style = {{fontSize: 15}}>Piano</Text>
-                <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
-              </CollapseHeader>
-              <CollapseBody style={[profileStyles.listItemContainer]}>
-                {/* <View style={{height: 200, width: "100%", backgroundColor: "yellow"}}> */}
-                  <FlatList
-                    style = {{padding: "2%"}}
-                    data = {roleRequest}
-                    renderItem = {renderRequest}
-                  />
-                {/* </View> */}
-              </CollapseBody>
-            </Collapse>
-          // </View>
+          <Collapse style={{padding: '5%'}}>
+            <CollapseHeader style={[profileStyles.accordian, {padding: "5%", margin: 0, flexDirection: "row"}]}>
+              <Text style = {{fontSize: 15}}>{object.item.role}</Text>
+              <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
+            </CollapseHeader>
+            <CollapseBody style={[profileStyles.listItemContainer]}>
+              <FlatList
+                style = {{padding: "2%"}}
+                data = {object.item.requests}
+                renderItem = {renderRequest}
+                ListEmptyComponent = {() => {
+                  return (
+                    <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                      <Text> This role has no requests </Text>
+                    </View>
+                  )
+                }}
+              />
+            </CollapseBody>
+          </Collapse>
         );
       }
 
@@ -857,24 +937,22 @@ export default function SparkSummary({ route, navigation }) {
         return (
           <View style={[sparkViewStyles.accordianItems]}>
             <View style={[sparkViewStyles.profileView]}>
-              <ProfileImage userId = {null} changeable = {false} size = {"small"}/>
-              <Text style={{fontSize:16, paddingHorizontal:"2%"}}>Claire Barclay</Text>
+              <ProfileImage userId = {object.item.requestUserId} changeable = {false} size = {"small"}/>
+              <Text style={{fontSize:16, width: "80%", padding: "5%"}}>{object.item.userName}</Text>
             </View>
-            <View style={{flexDirection:"row", alignItems:"center"}}>
-              <Icon name="add" size={28} />
-              <Icon name="close-outline" size={28} />
+            <View style={{flexDirection:"row", alignItems:"center", padding: "5%"}}>
+              <IconButton icon="check-bold" onPress = {() => acceptRequest(object.item.parentRole, object.item.requestUserId)} />
+              <IconButton icon="close-thick" onPress = {() => rejectRequest(object.item.parentRole, object.item.requestUserId)} />
             </View>
           </View>
         );
       }
-
-      let roleRequest = [1, 2, 3, 4, 5];
     
       return (
         // <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
         <List.Section title = "Requests">
           <FlatList
-            data = {roleRequest}
+            data = {rolesWithRequests}
             renderItem = {renderRoleRequest}
           /> 
           {/* <List.Accordion title="Piano" style = {profileStyles.accordian} titleStyle = {profileStyles.headerText}>
@@ -986,48 +1064,90 @@ export default function SparkSummary({ route, navigation }) {
 
     const VolunteersRoute = () => {
       const [volunteers, setVolunteers] = React.useState([]);
+      const [showRequestButton, setShowRequestButton] = React.useState(true);
+
+      const requestToPlay = async(role) => {
+        // make sure that this user hasn't already requested to join this spark before we add them to the requests
+        let requests = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/roles/${role}/requests`) || {};
+        // also make sure that this user hasn't already been rejected
+        let rejected = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/roles/${role}/rejected`) || {};
+        if (!Object.keys(requests).includes(userId) && !Object.keys(rejected).includes(userId)) {
+          //add currentUserId to a requested section of the spark with the currentSparkId
+          const db = getDatabase();
+          const roleRef = ref(db, `Sparks/${currentSparkId}/roles/${role}/requests/${userId}`);
+          set(roleRef, true);
+          
+          // get the updated spark data from firebase
+          getSparkData();
+          // remove user from request
+          //send notification to the user
+          // let sparkOverNotify = new PushNotify(() => navigation.navigate(Routes.publicProfile, {selectedUserId: "5cYHMVySLmOGyeZZeqA3oQ0DkO82"}));
+          // sparkOverNotify.scheduleNotification(null, "Spark Request", "You just received a request for your spark!", sparkLeaderId);
+        } 
+
+      }
       
       async function getVolunteersFromRoles() {
         let finalVolunteersArray = [];
-        for (const [roleName, roleIds] of Object.entries(globalRoleData.current)) {
+        let roleData = JSON.parse(JSON.stringify(globalRoleData.current))
+        for (const [roleName, roleIds] of Object.entries(roleData)) {
           if (roleName != 'spark_leader') {
             // separate by underscored
             let fancyRoleNamePart1 = roleName.split('_');
             let fancyRoleNamePart2 = fancyRoleNamePart1.map(role => role[0].toUpperCase() + role.substring(1));
             let fancyRoleName = fancyRoleNamePart2.join(' ');
 
-            for (let state of Object.values(roleIds)) {
-              // get user name and add to object
+            // this skips over requests array because it has no 'final' attribute
+            delete roleIds['requests'];
+            for (let finalRole of Object.values(roleIds)) {
               let userName = null;
-              if (state?.final) {
-                userName = await FirebaseButler.fbGet(`Users/${state.final}/info/name`); 
-              }
-              finalVolunteersArray.push({role: roleName, fancyRoleName, userId: state?.final, userName})
+              if (finalRole?.final) {
+                if (finalRole.final == userId) setShowRequestButton(false);
+                // get user name and add to object
+                userName = await FirebaseButler.fbGet(`Users/${finalRole.final}/info/name`); 
+              } 
+              finalVolunteersArray.push({role: roleName, fancyRoleName, userId: finalRole?.final || null, userName})
             } 
           }
-        }  
+        }
         setVolunteers([...finalVolunteersArray]);
       }
 
       useEffect(() => {
         getVolunteersFromRoles();
-      }, [globalRoleData])
+      }, [globalRoleData]);
+
+      const ShowRequestButton = (props) => {
+        if (showRequestButton == true) {
+          return (
+            <IconButton 
+              onPress = {() => requestToPlay(props.role)}
+              icon = "checkbox-marked-circle-plus-outline"
+              size = {20}
+            />
+          );
+        }
+        else {
+          return (
+            <View style = {{height: 40, width: 40}} />
+          );
+        }
+      }
 
       const renderVolunteer = (object) => {
-        if (object.item.userId) {
-          <View style={[sparkViewStyles.boxOne, {marginTop: "8%"}]}>
-            <ProfileImage size = "small" userId = {object.item.userId} />
-            <Text style={{marginLeft: "5%"}}>{object.item.fancyRoleName}: {object.item.userName} </Text>
-          </View>
+        if (object.item.userId !== null) {
+          return (
+            <View style={[sparkViewStyles.boxOne, {marginTop: "8%"}]}>
+              <ProfileImage size = "small" userId = {object.item.userId} />
+              <Text style={{marginLeft: "5%"}}>{object.item.fancyRoleName}: {object.item.userName} </Text>
+            </View>
+          );
         }
         else {
           return (
             <View style={[sparkViewStyles.boxOne, {marginTop: "8%", justifyContent: "center"}]}>
               <Text style={{marginLeft: "5%"}}>{object.item.fancyRoleName}: Needs filled! </Text>
-              <IconButton 
-                onPress = {() => requestToPlay(object.item.role)}
-                icon = "checkbox-marked-circle-plus-outline"
-              />
+              <ShowRequestButton role = {object.item.role} />
             </View>
           )
         }
@@ -1040,24 +1160,6 @@ export default function SparkSummary({ route, navigation }) {
             data = {volunteers}
             renderItem = {renderVolunteer}
           />
-          {/* <ScrollView contentContainerStyle = {{flex: 1}}>
-            <View style={[sparkViewStyles.boxOne, {marginTop: "8%"}]}>
-              <ProfileImage size = {"small"} userId = {null}/>
-              <Text style={{marginLeft: "5%"}}>Spark Leader: Colin Robson</Text>
-            </View>
-            <View style={[sparkViewStyles.boxOne]}>
-              <ProfileImage size = {"small"} userId = {null}/>
-              <Text style={{marginLeft: "5%"}}>Bass: Azianna Yang</Text>
-            </View>
-            <View style={[sparkViewStyles.boxOne]}>
-              <ProfileImage size = {"small"} userId = {null}/>
-              <Text style={{marginLeft: "5%"}}>Piano: Colin Robson</Text>
-            </View>
-            <View style={[sparkViewStyles.boxOne]}>
-              <ProfileImage size = {"small"} userId = {null}/>
-              <Text style={{marginLeft: "5%"}}>Vocals: Austin Dorsey</Text>
-            </View>
-          </ScrollView> */}
         </View>
       );
     }
@@ -1224,17 +1326,6 @@ export default function SparkSummary({ route, navigation }) {
       // let sparkOverNotify = new PushNotify(() => navigation.navigate(Routes.sparkSurvey));
       // sparkOverNotify.scheduleNotification(null, "How was your experience?", "Please fill out this survery to let us know how things went!", userId); 
     }
-
-    const requestToPlay = (role) => {
-      //add currentUserId to a requested section of the spark with the currentSparkId
-      const db = getDatabase();
-      const roleRef = ref(db, `Sparks/${currentSparkId}/roles/${role}/requests`);
-      push(roleRef, userId);
-  
-      //send notification to the user
-      // let sparkOverNotify = new PushNotify(() => navigation.navigate(Routes.publicProfile, {selectedUserId: "5cYHMVySLmOGyeZZeqA3oQ0DkO82"}));
-      // sparkOverNotify.scheduleNotification(null, "Spark Request", "You just received a request for your spark!", sparkLeaderId);
-    }
   
   return(
     <View style={styles.MainContainer}>
@@ -1246,7 +1337,6 @@ export default function SparkSummary({ route, navigation }) {
             {/* <Text style={styles.titleText}></Text> */}
             <IconButton onPress = {() => saveSpark()}style = {{position: "absolute", left: 0}}icon = "content-save-check"/>
             <IconButton onPress = {() => toggleReadWrite()}style = {{position: "absolute", left: "42%"}} icon = "pencil"/>
-            <IconButton onPress = {() => requestToPlay()}style = {{position: "absolute", left: "85%"}}icon = "checkbox-marked-circle-plus-outline"/>
           </View>
           <View style = {styles.row}>
             <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>{sparkName}</Text>
@@ -1454,13 +1544,14 @@ const sparkViewStyles = StyleSheet.create({
   },
 
   accordianItems: {
-    flexDirection:"row", 
-    alignItems:"center", 
-    justifyContent:"space-between",
-    marginTop: "5%",
-    marginBottom: "5%"
+    flex: 1,
+    flexDirection: "row", 
+    alignItems: "center", 
+    padding: "5%",
+    // backgroundColor: "green"
   },
   profileView:{
+    width: "60%",
     flexDirection:"row", 
     alignItems:"center"
   },
