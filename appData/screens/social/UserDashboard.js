@@ -33,7 +33,7 @@ export default function UserDashboard({ route, navigation }) {
     let attendingSparksOBJs = await FirebaseButler.fbGet(`Users/${userId}/sparks/attending`) || {};
     let playingSparkOBJs = await FirebaseButler.fbGet(`Users/${userId}/sparks/playing`) || {}; 
     let sparksOBJs = {...attendingSparksOBJs, ...playingSparkOBJs};
-
+    
     if (Object.values(sparksOBJs).length > 0) {
       let sparkIds = Object.values(sparksOBJs);
       let localMarkedDates = {};
