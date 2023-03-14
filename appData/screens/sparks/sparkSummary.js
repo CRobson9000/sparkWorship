@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
 import { StyleSheet, View, Text, TextInput, Image, Button, ScrollView, TouchableOpacity, TouchableHighlight, FlatList, Dimensions } from 'react-native';
 
-import DatePicker from 'react-native-date-picker';
+import { TimePickerModal, DatePickerModal } from 'react-native-paper-dates';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { IconButton, ProgressBar, List } from 'react-native-paper';
 import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
@@ -732,40 +732,40 @@ export default function SparkSummary({ route, navigation }) {
      */
 
     const TimesRoute = () => {
-      const [date, setDate] = React.useState(new Date())
-      const [open, setOpen] = React.useState(false)
+      const [visible, setVisible] = React.useState(false)
+      const onDismiss = React.useCallback(() => {
+        setVisible(false)
+      }, [setVisible])
+
+      const onConfirm = React.useCallback(
+        ({ hours, minutes }) => {
+          setVisible(false);
+          console.log({ hours, minutes });
+        },
+        [setVisible])
 
       return(
+       
         <View style = {{flex: 1, alignItems: "center"}}>
           <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"row", width:"100%"}}>
             <Text style = {{padding:"1%"}}>
               Baba Boi
             </Text>
-            <Button title="Open" onPress={() => setOpen(true)} />
-            <DatePicker
-              modal
-              open={open}
-              date={date}
-              onConfirm={(date) => {
-                setOpen(false)
-                setDate(date)
-              }}
-              onCancel={() => {
-                setOpen(false)
-              }}
+            <Button onPress={() => setVisible(true)} uppercase={false} mode="outlined" title="Pick time">
+              
+            </Button>
+            <TimePickerModal
+              visible={visible}
+              onDismiss={onDismiss}
+              onConfirm={onConfirm}
+              hours={12}
+              minutes={14}
             />
           </View>
           <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"row", width:"100%"}}>
             <Text style = {{padding:"1%"}}>
               Baba Boi
             </Text>
-            <Dropdown
-              style={styles.dialogDropDown} 
-              data={["Lyrics", "Note", "Chord Chart", "Music"]} 
-              renderItem={renderDropDownItem}
-              maxHeight = {"40%"}
-              itemTextStyle = {{color: "black", fontSize: 2}}
-            />
           </View>
         </View>
       );
