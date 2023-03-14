@@ -37,6 +37,7 @@ export default function SparkView({ route, navigation }) {
             // let finalDate = sparkTDO.getFormattedDateFormal();
             // let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
             let sparkId = Object.keys(sparks)[object.index];
+            let leaderId = item.roles.spark_leader;
 
             //Location formatting
             let locationObj = item.info.location;
@@ -47,7 +48,7 @@ export default function SparkView({ route, navigation }) {
                     onPress = {() => navigation.navigate(Routes.sparkSummary, {...props, currentSparkId: sparkId})} 
                     style={[sparkViewStyles.boxOne]}
                 >
-                    <ProfileImage userId = {null} size = {"medium"}/>
+                    <ProfileImage userId = {leaderId} size = {"medium"}/>
                     <Text style={sparkViewStyles.boxText}> {item?.info?.name} </Text>
                     <Text style={{left: "30%"}}> More</Text>
                 </TouchableOpacity>

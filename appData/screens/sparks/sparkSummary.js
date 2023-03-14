@@ -47,6 +47,7 @@ export default function SparkSummary({ route, navigation }) {
   const [sparkLeaderId, setSparkLeaderId] = React.useState(null);
   const [attending, setAttending] = React.useState(false);
   const [playing, setPlaying] = React.useState(false);
+  const profileImage = useRef(null);
 
   // Location Tab
   const globalLocationTitle = useRef("");
@@ -209,6 +210,8 @@ export default function SparkSummary({ route, navigation }) {
     let rolesObject = sparkData['roles'];
     // set spark leader
     setSparkLeaderId(rolesObject.spark_leader);
+    // set profile pic based on sparkLeaderId
+    await profileImage.current.getPhoto(rolesObject.spark_leader);
     // set global roles object
     globalRoleData.current = rolesObject;
 
@@ -1261,7 +1264,11 @@ export default function SparkSummary({ route, navigation }) {
         if (object.item.userId !== null) {
           return (
             <View style={[sparkViewStyles.boxOne, {marginTop: "8%"}]}>
-              <ProfileImage size = "small" userId = {object.item.userId} />
+              <ProfileImage 
+                size = "small" 
+                userId = {object.item.userId} 
+                onTap = {() => navigation.navigate(Routes.publicProfile, {...props, selectedUserId: object.item.userId})}
+              />
               <Text style={{marginLeft: "5%"}}>{object.item.fancyRoleName}: {object.item.userName} </Text>
             </View>
           );
@@ -1501,22 +1508,17 @@ export default function SparkSummary({ route, navigation }) {
     <View style={styles.MainContainer}>
       <View pointerEvents = {disable} style = {{height: "100%", width: "100%", opacity: contentOpacity}}>
         <View style={styles.topBorder}>
-          <View style={[styles.row2, {justifyContent: 'center', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
-            {/* REMOVE TESTREQUEST BUTTON AND REPLACE WITH ATTENDSPARK BUTTON */}
-            {/* <IconButton onPress = {() => testRequest()}style = {{position: "absolute", left: "2%"}}icon = "head-check" size = {30}/> */}
-            {/* <Text style={styles.titleText}></Text> */}
-            <IconButton onPress = {() => saveSpark()}style = {{position: "absolute", left: 0}}icon = "content-save-check"/>
-            {
-              sparkLeaderId == userId &&
-              <IconButton onPress = {() => toggleReadWrite()}style = {{position: "absolute", left: "42%"}} icon = "pencil"/>
-            }
-          </View>
           <View style = {styles.row}>
-            <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>{sparkName}</Text>
+            <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>{(sparkLeaderId != userId) ? sparkName : 'My Spark'}</Text>
           </View>
           <View style={[styles.row, {marginLeft: "10%"}]}>
             <View style={{marginLeft:"4%"}}>
-              <ProfileImage size = {"medium"} userId = {sparkLeaderId}/>
+              <ProfileImage 
+                ref = {profileImage} 
+                onTap = {() => navigation.navigate(Routes.publicProfile, {...props, selectedUserId: sparkLeaderId})}
+                size = {"medium"} 
+                userId = {null}
+              />
             </View>
             <View style={styles.column}>
               <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13, marginRight: screenWidth/60}}>Date and Time</Text>
