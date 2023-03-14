@@ -3,6 +3,7 @@ import { StyleSheet, Image, TouchableHighlight } from "react-native";
 import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storageRef } from '../../config/additionalMethods';
 import * as ImagePicker from 'expo-image-picker';
+import Routes from '../screens/Navigation/constants/Routes';
 
 // --------------
 // Get image code
@@ -21,6 +22,7 @@ class ProfileImage extends Component {
 
         //images are not changeable by default
         this.changeable = false;
+        this.onTap = props.onTap || (() => {});
 
         this.style = props.style;
 
@@ -64,10 +66,14 @@ class ProfileImage extends Component {
         this.getPhoto();
     }
 
-    getPhoto = async() => {
+    getPhoto = async(id) => {
+        // determine what id to use
+        let idToUse;
+        if (id) idToUse = id;
+        else idToUse = this.userId;
         //get the photo from firebase storage
         const storage = getStorage();
-        getDownloadURL(storageRef(storage, `userData/${this.userId}/userCoverPhoto`))
+        getDownloadURL(storageRef(storage, `userData/${idToUse}/userCoverPhoto`))
         .then((url) => {
             //display the image that was found using its url
             this.setState({image: {uri: url}});
@@ -147,18 +153,16 @@ class ProfileImage extends Component {
     }
 
     render() {
-        if (this.changeable) {
-            return (
-                <TouchableHighlight onPress = {() => this.uploadPhoto()}>
-                    <Image style={[this.style.profilePicture, {height: this.height, width: this.width}]} source={this.state.image} resizeMode = {'contain'}/>
-                </TouchableHighlight>
-            );
-        }
-        else {
-            return (
+        return (
+            <TouchableHighlight 
+                onPress = {() => {
+                    if (this.changeable) this.uploadPhoto();
+                    else this.onTap();
+                }}
+            >
                 <Image style={[this.style.profilePicture, {height: this.height, width: this.width}]} source={this.state.image} resizeMode = {'contain'}/>
-            )
-        }
+            </TouchableHighlight>
+        );
     }
 }
 

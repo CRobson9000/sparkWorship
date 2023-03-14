@@ -39,12 +39,16 @@ export default function UserDashboard({ route, navigation }) {
       let localMarkedDates = {};
       //each each id, get the actual spark data for that specific spark in firebase (found in Sparks)
       for (let sparkId of sparkIds) {
-        let sparkInfo = await FirebaseButler.fbGet(`Sparks/${sparkId}/info`) || null;
-        if (sparkInfo) {
+        let sparkData = await FirebaseButler.fbGet(`Sparks/${sparkId}`) || null;
+        let sparkInfo = sparkData?.info || {};
+        if (sparkData) {
           //add the needed spark data to local sparks array
           let sparkObject = {};
-          sparkObject['name'] = sparkInfo.name;   // then add other info on the same level as TDO
+          sparkObject['name'] = sparkInfo?.name;   // then add other info on the same level as TDO
           sparkObject['id'] = sparkId;
+
+          // set spark leader id
+          sparkObject['leaderId'] = sparkData.roles.spark_leader;
           allSparks.push(sparkObject);
   
           // set times on calendar and for sparks array
@@ -83,7 +87,7 @@ export default function UserDashboard({ route, navigation }) {
         onPress = {() => navigation.navigate(Routes.sparkSummary, {...props, currentSparkId: item.id})} 
         style={[sparkViewStyles.boxOne]}
       >
-        <ProfileImage userId = {null} size = {"medium"}/>
+        <ProfileImage userId = {item.leaderId} size = {"medium"}/>
         <Text style={sparkViewStyles.boxText}> {item.name} </Text>
         <Text style={{left: "30%"}}> More</Text>
       </TouchableOpacity>
