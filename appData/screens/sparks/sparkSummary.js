@@ -870,6 +870,23 @@ export default function SparkSummary({ route, navigation }) {
         },
         [setVisible])
 
+      const [date, setDate] = React.useState(undefined);
+      const [open, setOpen] = React.useState(false);
+
+      const onDismissSingle = React.useCallback(() => {
+        setOpen(false);
+      }, [setOpen]);
+
+      const onConfirmSingle = React.useCallback(
+        (params) => {
+          setOpen(false);
+          setDate(params.date);
+        },
+        [setOpen, setDate]
+      );
+      
+
+
       return(
        
         <View style = {{flex: 1, alignItems: "center"}}>
@@ -878,7 +895,6 @@ export default function SparkSummary({ route, navigation }) {
               Baba Boi
             </Text>
             <Button onPress={() => setVisible(true)} uppercase={false} mode="outlined" title="Pick time">
-              
             </Button>
             <TimePickerModal
               visible={visible}
@@ -886,6 +902,17 @@ export default function SparkSummary({ route, navigation }) {
               onConfirm={onConfirm}
               hours={12}
               minutes={14}
+            />
+            <Button onPress={() => setOpen(true)} uppercase={false} mode="outlined" title="Pick single date">
+              
+            </Button>
+            <DatePickerModal
+              locale="en"
+              mode="single"
+              visible={open}
+              onDismiss={onDismissSingle}
+              date={date}
+              onConfirm={onConfirmSingle}
             />
           </View>
           <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"row", width:"100%"}}>
