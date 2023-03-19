@@ -727,7 +727,7 @@ export default function ProfileScreen({route, navigation}) {
               <View style={styleSheet.topRow}>
                 <ProfileImage userId = {userId} changeable = {true} size = {"large"}/>
                 <View style={styleSheet.column3}>
-                  <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2.4 , height: 20, borderRadius: 10, marginBottom: "15%"}} progress={(currentIndex + 1) / 5}/>
+                  <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2.4 , height: 23, borderRadius: 10, marginBottom: "15%", borderColor: "rgb(0, 97, 117)", borderWidth: 2, backgroundColor: "rgb(219, 233, 236)"}} progress={(currentIndex + 1) / 5}/>
                   <Text style={styleSheet.smallText1}>Click your profile picture to change</Text>
                 </View>
               </View>
