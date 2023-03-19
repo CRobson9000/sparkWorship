@@ -15,7 +15,7 @@ const height = Dimensions.get('window').height;
 export default function PSPersonal({ route, navigation }) {
     let props = route.params;
     let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
-    let role = props?.role || 'attendee';
+    let userRole = props?.role || 'attendee';
     const [profileData, setProfileData] = React.useState(null);
 
     async function getProfileData() {
@@ -116,13 +116,23 @@ export default function PSPersonal({ route, navigation }) {
       
       
     const [index, setIndex] = React.useState(0);
-    const [routes] = React.useState([
+    const [attenderRoutes] = React.useState([
+        { key: 'first', title: 'Church' },
+        { key: 'second', title: 'Socials' },
+    ]);
+    
+    const attenderRenderScene = SceneMap({
+        first: ChurchRoute,
+        second: SocialsRoute
+    });
+
+    const [instrumentalistRoutes] = React.useState([
         { key: 'first', title: 'Music' },
         { key: 'second', title: 'Church' },
         { key: 'third', title: 'Socials' },
     ]);
     
-    const renderScene = SceneMap({
+    const instrumentalistRenderScene = SceneMap({
         first: MusicRoute,
         second: ChurchRoute,
         third: SocialsRoute
@@ -264,7 +274,12 @@ export default function PSPersonal({ route, navigation }) {
             </View>
           </View>
           <View style={{height: "100%", width: "100%"}}>
-            <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex} />
+            <TabView 
+              navigationState={{ index, routes: (userRole == "attendee") ? attenderRoutes : instrumentalistRoutes}} 
+              renderScene={(userRole == "attendee") ? attenderRenderScene : instrumentalistRenderScene} 
+              renderTabBar={renderTabBar} 
+              onIndexChange={setIndex} 
+            />
           </View>
         </View>
       );

@@ -18,7 +18,7 @@ export default function PSPersonal({ route, navigation }) {
     let props = route.params;
     let selectedUserId = props?.selectedUserId || null;
     let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
-
+    const [selectedUserRole, setSelectedUserRole] = React.useState(null);
     const [profileData, setProfileData] = React.useState(null);
 
     async function getProfileData() {
@@ -232,18 +232,29 @@ export default function PSPersonal({ route, navigation }) {
     
     
     const [index, setIndex] = React.useState(0);
-    const [routes] = React.useState([
-        { key: 'first', title: 'Sparks' },
-        { key: 'second', title: 'Music' },
-        { key: 'third', title: 'Church' },
-        { key: 'fourth', title: 'Socials' },
+
+    const [attenderRoutes] = React.useState([
+        { key: 'first', title: 'Church' },
+        { key: 'second', title: 'Socials' },
     ]);
     
-    const renderScene = SceneMap({
-        first: SparkRoute,
-        second: MusicRoute,
-        third: ChurchRoute,
-        fourth: SocialsRoute
+    const attenderRenderScene = SceneMap({
+        first: ChurchRoute,
+        second: SocialsRoute
+    });
+
+    const [instrumentalistRoutes] = React.useState([
+      { key: 'first', title: 'Sparks' },
+      { key: 'second', title: 'Music' },
+      { key: 'third', title: 'Church' },
+      { key: 'fourth', title: 'Socials' },
+    ]);
+    
+    const instrumentalistRenderScene = SceneMap({
+      first: SparkRoute,      
+      second: MusicRoute,
+      third: ChurchRoute,
+      fourth: SocialsRoute
     });
 
     const renderTabBar = props => (
@@ -255,6 +266,11 @@ export default function PSPersonal({ route, navigation }) {
         style={{ backgroundColor: 'rgb(219, 233, 236)'}}
       />
     );
+
+    async function setupSelectedUserRole() {
+      let currentRole = await FirebaseButler.fbGet(`Users/${selectedUserId}/role`);
+      setSelectedUserRole(currentRole);
+    }
 
     const [MyName, setMyName] = React.useState("Name not set");
 
@@ -355,6 +371,7 @@ export default function PSPersonal({ route, navigation }) {
     }
 
     useEffect(() => {
+      setupSelectedUserRole();
       setName();
       setRole();
       setLocation();
@@ -385,7 +402,12 @@ export default function PSPersonal({ route, navigation }) {
           </View>
         </View>
         <View style={{height: "100%", width: "100%"}}>
-          <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
+          <TabView 
+              navigationState={{ index, routes: (selectedUserRole == "attendee") ? attenderRoutes : instrumentalistRoutes}} 
+              renderScene={(selectedUserRole == "attendee") ? attenderRenderScene : instrumentalistRenderScene} 
+              renderTabBar={renderTabBar} 
+              onIndexChange={setIndex} 
+          />
         </View>
       </View>
     );
