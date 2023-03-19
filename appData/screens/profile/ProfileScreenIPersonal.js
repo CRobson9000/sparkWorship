@@ -6,49 +6,26 @@ import Routes from '../Navigation/constants/Routes';
 import { FirebaseButler } from '../../components/classes';
 import ProfileImage from '../../components/profileImage.js';
 import { profileStyles } from "../../styles/profileViewStyles.js";
-
+import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
 import { IconButton } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Ionicons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
+import { set } from 'firebase/database';
 
 const screenWidth = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 export default function PSPersonal({ route, navigation }) {
     let props = route.params;
     let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
-    let role = props?.role || 'attendee';
- 
-    const SparkRoute = () => (
-    <ScrollView style={profileStyles.content}>
-      <Text style={profileStyles.titleText}>Spark History</Text>
-      <View style={[profileStyles.row2, {alignItems: "center", alignSelf: "center"}]}>
-        <Text style={{fontSize: 18, marginRight: "5%"}}>324 sparks</Text>
-        <Text style={{fontSize: 20}}>-</Text>
-        <Image style={{height: 35, width: 35, marginLeft: "5%"}} source={require('../../../assets/filledspark.png')}/>
-        <Image style={{height: 35, width: 35}} source={require('../../../assets/filledspark.png')}/>
-        <Image style={{height: 35, width: 35}} source={require('../../../assets/filledspark.png')}/>
-        <Image style={{height: 35, width: 35}} source={require('../../../assets/emptyspark.png')}/>
-        <Image style={{height: 35, width: 35}} source={require('../../../assets/emptyspark.png')}/>
-      </View>
-      <Text style={profileStyles.titleText}>Upcoming Sparks</Text>
-      <List.Accordion 
-        title="Leading"
-        style={[profileStyles.accordian, {marginBottom: "3%"}]}
-        titleStyle = {profileStyles.headerText}>
-      </List.Accordion>
-      <List.Accordion 
-        title="Playing"
-        style={[profileStyles.accordian, {marginBottom: "3%"}]}
-        titleStyle = {profileStyles.headerText}>
-      </List.Accordion>
-      <List.Accordion 
-        title="Attending"
-        style={profileStyles.accordian}
-        titleStyle = {profileStyles.headerText}>
-      </List.Accordion>
-    </ScrollView>
-    );
+    let userRole = props?.role || 'attendee';
+    const [profileData, setProfileData] = React.useState(null);
 
+    async function getProfileData() {
+      let profileDataObject = await FirebaseButler.fbGet(`Users/${userId}`);
+      setProfileData({...profileDataObject});
+    }
+
+    useEffect(() => {
+      getProfileData();
+    }, [])
 
     const MusicRoute = () => {
       function instrumentRender(object) {
@@ -139,18 +116,26 @@ export default function PSPersonal({ route, navigation }) {
       
       
     const [index, setIndex] = React.useState(0);
-    const [routes] = React.useState([
-        { key: 'first', title: 'Sparks' },
-        { key: 'second', title: 'Music' },
-        { key: 'third', title: 'Church' },
-        { key: 'fourth', title: 'Socials' },
+    const [attenderRoutes] = React.useState([
+        { key: 'first', title: 'Church' },
+        { key: 'second', title: 'Socials' },
     ]);
     
-    const renderScene = SceneMap({
-        first: SparkRoute,
-        second: MusicRoute,
-        third: ChurchRoute,
-        fourth: SocialsRoute
+    const attenderRenderScene = SceneMap({
+        first: ChurchRoute,
+        second: SocialsRoute
+    });
+
+    const [instrumentalistRoutes] = React.useState([
+        { key: 'first', title: 'Music' },
+        { key: 'second', title: 'Church' },
+        { key: 'third', title: 'Socials' },
+    ]);
+    
+    const instrumentalistRenderScene = SceneMap({
+        first: MusicRoute,
+        second: ChurchRoute,
+        third: SocialsRoute
     });
 
     const renderTabBar = props => (
@@ -270,27 +255,32 @@ export default function PSPersonal({ route, navigation }) {
 
       return (
         <View style={profileStyles.MainContainer}>
-            <View style={profileStyles.topBorder}>
-                <View style={profileStyles.column1}>
-                  <View style={[profileStyles.row2, {justifyContent: 'space-evenly', alignContent: "center"}]}>
-                    <ProfileImage size = "large" userId = {userId} />
-                  </View>
-                  <Text style={profileStyles.nameText}>{MyName}</Text>
-                  <View style={[profileStyles.row2, {alignItems: "center", alignSelf: "center"}]}>
-                    <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
-                    <Text>   {MyLocation}</Text>
-                  </View>
+          <View style={profileStyles.topBorder}>
+            <View style={profileStyles.column1}>
+              <View style={[profileStyles.row2, {justifyContent: 'space-evenly', alignContent: "center"}]}>
+                <ProfileImage size = "large" userId = {userId} />
               </View>
+              <Text style={profileStyles.nameText}>{MyName}</Text>
+              <View style={[profileStyles.row2, {alignItems: "center", alignSelf: "center"}]}>
+                <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
+                <Text>   {MyLocation}</Text>
+              </View>
+            </View>
             <View style={[profileStyles.row2, {justifyContent: 'space-evenly', marginLeft: 30, marginRight: 30, alignItems: 'center'}]}>
-                <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => logFriends}>
-                  <Text style={profileStyles.buttonText}>Friends</Text></TouchableOpacity>
-                <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => navigation.navigate(Routes.profileCreation, props)}>
-                  <Text style={profileStyles.buttonText}>Edit Profile</Text></TouchableOpacity>
-              </View>
+              <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => logFriends}>
+                <Text style={profileStyles.buttonText}>Friends</Text></TouchableOpacity>
+              <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => navigation.navigate(Routes.profileCreation, props)}>
+                <Text style={profileStyles.buttonText}>Edit Profile</Text></TouchableOpacity>
             </View>
-            <View style={profileStyles.content}>
-              <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
-            </View>
+          </View>
+          <View style={{height: "100%", width: "100%"}}>
+            <TabView 
+              navigationState={{ index, routes: (userRole == "attendee") ? attenderRoutes : instrumentalistRoutes}} 
+              renderScene={(userRole == "attendee") ? attenderRenderScene : instrumentalistRenderScene} 
+              renderTabBar={renderTabBar} 
+              onIndexChange={setIndex} 
+            />
+          </View>
         </View>
       );
 }

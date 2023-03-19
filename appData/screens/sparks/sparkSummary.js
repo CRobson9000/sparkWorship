@@ -1243,7 +1243,7 @@ export default function SparkSummary({ route, navigation }) {
       }, [globalRoleData]);
 
       const ShowRequestButton = (props) => {
-        if (showRequestButton == true) {
+        if (showRequestButton == true && role != 'attendee') {
           return (
             <IconButton 
               onPress = {() => requestToPlay(props.role)}
@@ -1323,17 +1323,26 @@ export default function SparkSummary({ route, navigation }) {
       const renderSong = (object) => {
         return (
           <View style={[{marginBottom: "5%"}]}>
-            <Collapse style={{width:"100%", padding: "5%"}}>
-              <CollapseHeader style={[profileStyles.accordian, {padding: "5%", flexDirection: "row"}]}>
+            {
+              userRole != 'attendee' &&
+              <Collapse style={{width:"100%", padding: "5%"}}>
+                <CollapseHeader style={[profileStyles.accordian, {padding: "5%", flexDirection: "row"}]}>
+                  <Text style = {{fontSize: 15}}>{object.item.songName}</Text>
+                  <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
+                </CollapseHeader>
+                <CollapseBody style={[profileStyles.listItemContainer, {flex: 1}]}>
+                  <View style={{alignItems:"center"}}>
+                    <AttachmentContent attachments = {object.item.attachments}/>
+                  </View>
+                </CollapseBody>
+              </Collapse>
+            }
+            {
+              userRole == 'attendee' && 
+              <View style={[profileStyles.accordian, {padding: "5%", flexDirection: "row"}]}>
                 <Text style = {{fontSize: 15}}>{object.item.songName}</Text>
-                <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
-              </CollapseHeader>
-              <CollapseBody style={[profileStyles.listItemContainer, {flex: 1}]}>
-                <View style={{alignItems:"center"}}>
-                  <AttachmentContent attachments = {object.item.attachments}/>
-                </View>
-              </CollapseBody>
-            </Collapse>
+              </View>
+            }
           </View>
         );
       }
