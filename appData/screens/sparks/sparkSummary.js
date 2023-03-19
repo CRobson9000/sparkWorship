@@ -31,9 +31,11 @@ export default function SparkSummary({ route, navigation }) {
   let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
   let currentSparkId = props?.currentSparkId || "-NHSPNV5tXpWmVtr6M3h";
   let currentSparkIdAttend = "-NFQzJtPbk7zfcY0Iy2l";
+  let role = props?.role;
+  let status = route.params
+  let userRole = props?.role || "attendee";
 
   const update = useRef({});
-  const [readMode, setReadMode] = React.useState(true);
 
   // -------------------------
   // global variables for tabs
@@ -42,6 +44,9 @@ export default function SparkSummary({ route, navigation }) {
   const [sparkName, setSparkName] = React.useState(null);
   const [sparkLocationString, setSparkLocationString] = React.useState(null);
   const [sparkLeaderId, setSparkLeaderId] = React.useState(null);
+  const [attending, setAttending] = React.useState(false);
+  const [playing, setPlaying] = React.useState(false);
+  const profileImage = useRef(null);
 
   // Location Tab
   const globalLocationTitle = useRef("");
@@ -173,10 +178,6 @@ export default function SparkSummary({ route, navigation }) {
     update.current = {};
   }
 
-  function toggleReadWrite() {
-    setReadMode(!readMode);
-  }
-
   async function getSparkData() {
     // setup info data
     let sparkData = await FirebaseButler.fbGet(`Sparks/${currentSparkId}`);
@@ -206,11 +207,136 @@ export default function SparkSummary({ route, navigation }) {
 
     // setup roles
     let rolesObject = sparkData['roles'];
+    // set spark leader
+    setSparkLeaderId(rolesObject.spark_leader);
+    // set profile pic based on sparkLeaderId
+    await profileImage.current.getPhoto(rolesObject.spark_leader);
+    // set global roles object
     globalRoleData.current = rolesObject;
+
+    // get attending
+    let attenders = sparkData['attending'];
+    if (attenders && Object.values(attenders)?.includes(userId)) {
+      setAttending(true);
+    }
+
+    // determines if the current user is playing for this spark
+    // get the list of sparks the current user is playing for
+    let sparksPlayingForObj = await FirebaseButler.fbGet(`Users/${userId}/sparks/playing`);
+    if (sparksPlayingForObj && Object.values(sparksPlayingForObj)?.includes(currentSparkId)) {
+      setPlaying(true);
+    }
+  }
+
+  const [readMode, setReadMode] = React.useState(true);
+  function toggleReadWrite() {
+    setReadMode(!readMode);
+  }
+
+  const [tabRoutes, setTabRoutes] = React.useState(readRoutes);
+  const [renderTabRoutes, setRenderTabRoutes] = React.useState(renderReadScene);
+
+  function setTabViewData() {
+    let returnObj = {};
+    if (readMode) {
+      if (sparkLeaderId == userId) {
+        returnObj['route'] = readRoutesSparkLeader;
+        returnObj['scene'] = renderReadSceneSparkLeader;
+        // setTabRoutes(readRoutesSparkLeader);
+        // setRenderTabRoutes(renderReadSceneSparkLeader);
+      }
+      else {
+        returnObj['route'] = readRoutes;
+        returnObj['scene'] = renderReadScene;
+        // setTabRoutes(readRoutes);
+        // setRenderTabRoutes(renderReadScene);
+      }
+    }
+    else {
+      returnObj['route'] = editRoutes;
+      returnObj['scene'] = renderEditScene;
+      // setTabRoutes(editRoutes);
+      // setRenderTabRoutes(renderEditScene);
+    }
+
+    return returnObj;
+  }
+
+  async function attendSpark() {
+    // add spark to user's section as a spark they are attending
+    const db = getDatabase();
+    const attendSparkRef = ref(db, `Users/${userId}/sparks/attending`)
+    await push(attendSparkRef, currentSparkId);
+
+    // add user to attending list for spark
+    const addAttenderToSpark = ref(db, `Sparks/${currentSparkId}/attending`)
+    await push(addAttenderToSpark, userId);
+
+    setAttending(true);
+    // TODO: evaluate whether we need this: schedule notification to arrive after the spark is complete
+    // let sparkOverNotify = new PushNotify(() => navigation.navigate(Routes.sparkSurvey));
+    // sparkOverNotify.scheduleNotification(null, "How was your experience?", "Please fill out this survery to let us know how things went!", userId); 
+  }
+
+  async function cancelAttendSpark() {
+    const db = getDatabase();
+    // delete spark from user's attending
+    // find in user's attending sparks
+    let attendingSparks = await FirebaseButler.fbGet(`Users/${userId}/sparks/attending`) || {};    
+    for (const [pushId, sparkId] of Object.entries(attendingSparks)) {
+      if (sparkId == currentSparkId) {
+        const sparkInUser = ref(db, `Users/${userId}/sparks/attending/${pushId}`);
+        await set(sparkInUser, null);
+      }
+    }
+
+    // delete current user from spark's attenders
+    let attenders = await FirebaseButler.fbGet(`Sparks/${currentSparkId}/attending`);
+    for (const [pushId, iterativeUserId] of Object.entries(attenders)) {
+      if (iterativeUserId == userId) {
+        const userInSpark = ref(db, `Sparks/${currentSparkId}/attending/${pushId}`);
+        await set(userInSpark, null);
+      }
+    } 
+    setAttending(false);
+  }
+
+  async function leaveSpark() {
+    const db = getDatabase();
+    // find spark under "User" and delete it as a spark they are playing
+    let playingSparks = await FirebaseButler.fbGet(`Users/${userId}/sparks`);
+    for (const [type, sparkList] of Object.entries(playingSparks)) {
+      for (const [pushId, sparkId] of Object.entries(sparkList)) {
+        // we've found the spark we're looking for
+        if (sparkId == currentSparkId) {
+          const deleteSparkFromUser = ref(db, `Users/${userId}/sparks/${type}/${pushId}`);
+          await set(deleteSparkFromUser, null);
+          break;
+        }
+      }    
+    }
+
+    // find userId in spark roles
+    for (const [iterativeRole, iterativeRoleData] of Object.entries(globalRoleData.current)) {
+      // skip over spark leader role
+      if (iterativeRole != 'spark_leader') {
+        for (const [pushId, user] of Object.entries(iterativeRoleData)) {
+          if (pushId != 'request' && user.final == userId) {
+            const userInSpark = ref(db, `Sparks/${currentSparkId}/roles/${iterativeRole}/${pushId}/final`);
+            await set(userInSpark, "");
+            break;
+          }
+        }
+      }
+    }
+    setPlaying(false);
+    setAttending(false);
+    getSparkData();
   }
 
   useEffect(() => {
     getSparkData();
+    // setTabViewData();
   }, [])
 
   const LocationRoute = () => {
@@ -1137,7 +1263,11 @@ export default function SparkSummary({ route, navigation }) {
         if (object.item.userId !== null) {
           return (
             <View style={[sparkViewStyles.boxOne, {marginTop: "8%"}]}>
-              <ProfileImage size = "small" userId = {object.item.userId} />
+              <ProfileImage 
+                size = "small" 
+                userId = {object.item.userId} 
+                onTap = {() => navigation.navigate(Routes.publicProfile, {...props, selectedUserId: object.item.userId})}
+              />
               <Text style={{marginLeft: "5%"}}>{object.item.fancyRoleName}: {object.item.userName} </Text>
             </View>
           );
@@ -1272,77 +1402,122 @@ export default function SparkSummary({ route, navigation }) {
       );
     }
 
-    let [currentIndex, setCurrentIndex] = React.useState(1);
-        
-    const [index, setIndex] = React.useState(0);
-    const [editRoutes] = React.useState([
-        { key: 'first', title: 'Location' },
-        { key: 'second', title: 'Times' },
-        { key: 'third', title: 'Set List' },
-        { key: 'fourth', title: 'Volunteers' },
-        { key: 'fifth', title: 'Requests' },
-    ]);
-    
-    const renderEditScene = SceneMap({
-        first: LocationRoute,
-        second: TimesRoute,
-        third: SetListRoute,
-        fourth: VolunteersRoute,
-        fifth: RequestsRoute,
-    });
+    let [currentIndex, setCurrentIndex] = React.useState(1);      
+  const [index, setIndex] = React.useState(0);
+  const [editRoutes] = React.useState([
+      { key: 'first', title: 'Location' },
+      { key: 'second', title: 'Times' },
+      { key: 'third', title: 'Set List' },
+      { key: 'fourth', title: 'Volunteers' },
+      { key: 'fifth', title: 'Requests' },
+  ]);
+  
+  const renderEditScene = SceneMap({
+      first: LocationRoute,
+      second: TimesRoute,
+      third: SetListRoute,
+      fourth: VolunteersRoute,
+      fifth: RequestsRoute,
+  });
 
-    const [readRoutes] = React.useState([
-        { key: 'first', title: 'Location' },
-        { key: 'second', title: 'Times' },
-        { key: 'third', title: 'Set List' },
-        { key: 'fourth', title: 'Volunteers' },
-    ]);
+  const [readRoutesSparkLeader] = React.useState([
+      { key: 'first', title: 'Location' },
+      { key: 'second', title: 'Times' },
+      { key: 'third', title: 'Set List' },
+      { key: 'fourth', title: 'Volunteers' },
+      { key: 'fifth', title: 'Requests' }
+  ]);
 
-    const renderReadScene = SceneMap({
-        first: ReadLocationRoute,
-        second: TimesRoute,
-        third: ReadSetListRoute,
-        fourth: VolunteersRoute,
-    });
+  const renderReadSceneSparkLeader = SceneMap({
+      first: ReadLocationRoute,
+      second: TimesRoute,
+      third: ReadSetListRoute,
+      fourth: VolunteersRoute,
+      fifth: RequestsRoute
+  });
 
-    const renderTabBar = props => (
-      <TabBar
-        {...props}
-        indicatorStyle={{ backgroundColor: '#006175' }}
-        scrollEnabled= {true}
-        labelStyle={{color:"#006175"}}
-        style={{ backgroundColor: 'rgb(219, 233, 236)'}}
-      />
-    );
+  const [readRoutes] = React.useState([
+    { key: 'first', title: 'Location' },
+    { key: 'second', title: 'Times' },
+    { key: 'third', title: 'Set List' },
+    { key: 'fourth', title: 'Volunteers' }
+  ]);
 
-    const attendSpark = () => {
-      //add spark to user's section as a spark they are attending
-      const db = getDatabase();
-      const attendSparkRef = ref(db, `Users/${userId}/sparks/attending`)
-      push(attendSparkRef, currentSparkIdAttend);
+  const renderReadScene = SceneMap({
+    first: ReadLocationRoute,
+    second: TimesRoute,
+    third: ReadSetListRoute,
+    fourth: VolunteersRoute,
+  });
 
-      // TODO: evaluate whether we need this: schedule notification to arrive after the spark is complete
-      // let sparkOverNotify = new PushNotify(() => navigation.navigate(Routes.sparkSurvey));
-      // sparkOverNotify.scheduleNotification(null, "How was your experience?", "Please fill out this survery to let us know how things went!", userId); 
-    }
+  const renderTabBar = props => (
+    <TabBar
+      {...props}
+      indicatorStyle={{ backgroundColor: '#006175' }}
+      scrollEnabled= {true}
+      labelStyle={{color:"#006175"}}
+      style={{ backgroundColor: 'rgb(219, 233, 236)'}}
+    />
+  );
+
+  function getUserOptions() {
+    return (
+      <View style={[styles.row, {top: "30%"}]}>
+      {/* Show "Attend Spark" button if the current user is an attendee or they're an instrumentalist who is not playing for this spark */}
+      {
+        sparkLeaderId != userId && (role == "attendee" || (role == "instrumentalist" && !playing)) &&
+        <TouchableOpacity 
+          style={profileStyles.constantButtons} 
+          onPress = {
+            () => {
+              if (!attending) attendSpark();
+              else cancelAttendSpark();  
+            }
+          }
+        >
+          <Text style={profileStyles.buttonText}> {(!attending) ? 'Attend Spark' : 'Nevermind!'} </Text>
+        </TouchableOpacity>
+      }
+      {/* Show "Leave Spark" button if the current user is playing for this spark */}
+      {
+        playing && sparkLeaderId != userId &&
+        <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => leaveSpark()} >
+          <Text style={profileStyles.buttonText}> Leave Spark </Text>
+        </TouchableOpacity>
+      }
+      {/* Show "Edit Spark" button if the current user is the spark leader*/}
+      {
+        sparkLeaderId == userId &&
+        <TouchableOpacity style={profileStyles.constantButtons} onPress = { () => toggleReadWrite() }>
+          <Text style={profileStyles.buttonText}> {(readMode) ? 'Edit Spark' : 'View Spark'} </Text>
+        </TouchableOpacity> 
+      }
+      {/* Show save spark button if we are in edit mode and there are active changes*/}
+      {
+        readMode == false &&
+        <TouchableOpacity style={profileStyles.constantButtons} onPress = { () => saveSpark() }>
+          <Text style={profileStyles.buttonText}> Save Spark </Text>
+        </TouchableOpacity>  
+      }
+      </View>
+    )
+  }
   
   return(
     <View style={styles.MainContainer}>
       <View pointerEvents = {disable} style = {{height: "100%", width: "100%", opacity: contentOpacity}}>
         <View style={styles.topBorder}>
-          <View style={[styles.row2, {justifyContent: 'center', marginLeft: 20, marginRight: 20, top: '16%', alignItems: 'center'}]}>
-            {/* REMOVE TESTREQUEST BUTTON AND REPLACE WITH ATTENDSPARK BUTTON */}
-            {/* <IconButton onPress = {() => testRequest()}style = {{position: "absolute", left: "2%"}}icon = "head-check" size = {30}/> */}
-            {/* <Text style={styles.titleText}></Text> */}
-            <IconButton onPress = {() => saveSpark()}style = {{position: "absolute", left: 0}}icon = "content-save-check"/>
-            <IconButton onPress = {() => toggleReadWrite()}style = {{position: "absolute", left: "42%"}} icon = "pencil"/>
-          </View>
           <View style = {styles.row}>
-            <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>{sparkName}</Text>
+            <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>{(sparkLeaderId != userId) ? sparkName : 'My Spark'}</Text>
           </View>
           <View style={[styles.row, {marginLeft: "10%"}]}>
             <View style={{marginLeft:"4%"}}>
-              <ProfileImage size = {"medium"} userId = {sparkLeaderId}/>
+              <ProfileImage 
+                ref = {profileImage} 
+                onTap = {() => navigation.navigate(Routes.publicProfile, {...props, selectedUserId: sparkLeaderId})}
+                size = {"medium"} 
+                userId = {null}
+              />
             </View>
             <View style={styles.column}>
               <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13, marginRight: screenWidth/60}}>Date and Time</Text>
@@ -1352,17 +1527,12 @@ export default function SparkSummary({ route, navigation }) {
               </View>
             </View>
           </View>
-          <View style={[styles.row, {marginLeft: screenWidth/5, marginRight: screenWidth/50, top: "30%"}]}>
-            <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => attendSpark()}>
-              <Text style={profileStyles.buttonText}>Attend Spark</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={profileStyles.constantButtons}><Text style={profileStyles.buttonText}>Next</Text></TouchableOpacity>
-          </View>
+          { getUserOptions() }
         </View>
         <View style={styles.content}>
           <TabView 
-            navigationState={{ index, routes: (readMode) ? readRoutes : editRoutes }} 
-            renderScene={(readMode) ? renderReadScene : renderEditScene} 
+            navigationState={{ index, routes: setTabViewData().route }} 
+            renderScene={setTabViewData().scene} 
             renderTabBar={renderTabBar} 
             onIndexChange={setIndex}
           />
