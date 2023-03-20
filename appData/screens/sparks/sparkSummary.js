@@ -15,7 +15,7 @@ import { profileStyles } from "../../styles/profileViewStyles.js";
 import Icon from 'react-native-vector-icons/Ionicons';
 
 // photo upload imports
-import { getStorage, uploadBytes, getDownloadURL, connectStorageEmulator } from "firebase/storage";
+import { getStorage, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import * as DocumentPicker from 'expo-document-picker';
 import * as Linking from 'expo-linking';
 
@@ -172,6 +172,15 @@ export default function SparkSummary({ route, navigation }) {
           for (let attachment of attachments) {
             if (attachment.attachmentType == "file") await saveFile(attachment.value, attachment.songKey, attachment.attachmentId)
           }
+        }
+      }
+
+      // delete the songs from cloud storage that were removed
+      if (overallKey == "delete") {
+        for (let attachment of values) {
+          const storage = getStorage();
+          const deleteStorageRef = storageRef(storage, `sparkData/${currentSparkId}/${attachment.songKey}/${attachment.attachmentId}`);
+          await deleteObject(deleteStorageRef);
         }
       }
     }
@@ -491,47 +500,11 @@ export default function SparkSummary({ route, navigation }) {
       </ScrollView>
     )
   }
-
-  // const SetListRoute = () => (
-  //   <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
-  //     <List.Section title = "Set List">
-        // <List.Accordion title="Rock of Ages" style = {profileStyles.accordian} titleStyle = {profileStyles.headerText}>
-        //   <View style={profileStyles.listItemContainer}>
-        //     <View style={profileStyles.listItemHeader}>
-        //       <Text style={[profileStyles.accordionHeaderText]}> Lyrics </Text>
-        //     </View>
-        //     <View style={profileStyles.listItemContent}>
-        //       <Text>RockOfAgesLyrics.pdf</Text>
-        //     </View>
-        //   </View>
-        //   <View style={profileStyles.listItemContainer}>
-        //     <View style={profileStyles.listItemHeader}>
-        //       <Text style={[profileStyles.accordionHeaderText]}> Sheet Music </Text>
-        //     </View>
-        //     <View style={profileStyles.listItemContent}>
-        //       <Text>RockOfAgesSongSheet.pdf</Text>
-        //     </View>
-        //   </View>
-        //   <View style={sparkViewStyles.listItemContainer}>
-        //     <View style={{width:"100%", alignItems:"center", marginBottom:"5%"}}>
-        //       <Text style={{fontSize:32}}>
-        //         +
-        //       </Text>
-        //     </View>
-        //   </View>
-        // </List.Accordion>
-  //       <View style={{width:"100%", alignItems:"center"}}>
-  //         <Text style={{fontSize:32}}>
-  //           +
-  //         </Text>
-  //       </View>
-  //     </List.Section>
       
   const SetListRoute = () => {
     const [songs, setSongs] = React.useState(null);
 
     useEffect(() => {
-      // console.log("Global Songs"/*, globalSongs.current*/);
       setSongs(globalSongs.current);
     }, [globalSongs])
 
@@ -552,6 +525,37 @@ export default function SparkSummary({ route, navigation }) {
           console.log("Could not open file.  You may need to save your spark to access this file!");
         })
       }
+    }
+
+    function deleteSong(songIndex) {
+      // loop through the attachments of the song and add them to the delete key of the update
+      let songAttachments = globalSongs.current[songIndex].attachments;
+      for (let attachment of songAttachments) {
+        if (attachment.attachmentType == "file") {
+          if (!update.current.delete) update.current["delete"] = [];
+          update.current.delete.push({songKey: attachment.songKey, attachmentId: attachment.attachmentId})
+        }
+      }
+
+      // delete the song and then add the global songs array to the update
+      globalSongs.current.splice(songIndex, 1);
+      update.current["songs"] = globalSongs.current;
+      setSongs([...globalSongs.current]);
+    }
+
+    function deleteAttachment(songKey, attachmentId, attachmentType, songIndex, attachmentIndex) {
+      // delete attachment from globalSongs
+      globalSongs.current[songIndex].attachments.splice(attachmentIndex, 1);
+      // add to update to delete these songs
+      update.current["songs"] = globalSongs.current;
+      // add files to delete from cloud storage to the update
+      if (attachmentType == 'file') {
+        if (!update.current.delete) update.current["delete"] = [];
+        update.current.delete.push({songKey, attachmentId})
+      }
+
+      // re-render tab
+      setSongs([...globalSongs.current]);
     }
 
     const AddAttachmentContent = (props) => {
@@ -689,40 +693,25 @@ export default function SparkSummary({ route, navigation }) {
       )
     }
 
-    // <List.Accordion title="Rock of Ages" style = {profileStyles.accordian} titleStyle = {profileStyles.headerText}>
-    // <View style={profileStyles.listItemContainer}>
-    //   <View style={profileStyles.listItemHeader}>
-    //     <Text style={[profileStyles.accordionHeaderText]}> Lyrics </Text>
-    //   </View>
-    //   <View style={profileStyles.listItemContent}>
-    //     <Text>RockOfAgesLyrics.pdf</Text>
-    //   </View>
-    // </View>
-  //   <View style={profileStyles.listItemContainer}>
-  //     <View style={profileStyles.listItemHeader}>
-  //       <Text style={[profileStyles.accordionHeaderText]}> Sheet Music </Text>
-  //     </View>
-  //     <View style={profileStyles.listItemContent}>
-  //       <Text>RockOfAgesSongSheet.pdf</Text>
-  //     </View>
-  //   </View>
-  //   <View style={sparkViewStyles.listItemContainer}>
-  //     <View style={{width:"100%", alignItems:"center", marginBottom:"5%"}}>
-  //       <Text style={{fontSize:32}}>
-  //         +
-  //       </Text>
-  //     </View>
-  //   </View>
-  // </List.Accordion>
-
     const renderSong = (object) => {
       return (
         <View style={[{margin: "5%"}]}>
           <Collapse style={{flex: 1}}>
             <CollapseHeader style = {[profileStyles.accordian, {padding: "5%"}]}>
-              <Text style = {{fontSize: 15}}>{object.item.songName}</Text>
-              <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
-              {/* <Text style={{color:"white", fontSize:20, paddingVertical:"2%"}}>Key: {object.item.key}</Text> */}
+              <Text style = {{fontSize: 15, width: (readMode == false) ? "75%" : "100%", paddingTop: "2%", paddingBottom: "2%"}}>{object.item.songName}</Text>
+              <List.Icon 
+                color = {"gray"} 
+                size = {20}
+                icon = {"chevron-down"}
+              />
+              {
+                readMode == false && 
+                <IconButton
+                  icon = {'trash-can'}
+                  size = {20}
+                  onPress = {() => deleteSong(object.index)}
+                />
+              }
             </CollapseHeader>
             <CollapseBody style={[profileStyles.listItemContainer, {flex: 1}]}>
               <TouchableOpacity 
@@ -737,7 +726,7 @@ export default function SparkSummary({ route, navigation }) {
                 <Text style={{color: "black", fontSize:15}}>+</Text>
               </TouchableOpacity>
               <View style={{alignItems:"center"}}>
-                <AttachmentContent attachments = {object.item.attachments}/>
+                <AttachmentContent attachments = {object.item.attachments} songIndex = {object.index}/>
               </View>
             </CollapseBody>
           </Collapse>
@@ -745,28 +734,26 @@ export default function SparkSummary({ route, navigation }) {
       );
     }
 
-    // <View style={profileStyles.listItemContainer}>
-    //   <View style={profileStyles.listItemHeader}>
-    //     <Text style={[profileStyles.accordionHeaderText]}> Lyrics </Text>
-    //   </View>
-    //   <View style={profileStyles.listItemContent}>
-    //     <Text>RockOfAgesLyrics.pdf</Text>
-    //   </View>
-    // </View>
     const renderAttachment = (object) => {
+      console.log("Attachment Object", object);
       return (
         <View style = {{padding: "2%"}}>
           <TouchableHighlight onPress = {() => openAttachment(object.item)} style={[profileStyles.listItemHeader]}>
-            <View style = {{padding: "2%", flexDirection: "row"}}>
-              <Text style={[profileStyles.accordionHeaderText]}> {object.item.type}: </Text>
-              <Text style = {{fontSize: 15}}> {object.item.attachmentName} </Text>
+            <View style = {{flexDirection: "row", justifyContent: "center"}}>
+              <View style = {{paddingBottom: "2%", paddingTop: "2%", width: (readMode == false) ? "80%" : "100%", flexWrap: 'wrap', flexDirection: "row"}}>
+                <Text style={[profileStyles.accordionHeaderText]}> {object.item.type}: </Text>
+                <Text style = {{fontSize: 15}}> {object.item.attachmentName} </Text>
+              </View>
+              {
+                readMode == false &&
+                <IconButton
+                  size = {20}
+                  icon = {"trash-can"}
+                  onPress = {() => deleteAttachment(object.item.songKey, object.item.attachmentId, object.item.attachmentType, object.item.songIndex, object.index)}
+                />
+              }
             </View>
           </TouchableHighlight>
-          {/* <View style={profileStyles.listItemContent}>
-            <TouchableHighlight onPress = {() => openAttachment(object.item)}style = {styles.attachment}>
-              <Text style = {{fontSize: 15}}> {object.item.attachmentName} </Text>
-            </TouchableHighlight>
-          </View> */}
         </View>
       )
     }
@@ -794,6 +781,8 @@ export default function SparkSummary({ route, navigation }) {
 
     const AttachmentContent = (props) => {
       if (props.attachments && props.attachments.length != 0) {
+        // add songIndex to each attachment to know how to delete it
+        props.attachments.forEach((attachment) => attachment['songIndex'] = props.songIndex);
         return (
           <View style = {{flex: 1}}>
             <FlatList
