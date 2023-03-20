@@ -889,36 +889,63 @@ export default function SparkSummary({ route, navigation }) {
 
       return(
        
-        <View style = {{flex: 1, alignItems: "center"}}>
+        <View style = {{flex: 1, alignItems: "flex-start"}}>
+          <Text style={{paddingLeft:"4%", paddingTop:"5%"}}>Times</Text>
           <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"row", width:"100%"}}>
-            <Text style = {{padding:"1%"}}>
-              Baba Boi
+            <Text style = {{paddingRight:"5%", fontFamily:"RNSMiles"}}>
+              Publishing Time
             </Text>
-            <Button onPress={() => setVisible(true)} uppercase={false} mode="outlined" title="Pick time">
-            </Button>
-            <TimePickerModal
-              visible={visible}
-              onDismiss={onDismiss}
-              onConfirm={onConfirm}
-              hours={12}
-              minutes={14}
-            />
-            <Button onPress={() => setOpen(true)} uppercase={false} mode="outlined" title="Pick single date">
-              
-            </Button>
-            <DatePickerModal
-              locale="en"
-              mode="single"
-              visible={open}
-              onDismiss={onDismissSingle}
-              date={date}
-              onConfirm={onConfirmSingle}
-            />
+            <View style={{width:"25%"}}>
+              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setVisible(true)}>
+                <Text style={[styles.buttonText]}>Time</Text>
+              </TouchableOpacity>
+              <TimePickerModal
+                visible={visible}
+                onDismiss={onDismiss}
+                onConfirm={onConfirm}
+                hours={12}
+                minutes={14}
+              />
+              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setVisible(true)}>
+                <Text style={[styles.buttonText]}>Date</Text>
+              </TouchableOpacity>
+              <DatePickerModal
+                locale="en"
+                mode="single"
+                visible={open}
+                onDismiss={onDismissSingle}
+                date={date}
+                onConfirm={onConfirmSingle}
+              />
+            </View>
           </View>
           <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"row", width:"100%"}}>
-            <Text style = {{padding:"1%"}}>
-              Baba Boi
+            <Text style = {{paddingRight:"2.5%", fontFamily:"RNSMiles"}}>
+              Performance Time
             </Text>
+            <View style={{width:"25%"}}>
+              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setVisible(true)}>
+                <Text style={[styles.buttonText]}>Time</Text>
+              </TouchableOpacity>
+              <TimePickerModal
+                visible={visible}
+                onDismiss={onDismiss}
+                onConfirm={onConfirm}
+                hours={12}
+                minutes={14}
+              />
+              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setVisible(true)}>
+                <Text style={[styles.buttonText]}>Date</Text>
+              </TouchableOpacity>
+              <DatePickerModal
+                locale="en"
+                mode="single"
+                visible={open}
+                onDismiss={onDismissSingle}
+                date={date}
+                onConfirm={onConfirmSingle}
+              />
+            </View>
           </View>
         </View>
       );
@@ -1554,6 +1581,15 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "35%",
     borderRadius: 10
+  },
+
+  timesButton:{
+    justifyContent: "center",
+    alignItems: "center",
+    height: "15%",
+    width: "100%",
+    borderRadius: 10,
+    margin: "5%"
   },
 
   dialogButtonRow: {
