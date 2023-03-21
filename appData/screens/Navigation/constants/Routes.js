@@ -3,6 +3,7 @@ let Routes={
     login: 'LoginScreen',
     registration: 'Registration',
     userDashboard: 'User Dashboard',
+    forgotPassword: 'Forgot Password',
     //hostingDashboard: 'HostingDashboard',
     userHub: 'User Hub',
     sparkView: 'Spark View',
