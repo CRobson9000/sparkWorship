@@ -6,22 +6,19 @@ const width = Dimensions.get('window').width;
 const styleSheet = StyleSheet.create({
     
     MainContainer: {
-      position: "absolute",
       width: "100%", 
       height: "100%",
-      backgroundColor: "white",
-      top: 0
+      backgroundColor: "white"
     },
 
     content: {
-      height: "100%",
+      height: "60%",
       width: "100%"
     },
 
     topBorder: {
       position: "absolute",
-      top: 0,
-      height: "25%",
+      height: "30%",
       width: "100%",
       justifyContent: "center",
       backgroundColor: "rgb(219, 233, 236)",
@@ -40,7 +37,7 @@ const styleSheet = StyleSheet.create({
       textAlign: "center",
       fontFamily: "RNSMiles",
       fontSize: screenHeight/35,
-      marginBottom: "4%" 
+      marginBottom: "8%" 
     },
 
     // Labels for all input boxes except Zip Code 
@@ -55,7 +52,7 @@ const styleSheet = StyleSheet.create({
       backgroundColor: "#F2905B",
       borderRadius: 10,
       width: "85%",
-      height: "10%",
+      height: "8%",
       alignSelf: "center",
       marginBottom: "4%", 
       padding: 10
@@ -69,7 +66,7 @@ const styleSheet = StyleSheet.create({
       justifyContent: "space-evenly",
       height: "10%",
       width: '100%',
-      bottom: 0
+      bottom: "3%"
     },
 
     // Text for all buttons
@@ -83,7 +80,7 @@ const styleSheet = StyleSheet.create({
       backgroundColor: "rgb(0, 97, 117)",
       justifyContent: "center",
       alignItems: "center",
-      height: "55%",
+      height: "50%",
       width: "35%",
       // top: "10%",
       borderRadius: 10
@@ -220,7 +217,7 @@ const styleSheet = StyleSheet.create({
       fontSize:18,
       justifyContent:"center",
     },
-//
+
     timeDateRow: {
       width: "80%",
       flexDirection:"row",
