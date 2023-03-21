@@ -316,7 +316,7 @@ export default function SparkCreation({ route, navigation }) {
                 hours={12}
                 minutes={14}
               />
-              <TouchableOpacity style={[styleSheet.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setVisible(true)}>
+              <TouchableOpacity style={[styleSheet.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setOpen(true)}>
                 <Text style={[styleSheet.buttonText]}>Date</Text>
               </TouchableOpacity>
               <DatePickerModal

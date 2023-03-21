@@ -895,7 +895,7 @@ export default function SparkSummary({ route, navigation }) {
                 hours={12}
                 minutes={14}
               />
-              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setVisible(true)}>
+              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setOpen(true)}>
                 <Text style={[styles.buttonText]}>Date</Text>
               </TouchableOpacity>
               <DatePickerModal
@@ -923,7 +923,7 @@ export default function SparkSummary({ route, navigation }) {
                 hours={12}
                 minutes={14}
               />
-              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setVisible(true)}>
+              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setOpen(true)}>
                 <Text style={[styles.buttonText]}>Date</Text>
               </TouchableOpacity>
               <DatePickerModal
