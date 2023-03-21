@@ -1,4 +1,4 @@
-import { Image, Text, View, TouchableOpacity, TextInput, Keyboard } from 'react-native';
+import { StyleSheet, Image, Text, View, TouchableOpacity, TextInput, Keyboard } from 'react-native';
 import React, { useRef } from 'react';
 import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
 import Routes from '../Navigation/constants/Routes.js';
@@ -12,6 +12,9 @@ import * as Device from 'expo-device';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 // import Routes.UserDashboard from '../dashboard/UserDashboard';
+
+// Linear Gradient Import
+import {LinearGradient} from 'expo-linear-gradient';
 
 //import statements for styles
 import { stylesPortrait } from "../../styles/portrait.js";
@@ -86,7 +89,12 @@ export default function LoginScreen({ navigation }) {
  
   return (
     <KeyboardView style = {{paddingBottom: "30%"}}>
-      <View style={[stylesPortrait.container, {backgroundColor: 'white'}]}>
+      {/* <LinearGradient
+                        colors={['#FFE5B4', '#DBE9EC']}
+                        style={sparkViewStyles.boxOne}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}  > */}
+      <View>
         <TouchableHighlight
           style = {{
             borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
@@ -173,14 +181,27 @@ export default function LoginScreen({ navigation }) {
           <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate(Routes.registration)}>
             <Text style={[stylesPortrait.centerText]}>Register New User</Text>
           </TouchableOpacity>
+          
 
           <Provider>
             <Toast ref = {toastRef}/>
           </Provider>
         </View>
       </View>
+      {/* </LinearGradient> */}
     </KeyboardView>
   );
 }
+
+// const sparkViewStyles = StyleSheet.create({
+//   boxOne:
+//   {
+//     container: {
+//       flex: 1,
+//       alignItems: 'center',
+//       justifyContent: 'center',
+//     },
+//   }
+// });
 
 

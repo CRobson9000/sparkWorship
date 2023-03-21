@@ -11,6 +11,8 @@ import { getDatabase, ref, set, get } from 'firebase/database';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ProfileImage from '../../components/profileImage.js';
 
+import {LinearGradient} from 'expo-linear-gradient';
+
 const screenHeight = Dimensions.get('window').height;
 
 export default function SparkView({ route, navigation }) {
@@ -44,13 +46,42 @@ export default function SparkView({ route, navigation }) {
             let locationString = `${locationObj?.address} ${locationObj?.city}, ${locationObj?.state} ${locationObj?.zip}`;
             
             return (
-                <TouchableOpacity 
-                    onPress = {() => navigation.navigate(Routes.sparkSummary, {...props, currentSparkId: sparkId})} 
+                <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary, {...props, currentSparkId: sparkId})} 
                     style={[sparkViewStyles.boxOne]}
                 >
-                    <ProfileImage userId = {leaderId} size = {"medium"}/>
+                    {/* <ProfileImage userId = {leaderId} size = {"medium"}/>
                     <Text style={sparkViewStyles.boxText}> {item?.info?.name} </Text>
-                    <Text style={{left: "30%"}}> More</Text>
+                    <Text style={{left: "30%"}}> More</Text> */}
+                     {/* <View style={sparkViewStyles.searchBar}>
+                        <View style={sparkViewStyles.row2}>
+                            <Image style={sparkViewStyles.searchIcon} source={require('../../../assets/searchIcon.png')}/>
+                            <Text style={{color: "grey"}}>Search</Text>
+                        </View>
+                    </View> */}
+                    <LinearGradient
+                        colors={['#FFE5B4', '#DBE9EC']}
+                        style={sparkViewStyles.container}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}  >
+
+                        <View style={{width: "100%", paddingBottom: "10%", alignItems:"center", flexDirection: "column", justifyContent: "center"}}>
+                                <View style={{padding: "2%", margin: "5%"}}>
+                                     <ProfileImage userId = {leaderId} size = {"medium"}/>
+                                </View>
+                                <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name} </Text>
+                                <View style={sparkViewStyles.informationBox}>
+                                    <View style={{position: "relative", flexDirection: "row", width: "30%", alignItems: "center"}}>
+                                    <Image style={{height: 20, width: 20, position: "relative", /*left: "10%"*/}} source={require('../../../assets/locationpin.png')}></Image>
+                                        <Text>Ephrata, PA</Text>
+                                    </View>
+                                    <View style={sparkViewStyles.verticalLine}></View>
+                                    <View style={{position: "relative", width: "30%", alignItems: "center"}}>
+                                        <Text>April 28, 2023 @ 8 p.m.</Text>
+                                    </View>
+                                </View>
+                        </View>
+                    </LinearGradient>
+
                 </TouchableOpacity>
             )  
         }
@@ -180,20 +211,103 @@ const sparkViewStyles = StyleSheet.create({
         justifyContent: "space-between", 
         alignItems: "center"
     },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        borderRadius: 30,
+        justifyContent: 'center',
+      },
+
+    searchBar: {
+        width: "85%", 
+        height: "6%", 
+        backgroundColor: "#E7E6E6", 
+        marginBottom: 25, 
+        marginTop: 25, 
+        borderRadius: 10,
+        justifyContent: "center"
+    },
+    // boxOne:
+    // {
+    //     backgroundColor: "#DBE9EC",
+    //     padding: "3%",
+    //     borderRadius: 30,
+    //     flexDirection: "column",
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    //     margin: "5%"
+    // },
+    // boxText:{
+    //     padding: "5%",
+    //     fontSize: screenHeight/70,
+    //     fontFamily: "RNSMiles",
+    //     fontWeight: "bold"
+    // },
+
     boxOne:
     {
-        backgroundColor: "#DBE9EC",
-        padding: "3%",
+        // backgroundColor: "#FFE5B4",
+        flex: 1,
+        padding: "2%",
         borderRadius: 30,
         flexDirection: "column",
-        justifyContent: "center",
+        // justifyContent: "space-between",
         alignItems: "center",
-        margin: "5%"
+        margin: "2%"
     },
+  
+    informationBox:
+    {
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        paddingTop: "2%",
+        paddingBottom: "2%",
+        width: "100%",
+    },
+  
+    veryTopBox:{
+      marginTop: "5%",
+    },
+  
     boxText:{
-        padding: "5%",
-        fontSize: screenHeight/70,
-        fontFamily: "RNSMiles",
-        fontWeight: "bold"
+      marginBottom: "2%",
+      padding: "2%",
+      fontSize: screenHeight/70
+    },
+    
+    topText:{
+      // fontSize: 12
+      fontFamily: "RNSMiles",
+      fontWeight: "bold",
+      color: "#e56a17",
+      fontSize: 20
+      },
+  
+    profPic:{
+      
+    },
+    musicianContainer:
+    {
+      width:"85%",
+      height:"100%",
+      backgroundColor: "white",
+      flexDirection: "column", 
+      justifyContent: "space-between", 
+      alignItems: "center"
+    },
+    verticalLine: {
+      height: '90%',
+      width: 2,
+      backgroundColor: '#909090',
+      alignItems: "center",
+      position: "relative",
+      // right: "52%"
     }
+
+
+
+
+
+
 });
