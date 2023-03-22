@@ -30,56 +30,91 @@ export default function PSPersonal({ route, navigation }) {
     const MusicRoute = () => {
       function instrumentRender(object) {
         return(
-          <List.Accordion
-            title={object.item.instrumentName}
-            style = {profileStyles.accordian}
-            titleStyle = {profileStyles.headerText}
-          >   
-            <View style={profileStyles.listItemContainer}>
-              <View style={profileStyles.listItemHeader}>
-                <Text style={[profileStyles.accordionHeaderText]}> General Experience </Text>
-              </View>
-              <View style={profileStyles.listItemContent}>
-                <Text style={profileStyles.contentText}>
-                  {object.item.generalExperience}
-                </Text>
-              </View>
-            </View>
+          <View style={[{margin: "5%"}]}>
+            <Collapse style={{flex: 1}}>
+              <CollapseHeader style = {[accordianStyles.accordian, {padding: "5%"}]}>
+                <Text style = {{fontSize: 15}}>{object.item.instrumentName}</Text>
+                <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
+                {/* <Text style={{color:"white", fontSize:20, paddingVertical:"2%"}}>Key: {object.item.key}</Text> */}
+              </CollapseHeader>
+              <CollapseBody style={[accordianStyles.listItemContainer, {flex: 1}]}>
+                <View style={profileStyles.listItemHeader}>
+                  <Text style={[profileStyles.accordionHeaderText]}> General Experience </Text>
+                </View>
+                <View style={profileStyles.listItemContent}>
+                  <Text style={profileStyles.contentText}>
+                    {object.item.generalExperience}
+                  </Text>
+                </View>
+                <View style={profileStyles.listItemHeader}>
+                  <Text style={[profileStyles.accordionHeaderText]}> Worship Experience </Text>
+                </View>
+                <View style={profileStyles.listItemContent}>
+                  <Text style={profileStyles.contentText}>
+                    {object.item.worshipExperience}
+                  </Text>
+                </View>
+                <View style={profileStyles.listItemHeader}>
+                  <Text style={[profileStyles.accordionHeaderText]}> Additional Notes </Text>
+                </View>
+                <View style={profileStyles.listItemContent}>
+                  <Text style={profileStyles.contentText}>
+                    {object.item.additionalNotes}
+                  </Text>
+                </View>  
+              </CollapseBody>
+            </Collapse>
+          </View>
+          // <List.Accordion
+          //   title={object.item.instrumentName}
+          //   style = {profileStyles.accordian}
+          //   titleStyle = {profileStyles.headerText}
+          // >
+          //   <View style = {{flex: 1, padding: "2%"}}> 
+          //     <View style={profileStyles.listItemContainer}>
+          //       <View style={profileStyles.listItemHeader}>
+          //         <Text style={[profileStyles.accordionHeaderText]}> General Experience </Text>
+          //       </View>
+          //       <View style={profileStyles.listItemContent}>
+          //         <Text style={profileStyles.contentText}>
+          //           {object.item.generalExperience}
+          //         </Text>
+          //       </View>
+          //     </View>
 
-            <View style={profileStyles.listItemContainer}>
-              <View style={profileStyles.listItemHeader}>
-                <Text style={[profileStyles.accordionHeaderText]}> Worship Experience </Text>
-              </View>
-              <View style={profileStyles.listItemContent}>
-                <Text style={profileStyles.contentText}>
-                  {object.item.worshipExperience}
-                </Text>
-              </View>
-            </View>
+          //     <View style={profileStyles.listItemContainer}>
+          //       <View style={profileStyles.listItemHeader}>
+          //         <Text style={[profileStyles.accordionHeaderText]}> Worship Experience </Text>
+          //       </View>
+          //       <View style={profileStyles.listItemContent}>
+          //         <Text style={profileStyles.contentText}>
+          //           {object.item.worshipExperience}
+          //         </Text>
+          //       </View>
+          //     </View>
 
-            <View style={[profileStyles.listItemContainer, {borderBottomLeftRadius: 10, borderBottomRightRadius: 10}]}>
-              <View style={profileStyles.listItemHeader}>
-                <Text style={[profileStyles.accordionHeaderText]}> Additional Notes </Text>
-              </View>
-              <View style={profileStyles.listItemContent}>
-                <Text style={profileStyles.contentText}>
-                  {object.item.additionalNotes}
-                </Text>
-              </View>
-            </View>
-            
-          </List.Accordion>
+          //     <View style={[profileStyles.listItemContainer, {borderBottomLeftRadius: 10, borderBottomRightRadius: 10}]}>
+          //       <View style={profileStyles.listItemHeader}>
+          //         <Text style={[profileStyles.accordionHeaderText]}> Additional Notes </Text>
+          //       </View>
+          //       <View style={profileStyles.listItemContent}>
+          //         <Text style={profileStyles.contentText}>
+          //           {object.item.additionalNotes}
+          //         </Text>
+          //       </View>
+          //     </View>
+          //   </View>   
+          // </List.Accordion>
         );
       }
       return( 
-        // <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
-            <List.Section title="Instruments">
-              <FlatList
-                data = {myInstruments}
-                style = {{height: "100%", width: "100%"}}
-                renderItem = {instrumentRender}/>
-            </List.Section>
-          // </ScrollView>
+        <View style = {{width: "100%", height: "57%"}}>
+          <FlatList
+            data = {myInstruments}
+            style = {{flex: 1}}
+            renderItem = {instrumentRender}
+          />
+        </View>
       );
     }
       
@@ -169,9 +204,12 @@ export default function PSPersonal({ route, navigation }) {
     const [MyLocation, setMyLocation] = React.useState("Location is not set");
 
     async function setLocation() {
-      let location = await FirebaseButler.fbGet(`Users/${userId}/info/location`);
-      if (location) {
-        setMyLocation(location);
+      let state = await FirebaseButler.fbGet(`Users/${userId}/info/state`) || null;
+      let city = await FirebaseButler.fbGet(`Users/${userId}/info/city`) || null;
+      let zip = await FirebaseButler.fbGet(`Users/${userId}/info/zipCode`) || null;
+      if (state && city && zip) {
+        let locationString = `${city}, ${state} ${zip}`;
+        setMyLocation(locationString);
       }
     }
 
@@ -206,9 +244,13 @@ export default function PSPersonal({ route, navigation }) {
     const [MyChurchLocation, setMyChurchLocation] = React.useState("Church Location is not set");
 
     async function setChurchLocation() {
-      let churchLocation = await FirebaseButler.fbGet(`Users/${userId}/info/churchStreetAddress`);
-      if (churchLocation) {
-        setMyChurchLocation(churchLocation);
+      let churchState = await FirebaseButler.fbGet(`Users/${userId}/info/churchState`) || null;
+      let churchCity = await FirebaseButler.fbGet(`Users/${userId}/info/churchCity`) || null;
+      let churchAddress = await FirebaseButler.fbGet(`Users/${userId}/info/churchStreetAddress`) || null;
+      let churchZipCode = await FirebaseButler.fbGet(`Users/${userId}/info/churchZipCode`) || null;
+      if (churchState && churchCity && churchAddress && churchZipCode) {
+        let locationString = `${churchAddress} ${churchCity}, ${churchState} ${churchZipCode}`;
+        setMyChurchLocation(locationString);
       }
     }
 
@@ -284,4 +326,20 @@ export default function PSPersonal({ route, navigation }) {
         </View>
       );
 }
+
+const accordianStyles = StyleSheet.create({
+  accordian: {
+    backgroundColor: '#F2905B',
+    margin: "2%",
+    marginBottom: 0,
+    borderRadius: 10 
+  },
+  listItemContainer: {
+    backgroundColor: "white",
+    backgroundColor: "#F9CBB1",
+    paddingBottom: "2%",
+    width: "85%",
+    marginLeft: "7%"
+  }
+})
 
