@@ -40,6 +40,15 @@ const styleSheet = StyleSheet.create({
       marginBottom: "8%" 
     },
 
+    timesButton:{
+      justifyContent: "center",
+      alignItems: "center",
+      height: "15%",
+      width: "100%",
+      borderRadius: 10,
+      margin: "5%"
+    },
+
     // Labels for all input boxes except Zip Code 
     text1: {
       paddingBottom: "2%",

@@ -4,6 +4,8 @@ import { useDeviceOrientation } from '@react-native-community/hooks';
 // import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, createUserWithEmailAndPassword } from "@firebase/auth";
 // import Icon from 'react-native-vector-icons/Ionicons';
+import { IconButton } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 //import for navigation
 import Routes from '../Navigation/constants/Routes.js';
@@ -14,6 +16,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { FirebaseButler } from "../../components/classes";
 // import { ScaleFromCenterAndroid } from 'react-navigation-stack/lib/typescript/src/vendor/TransitionConfigs/TransitionPresets.js';
 // import { green100 } from 'react-native-paper/lib/typescript/styles/themes/v2/colors.js';
+import {LinearGradient} from 'expo-linear-gradient';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -32,7 +35,14 @@ export default function UserHub({ route, navigation }) {
       let locationString = `${item.city}, ${item.state} ${item.zipCode}`;
       return (
           <TouchableOpacity onPress = {() => navigation.navigate(Routes.publicProfile, {...props, selectedUserId: musicianId})} style={[musicianStyles.boxOne]}>
+              <LinearGradient
+                        colors={['#FFE5B4', '#DBE9EC']}
+                        style={musicianStyles.container}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                    >
               <View style={{width: "100%", paddingBottom: "10%", alignItems:"center", flexDirection: "column", justifyContent: "center"}}>
+              
                   <View style={{padding: "2%", margin: "5%"}}>
                       <ProfileImage userId = {musicianId} size = {"medium"}/>
                   </View>
@@ -46,11 +56,12 @@ export default function UserHub({ route, navigation }) {
                       </View>
                       <View style={musicianStyles.verticalLine}></View>
                       <View style={{position: "relative", width: "30%", alignItems: "center"}}>
-                        <Text>Piano</Text>
+                      <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}
+                        icon = "piano"/>
                       </View>
                   </View>
-                  {/* <Text style={{position: "relative", left: "40%"}}> More</Text> */}
               </View>
+              </LinearGradient>
           </TouchableOpacity>
       )
     }
@@ -93,7 +104,7 @@ export default function UserHub({ route, navigation }) {
 const musicianStyles = StyleSheet.create({
   boxOne:
   {
-      backgroundColor: "#DBE9EC",
+      // backgroundColor: "#FFE5B4",
       flex: 1,
       padding: "2%",
       borderRadius: 30,
@@ -101,6 +112,12 @@ const musicianStyles = StyleSheet.create({
       // justifyContent: "space-between",
       alignItems: "center",
       margin: "2%"
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    borderRadius: 30,
+    justifyContent: 'center',
   },
 
   informationBox:
@@ -127,6 +144,7 @@ const musicianStyles = StyleSheet.create({
     // fontSize: 12
     fontFamily: "RNSMiles",
     fontWeight: "bold",
+    color: "#e56a17",
     fontSize: 20
     },
 

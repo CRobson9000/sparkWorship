@@ -22,7 +22,7 @@ export default function PSPersonal({ route, navigation }) {
     const [profileData, setProfileData] = React.useState(null);
 
     async function getProfileData() {
-      let profileDataObject = await FirebaseButler.fbGet(`Users/${userId}`);
+      let profileDataObject = await FirebaseButler.fbGet(`Users/${selectedUserId}`);
       setProfileData({...profileDataObject});
     }
 
@@ -34,6 +34,7 @@ export default function PSPersonal({ route, navigation }) {
       const [sparksWithTypes, setSparksWithTypes] = React.useState([]);
       async function setupSparks()
       {
+        console.log("ProfileData", profileData);
         let startSparks = profileData?.['sparks'];
         let finalSparks = [
           {

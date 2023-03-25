@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
 import { StyleSheet, View, Text, TextInput, Image, Button, ScrollView, TouchableOpacity, TouchableHighlight, FlatList, Dimensions } from 'react-native';
 
+import { TimePickerModal, DatePickerModal } from 'react-native-paper-dates';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { IconButton, ProgressBar, List } from 'react-native-paper';
 import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
@@ -844,83 +845,101 @@ export default function SparkSummary({ route, navigation }) {
         </List.Section>
      */
 
-    const TimesRoute = () => (
-      <View style = {{flex: 1, justifyContent: "center", alignItems: "center"}}>
-        <Text> Available Soon! </Text>
-      </View>
-  //     <ScrollView>
-  //     <View style={[sparkViewStyles.sparkVerticalContainer]}>
-  //     <View style={[sparkViewStyles.centerContents]}>
-  //       <View style={{alignItems: "center", justifyContent: "center"}}>
-  //           <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Times</Text>
-  //       </View>
-  //       <View style={{alignItems: "center", justifyContent: "center", marginTop:"6%"}}>
-  //           <Text style={[sparkViewStyles.inbetweenText]}>Spark Begins On</Text>
-  //       </View>
-          
-  //         <View style={[sparkViewStyles.timeContainer]}>
-  //             {/* <Input placeHolderText={"MM"} start = {inputs.sparkMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMonth.setVal(val)}/> */}
-  //             <Text style = {{fontSize: 30}}>05</Text>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-  //             <Text style = {{fontSize: 30}}>10</Text>
-  //             {/* <Input placeHolderText={"DD"} start = {inputs.sparkDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkDay.setVal(val)}/> */}
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-  //             <Text style = {{fontSize: 30}}>22</Text>
-  //             {/* <Input placeHolderText={"YY"} start = {inputs.sparkYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkYear.setVal(val)}/> */}
-  //             <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
-  //             <Text style = {{fontSize: 30}}>5</Text>
-  //             {/* <Input placeHolderText={"12"} start = {inputs.sparkHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkHours.setVal(val)}/> */}
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
-  //             <Text style = {{fontSize: 30}}>30</Text>
-  //             {/* <Input placeHolderText={"30"} start = {inputs.sparkMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMinutes.setVal(val)}/> */}
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
-  //             <Text style = {{fontSize: 30}}>PM</Text>
-  //             {/* <Input placeHolderText={"PM"} start = {inputs.sparkAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkAmPM.setVal(val)}/> */}
-  //         </View>
-  //     </View>
-  //     <View style={[sparkViewStyles.centerContents, sparkViewStyles.middleMan]}>
-  //       <View style={{alignItems: "center", justifyContent: "center"}}>
-  //           <Text style={[sparkViewStyles.inbetweenText]}>First Rehearsal On</Text>
-  //       </View>
-  //         <View style={[sparkViewStyles.timeContainer]}>
-  //             {/* <Input placeHolderText={"MM"} start = {inputs.rehearsalMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMonth.setVal(val)}/> */}
-  //             <Text style = {{fontSize: 30}}>05</Text>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-  //             {/* <Input placeHolderText={"DD"} start = {inputs.rehearsalDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalDay.setVal(val)}/> */}
-  //             <Text style = {{fontSize: 30}}>05</Text>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-  //             {/* <Input placeHolderText={"YY"} start = {inputs.rehearsalYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalYear.setVal(val)}/> */}
-  //             <Text style = {{fontSize: 30}}>22</Text>
-  //             <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
-  //             {/* <Input placeHolderText={"12"} start = {inputs.rehearsalHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalHours.setVal(val)}/> */}
-  //             <Text style = {{fontSize: 30}}>06</Text>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
-  //             {/* <Input placeHolderText={"30"} start = {inputs.rehearsalMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMinutes.setVal(val)}/> */}
-  //             <Text style = {{fontSize: 30}}>45</Text>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
-  //             <Text style = {{fontSize: 30}}>PM</Text>
-  //             {/* <Input placeHolderText={"PM"} start = {inputs.rehearsalAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalAmPM.setVal(val)}/> */}
-  //         </View>
-  //     </View>
-  //     <View style={[sparkViewStyles.centerContents]}>
-  //         <Text style={[sparkViewStyles.inbetweenText]}>Roles to be Filled By</Text>
-  //         <View style={[sparkViewStyles.timeContainer]}>
-  //             <Input placeHolderText={"MM"} start = {inputs.publishedMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedMonth.setVal(val)}/>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-  //             <Input placeHolderText={"DD"} start = {inputs.publishedDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedDay.setVal(val)}/>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-  //             <Input placeHolderText={"YY"} start = {inputs.publishedYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedYear.setVal(val)}/>
-  //             <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
-  //             <Input placeHolderText={"12"} start = {inputs.publishedHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedHours.setVal(val)}/>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
-  //             <Input placeHolderText={"30"} start = {inputs.publishedMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedMinutes.setVal(val)}/>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
-  //             <Input placeHolderText={"PM"} start = {inputs.publishedAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedAmPM.setVal(val)}/>
-  //         </View>
-  //     </View>
-  // </View>
-  // </ScrollView>
-    );
+    const TimesRoute = () => {
+      const [visible, setVisible] = React.useState(false)
+      const onDismiss = React.useCallback(() => {
+        setVisible(false)
+      }, [setVisible])
+
+      const onConfirm = React.useCallback(
+        ({ hours, minutes }) => {
+          setVisible(false);
+          console.log({ hours, minutes });
+        },
+        [setVisible])
+
+      const [date, setDate] = React.useState(undefined);
+      const [open, setOpen] = React.useState(false);
+
+      const onDismissSingle = React.useCallback(() => {
+        setOpen(false);
+      }, [setOpen]);
+
+      const onConfirmSingle = React.useCallback(
+        (params) => {
+          setOpen(false);
+          setDate(params.date);
+        },
+        [setOpen, setDate]
+      );
+      
+
+
+      return(
+       
+        <View style = {{flex: 1, alignItems: "flex-start"}}>
+          <Text style={{paddingLeft:"4%", paddingTop:"5%"}}>Times</Text>
+          <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"row", width:"100%"}}>
+            <Text style = {{paddingRight:"5%", fontFamily:"RNSMiles"}}>
+              Publishing Time
+            </Text>
+            <View style={{width:"25%"}}>
+              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setVisible(true)}>
+                <Text style={[styles.buttonText]}>Time</Text>
+              </TouchableOpacity>
+              <TimePickerModal
+                visible={visible}
+                onDismiss={onDismiss}
+                onConfirm={onConfirm}
+                hours={12}
+                minutes={14}
+              />
+              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setOpen(true)}>
+                <Text style={[styles.buttonText]}>Date</Text>
+              </TouchableOpacity>
+              <DatePickerModal
+                locale="en"
+                mode="single"
+                visible={open}
+                onDismiss={onDismissSingle}
+                date={date}
+                onConfirm={onConfirmSingle}
+              />
+            </View>
+          </View>
+          <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"row", width:"100%"}}>
+            <Text style = {{paddingRight:"2.5%", fontFamily:"RNSMiles"}}>
+              Performance Time
+            </Text>
+            <View style={{width:"25%"}}>
+              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setVisible(true)}>
+                <Text style={[styles.buttonText]}>Time</Text>
+              </TouchableOpacity>
+              <TimePickerModal
+                visible={visible}
+                onDismiss={onDismiss}
+                onConfirm={onConfirm}
+                hours={12}
+                minutes={14}
+              />
+              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setOpen(true)}>
+                <Text style={[styles.buttonText]}>Date</Text>
+              </TouchableOpacity>
+              <DatePickerModal
+                locale="en"
+                mode="single"
+                visible={open}
+                onDismiss={onDismissSingle}
+                date={date}
+                onConfirm={onConfirmSingle}
+              />
+            </View>
+          </View>
+        </View>
+      );
+     }
+
+   
 
     const RequestsRoute = () => {
       const [rolesWithRequests, setRolesWithRequests] = React.useState([]);
@@ -1561,6 +1580,15 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
 
+  timesButton:{
+    justifyContent: "center",
+    alignItems: "center",
+    height: "15%",
+    width: "100%",
+    borderRadius: 10,
+    margin: "5%"
+  },
+
   dialogButtonRow: {
     flexDirection: "row",
     justifyContent: "space-evenly",
@@ -1573,7 +1601,8 @@ const styles = StyleSheet.create({
   dialogDropDown: {
     backgroundColor: "#F2905B",
     borderRadius: 10,
-    height: "10%"
+    height: "10%",
+    width: "30%"
   },
 
   attachment: {

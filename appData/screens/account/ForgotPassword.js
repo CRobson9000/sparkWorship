@@ -1,6 +1,6 @@
-import { StyleSheet, Image, Text, View, TouchableOpacity, TextInput, Keyboard } from 'react-native';
+import { Image, Text, View, TouchableOpacity, TextInput, Keyboard } from 'react-native';
 import React, { useRef } from 'react';
-import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "@firebase/auth";
 import Routes from '../Navigation/constants/Routes.js';
 import { Provider } from 'react-native-paper';
 import { Toast } from '../../components/components';
@@ -13,9 +13,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 // import Routes.UserDashboard from '../dashboard/UserDashboard';
 
-// Linear Gradient Import
-import {LinearGradient} from 'expo-linear-gradient';
-
 //import statements for styles
 import { stylesPortrait } from "../../styles/portrait.js";
 import { Dimensions, TouchableHighlight } from 'react-native';
@@ -25,7 +22,7 @@ import { Input, KeyboardView } from '../../components/components.js';
 import { FirebaseButler } from '../../components/classes.js';
 
 
-export default function LoginScreen({ navigation }) {
+export default function ForgotPassword({ navigation }) {
 
   /*------------------------------------------------*/
   /*----------BACK-END APP CODE ----------*/
@@ -35,21 +32,21 @@ export default function LoginScreen({ navigation }) {
   let username;
   let userPassword;
   const toastRef = useRef("");
+  const [email, setEmail] = React.useState(null);
 
-  function signIn(navigation) {
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, username, userPassword).then(async(userCredential) => {
-        // Signed in with a valid username and password 
-        const user = userCredential.user;
-
-        //await registerForPushNotificationsAsync(user.uid);
-        let role = await FirebaseButler.fbGet(`Users/${user.uid}/role`)
-        navigation.navigate("Navigator", {userId: user.uid, role});
-    }).catch((error) => {
+  const auth = getAuth()
+  function resetPassword () { 
+      sendPasswordResetEmail(auth, email) 
+      .then(() => {
+        // Password reset email sent!
+        // ..
+      })
+      .catch((error) => {
+        const errorCode = error.code;
         const errorMessage = error.message;
-        toastRef.current.showToast(errorMessage, 3000, "red");
-    });
-  }
+        // ..
+      });
+    }
 
   // uncomment this for existing users
   // async function registerForPushNotificationsAsync(uid) {
@@ -89,12 +86,7 @@ export default function LoginScreen({ navigation }) {
  
   return (
     <KeyboardView style = {{paddingBottom: "30%"}}>
-      {/* <LinearGradient
-                        colors={['#FFE5B4', '#DBE9EC']}
-                        style={sparkViewStyles.boxOne}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 1 }}  > */}
-      <View>
+      <View style={[stylesPortrait.container, {backgroundColor: 'white'}]}>
         <TouchableHighlight
           style = {{
             borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
@@ -107,7 +99,7 @@ export default function LoginScreen({ navigation }) {
             top: 100
           }}
         >
-          <Text style={{color: "#006175", fontFamily: "RNSMiles"}}> Login </Text>
+          <Text style={{color: "#006175", fontFamily: "RNSMiles"}}> Reset Password </Text>
         </TouchableHighlight>
 
         {/* Mini circles */}
@@ -164,44 +156,22 @@ export default function LoginScreen({ navigation }) {
         {/* Container for everything below the logo */}
         <View style={stylesPortrait.contentContainer}>
           <Text style={[stylesPortrait.username]}>Email</Text>
-          <Input secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
-
-          <Text style={[stylesPortrait.password]}>Password</Text>
-          <Input secure={true} func={(val) => userPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
-
-          <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate('Forgot Password')}>
-            <Text style={[stylesPortrait.forgotPassword]}>Forgot password?</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}>
+          <TextInput 
+             onChangeText= {(val) => setEmail(val)} 
+             style={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}
+          />
+          <TouchableOpacity activeOpacity={1} onPress = {() => resetPassword()} style={[stylesPortrait.button]}>
           {/* <TouchableOpacity activeOpacity={1} onPress = {() => signIn(navigation)} style={[stylesPortrait.button]}> */}
-            <View><Text style={{color: "white", fontFamily: "RNSMiles", fontSize: Dimensions.get('window').height*0.023}}>Login</Text></View>
+            <View><Text style={{color: "white", fontFamily: "RNSMiles", fontSize: Dimensions.get('window').height*0.023}}>Change Password</Text></View>
           </TouchableOpacity>
 
-          <TouchableOpacity activeOpacity={1} onPress = {() => navigation.navigate(Routes.registration)}>
-            <Text style={[stylesPortrait.centerText]}>Register New User</Text>
-          </TouchableOpacity>
-          
+
 
           <Provider>
             <Toast ref = {toastRef}/>
           </Provider>
         </View>
       </View>
-      {/* </LinearGradient> */}
     </KeyboardView>
   );
 }
-
-// const sparkViewStyles = StyleSheet.create({
-//   boxOne:
-//   {
-//     container: {
-//       flex: 1,
-//       alignItems: 'center',
-//       justifyContent: 'center',
-//     },
-//   }
-// });
-
-
