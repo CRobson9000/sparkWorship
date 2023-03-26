@@ -91,20 +91,22 @@ export default function ChatList({ route, navigation }){
                 <Image style={styles.logo} source={require('../../../assets/logo2.png')}/>
             </View>
 
-            <KeyboardView flatList = {true} style={styles.content}>
-                <View style={styles.searchBar}>
-                    <View style={styles.row2}>
-                        <Image style={styles.searchIcon} source={require('../../../assets/searchIcon.png')}/>
-                        <Text style={{color: "grey"}}>Search</Text>
+            <View style={styles.content}>
+                {/* <KeyboardView flatList = {true} backgroundColor = {'red'}> */}
+                    <View style={styles.searchBar}>
+                        <View style={styles.row2}>
+                            <Image style={styles.searchIcon} source={require('../../../assets/searchIcon.png')}/>
+                            <Text style={{color: "grey"}}>Search</Text>
+                        </View>
                     </View>
-                </View>
 
-                <FlatList 
-                    style = {{ height: "100%" }}
-                    data = {conversations}
-                    renderItem = {renderConversation}
-                />                
-            </KeyboardView>
+                    <FlatList 
+                        style = {{ height: "100%" }}
+                        data = {conversations}
+                        renderItem = {renderConversation}
+                    />                
+                {/* </KeyboardView> */}
+            </View>
         </View>
     )
 }
@@ -113,7 +115,7 @@ export default function ChatList({ route, navigation }){
 const styles = StyleSheet.create({
 
     MainContainer: {
-        backgroundColor: "white",
+        // backgroundColor: "green",
         height: "100%",
         width: "100%",
         alignItems: "center"
@@ -130,7 +132,6 @@ const styles = StyleSheet.create({
 
     content: {
         alignItems: "center",
-        backgroundColor: "white",
         paddingBottom: "5%",
         height: "85%",
         width: "100%",
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
     },
 
     searchBar: {
-        width: "85%", 
+        width: "80%", 
         height: "6%", 
         backgroundColor: "#E7E6E6", 
         marginBottom: 25, 
