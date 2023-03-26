@@ -138,11 +138,6 @@ export default function SparkView({ route, navigation }) {
         return filteredSparks;
     }
 
-    //Run filter:  let filteredSparks = sparks.filter((spark) => filterMyRole(spark, <insertRole>));
-    //Run filter:  let filteredSparks = sparks.filter((spark) => filterByDistance(spark, distance));
-
-    // printFilterSparks();
-
     const renderDropDownItem = (item) => {
         return (
             <View style={{padding: "5%", justifyContent: "center", alignItems: "center", flex: 1}}>
