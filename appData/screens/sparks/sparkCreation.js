@@ -239,9 +239,9 @@ export default function SparkCreation({ route, navigation }) {
             <KeyboardView style={styleSheet.content}>
                 <Text style={styleSheet.stageText}>Location</Text>
                 <Text style={styleSheet.text1}>Street Address</Text>
-                <Input start = {inputs?.address?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.address.setVal(val)}/>
+                <Input start = {inputs?.address?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.address.setVal(val)} required={true}/>
                 <Text style={styleSheet.text1}>City</Text>
-                <Input start = {inputs?.city?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.city.setVal(val)}/>
+                <Input start = {inputs?.city?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.city.setVal(val)} required={true}/>
                 <View style={styleSheet.row2}>
                     <View style={styleSheet.column2}>
                         <Text style={styleSheet.text3}>State</Text>
@@ -256,11 +256,12 @@ export default function SparkCreation({ route, navigation }) {
                             value = {userState}
                             containerStyle = {{top: -30}}
                             dropdownPosition = {"bottom"}
+                            required={true}
                         />
                     </View>
                     <View style={styleSheet.column2}>
                         <Text style={styleSheet.text3}>Zip Code</Text>
-                        <Input start = {inputs?.zip?.getVal()} inputStyle = {styleSheet.inputBox2} func = {(val) => inputs.zip.setVal(val)}/>
+                        <Input start = {inputs?.zip?.getVal()} inputStyle = {styleSheet.inputBox2} func = {(val) => inputs.zip.setVal(val)} required={true}/>
                     </View>
                 </View>
                 
@@ -276,37 +277,37 @@ export default function SparkCreation({ route, navigation }) {
                 <Text style={[styleSheet.text1]}>Spark Date</Text>
                 <View style={styleSheet.timeDateRow}>
                     <View style={[styleSheet.timeContainer]}>
-                        <Input placeHolderText={"MM"} start = {inputs.sparkMonth.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.sparkMonth.setVal(val)}/>
+                        <Input placeHolderText={"MM"} start = {inputs.sparkMonth.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.sparkMonth.setVal(val)} required={true}/>
                         <Text style={[styleSheet.timeDateInput]}> / </Text>
-                        <Input placeHolderText={"DD"} start = {inputs.sparkDay.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.sparkDay.setVal(val)}/>
+                        <Input placeHolderText={"DD"} start = {inputs.sparkDay.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.sparkDay.setVal(val)} required={true}/>
                         <Text style={[styleSheet.timeDateInput]}> / </Text>
-                        <Input placeHolderText={"YY"} start = {inputs.sparkYear.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.sparkYear.setVal(val)}/>
+                        <Input placeHolderText={"YY"} start = {inputs.sparkYear.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.sparkYear.setVal(val)} required={true}/>
                     </View>
                     <Text style={[styleSheet.inbetweenText]}>at</Text>
                     <View style={[styleSheet.timeContainer]}>
-                        <Input placeHolderText={"12"} start = {inputs.sparkHours.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.sparkHours.setVal(val)}/>
+                        <Input placeHolderText={"12"} start = {inputs.sparkHours.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.sparkHours.setVal(val)} required={true}/>
                         <Text style={[styleSheet.timeDateInput]}> : </Text>
-                        <Input placeHolderText={"30"} start = {inputs.sparkMinutes.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.sparkMinutes.setVal(val)}/>
+                        <Input placeHolderText={"30"} start = {inputs.sparkMinutes.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.sparkMinutes.setVal(val)} required={true}/>
                         <Text style={[styleSheet.timeDateInput]}> </Text>
-                        <Input placeHolderText={"PM"} start = {inputs.sparkAmPM.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.sparkAmPM.setVal(val)}/>
+                        <Input placeHolderText={"PM"} start = {inputs.sparkAmPM.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.sparkAmPM.setVal(val)} required={true}/>
                     </View>
                 </View>
                 <Text style={[styleSheet.text1]}>First Rehearsal</Text>
                 <View style={styleSheet.timeDateRow}>
                     <View style={[styleSheet.timeContainer]}>
-                        <Input placeHolderText={"MM"} start = {inputs.rehearsalMonth.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.rehearsalMonth.setVal(val)}/>
+                        <Input placeHolderText={"MM"} start = {inputs.rehearsalMonth.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.rehearsalMonth.setVal(val)} required={true}/>
                         <Text style={[styleSheet.timeDateInput]}> / </Text>
-                        <Input placeHolderText={"DD"} start = {inputs.rehearsalDay.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.rehearsalDay.setVal(val)}/>
+                        <Input placeHolderText={"DD"} start = {inputs.rehearsalDay.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.rehearsalDay.setVal(val)} required={true}/>
                         <Text style={[styleSheet.timeDateInput]}> / </Text>
-                        <Input placeHolderText={"YY"} start = {inputs.rehearsalYear.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.rehearsalYear.setVal(val)}/>
+                        <Input placeHolderText={"YY"} start = {inputs.rehearsalYear.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.rehearsalYear.setVal(val)} required={true}/>
                     </View>
                     <Text style={[styleSheet.inbetweenText]}>at</Text>
                     <View style={[styleSheet.timeContainer]}>    
-                        <Input placeHolderText={"12"} start = {inputs.rehearsalHours.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.rehearsalHours.setVal(val)}/>
+                        <Input placeHolderText={"12"} start = {inputs.rehearsalHours.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.rehearsalHours.setVal(val)} required={true}/>
                         <Text style={[styleSheet.timeDateInput]}> : </Text>
-                        <Input placeHolderText={"30"} start = {inputs.rehearsalMinutes.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.rehearsalMinutes.setVal(val)}/>
+                        <Input placeHolderText={"30"} start = {inputs.rehearsalMinutes.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.rehearsalMinutes.setVal(val)} required={true}/>
                         <Text style={[styleSheet.timeDateInput]}> </Text>
-                        <Input placeHolderText={"PM"} start = {inputs.rehearsalAmPM.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.rehearsalAmPM.setVal(val)}/>
+                        <Input placeHolderText={"PM"} start = {inputs.rehearsalAmPM.getVal()} inputStyle = {styleSheet.timeDateInput} func = {(val) => inputs.rehearsalAmPM.setVal(val)} required={true}/>
                     </View>
                 </View>
                 <Text style={[styleSheet.text1]}>Roles Filled By</Text>
