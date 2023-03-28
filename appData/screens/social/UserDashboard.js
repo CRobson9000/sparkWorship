@@ -13,6 +13,9 @@ import Routes from '../Navigation/constants/Routes';
 // import for calendar
 import { Calendar } from 'react-native-calendars';
 
+// Linear Gradient Import
+import {LinearGradient} from 'expo-linear-gradient';
+
 //import for database stuff
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 
@@ -83,14 +86,26 @@ export default function UserDashboard({ route, navigation }) {
     // let locationString = `${locationObj?.address} ${locationObj?.city}, ${locationObj?.state} ${locationObj?.zip}`;
     
     return (
+      <LinearGradient
+                        colors={['#FFE5B4', '#DBE9EC']}
+                        style={sparkViewStyles.boxOne}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}  >
       <TouchableOpacity 
         onPress = {() => navigation.navigate(Routes.sparkSummary, {...props, currentSparkId: item.id})} 
         style={[sparkViewStyles.boxOne]}
       >
+        {/* <LinearGradient
+                        colors={['#FFE5B4', '#DBE9EC']}
+                        style={sparkViewStyles.boxOne}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}  > */}
         <ProfileImage userId = {item.leaderId} size = {"medium"}/>
         <Text style={sparkViewStyles.boxText}> {item.name} </Text>
         <Text style={{left: "30%"}}> More</Text>
+        {/* </LinearGradient> */}
       </TouchableOpacity>
+      </LinearGradient>
     );  
   }
 
@@ -169,6 +184,12 @@ const dashboardStyles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white"
   },  
+  container2: {
+    flex: 1,
+    alignItems: 'center',
+    borderRadius: 30,
+    justifyContent: 'center',
+  },
   dashboardHeader: {
     height: "7%",
     width: "100%",
@@ -187,10 +208,11 @@ const dashboardStyles = StyleSheet.create({
   }
 });
 
+// Note this will be removed when I (Colin) pull the sparks out into their own component
 const sparkViewStyles = StyleSheet.create({
   boxOne:
   {
-    backgroundColor: "#DBE9EC",
+    // backgroundColor: "#DBE9EC",
     padding: "3%",
     borderRadius: 30,
     flexDirection: "column",

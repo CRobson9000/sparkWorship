@@ -91,11 +91,10 @@ const profileStyles = StyleSheet.create({
 
   accordian: {
     backgroundColor: '#F2905B',
-    // padding: 10,
     margin: "2%",
-    // marginLeft: '5%',
-    // marginRight: '5%',
-    borderRadius: 10
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: 'center'
   },
 
   // The orange box that holds the social media logo and the user's handle
@@ -121,7 +120,6 @@ const profileStyles = StyleSheet.create({
   listItemContainer: {
     backgroundColor: "white",
     backgroundColor: "#F9CBB1",
-    paddingTop: "2%",
     width: "85%",
     marginLeft: "7%"
   },

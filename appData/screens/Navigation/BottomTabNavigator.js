@@ -10,6 +10,8 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 const Tab = createBottomTabNavigator();
 
 function BottomTabNavigator( { route, navigation } ) {
+  let props = route?.params;
+  let role = props.role || 'attendee'
   return (
     <Tab.Navigator 
       screenOptions= {({route}) => ({
@@ -46,11 +48,17 @@ function BottomTabNavigator( { route, navigation } ) {
         header: ({navigation, route, options}) => {
           return (
             <View style = {[options.headerStyle]}>
-              <Image style={{position: "absolute", height: 60, width: 220}} source={require('../../../assets/logo2.png')}/>
+              <Image style={{position: "absolute", height: 70, width: 220, left: "2%"}} source={require('../../../assets/logo2.png')}/>
               {/* <FeatherIcon icon="message-circle" size="24" style = {{position: "absolute", right: "5%"}} /> */}
               <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}
-              icon = "message" style = {{position: "absolute", right: "5%"}}/>
-            </View>
+              icon = "logout" style = {{position: "absolute", right: "1%"}}/>
+
+              <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}
+                icon = "message-outline" style = {{position: "absolute", right: "18%"}}/>
+
+              <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}
+              icon = "feature-search-outline" style = {{position: "absolute", right: "9%"}}/>
+              </View>
             // iconName = focused ? 'ios-chatbubble-outline' : 'ios-chatbubble-outline';
           );
         }
@@ -58,9 +66,15 @@ function BottomTabNavigator( { route, navigation } ) {
     >
       <Tab.Screen name={Routes.userDashboard} component={UserDashboard} options={{ unmountOnBlur: true }} initialParams={route.params} />
       <Tab.Screen name={Routes.sparkView} component={SparkView} options={{ unmountOnBlur: true }} initialParams={route.params} />
-      <Tab.Screen name={Routes.sparkCreation} component={SparkCreation} options={{ unmountOnBlur: true }} initialParams={route.params} />
+      {
+        role != 'attendee' &&
+        <Tab.Screen 
+        name={Routes.sparkCreation} 
+        component={SparkCreation} 
+        options={{ tabBarStyle: { display: "none" }, headerShown: false, unmountOnBlur: true }}
+         initialParams={route.params} />
+      }
       <Tab.Screen name={Routes.userHub} component={UserHub} options={{ unmountOnBlur: true }} initialParams={route.params} />
-      {/* <Tab.Screen name={Routes.messaging} component={Messaging} initialParams={route.params} /> */}
       <Tab.Screen name={Routes.personalProfile} component={PSPersonal} options={{ unmountOnBlur: true }} initialParams={route.params} />
     </Tab.Navigator>
   );
