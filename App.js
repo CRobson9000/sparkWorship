@@ -24,7 +24,7 @@ function App() {
   if(fontsLoaded){
     return (
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={Routes.login}>
+        <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={Routes.sparkSurvey}>
           {/* Actual Screens used in our app */}
           <Stack.Screen name={Routes.login} component={LoginScreen} />
           <Stack.Screen name={Routes.registration} component={RegistrationScreen} />
