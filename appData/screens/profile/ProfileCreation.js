@@ -730,16 +730,14 @@ export default function ProfileScreen({route, navigation}) {
   // if (done) {
   return (
       <View style={styleSheet.MainContainer}> 
-        <View>
-          <View pointerEvents = {disable} style = {{height: "100%", width: "100%", opacity: contentOpacity}}>
-            <View style={styleSheet.topBorder}>
-              <Text style={styleSheet.titleText}>Profile Creation</Text>
-              <View style={styleSheet.topRow}>
-                <ProfileImage userId = {userId} changeable = {true} size = {"large"}/>
-                <View style={styleSheet.column3}>
-                  <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2.4 , height: 23, borderRadius: 10, marginBottom: "15%", borderColor: "rgb(0, 97, 117)", borderWidth: 2, backgroundColor: "rgb(219, 233, 236)"}} progress={(currentIndex + 1) / 5}/>
-                  <Text style={styleSheet.smallText1}>Click your profile picture to change</Text>
-                </View>
+        <View pointerEvents = {disable} style = {{height: "100%", width: "100%", opacity: contentOpacity}}>
+          <View style={styleSheet.topBorder}>
+            <Text style={styleSheet.titleText}>Profile Creation</Text>
+            <View style={styleSheet.topRow}>
+              <ProfileImage userId = {userId} changeable = {true} size = {"large"}/>
+              <View style={styleSheet.column3}>
+                <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2.4 , height: 23, borderRadius: 10, marginBottom: "15%", borderColor: "rgb(0, 97, 117)", borderWidth: 2, backgroundColor: "rgb(219, 233, 236)"}} progress={(currentIndex + 1) / 5}/>
+                <Text style={styleSheet.smallText1}>Click your profile picture to change</Text>
               </View>
             </View>
           </View>

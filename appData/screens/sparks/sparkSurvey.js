@@ -94,8 +94,7 @@ export default function Survey ({ route, navigation }) {
                 minimumTrackTintColor="#F2905B"
                 maximumTrackTintColor="rgb(0, 97, 117)"/>
             <Text style={[styles.smallText, {marginTop: "2%", marginBottom: "0%"}]}>1                   2                   3                   4                  5</Text>
-            <Text style={[styles.smallText, {alignSelf: "left"}]}>Please provide any additional comments in the space below.</Text> 
-            <Text style={[styles.smallText, {marginTop: "5%"}]}>Thank you for your honest feedback!</Text>
+            <Text style={[styles.smallText, {marginTop: "10%", marginBottom: "7%"}]}>Thank you for your honest feedback!</Text>
             <TouchableOpacity style={styles.submitButton}><Text style={styles.buttonText}>Submit</Text></TouchableOpacity>
         </ScrollView> 
     </View>
@@ -112,10 +111,6 @@ const styles = StyleSheet.create({
     topBorder: {
         height: "30%",
         backgroundColor: "rgb(219, 233, 236)",
-    },
-
-    content: {
-        height: "50%"
     },
 
     titleText: {
@@ -138,8 +133,7 @@ const styles = StyleSheet.create({
 
     nameText: {
         alignSelf: "center",
-        fontSize: 20, 
-
+        fontSize: 20
     },
 
     questionText: {
@@ -152,7 +146,7 @@ const styles = StyleSheet.create({
     submitButton: {
         backgroundColor: "rgb(0, 97, 117)",
         width: "80%",
-        height: "5%",
+        height: "4%",
         alignSelf: "center",
         borderRadius: 10,
         justifyContent: "center"
@@ -161,13 +155,5 @@ const styles = StyleSheet.create({
     buttonText: {
         color: "white",
         alignSelf: "center"
-    },
-
-    inputBox: {
-        width: "80%",
-        height: "10%",
-        borderRadius: 10, 
-        borderwidth: 3, 
-        borderColor: "#F2905B"
     }
 })
