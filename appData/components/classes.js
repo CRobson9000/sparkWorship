@@ -41,7 +41,7 @@ class TDO {
             this.TDO = {
                 "hours": hours,
                 "minutes": minutes,
-                "seconds:": seconds,
+                "seconds": seconds,
                 "month": month,
                 "day": day,
                 "year": year
