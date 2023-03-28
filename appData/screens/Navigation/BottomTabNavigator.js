@@ -10,6 +10,8 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 const Tab = createBottomTabNavigator();
 
 function BottomTabNavigator( { route, navigation } ) {
+  let props = route?.params;
+  let role = props.role || 'attendee'
   return (
     <Tab.Navigator 
       screenOptions= {({route}) => ({
@@ -64,9 +66,15 @@ function BottomTabNavigator( { route, navigation } ) {
     >
       <Tab.Screen name={Routes.userDashboard} component={UserDashboard} options={{ unmountOnBlur: true }} initialParams={route.params} />
       <Tab.Screen name={Routes.sparkView} component={SparkView} options={{ unmountOnBlur: true }} initialParams={route.params} />
-      <Tab.Screen name={Routes.sparkCreation} component={SparkCreation} options={{ unmountOnBlur: true }} initialParams={route.params} />
+      {
+        role != 'attendee' &&
+        <Tab.Screen 
+        name={Routes.sparkCreation} 
+        component={SparkCreation} 
+        options={{ tabBarStyle: { display: "none" }, headerShown: false, unmountOnBlur: true }}
+         initialParams={route.params} />
+      }
       <Tab.Screen name={Routes.userHub} component={UserHub} options={{ unmountOnBlur: true }} initialParams={route.params} />
-      {/* <Tab.Screen name={Routes.messaging} component={Messaging} initialParams={route.params} /> */}
       <Tab.Screen name={Routes.personalProfile} component={PSPersonal} options={{ unmountOnBlur: true }} initialParams={route.params} />
     </Tab.Navigator>
   );

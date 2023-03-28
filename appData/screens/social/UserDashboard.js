@@ -231,6 +231,7 @@ const dashboardStyles = StyleSheet.create({
   }
 });
 
+// Note this will be removed when I (Colin) pull the sparks out into their own component
 const sparkViewStyles = StyleSheet.create({
   boxOne:
   {

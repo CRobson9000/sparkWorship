@@ -8,7 +8,8 @@ const height = Dimensions.get('window').height;
 const stylesPortrait = StyleSheet.create({
     container: 
     {
-      flex: 1,
+      height: '100%',
+      width: '100%',
       flexDirection: "column",
       backgroundColor: colors.secondary,
     },

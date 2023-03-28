@@ -12,14 +12,14 @@ const styleSheet = StyleSheet.create({
     },
   
     topBorder:{
-      height: height/3.3,
+      height: "30%",
       width: "100%",
       backgroundColor: "rgb(219, 233, 236)",
-      marginBottom: "5%"
     },
   
     content: {
-      flex: 1,
+      paddingTop: "5%",
+      height: "100%",
       width: "100%"
     },
   
@@ -81,11 +81,10 @@ const styleSheet = StyleSheet.create({
     // Constant area that holds the "Previous" and "Next Buttons"
     bottomRow: {
       flexDirection: "row",
-      alignSelf: 'center',
-      justifyContent: "space-between",
+      alignItems: 'center',
+      justifyContent: "space-evenly",
       height: "10%",
-      width: '85%',
-      marginTop: "20%"
+      width: '100%',
     },
   
     // "Previous" and "Next" buttons on each screen
@@ -94,8 +93,7 @@ const styleSheet = StyleSheet.create({
       justifyContent: "center",
       alignItems: "center",
       height: "45%",
-      width: "45%",
-      top: "10%",
+      width: "35%",
       borderRadius: 10
     },
   
@@ -113,8 +111,8 @@ const styleSheet = StyleSheet.create({
     dropDown: {
       backgroundColor: "#F2905B",
       borderRadius: 10,
-      width: "100%",
-      height: "100%"
+      paddingLeft: "10%",
+      height: "25%"
     },
 
     // Dialog Box instrument dropdown
@@ -156,17 +154,17 @@ const styleSheet = StyleSheet.create({
     row2: {
       flexDirection: "row",
       width: "85%",
-      height: "8%",
+      paddingTop: "2%",
+      paddingBottom: "2%",
       justifyContent: "space-between",
       alignSelf: "center",
-      marginBottom: "7%"
     },
      
     // City and Zip Code input box
     inputBox2: {
       backgroundColor: "#F2905B",
       borderRadius: 10,
-      height: "100%",
+      height: "25%",
       paddingLeft: "10%",
       fontSize: 12
     },
@@ -174,15 +172,16 @@ const styleSheet = StyleSheet.create({
     // Column for City, State and Zip Code
     column2 : {
       flexDirection: "column",
-      width: "30%",
-      height: "100%"
+      paddingTop: "2%",
+      paddingBottom: "2%",
+      width: "30%"
     },
   
     // Labels for all input boxes except gender, birthday, city, state, zip code
     text1: {
       paddingBottom: "2%",
       fontSize: 15,
-      left: "5%",
+      marginLeft: "5%",
     },
   
     // Label for gender and birthday

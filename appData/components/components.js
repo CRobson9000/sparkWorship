@@ -217,7 +217,7 @@ class KeyboardView extends Component {
     else {
       return (
         <KeyboardAwareFlatList
-          containerStyle = {{...this.style, height: this.state.height, width: "100%", backgroundColor: "white"}}
+          containerStyle = {{...this.style, height: this.state.height, width: "100%", backgroundColor: this.backgroundColor || "white"}}
           onKeyboardDidHide = {() => {
             this.setState({height: "100%"})
           }}

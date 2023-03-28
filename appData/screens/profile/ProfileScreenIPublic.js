@@ -7,6 +7,7 @@ import { FirebaseButler, PushNotify } from '../../components/classes';
 import { getDatabase, ref, set, get, push } from 'firebase/database';
 import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storageRef } from '../../../config/additionalMethods';
+import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
 
 import ProfileImage from '../../components/profileImage.js';
 import { profileStyles } from '../../styles/profileViewStyles';
@@ -17,38 +18,132 @@ export default function PSPersonal({ route, navigation }) {
     let props = route.params;
     let selectedUserId = props?.selectedUserId || null;
     let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+    const [selectedUserRole, setSelectedUserRole] = React.useState(null);
+    const [profileData, setProfileData] = React.useState(null);
 
-    const SparkRoute = () => (
-      <ScrollView style={profileStyles.content}>
-      <Text style={profileStyles.titleText}>Spark History</Text>
-      <View style={[profileStyles.row2, {alignItems: "center", alignSelf: "center"}]}>
-        <Text style={{fontSize: 18, marginRight: "5%"}}>324 sparks</Text>
-        <Text style={{fontSize: 20}}>-</Text>
-        <Image style={{height: 35, width: 35, marginLeft: "5%"}} source={require('../../../assets/filledspark.png')}/>
-        <Image style={{height: 35, width: 35}} source={require('../../../assets/filledspark.png')}/>
-        <Image style={{height: 35, width: 35}} source={require('../../../assets/filledspark.png')}/>
-        <Image style={{height: 35, width: 35}} source={require('../../../assets/emptyspark.png')}/>
-        <Image style={{height: 35, width: 35}} source={require('../../../assets/emptyspark.png')}/>
-      </View>
-      <Text style={profileStyles.titleText}>Upcoming Sparks</Text>
-      <List.Accordion 
-        title="Leading"
-        style={[profileStyles.accordian, {marginBottom: "3%"}]}
-        titleStyle = {profileStyles.headerText}>
-      </List.Accordion>
-      <List.Accordion 
-        title="Playing"
-        style={[profileStyles.accordian, {marginBottom: "3%"}]}
-        titleStyle = {profileStyles.headerText}>
-      </List.Accordion>
-      <List.Accordion 
-        title="Attending"
-        style={profileStyles.accordian}
-        titleStyle = {profileStyles.headerText}>
-      </List.Accordion>
-      </ScrollView>
-    );
-  
+    async function getProfileData() {
+      let profileDataObject = await FirebaseButler.fbGet(`Users/${selectedUserId}`);
+      setProfileData({...profileDataObject});
+    }
+
+    useEffect(() => {
+      getProfileData();
+    }, [])
+
+    const SparkRoute = () => {      
+      const [sparksWithTypes, setSparksWithTypes] = React.useState([]);
+      async function setupSparks()
+      {
+        let startSparks = profileData?.['sparks'];
+        let finalSparks = [
+          {
+            type: "Playing",
+            sparks: []
+          }, 
+          {
+            type: "Attending",
+            sparks: []
+          }
+        ];  
+
+        let playingSparks = Object.values(startSparks?.playing || []);
+        for (let id of playingSparks) {
+          let leaderId = await FirebaseButler.fbGet(`Sparks/${id}/roles/spark_leader`);
+          let name = await FirebaseButler.fbGet(`Sparks/${id}/info/name`);
+          finalSparks[0].sparks.push({name, leaderId, id})
+        }
+
+        let attendingSparks = Object.values(startSparks?.attending || []);
+        for (let id in attendingSparks) {
+          let leaderId = await FirebaseButler.fbGet(`Sparks/${id}/roles/spark_leader`);
+          let name = await FirebaseButler.fbGet(`Sparks/${id}/info/name`);
+          finalSparks[1].sparks.push({name, leaderId, id})
+        }
+
+        setSparksWithTypes([...finalSparks]);
+      }
+      useEffect(() => {
+        setupSparks();
+      }, [])
+
+      const renderSparkType = (object) => {
+        return (
+          <View style={[{margin: "5%"}]}>
+            <Collapse style={{flex: 1}}>
+              <CollapseHeader style = {[accordianStyles.accordian, {padding: "5%"}]}>
+                <Text style = {{fontSize: 15}}>{object.item.type}</Text>
+                <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
+                {/* <Text style={{color:"white", fontSize:20, paddingVertical:"2%"}}>Key: {object.item.key}</Text> */}
+              </CollapseHeader>
+              <CollapseBody style={[accordianStyles.listItemContainer, {flex: 1}]}>
+                {
+                  object.item.sparks.length != 0 && 
+                  <FlatList
+                    data = {object.item.sparks}
+                    style = {{flex: 1}}
+                    renderItem = {renderSpark} 
+                  />
+                }
+                {
+                  object.item.sparks.length == 0 && 
+                  <View style = {{padding: "5%", alignItems: "center", justifyContent: "center"}}>
+                    <Text>{`This user is not ${(object.item.type == "Attending") ? 'attending' : 'playing for'} any sparks`}</Text>
+                  </View>
+                }
+              </CollapseBody>
+            </Collapse>
+          </View>
+        );
+      }
+      const renderSpark = (object) => {
+        let item = object.item;
+        return (
+          //Date Time string formatting
+          // let sparkTimeObj = item.info?.times?.spark.TDO;
+          // let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
+          // let finalTime = sparkTDO.getFormattedTime();
+          // let finalDate = sparkTDO.getFormattedDateFormal();
+          // let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
+
+          //Location formatting
+          // let locationObj = item.info.location;
+          // let locationString = `${locationObj?.address} ${locationObj?.city}, ${locationObj?.state} ${locationObj?.zip}`;
+          
+          <TouchableOpacity 
+            onPress = {() => navigation.navigate(Routes.sparkSummary, {...props, currentSparkId: item.id})} 
+            style={[sparkViewStyles.boxOne]}
+          >
+            <ProfileImage userId = {item.leaderId} size = {"medium"}/>
+            <Text style={sparkViewStyles.boxText}> {item.name} </Text>
+            <Text style={{left: "30%"}}> More</Text>
+          </TouchableOpacity> 
+        );            
+      }
+      return (
+        <View style={profileStyles.content}>
+          <View style = {{height: "40%", width: "100%"}}>
+            <Text style={profileStyles.titleText}>Spark History</Text>
+            <View style={[profileStyles.row2, {alignItems: "center", alignSelf: "center"}]}>
+              <Text style={{fontSize: 18, marginRight: "5%"}}>324 sparks</Text>
+              <Text style={{fontSize: 20}}>-</Text>
+              <Image style={{height: 35, width: 35, marginLeft: "5%"}} source={require('../../../assets/filledspark.png')}/>
+              <Image style={{height: 35, width: 35}} source={require('../../../assets/filledspark.png')}/>
+              <Image style={{height: 35, width: 35}} source={require('../../../assets/filledspark.png')}/>
+              <Image style={{height: 35, width: 35}} source={require('../../../assets/emptyspark.png')}/>
+              <Image style={{height: 35, width: 35}} source={require('../../../assets/emptyspark.png')}/>
+            </View>
+            <Text style={profileStyles.titleText}>Upcoming Sparks</Text>
+          </View>
+          <View style = {{flex: 1}}>
+            <FlatList
+              data = {sparksWithTypes}
+              style = {{flex: 1}}
+              renderItem = {renderSparkType}
+            />
+          </View>
+        </View>
+      );
+    }
   
     const MusicRoute = () => {
       function instrumentRender(object) {
@@ -137,18 +232,29 @@ export default function PSPersonal({ route, navigation }) {
     
     
     const [index, setIndex] = React.useState(0);
-    const [routes] = React.useState([
-        { key: 'first', title: 'Sparks' },
-        { key: 'second', title: 'Music' },
-        { key: 'third', title: 'Church' },
-        { key: 'fourth', title: 'Socials' },
+
+    const [attenderRoutes] = React.useState([
+        { key: 'first', title: 'Church' },
+        { key: 'second', title: 'Socials' },
     ]);
     
-    const renderScene = SceneMap({
-        first: SparkRoute,
-        second: MusicRoute,
-        third: ChurchRoute,
-        fourth: SocialsRoute
+    const attenderRenderScene = SceneMap({
+        first: ChurchRoute,
+        second: SocialsRoute
+    });
+
+    const [instrumentalistRoutes] = React.useState([
+      { key: 'first', title: 'Sparks' },
+      { key: 'second', title: 'Music' },
+      { key: 'third', title: 'Church' },
+      { key: 'fourth', title: 'Socials' },
+    ]);
+    
+    const instrumentalistRenderScene = SceneMap({
+      first: SparkRoute,      
+      second: MusicRoute,
+      third: ChurchRoute,
+      fourth: SocialsRoute
     });
 
     const renderTabBar = props => (
@@ -160,6 +266,11 @@ export default function PSPersonal({ route, navigation }) {
         style={{ backgroundColor: 'rgb(219, 233, 236)'}}
       />
     );
+
+    async function setupSelectedUserRole() {
+      let currentRole = await FirebaseButler.fbGet(`Users/${selectedUserId}/role`);
+      setSelectedUserRole(currentRole);
+    }
 
     const [MyName, setMyName] = React.useState("Name not set");
 
@@ -182,9 +293,12 @@ export default function PSPersonal({ route, navigation }) {
     const [MyLocation, setMyLocation] = React.useState("Location is not set");
 
     async function setLocation() {
-      let location = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/location`);
-      if (location) {
-        setMyLocation(location);
+      let state = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/state`) || null;
+      let city = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/city`) || null;
+      let zip = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/zipCode`) || null;
+      if (state && city && zip) {
+        let locationString = `${city}, ${state} ${zip}`;
+        setMyLocation(locationString);
       }
     }
 
@@ -216,12 +330,16 @@ export default function PSPersonal({ route, navigation }) {
       }
     }
 
-    const [MyChurchLocation, setMyChurchLocation] = React.useState("Church Location is not set");
+    const [MyChurchLocation, setMyChurchLocation] = React.useState("This church location is not set");
 
     async function setChurchLocation() {
-      let churchLocation = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/churchStreetAddress`);
-      if (churchLocation) {
-        setMyChurchLocation(churchLocation);
+      let churchState = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/churchState`) || null;
+      let churchCity = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/churchCity`) || null;
+      let churchAddress = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/churchStreetAddress`) || null;
+      let churchZipCode = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/churchZipCode`) || null;
+      if (churchState && churchCity && churchAddress && churchZipCode) {
+        let locationString = `${churchAddress} ${churchCity}, ${churchState} ${churchZipCode}`;
+        setMyChurchLocation(locationString);
       }
     }
 
@@ -260,6 +378,7 @@ export default function PSPersonal({ route, navigation }) {
     }
 
     useEffect(() => {
+      setupSelectedUserRole();
       setName();
       setRole();
       setLocation();
@@ -280,7 +399,7 @@ export default function PSPersonal({ route, navigation }) {
             <Text style={profileStyles.nameText}>{MyName}</Text>
             <View style={[profileStyles.row2, {alignItems: "center", alignSelf: "center"}]}>
               <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
-              <Text>   {MyLocation}</Text>
+              <Text> {MyLocation} </Text>
             </View>
           </View>
           <View style={[profileStyles.row2, {justifyContent: 'space-evenly', marginLeft: 30, marginRight: 30, alignItems: 'center'}]}>
@@ -289,9 +408,51 @@ export default function PSPersonal({ route, navigation }) {
             <TouchableOpacity style={profileStyles.constantButtons}><Text style={profileStyles.buttonText}>Message</Text></TouchableOpacity>
           </View>
         </View>
-        <View style={profileStyles.content}>
-          <TabView navigationState={{ index, routes }} renderScene={renderScene} renderTabBar={renderTabBar} onIndexChange={setIndex}/>
+        <View style={{height: "100%", width: "100%"}}>
+          <TabView 
+              navigationState={{ index, routes: (selectedUserRole == "attendee") ? attenderRoutes : instrumentalistRoutes}} 
+              renderScene={(selectedUserRole == "attendee") ? attenderRenderScene : instrumentalistRenderScene} 
+              renderTabBar={renderTabBar} 
+              onIndexChange={setIndex} 
+          />
         </View>
       </View>
     );
 }
+
+// Note: I'll remove this when I (Colin) pull the accordian views out into their own components!
+const accordianStyles = StyleSheet.create({
+  accordian: {
+    backgroundColor: '#F2905B',
+    margin: "2%",
+    marginBottom: 0,
+    borderRadius: 10 
+  },
+  listItemContainer: {
+    backgroundColor: "white",
+    backgroundColor: "#F9CBB1",
+    paddingBottom: "2%",
+    width: "85%",
+    marginLeft: "7%"
+  }
+})
+
+// Note this will be removed when I (Colin) pull the sparks out into their own component
+const sparkViewStyles = StyleSheet.create({
+  boxOne:
+  {
+    backgroundColor: "#DBE9EC",
+    padding: "3%",
+    borderRadius: 30,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: "5%"
+  },
+  boxText:{
+    padding: "5%",
+    fontSize: height/70,
+    fontFamily: "RNSMiles",
+    fontWeight: "bold"
+  }
+});

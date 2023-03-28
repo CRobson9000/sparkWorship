@@ -6,7 +6,7 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { IconButton, ProgressBar, List } from 'react-native-paper';
 import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
 import { DialogBox, KeyboardView } from '../../components/components';
-import { Observable, TDO, FirebaseButler, PushNotify } from '../../components/classes';
+import { TDO, FirebaseButler, PushNotify } from '../../components/classes';
 import { stylesPortrait } from "../../styles/portrait";
 import Routes from "../Navigation/constants/Routes";
 import ProfileImage from "../../components/profileImage.js";
@@ -14,8 +14,12 @@ import { styleSheet } from "../../styles/newSparkCreationStyles.js";
 import { profileStyles } from "../../styles/profileViewStyles.js";
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import { TimePickerModal, DatePickerModal } from 'react-native-paper-dates';
+import { en, registerTranslation } from 'react-native-paper-dates'
+registerTranslation('en', en);
+
 // photo upload imports
-import { getStorage, uploadBytes, getDownloadURL, connectStorageEmulator } from "firebase/storage";
+import { getStorage, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import * as DocumentPicker from 'expo-document-picker';
 import * as Linking from 'expo-linking';
 
@@ -57,6 +61,17 @@ export default function SparkSummary({ route, navigation }) {
   const globalState = useRef("");
   const globalAdditionalDirections = useRef("");
   const globalGoogleMapsLink = useRef("");
+  
+  const globalPublishHours = useRef("");
+  const globalRehearsalHours = useRef("");
+  const globalSparkHours = useRef("");
+  const globalPublishMinutes = useRef("");
+  const globalRehearsalMinutes = useRef("");
+  const globalSparkMinutes = useRef("");
+
+  const globalPublishDate = useRef("");
+  const globalRehearsalDate = useRef("");
+  const globalSparkDate = useRef("");
 
   const db = getDatabase();
   const storage = getStorage();
@@ -174,6 +189,24 @@ export default function SparkSummary({ route, navigation }) {
           }
         }
       }
+
+      if (overallKey == "times") {
+        for (const [timeDateType, timeDateVal] of Object.entries(values)) {
+          for (const [key, val] of Object.entries(timeDateVal)) {
+            const timeRef = ref(db, `Sparks/${currentSparkId}/info/times/${timeDateType}/TDO/${key}`);
+            await set(timeRef, val);
+          }
+        }
+      }
+
+      // delete the songs from cloud storage that were removed
+      if (overallKey == "delete") {
+        for (let attachment of values) {
+          const storage = getStorage();
+          const deleteStorageRef = storageRef(storage, `sparkData/${currentSparkId}/${attachment.songKey}/${attachment.attachmentId}`);
+          await deleteObject(deleteStorageRef);
+        }
+      }
     }
     // clear update after all values have been set
     update.current = {};
@@ -203,6 +236,29 @@ export default function SparkSummary({ route, navigation }) {
       }
       else if (key == "songs") {
         globalSongs.current = value;  
+      }
+
+      else if (key == "times") {
+        for (const [timeDateType, timeDateValTDO] of Object.entries(value)) {
+          let timeDateValObj = timeDateValTDO.TDO;
+          let javascriptDate = new Date(timeDateValObj['year'], timeDateValObj['month'] - 1, timeDateValObj['day'], 0, 0, 0);
+          let dateString = javascriptDate.toISOString();
+          if (timeDateType == 'published') {
+            globalPublishHours.current = timeDateValObj['hours'];
+            globalPublishMinutes.current = timeDateValObj['minutes'];
+            globalPublishDate.current = dateString
+          }
+          else if (timeDateType == "rehearsal") {
+            globalRehearsalHours.current = timeDateValObj['hours'];
+            globalRehearsalMinutes.current = timeDateValObj['minutes'];
+            globalRehearsalDate.current = dateString
+          }
+          else if (timeDateType == "spark") {
+            globalSparkHours.current = timeDateValObj['hours'];
+            globalSparkMinutes.current = timeDateValObj['minutes'];
+            globalSparkDate.current = dateString
+          }
+        }
       }
     }
 
@@ -491,47 +547,11 @@ export default function SparkSummary({ route, navigation }) {
       </ScrollView>
     )
   }
-
-  // const SetListRoute = () => (
-  //   <ScrollView style={{ flex: 1, backgroundColor: 'white'}}>
-  //     <List.Section title = "Set List">
-        // <List.Accordion title="Rock of Ages" style = {profileStyles.accordian} titleStyle = {profileStyles.headerText}>
-        //   <View style={profileStyles.listItemContainer}>
-        //     <View style={profileStyles.listItemHeader}>
-        //       <Text style={[profileStyles.accordionHeaderText]}> Lyrics </Text>
-        //     </View>
-        //     <View style={profileStyles.listItemContent}>
-        //       <Text>RockOfAgesLyrics.pdf</Text>
-        //     </View>
-        //   </View>
-        //   <View style={profileStyles.listItemContainer}>
-        //     <View style={profileStyles.listItemHeader}>
-        //       <Text style={[profileStyles.accordionHeaderText]}> Sheet Music </Text>
-        //     </View>
-        //     <View style={profileStyles.listItemContent}>
-        //       <Text>RockOfAgesSongSheet.pdf</Text>
-        //     </View>
-        //   </View>
-        //   <View style={sparkViewStyles.listItemContainer}>
-        //     <View style={{width:"100%", alignItems:"center", marginBottom:"5%"}}>
-        //       <Text style={{fontSize:32}}>
-        //         +
-        //       </Text>
-        //     </View>
-        //   </View>
-        // </List.Accordion>
-  //       <View style={{width:"100%", alignItems:"center"}}>
-  //         <Text style={{fontSize:32}}>
-  //           +
-  //         </Text>
-  //       </View>
-  //     </List.Section>
       
   const SetListRoute = () => {
     const [songs, setSongs] = React.useState(null);
 
     useEffect(() => {
-      // console.log("Global Songs"/*, globalSongs.current*/);
       setSongs(globalSongs.current);
     }, [globalSongs])
 
@@ -552,6 +572,37 @@ export default function SparkSummary({ route, navigation }) {
           console.log("Could not open file.  You may need to save your spark to access this file!");
         })
       }
+    }
+
+    function deleteSong(songIndex) {
+      // loop through the attachments of the song and add them to the delete key of the update
+      let songAttachments = globalSongs.current[songIndex].attachments;
+      for (let attachment of songAttachments) {
+        if (attachment.attachmentType == "file") {
+          if (!update.current.delete) update.current["delete"] = [];
+          update.current.delete.push({songKey: attachment.songKey, attachmentId: attachment.attachmentId})
+        }
+      }
+
+      // delete the song and then add the global songs array to the update
+      globalSongs.current.splice(songIndex, 1);
+      update.current["songs"] = globalSongs.current;
+      setSongs([...globalSongs.current]);
+    }
+
+    function deleteAttachment(songKey, attachmentId, attachmentType, songIndex, attachmentIndex) {
+      // delete attachment from globalSongs
+      globalSongs.current[songIndex].attachments.splice(attachmentIndex, 1);
+      // add to update to delete these songs
+      update.current["songs"] = globalSongs.current;
+      // add files to delete from cloud storage to the update
+      if (attachmentType == 'file') {
+        if (!update.current.delete) update.current["delete"] = [];
+        update.current.delete.push({songKey, attachmentId})
+      }
+
+      // re-render tab
+      setSongs([...globalSongs.current]);
     }
 
     const AddAttachmentContent = (props) => {
@@ -689,40 +740,25 @@ export default function SparkSummary({ route, navigation }) {
       )
     }
 
-    // <List.Accordion title="Rock of Ages" style = {profileStyles.accordian} titleStyle = {profileStyles.headerText}>
-    // <View style={profileStyles.listItemContainer}>
-    //   <View style={profileStyles.listItemHeader}>
-    //     <Text style={[profileStyles.accordionHeaderText]}> Lyrics </Text>
-    //   </View>
-    //   <View style={profileStyles.listItemContent}>
-    //     <Text>RockOfAgesLyrics.pdf</Text>
-    //   </View>
-    // </View>
-  //   <View style={profileStyles.listItemContainer}>
-  //     <View style={profileStyles.listItemHeader}>
-  //       <Text style={[profileStyles.accordionHeaderText]}> Sheet Music </Text>
-  //     </View>
-  //     <View style={profileStyles.listItemContent}>
-  //       <Text>RockOfAgesSongSheet.pdf</Text>
-  //     </View>
-  //   </View>
-  //   <View style={sparkViewStyles.listItemContainer}>
-  //     <View style={{width:"100%", alignItems:"center", marginBottom:"5%"}}>
-  //       <Text style={{fontSize:32}}>
-  //         +
-  //       </Text>
-  //     </View>
-  //   </View>
-  // </List.Accordion>
-
     const renderSong = (object) => {
       return (
         <View style={[{margin: "5%"}]}>
           <Collapse style={{flex: 1}}>
             <CollapseHeader style = {[profileStyles.accordian, {padding: "5%"}]}>
-              <Text style = {{fontSize: 15}}>{object.item.songName}</Text>
-              <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
-              {/* <Text style={{color:"white", fontSize:20, paddingVertical:"2%"}}>Key: {object.item.key}</Text> */}
+              <Text style = {{fontSize: 15, width: (readMode == false) ? "75%" : "100%", paddingTop: "2%", paddingBottom: "2%"}}>{object.item.songName}</Text>
+              <List.Icon 
+                color = {"gray"} 
+                size = {20}
+                icon = {"chevron-down"}
+              />
+              {
+                readMode == false && 
+                <IconButton
+                  icon = {'trash-can'}
+                  size = {20}
+                  onPress = {() => deleteSong(object.index)}
+                />
+              }
             </CollapseHeader>
             <CollapseBody style={[profileStyles.listItemContainer, {flex: 1}]}>
               <TouchableOpacity 
@@ -737,7 +773,7 @@ export default function SparkSummary({ route, navigation }) {
                 <Text style={{color: "black", fontSize:15}}>+</Text>
               </TouchableOpacity>
               <View style={{alignItems:"center"}}>
-                <AttachmentContent attachments = {object.item.attachments}/>
+                <AttachmentContent attachments = {object.item.attachments} songIndex = {object.index}/>
               </View>
             </CollapseBody>
           </Collapse>
@@ -745,28 +781,26 @@ export default function SparkSummary({ route, navigation }) {
       );
     }
 
-    // <View style={profileStyles.listItemContainer}>
-    //   <View style={profileStyles.listItemHeader}>
-    //     <Text style={[profileStyles.accordionHeaderText]}> Lyrics </Text>
-    //   </View>
-    //   <View style={profileStyles.listItemContent}>
-    //     <Text>RockOfAgesLyrics.pdf</Text>
-    //   </View>
-    // </View>
     const renderAttachment = (object) => {
+      console.log("Attachment Object", object);
       return (
         <View style = {{padding: "2%"}}>
           <TouchableHighlight onPress = {() => openAttachment(object.item)} style={[profileStyles.listItemHeader]}>
-            <View style = {{padding: "2%", flexDirection: "row"}}>
-              <Text style={[profileStyles.accordionHeaderText]}> {object.item.type}: </Text>
-              <Text style = {{fontSize: 15}}> {object.item.attachmentName} </Text>
+            <View style = {{flexDirection: "row", justifyContent: "center"}}>
+              <View style = {{paddingBottom: "2%", paddingTop: "2%", width: (readMode == false) ? "80%" : "100%", flexWrap: 'wrap', flexDirection: "row"}}>
+                <Text style={[profileStyles.accordionHeaderText]}> {object.item.type}: </Text>
+                <Text style = {{fontSize: 15}}> {object.item.attachmentName} </Text>
+              </View>
+              {
+                readMode == false &&
+                <IconButton
+                  size = {20}
+                  icon = {"trash-can"}
+                  onPress = {() => deleteAttachment(object.item.songKey, object.item.attachmentId, object.item.attachmentType, object.item.songIndex, object.index)}
+                />
+              }
             </View>
           </TouchableHighlight>
-          {/* <View style={profileStyles.listItemContent}>
-            <TouchableHighlight onPress = {() => openAttachment(object.item)}style = {styles.attachment}>
-              <Text style = {{fontSize: 15}}> {object.item.attachmentName} </Text>
-            </TouchableHighlight>
-          </View> */}
         </View>
       )
     }
@@ -794,6 +828,8 @@ export default function SparkSummary({ route, navigation }) {
 
     const AttachmentContent = (props) => {
       if (props.attachments && props.attachments.length != 0) {
+        // add songIndex to each attachment to know how to delete it
+        props.attachments.forEach((attachment) => attachment['songIndex'] = props.songIndex);
         return (
           <View style = {{flex: 1}}>
             <FlatList
@@ -856,83 +892,352 @@ export default function SparkSummary({ route, navigation }) {
         </List.Section>
      */
 
-    const TimesRoute = () => (
-      <View style = {{flex: 1, justifyContent: "center", alignItems: "center"}}>
-        <Text> Available Soon! </Text>
-      </View>
-  //     <ScrollView>
-  //     <View style={[sparkViewStyles.sparkVerticalContainer]}>
-  //     <View style={[sparkViewStyles.centerContents]}>
-  //       <View style={{alignItems: "center", justifyContent: "center"}}>
-  //           <Text style={{fontSize:28, paddingTop:"4%", fontWeight:'500'}}>Times</Text>
-  //       </View>
-  //       <View style={{alignItems: "center", justifyContent: "center", marginTop:"6%"}}>
-  //           <Text style={[sparkViewStyles.inbetweenText]}>Spark Begins On</Text>
-  //       </View>
-          
-  //         <View style={[sparkViewStyles.timeContainer]}>
-  //             {/* <Input placeHolderText={"MM"} start = {inputs.sparkMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMonth.setVal(val)}/> */}
-  //             <Text style = {{fontSize: 30}}>05</Text>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-  //             <Text style = {{fontSize: 30}}>10</Text>
-  //             {/* <Input placeHolderText={"DD"} start = {inputs.sparkDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkDay.setVal(val)}/> */}
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-  //             <Text style = {{fontSize: 30}}>22</Text>
-  //             {/* <Input placeHolderText={"YY"} start = {inputs.sparkYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkYear.setVal(val)}/> */}
-  //             <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
-  //             <Text style = {{fontSize: 30}}>5</Text>
-  //             {/* <Input placeHolderText={"12"} start = {inputs.sparkHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkHours.setVal(val)}/> */}
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
-  //             <Text style = {{fontSize: 30}}>30</Text>
-  //             {/* <Input placeHolderText={"30"} start = {inputs.sparkMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkMinutes.setVal(val)}/> */}
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
-  //             <Text style = {{fontSize: 30}}>PM</Text>
-  //             {/* <Input placeHolderText={"PM"} start = {inputs.sparkAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.sparkAmPM.setVal(val)}/> */}
-  //         </View>
-  //     </View>
-  //     <View style={[sparkViewStyles.centerContents, sparkViewStyles.middleMan]}>
-  //       <View style={{alignItems: "center", justifyContent: "center"}}>
-  //           <Text style={[sparkViewStyles.inbetweenText]}>First Rehearsal On</Text>
-  //       </View>
-  //         <View style={[sparkViewStyles.timeContainer]}>
-  //             {/* <Input placeHolderText={"MM"} start = {inputs.rehearsalMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMonth.setVal(val)}/> */}
-  //             <Text style = {{fontSize: 30}}>05</Text>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-  //             {/* <Input placeHolderText={"DD"} start = {inputs.rehearsalDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalDay.setVal(val)}/> */}
-  //             <Text style = {{fontSize: 30}}>05</Text>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-  //             {/* <Input placeHolderText={"YY"} start = {inputs.rehearsalYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalYear.setVal(val)}/> */}
-  //             <Text style = {{fontSize: 30}}>22</Text>
-  //             <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
-  //             {/* <Input placeHolderText={"12"} start = {inputs.rehearsalHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalHours.setVal(val)}/> */}
-  //             <Text style = {{fontSize: 30}}>06</Text>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
-  //             {/* <Input placeHolderText={"30"} start = {inputs.rehearsalMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalMinutes.setVal(val)}/> */}
-  //             <Text style = {{fontSize: 30}}>45</Text>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
-  //             <Text style = {{fontSize: 30}}>PM</Text>
-  //             {/* <Input placeHolderText={"PM"} start = {inputs.rehearsalAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.rehearsalAmPM.setVal(val)}/> */}
-  //         </View>
-  //     </View>
-  //     <View style={[sparkViewStyles.centerContents]}>
-  //         <Text style={[sparkViewStyles.inbetweenText]}>Roles to be Filled By</Text>
-  //         <View style={[sparkViewStyles.timeContainer]}>
-  //             <Input placeHolderText={"MM"} start = {inputs.publishedMonth.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedMonth.setVal(val)}/>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-  //             <Input placeHolderText={"DD"} start = {inputs.publishedDay.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedDay.setVal(val)}/>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>/</Text>
-  //             <Input placeHolderText={"YY"} start = {inputs.publishedYear.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedYear.setVal(val)}/>
-  //             <Text style={[sparkViewStyles.inbetweenText]}>At</Text>
-  //             <Input placeHolderText={"12"} start = {inputs.publishedHours.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedHours.setVal(val)}/>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}>:</Text>
-  //             <Input placeHolderText={"30"} start = {inputs.publishedMinutes.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedMinutes.setVal(val)}/>
-  //             <Text style={[sparkViewStyles.timeAndDateInput]}> </Text>
-  //             <Input placeHolderText={"PM"} start = {inputs.publishedAmPM.getVal()} inputStyle = {sparkViewStyles.timeAndDateInput} func = {(val) => inputs.publishedAmPM.setVal(val)}/>
-  //         </View>
-  //     </View>
-  // </View>
-  // </ScrollView>
-    );
+    const TimesRoute = () => {
+      const [currPicker, setCurrPicker] = React.useState(null);
+
+      const [publishHours, setPublishHours] = React.useState(null);
+      const [publishMinutes, setPublishMinutes] = React.useState(null);
+      const [publishDate, setPublishDate] = React.useState(null);
+      const [publishTimeVisible, setPublishTimeVisible] = React.useState(false);
+      const [publishDateVisible, setPublishDateVisible] = React.useState(false);
+
+      const [rehearsalHours, setRehearsalHours] = React.useState(null);
+      const [rehearsalMinutes, setRehearsalMinutes] = React.useState(null);
+      const [rehearsalDate, setRehearsalDate] = React.useState(null);
+      const [rehearsalTimeVisible, setRehearsalTimeVisible] = React.useState(false);
+      const [rehearsalDateVisible, setRehearsalDateVisible] = React.useState(false);
+
+      const [sparkHours, setSparkHours] = React.useState(null);
+      const [sparkMinutes, setSparkMinutes] = React.useState(null);
+      const [sparkDate, setSparkDate] = React.useState(null);
+      const [sparkTimeVisible, setSparkTimeVisible] = React.useState(false);
+      const [sparkDateVisible, setSparkDateVisible] = React.useState(false);
+
+      // populate local copies of all of the global variables
+      useEffect(() => {
+        setPublishHours(globalPublishHours.current);
+      }, [globalPublishHours])
+      useEffect(() => {
+        setPublishMinutes(globalPublishMinutes.current);
+      }, [globalPublishMinutes])
+      useEffect(() => {
+        let javascriptDate = new Date(globalPublishDate.current);
+        setPublishDate(javascriptDate);
+      }, [globalPublishDate])
+
+      useEffect(() => {
+        setRehearsalHours(globalRehearsalHours.current);
+      }, [globalRehearsalHours])
+      useEffect(() => {
+        setRehearsalMinutes(globalRehearsalMinutes.current);
+      }, [globalRehearsalMinutes])
+      useEffect(() => {
+        let javascriptDate = new Date(globalRehearsalDate.current);
+        setRehearsalDate(javascriptDate);
+      }, [globalRehearsalDate])
+
+      useEffect(() => {
+        setSparkHours(globalSparkHours.current);
+      }, [globalSparkHours])
+      useEffect(() => {
+        setSparkMinutes(globalSparkMinutes.current);
+      }, [globalSparkMinutes])
+      useEffect(() => {
+        let javascriptDate = new Date(globalSparkDate.current);
+        setSparkDate(javascriptDate);
+      }, [globalSparkDate])
+
+      const setTimeVisible =  (type, value) => {
+        if (type == 'publish') {
+          setPublishTimeVisible(value);
+        }
+        else if (type == 'rehearsal') {
+          setRehearsalTimeVisible(value);
+        }
+        else if (type == 'spark') {
+          setSparkTimeVisible(value);
+        }
+      }
+
+      const setDateVisible =  (type, value) => {
+        if (type == 'publish') {
+          setPublishDateVisible(value);
+        }
+        else if (type == 'rehearsal') {
+          setRehearsalDateVisible(value);
+        }
+        else if (type == 'spark') {
+          setSparkDateVisible(value);
+        }
+      }
+
+      const onDismissTime = (type) => {
+        setTimeVisible(type, false);
+      }
+
+      const onConfirmTime = ({ hours, minutes }) => {
+        // hide the current active picker
+        setTimeVisible(currPicker, false);
+        // set variables based off picker
+        if (currPicker == 'publish') {
+          // set varibales for a time string to display
+          setPublishHours(hours);
+          setPublishMinutes(minutes);
+          // set time in the update payload
+          if (!update.current['times']) update.current['times'] = {};
+          let currentPublished;
+          // if there's already time data here, get it and set it along with the name data
+          if (!update.current['times']['published']) {
+            update.current['times']['published'] = {};
+            currentPublished = {};
+          } 
+          else currentPublished = update.current['times']['published'];
+          // add / adjust times here
+          currentPublished['hours'] = hours;
+          currentPublished['minutes'] = minutes;
+          currentPublished['seconds'] = 0;
+          // set whole dateTime object to update
+          update.current['times']['published'] = {...currentPublished}
+        }
+        else if (currPicker == 'rehearsal') {
+          setRehearsalHours(hours);
+          setRehearsalMinutes(minutes);
+          // set time in the update payload
+          if (!update.current['times']) update.current['times'] = {};
+          let currentPublished;
+          // if there's already time data here, get it and set it along with the name data
+          if (!update.current['times']['rehearsal']) {
+            update.current['times']['rehearsal'] = {};
+            currentPublished = {};
+          } 
+          else currentPublished = update.current['times']['rehearsal'];
+          // add / adjust times here
+          currentPublished['hours'] = hours;
+          currentPublished['minutes'] = minutes;
+          currentPublished['seconds'] = 0;
+          // set whole dateTime object to update
+          update.current['times']['rehearsal'] = {...currentPublished}
+        }
+        else if (currPicker == 'spark') {
+          setSparkHours(hours);
+          setSparkMinutes(minutes);          
+          // set time in the update payload
+          if (!update.current['times']) update.current['times'] = {};
+          let currentPublished;
+          // if there's already time data here, get it and set it along with the name data
+          if (!update.current['times']['spark']) {
+            update.current['times']['spark'] = {};
+            currentPublished = {};
+          } 
+          else currentPublished = update.current['times']['spark'];
+          // add / adjust times here
+          currentPublished['hours'] = hours;
+          currentPublished['minutes'] = minutes;
+          currentPublished['seconds'] = 0;
+          // set whole dateTime object to update
+          update.current['times']['spark'] = {...currentPublished}
+        }
+      }
+
+      const onDismissDate = (type) => {
+        setDateVisible(type, false);
+      }
+
+      const onConfirmDate = (object) => {
+        console.log('Date', object.date);
+        setDateVisible(currPicker, false);
+        // set up the date
+        let javascriptDate = new Date(object.date);
+        let dateString = javascriptDate.toISOString();
+        let month = javascriptDate.getMonth() + 1;
+        let day = javascriptDate.getDate();
+        let year = javascriptDate.getFullYear();
+
+        if (currPicker == 'publish') {
+          setPublishDate(dateString);  
+          // set date in the update payload
+          if (!update.current['times']) update.current['times'] = {};
+          let currentPublished;
+          // if there's already date data here, get it and set it along with the same time
+          if (!update.current['times']['published']) {
+            update.current['times']['published'] = {};
+            currentPublished = {};
+          } 
+          else currentPublished = update.current['times']['published'];
+          // add / adjust date here
+          currentPublished['month'] = month;
+          currentPublished['day'] = day;
+          currentPublished['year'] = year;
+          // set whole dateTime object to update
+          update.current['times']['published'] = {...currentPublished}
+        } 
+        else if (currPicker == 'rehearsal') {
+          setRehearsalDate(dateString);
+          // set date in the update payload
+          if (!update.current['times']) update.current['times'] = {};
+          let currentPublished;
+          // if there's already date data here, get it and set it along with the same time
+          if (!update.current['times']['rehearsal']) {
+            update.current['times']['rehearsal'] = {};
+            currentPublished = {};
+          } 
+          else currentPublished = update.current['times']['rehearsal'];
+          // add / adjust date here
+          currentPublished['month'] = month;
+          currentPublished['day'] = day;
+          currentPublished['year'] = year;
+          // set whole dateTime object to update
+          update.current['times']['rehearsal'] = {...currentPublished}
+        }
+        else if (currPicker == 'spark') {
+          setSparkDate(dateString);
+          // set date in the update payload
+          if (!update.current['times']) update.current['times'] = {};
+          let currentPublished;
+          // if there's already date data here, get it and set it along with the same time
+          if (!update.current['times']['spark']) {
+            update.current['times']['spark'] = {};
+            currentPublished = {};
+          } 
+          else currentPublished = update.current['times']['spark'];
+          // add / adjust date here
+          currentPublished['month'] = month;
+          currentPublished['day'] = day;
+          currentPublished['year'] = year;
+          // set whole dateTime object to update
+          update.current['times']['spark'] = {...currentPublished}
+        }   
+      }
+
+      return(
+        <View style = {{flex: 1, alignItems: "flex-start"}}>
+          <Text style={{paddingLeft:"4%", paddingTop:"5%"}}>Times</Text>
+          <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"row", width:"100%"}}>
+            <Text style = {{paddingRight:"5%", fontFamily:"RNSMiles"}}>
+              Publishing Time
+            </Text>
+            <View style={{width:"25%"}}>
+              <TouchableOpacity 
+                style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                  setPublishTimeVisible(true)
+                  setCurrPicker('publish');
+                }}
+              >
+                <Text style={[styles.buttonText]}>Time</Text>
+              </TouchableOpacity>
+              <TimePickerModal
+                locale={'en'}
+                visible={publishTimeVisible}
+                onDismiss={() => onDismissTime('publish')}
+                onConfirm={onConfirmTime}
+                hours={publishHours}
+                minutes={publishMinutes}
+              />
+              <TouchableOpacity 
+                style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                  setCurrPicker('publish')
+                  setPublishDateVisible(true)
+                }}
+              >
+                <Text style={[styles.buttonText]}>Date</Text>
+              </TouchableOpacity>
+              <DatePickerModal
+                locale="en"
+                mode="single"
+                visible={publishDateVisible}
+                onDismiss={() => onDismissDate('publish')}
+                date={publishDate}
+                onConfirm={onConfirmDate}
+              />
+            </View>
+          </View>
+          <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"row", width:"100%"}}>
+            <Text style = {{paddingRight:"2.5%", fontFamily:"RNSMiles"}}>
+              Rehearsal Time
+            </Text>
+            <View style={{width:"25%"}}>
+              <TouchableOpacity 
+                style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                  setRehearsalTimeVisible(true)
+                  setCurrPicker('rehearsal');
+                }}
+              >
+                <Text style={[styles.buttonText]}>Time</Text>
+              </TouchableOpacity>
+              <TimePickerModal
+                visible={rehearsalTimeVisible}
+                onDismiss={() => onDismissTime('rehearsal')}
+                onConfirm={onConfirmTime}
+                hours={rehearsalHours}
+                minutes={rehearsalMinutes}
+              />
+              <TouchableOpacity 
+                style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                  setCurrPicker('rehearsal')
+                  setRehearsalDateVisible(true)
+                }}
+              >
+                <Text style={[styles.buttonText]}>Date</Text>
+              </TouchableOpacity>
+              <DatePickerModal
+                locale="en"
+                mode="single"
+                visible={rehearsalDateVisible}
+                onDismiss={() => onDismissDate('rehearsal')}
+                date={rehearsalDate}
+                onConfirm={onConfirmDate}
+              />
+            </View>
+          </View>
+          <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"row", width:"100%"}}>
+            <Text style = {{paddingRight:"2.5%", fontFamily:"RNSMiles"}}>
+              Performance Time
+            </Text>
+            <View style={{width:"25%"}}>
+              <TouchableOpacity 
+                style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                  setSparkTimeVisible(true)
+                  setCurrPicker('spark');
+                }}
+              >
+                <Text style={[styles.buttonText]}>Time</Text>
+              </TouchableOpacity>
+              <TimePickerModal
+                visible={sparkTimeVisible}
+                onDismiss={() => onDismissTime('spark')}
+                onConfirm={onConfirmTime}
+                hours={sparkHours}
+                minutes={sparkMinutes}
+              />
+              <TouchableOpacity 
+                style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                  setCurrPicker('spark')
+                  setSparkDateVisible(true)
+                }}
+              >
+                <Text style={[styles.buttonText]}>Date</Text>
+              </TouchableOpacity>
+              <DatePickerModal
+                locale="en"
+                mode="single"
+                visible={sparkDateVisible}
+                onDismiss={() => onDismissDate('spark')}
+                date={sparkDate}
+                onConfirm={onConfirmDate}
+              />
+            </View>
+          </View>
+        </View>
+      );
+     }
+
+   
 
     const RequestsRoute = () => {
       const [rolesWithRequests, setRolesWithRequests] = React.useState([]);
@@ -1244,7 +1549,7 @@ export default function SparkSummary({ route, navigation }) {
       }, [globalRoleData]);
 
       const ShowRequestButton = (props) => {
-        if (showRequestButton == true) {
+        if (showRequestButton == true && role != 'attendee') {
           return (
             <IconButton 
               onPress = {() => requestToPlay(props.role)}
@@ -1324,17 +1629,26 @@ export default function SparkSummary({ route, navigation }) {
       const renderSong = (object) => {
         return (
           <View style={[{marginBottom: "5%"}]}>
-            <Collapse style={{width:"100%", padding: "5%"}}>
-              <CollapseHeader style={[profileStyles.accordian, {padding: "5%", flexDirection: "row"}]}>
+            {
+              userRole != 'attendee' &&
+              <Collapse style={{width:"100%", padding: "5%"}}>
+                <CollapseHeader style={[profileStyles.accordian, {padding: "5%", flexDirection: "row"}]}>
+                  <Text style = {{fontSize: 15}}>{object.item.songName}</Text>
+                  <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
+                </CollapseHeader>
+                <CollapseBody style={[profileStyles.listItemContainer, {flex: 1}]}>
+                  <View style={{alignItems:"center"}}>
+                    <AttachmentContent attachments = {object.item.attachments}/>
+                  </View>
+                </CollapseBody>
+              </Collapse>
+            }
+            {
+              userRole == 'attendee' && 
+              <View style={[profileStyles.accordian, {padding: "5%", flexDirection: "row"}]}>
                 <Text style = {{fontSize: 15}}>{object.item.songName}</Text>
-                <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
-              </CollapseHeader>
-              <CollapseBody style={[profileStyles.listItemContainer, {flex: 1}]}>
-                <View style={{alignItems:"center"}}>
-                  <AttachmentContent attachments = {object.item.attachments}/>
-                </View>
-              </CollapseBody>
-            </Collapse>
+              </View>
+            }
           </View>
         );
       }
@@ -1564,6 +1878,15 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
 
+  timesButton:{
+    justifyContent: "center",
+    alignItems: "center",
+    height: "15%",
+    width: "100%",
+    borderRadius: 10,
+    margin: "5%"
+  },
+
   dialogButtonRow: {
     flexDirection: "row",
     justifyContent: "space-evenly",
@@ -1576,7 +1899,8 @@ const styles = StyleSheet.create({
   dialogDropDown: {
     backgroundColor: "#F2905B",
     borderRadius: 10,
-    height: "10%"
+    height: "10%",
+    width: "30%"
   },
 
   attachment: {
