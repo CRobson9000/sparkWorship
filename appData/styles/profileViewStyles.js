@@ -120,7 +120,6 @@ const profileStyles = StyleSheet.create({
   listItemContainer: {
     backgroundColor: "white",
     backgroundColor: "#F9CBB1",
-    paddingTop: "2%",
     width: "85%",
     marginLeft: "7%"
   },

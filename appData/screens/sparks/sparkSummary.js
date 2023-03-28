@@ -2,17 +2,21 @@ import React, { useEffect, useRef } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
 import { StyleSheet, View, Text, TextInput, Image, Button, ScrollView, TouchableOpacity, TouchableHighlight, FlatList, Dimensions } from 'react-native';
 
-import { TimePickerModal, DatePickerModal } from 'react-native-paper-dates';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { IconButton, ProgressBar, List } from 'react-native-paper';
 import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
 import { DialogBox, KeyboardView } from '../../components/components';
-import { Observable, TDO, FirebaseButler, PushNotify } from '../../components/classes';
+import { TDO, FirebaseButler, PushNotify } from '../../components/classes';
+import { stylesPortrait } from "../../styles/portrait";
 import Routes from "../Navigation/constants/Routes";
 import ProfileImage from "../../components/profileImage.js";
 import { styleSheet } from "../../styles/newSparkCreationStyles.js";
 import { profileStyles } from "../../styles/profileViewStyles.js";
 import Icon from 'react-native-vector-icons/Ionicons';
+
+import { TimePickerModal, DatePickerModal } from 'react-native-paper-dates';
+import { en, registerTranslation } from 'react-native-paper-dates'
+registerTranslation('en', en);
 
 // photo upload imports
 import { getStorage, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
@@ -57,6 +61,17 @@ export default function SparkSummary({ route, navigation }) {
   const globalState = useRef("");
   const globalAdditionalDirections = useRef("");
   const globalGoogleMapsLink = useRef("");
+  
+  const globalPublishHours = useRef("");
+  const globalRehearsalHours = useRef("");
+  const globalSparkHours = useRef("");
+  const globalPublishMinutes = useRef("");
+  const globalRehearsalMinutes = useRef("");
+  const globalSparkMinutes = useRef("");
+
+  const globalPublishDate = useRef("");
+  const globalRehearsalDate = useRef("");
+  const globalSparkDate = useRef("");
 
   const db = getDatabase();
   const storage = getStorage();
@@ -175,6 +190,15 @@ export default function SparkSummary({ route, navigation }) {
         }
       }
 
+      if (overallKey == "times") {
+        for (const [timeDateType, timeDateVal] of Object.entries(values)) {
+          for (const [key, val] of Object.entries(timeDateVal)) {
+            const timeRef = ref(db, `Sparks/${currentSparkId}/info/times/${timeDateType}/TDO/${key}`);
+            await set(timeRef, val);
+          }
+        }
+      }
+
       // delete the songs from cloud storage that were removed
       if (overallKey == "delete") {
         for (let attachment of values) {
@@ -212,6 +236,29 @@ export default function SparkSummary({ route, navigation }) {
       }
       else if (key == "songs") {
         globalSongs.current = value;  
+      }
+
+      else if (key == "times") {
+        for (const [timeDateType, timeDateValTDO] of Object.entries(value)) {
+          let timeDateValObj = timeDateValTDO.TDO;
+          let javascriptDate = new Date(timeDateValObj['year'], timeDateValObj['month'] - 1, timeDateValObj['day'], 0, 0, 0);
+          let dateString = javascriptDate.toISOString();
+          if (timeDateType == 'published') {
+            globalPublishHours.current = timeDateValObj['hours'];
+            globalPublishMinutes.current = timeDateValObj['minutes'];
+            globalPublishDate.current = dateString
+          }
+          else if (timeDateType == "rehearsal") {
+            globalRehearsalHours.current = timeDateValObj['hours'];
+            globalRehearsalMinutes.current = timeDateValObj['minutes'];
+            globalRehearsalDate.current = dateString
+          }
+          else if (timeDateType == "spark") {
+            globalSparkHours.current = timeDateValObj['hours'];
+            globalSparkMinutes.current = timeDateValObj['minutes'];
+            globalSparkDate.current = dateString
+          }
+        }
       }
     }
 
@@ -846,37 +893,223 @@ export default function SparkSummary({ route, navigation }) {
      */
 
     const TimesRoute = () => {
-      const [visible, setVisible] = React.useState(false)
-      const onDismiss = React.useCallback(() => {
-        setVisible(false)
-      }, [setVisible])
+      const [currPicker, setCurrPicker] = React.useState(null);
 
-      const onConfirm = React.useCallback(
-        ({ hours, minutes }) => {
-          setVisible(false);
-          console.log({ hours, minutes });
-        },
-        [setVisible])
+      const [publishHours, setPublishHours] = React.useState(null);
+      const [publishMinutes, setPublishMinutes] = React.useState(null);
+      const [publishDate, setPublishDate] = React.useState(null);
+      const [publishTimeVisible, setPublishTimeVisible] = React.useState(false);
+      const [publishDateVisible, setPublishDateVisible] = React.useState(false);
 
-      const [date, setDate] = React.useState(undefined);
-      const [open, setOpen] = React.useState(false);
+      const [rehearsalHours, setRehearsalHours] = React.useState(null);
+      const [rehearsalMinutes, setRehearsalMinutes] = React.useState(null);
+      const [rehearsalDate, setRehearsalDate] = React.useState(null);
+      const [rehearsalTimeVisible, setRehearsalTimeVisible] = React.useState(false);
+      const [rehearsalDateVisible, setRehearsalDateVisible] = React.useState(false);
 
-      const onDismissSingle = React.useCallback(() => {
-        setOpen(false);
-      }, [setOpen]);
+      const [sparkHours, setSparkHours] = React.useState(null);
+      const [sparkMinutes, setSparkMinutes] = React.useState(null);
+      const [sparkDate, setSparkDate] = React.useState(null);
+      const [sparkTimeVisible, setSparkTimeVisible] = React.useState(false);
+      const [sparkDateVisible, setSparkDateVisible] = React.useState(false);
 
-      const onConfirmSingle = React.useCallback(
-        (params) => {
-          setOpen(false);
-          setDate(params.date);
-        },
-        [setOpen, setDate]
-      );
-      
+      // populate local copies of all of the global variables
+      useEffect(() => {
+        setPublishHours(globalPublishHours.current);
+      }, [globalPublishHours])
+      useEffect(() => {
+        setPublishMinutes(globalPublishMinutes.current);
+      }, [globalPublishMinutes])
+      useEffect(() => {
+        let javascriptDate = new Date(globalPublishDate.current);
+        setPublishDate(javascriptDate);
+      }, [globalPublishDate])
 
+      useEffect(() => {
+        setRehearsalHours(globalRehearsalHours.current);
+      }, [globalRehearsalHours])
+      useEffect(() => {
+        setRehearsalMinutes(globalRehearsalMinutes.current);
+      }, [globalRehearsalMinutes])
+      useEffect(() => {
+        let javascriptDate = new Date(globalRehearsalDate.current);
+        setRehearsalDate(javascriptDate);
+      }, [globalRehearsalDate])
+
+      useEffect(() => {
+        setSparkHours(globalSparkHours.current);
+      }, [globalSparkHours])
+      useEffect(() => {
+        setSparkMinutes(globalSparkMinutes.current);
+      }, [globalSparkMinutes])
+      useEffect(() => {
+        let javascriptDate = new Date(globalSparkDate.current);
+        setSparkDate(javascriptDate);
+      }, [globalSparkDate])
+
+      const setTimeVisible =  (type, value) => {
+        if (type == 'publish') {
+          setPublishTimeVisible(value);
+        }
+        else if (type == 'rehearsal') {
+          setRehearsalTimeVisible(value);
+        }
+        else if (type == 'spark') {
+          setSparkTimeVisible(value);
+        }
+      }
+
+      const setDateVisible =  (type, value) => {
+        if (type == 'publish') {
+          setPublishDateVisible(value);
+        }
+        else if (type == 'rehearsal') {
+          setRehearsalDateVisible(value);
+        }
+        else if (type == 'spark') {
+          setSparkDateVisible(value);
+        }
+      }
+
+      const onDismissTime = (type) => {
+        setTimeVisible(type, false);
+      }
+
+      const onConfirmTime = ({ hours, minutes }) => {
+        // hide the current active picker
+        setTimeVisible(currPicker, false);
+        // set variables based off picker
+        if (currPicker == 'publish') {
+          // set varibales for a time string to display
+          setPublishHours(hours);
+          setPublishMinutes(minutes);
+          // set time in the update payload
+          if (!update.current['times']) update.current['times'] = {};
+          let currentPublished;
+          // if there's already time data here, get it and set it along with the name data
+          if (!update.current['times']['published']) {
+            update.current['times']['published'] = {};
+            currentPublished = {};
+          } 
+          else currentPublished = update.current['times']['published'];
+          // add / adjust times here
+          currentPublished['hours'] = hours;
+          currentPublished['minutes'] = minutes;
+          currentPublished['seconds'] = 0;
+          // set whole dateTime object to update
+          update.current['times']['published'] = {...currentPublished}
+        }
+        else if (currPicker == 'rehearsal') {
+          setRehearsalHours(hours);
+          setRehearsalMinutes(minutes);
+          // set time in the update payload
+          if (!update.current['times']) update.current['times'] = {};
+          let currentPublished;
+          // if there's already time data here, get it and set it along with the name data
+          if (!update.current['times']['rehearsal']) {
+            update.current['times']['rehearsal'] = {};
+            currentPublished = {};
+          } 
+          else currentPublished = update.current['times']['rehearsal'];
+          // add / adjust times here
+          currentPublished['hours'] = hours;
+          currentPublished['minutes'] = minutes;
+          currentPublished['seconds'] = 0;
+          // set whole dateTime object to update
+          update.current['times']['rehearsal'] = {...currentPublished}
+        }
+        else if (currPicker == 'spark') {
+          setSparkHours(hours);
+          setSparkMinutes(minutes);          
+          // set time in the update payload
+          if (!update.current['times']) update.current['times'] = {};
+          let currentPublished;
+          // if there's already time data here, get it and set it along with the name data
+          if (!update.current['times']['spark']) {
+            update.current['times']['spark'] = {};
+            currentPublished = {};
+          } 
+          else currentPublished = update.current['times']['spark'];
+          // add / adjust times here
+          currentPublished['hours'] = hours;
+          currentPublished['minutes'] = minutes;
+          currentPublished['seconds'] = 0;
+          // set whole dateTime object to update
+          update.current['times']['spark'] = {...currentPublished}
+        }
+      }
+
+      const onDismissDate = (type) => {
+        setDateVisible(type, false);
+      }
+
+      const onConfirmDate = (object) => {
+        console.log('Date', object.date);
+        setDateVisible(currPicker, false);
+        // set up the date
+        let javascriptDate = new Date(object.date);
+        let dateString = javascriptDate.toISOString();
+        let month = javascriptDate.getMonth() + 1;
+        let day = javascriptDate.getDate();
+        let year = javascriptDate.getFullYear();
+
+        if (currPicker == 'publish') {
+          setPublishDate(dateString);  
+          // set date in the update payload
+          if (!update.current['times']) update.current['times'] = {};
+          let currentPublished;
+          // if there's already date data here, get it and set it along with the same time
+          if (!update.current['times']['published']) {
+            update.current['times']['published'] = {};
+            currentPublished = {};
+          } 
+          else currentPublished = update.current['times']['published'];
+          // add / adjust date here
+          currentPublished['month'] = month;
+          currentPublished['day'] = day;
+          currentPublished['year'] = year;
+          // set whole dateTime object to update
+          update.current['times']['published'] = {...currentPublished}
+        } 
+        else if (currPicker == 'rehearsal') {
+          setRehearsalDate(dateString);
+          // set date in the update payload
+          if (!update.current['times']) update.current['times'] = {};
+          let currentPublished;
+          // if there's already date data here, get it and set it along with the same time
+          if (!update.current['times']['rehearsal']) {
+            update.current['times']['rehearsal'] = {};
+            currentPublished = {};
+          } 
+          else currentPublished = update.current['times']['rehearsal'];
+          // add / adjust date here
+          currentPublished['month'] = month;
+          currentPublished['day'] = day;
+          currentPublished['year'] = year;
+          // set whole dateTime object to update
+          update.current['times']['rehearsal'] = {...currentPublished}
+        }
+        else if (currPicker == 'spark') {
+          setSparkDate(dateString);
+          // set date in the update payload
+          if (!update.current['times']) update.current['times'] = {};
+          let currentPublished;
+          // if there's already date data here, get it and set it along with the same time
+          if (!update.current['times']['spark']) {
+            update.current['times']['spark'] = {};
+            currentPublished = {};
+          } 
+          else currentPublished = update.current['times']['spark'];
+          // add / adjust date here
+          currentPublished['month'] = month;
+          currentPublished['day'] = day;
+          currentPublished['year'] = year;
+          // set whole dateTime object to update
+          update.current['times']['spark'] = {...currentPublished}
+        }   
+      }
 
       return(
-       
         <View style = {{flex: 1, alignItems: "flex-start"}}>
           <Text style={{paddingLeft:"4%", paddingTop:"5%"}}>Times</Text>
           <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"row", width:"100%"}}>
@@ -884,26 +1117,79 @@ export default function SparkSummary({ route, navigation }) {
               Publishing Time
             </Text>
             <View style={{width:"25%"}}>
-              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setVisible(true)}>
+              <TouchableOpacity 
+                style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                  setPublishTimeVisible(true)
+                  setCurrPicker('publish');
+                }}
+              >
                 <Text style={[styles.buttonText]}>Time</Text>
               </TouchableOpacity>
               <TimePickerModal
-                visible={visible}
-                onDismiss={onDismiss}
-                onConfirm={onConfirm}
-                hours={12}
-                minutes={14}
+                locale={'en'}
+                visible={publishTimeVisible}
+                onDismiss={() => onDismissTime('publish')}
+                onConfirm={onConfirmTime}
+                hours={publishHours}
+                minutes={publishMinutes}
               />
-              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setOpen(true)}>
+              <TouchableOpacity 
+                style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                  setCurrPicker('publish')
+                  setPublishDateVisible(true)
+                }}
+              >
                 <Text style={[styles.buttonText]}>Date</Text>
               </TouchableOpacity>
               <DatePickerModal
                 locale="en"
                 mode="single"
-                visible={open}
-                onDismiss={onDismissSingle}
-                date={date}
-                onConfirm={onConfirmSingle}
+                visible={publishDateVisible}
+                onDismiss={() => onDismissDate('publish')}
+                date={publishDate}
+                onConfirm={onConfirmDate}
+              />
+            </View>
+          </View>
+          <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"row", width:"100%"}}>
+            <Text style = {{paddingRight:"2.5%", fontFamily:"RNSMiles"}}>
+              Rehearsal Time
+            </Text>
+            <View style={{width:"25%"}}>
+              <TouchableOpacity 
+                style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                  setRehearsalTimeVisible(true)
+                  setCurrPicker('rehearsal');
+                }}
+              >
+                <Text style={[styles.buttonText]}>Time</Text>
+              </TouchableOpacity>
+              <TimePickerModal
+                visible={rehearsalTimeVisible}
+                onDismiss={() => onDismissTime('rehearsal')}
+                onConfirm={onConfirmTime}
+                hours={rehearsalHours}
+                minutes={rehearsalMinutes}
+              />
+              <TouchableOpacity 
+                style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                  setCurrPicker('rehearsal')
+                  setRehearsalDateVisible(true)
+                }}
+              >
+                <Text style={[styles.buttonText]}>Date</Text>
+              </TouchableOpacity>
+              <DatePickerModal
+                locale="en"
+                mode="single"
+                visible={rehearsalDateVisible}
+                onDismiss={() => onDismissDate('rehearsal')}
+                date={rehearsalDate}
+                onConfirm={onConfirmDate}
               />
             </View>
           </View>
@@ -912,26 +1198,38 @@ export default function SparkSummary({ route, navigation }) {
               Performance Time
             </Text>
             <View style={{width:"25%"}}>
-              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setVisible(true)}>
+              <TouchableOpacity 
+                style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                  setSparkTimeVisible(true)
+                  setCurrPicker('spark');
+                }}
+              >
                 <Text style={[styles.buttonText]}>Time</Text>
               </TouchableOpacity>
               <TimePickerModal
-                visible={visible}
-                onDismiss={onDismiss}
-                onConfirm={onConfirm}
-                hours={12}
-                minutes={14}
+                visible={sparkTimeVisible}
+                onDismiss={() => onDismissTime('spark')}
+                onConfirm={onConfirmTime}
+                hours={sparkHours}
+                minutes={sparkMinutes}
               />
-              <TouchableOpacity style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setOpen(true)}>
+              <TouchableOpacity 
+                style={[styles.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                  setCurrPicker('spark')
+                  setSparkDateVisible(true)
+                }}
+              >
                 <Text style={[styles.buttonText]}>Date</Text>
               </TouchableOpacity>
               <DatePickerModal
                 locale="en"
                 mode="single"
-                visible={open}
-                onDismiss={onDismissSingle}
-                date={date}
-                onConfirm={onConfirmSingle}
+                visible={sparkDateVisible}
+                onDismiss={() => onDismissDate('spark')}
+                date={sparkDate}
+                onConfirm={onConfirmDate}
               />
             </View>
           </View>

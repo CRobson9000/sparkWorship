@@ -13,6 +13,7 @@ import { getDatabase, ref, set, get, push } from 'firebase/database';
 
 import Routes from "../Navigation/constants/Routes";
 import ProfileImage from '../../components/profileImage.js';
+import { mdiCalendarMonthOutline } from '@mdi/js';
 
 const screenWidth = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -272,32 +273,118 @@ export default function SparkCreation({ route, navigation }) {
 
     // Time Entry
     const Screen2 = () => {
-        const [visible, setVisible] = React.useState(false)
-        const onDismiss = React.useCallback(() => {
-          setVisible(false)
-        }, [setVisible])
-  
-        const onConfirm = React.useCallback(
-          ({ hours, minutes }) => {
-            setVisible(false);
-            console.log({ hours, minutes });
-          },
-          [setVisible])
-  
-        const [date, setDate] = React.useState(undefined);
-        const [open, setOpen] = React.useState(false);
-  
-        const onDismissSingle = React.useCallback(() => {
-          setOpen(false);
-        }, [setOpen]);
-  
-        const onConfirmSingle = React.useCallback(
-          (params) => {
-            setOpen(false);
-            setDate(params.date);
-          },
-          [setOpen, setDate]
-        );
+        const [currPicker, setCurrPicker] = React.useState(null);
+
+        const [publishHours, setPublishHours] = React.useState(null);
+        const [publishMinutes, setPublishMinutes] = React.useState(null);
+        const [publishDate, setPublishDate] = React.useState(null);
+        const [publishTimeVisible, setPublishTimeVisible] = React.useState(false);
+        const [publishDateVisible, setPublishDateVisible] = React.useState(false);
+
+        const [rehearsalHours, setRehearsalHours] = React.useState(null);
+        const [rehearsalMinutes, setRehearsalMinutes] = React.useState(null);
+        const [rehearsalDate, setRehearsalDate] = React.useState(null);
+        const [rehearsalTimeVisible, setRehearsalTimeVisible] = React.useState(false);
+        const [rehearsalDateVisible, setRehearsalDateVisible] = React.useState(false);
+
+        const [sparkHours, setSparkHours] = React.useState(null);
+        const [sparkMinutes, setSparkMinutes] = React.useState(null);
+        const [sparkDate, setSparkDate] = React.useState(null);
+        const [sparkTimeVisible, setSparkTimeVisible] = React.useState(false);
+        const [sparkDateVisible, setSparkDateVisible] = React.useState(false);
+
+        const setTimeVisible =  (type, value) => {
+            if (type == 'publish') {
+            setPublishTimeVisible(value);
+            }
+            else if (type == 'rehearsal') {
+            setRehearsalTimeVisible(value);
+            }
+            else if (type == 'spark') {
+            setSparkTimeVisible(value);
+            }
+        }
+
+        const setDateVisible =  (type, value) => {
+            if (type == 'publish') {
+            setPublishDateVisible(value);
+            }
+            else if (type == 'rehearsal') {
+            setRehearsalDateVisible(value);
+            }
+            else if (type == 'spark') {
+            setSparkDateVisible(value);
+            }
+        }
+
+        const onDismissTime = (type) => {
+            setTimeVisible(type, false);
+        }
+
+        const onConfirmTime = ({ hours, minutes }) => {
+            // hide the current active picker
+            setTimeVisible(currPicker, false);
+            // set variables based off picker
+            if (currPicker == 'publish') {
+                // set varibales for a time string to display
+                setPublishHours(hours);
+                setPublishMinutes(minutes);
+                // set time in the update payload
+                update['publishedHours'] = hours;
+                update['publishedMinutes'] = minutes;
+            }
+            else if (currPicker == 'rehearsal') {
+                setRehearsalHours(hours);
+                setRehearsalMinutes(minutes);
+                // set time in the update payload
+                update['rehearsalHours'] = hours;
+                update['rehearsalMinutes'] = minutes;
+            }
+            else if (currPicker == 'spark') {
+                setSparkHours(hours);
+                setSparkMinutes(minutes);          
+                // set time in the update payload
+                update['sparkHours'] = hours;
+                update['sparkMinutes'] = minutes;
+            }
+        }
+
+        const onDismissDate = (type) => {
+            setDateVisible(type, false);
+        }
+
+        const onConfirmDate = (object) => {
+            setDateVisible(currPicker, false);
+            // set up the date
+            let javascriptDate = new Date(object.date);
+            let dateString = javascriptDate.toISOString();
+            let month = javascriptDate.getMonth() + 1;
+            let day = javascriptDate.getDate();
+            let year = javascriptDate.getFullYear();
+
+            if (currPicker == 'publish') {
+                setPublishDate(dateString);  
+                // set date in the update payload
+                update['publishedMonth'] = month;
+                update['publishedDay'] = day;
+                update['publishedYear'] = year;
+            } 
+            else if (currPicker == 'rehearsal') {
+                setRehearsalDate(dateString);
+                // set date in the update payload
+                update['rehearsalMonth'] = month;
+                update['rehearsalDay'] = day;
+                update['rehearsalYear'] = year;
+            }
+            else if (currPicker == 'spark') {
+                setSparkDate(dateString);
+                // set date in the update payload
+                update['sparkMonth'] = month;
+                update['sparkDay'] = day;
+                update['sparkYear'] = year;
+            }   
+        }
+
         return (
             <KeyboardView style={styleSheet.content}>
                 <Text style={styleSheet.stageText}>Date and Time</Text>
@@ -306,27 +393,81 @@ export default function SparkCreation({ route, navigation }) {
               Publishing Time
             </Text>
             <View style={{width:"25%"}}>
-              <TouchableOpacity style={[styleSheet.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setVisible(true)}>
+            <TouchableOpacity 
+                style={[styleSheet.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                    setPublishTimeVisible(true)
+                    setCurrPicker('publish');
+                }}
+            >
                 <Text style={[styleSheet.buttonText]}>Time</Text>
-              </TouchableOpacity>
-              <TimePickerModal
-                visible={visible}
-                onDismiss={onDismiss}
-                onConfirm={onConfirm}
-                hours={12}
-                minutes={14}
-              />
-              <TouchableOpacity style={[styleSheet.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setOpen(true)}>
-                <Text style={[styleSheet.buttonText]}>Date</Text>
-              </TouchableOpacity>
-              <DatePickerModal
+            </TouchableOpacity>
+            <TimePickerModal
+                locale={'en'}
+                visible={publishTimeVisible}
+                onDismiss={() => onDismissTime('publish')}
+                onConfirm={onConfirmTime}
+                hours={publishHours}
+                minutes={publishMinutes}
+            />
+            <TouchableOpacity 
+                style={[styleSheet.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                    setCurrPicker('publish')
+                    setPublishDateVisible(true)
+                }}
+            >
+            <Text style={[styleSheet.buttonText]}>Date</Text>
+            </TouchableOpacity>
+            <DatePickerModal
                 locale="en"
                 mode="single"
-                visible={open}
-                onDismiss={onDismissSingle}
-                date={date}
-                onConfirm={onConfirmSingle}
-              />
+                visible={publishDateVisible}
+                onDismiss={() => onDismissDate('publish')}
+                date={publishDate}
+                onConfirm={onConfirmDate}
+            />
+            </View>
+          </View>
+          <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"row", width:"100%"}}>
+            <Text style = {{paddingRight:"2.5%", fontFamily:"RNSMiles"}}>
+              Rehearsal Time
+            </Text>
+            <View style={{width:"25%"}}>
+            <TouchableOpacity 
+                style={[styleSheet.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                    setRehearsalTimeVisible(true)
+                    setCurrPicker('rehearsal');
+                }}
+            >
+                <Text style={[styleSheet.buttonText]}>Time</Text>
+            </TouchableOpacity>
+            <TimePickerModal
+                locale={'en'}
+                visible={rehearsalTimeVisible}
+                onDismiss={() => onDismissTime('rehearsal')}
+                onConfirm={onConfirmTime}
+                hours={rehearsalHours}
+                minutes={rehearsalMinutes}
+            />
+            <TouchableOpacity 
+                style={[styleSheet.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                    setCurrPicker('rehearsal')
+                    setRehearsalDateVisible(true)
+                }}
+            >
+            <Text style={[styleSheet.buttonText]}>Date</Text>
+            </TouchableOpacity>
+            <DatePickerModal
+                locale="en"
+                mode="single"
+                visible={rehearsalDateVisible}
+                onDismiss={() => onDismissDate('rehearsal')}
+                date={rehearsalDate}
+                onConfirm={onConfirmDate}
+            />
             </View>
           </View>
           <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"row", width:"100%"}}>
@@ -334,30 +475,43 @@ export default function SparkCreation({ route, navigation }) {
               Performance Time
             </Text>
             <View style={{width:"25%"}}>
-              <TouchableOpacity style={[styleSheet.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setVisible(true)}>
+            <TouchableOpacity 
+                style={[styleSheet.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                    setSparkTimeVisible(true)
+                    setCurrPicker('spark');
+                }}
+            >
                 <Text style={[styleSheet.buttonText]}>Time</Text>
-              </TouchableOpacity>
-              <TimePickerModal
-                visible={visible}
-                onDismiss={onDismiss}
-                onConfirm={onConfirm}
-                hours={12}
-                minutes={14}
-              />
-              <TouchableOpacity style={[styleSheet.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress={() => setVisible(true)}>
-                <Text style={[styleSheet.buttonText]}>Date</Text>
-              </TouchableOpacity>
-              <DatePickerModal
+            </TouchableOpacity>
+            <TimePickerModal
+                locale={'en'}
+                visible={sparkTimeVisible}
+                onDismiss={() => onDismissTime('spark')}
+                onConfirm={onConfirmTime}
+                hours={sparkHours}
+                minutes={sparkMinutes}
+            />
+            <TouchableOpacity 
+                style={[styleSheet.timesButton, {backgroundColor: "rgb(0, 97, 117)"}]} 
+                onPress={() => {
+                    setCurrPicker('spark')
+                    setSparkDateVisible(true)
+                }}
+            >
+            <Text style={[styleSheet.buttonText]}>Date</Text>
+            </TouchableOpacity>
+            <DatePickerModal
                 locale="en"
                 mode="single"
-                visible={open}
-                onDismiss={onDismissSingle}
-                date={date}
-                onConfirm={onConfirmSingle}
-              />
+                visible={sparkDateVisible}
+                onDismiss={() => onDismissDate('spark')}
+                date={sparkDate}
+                onConfirm={onConfirmDate}
+            />
             </View>
           </View>
-            </KeyboardView>
+        </KeyboardView>
         );
     } 
 

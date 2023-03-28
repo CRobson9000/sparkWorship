@@ -34,7 +34,6 @@ export default function PSPersonal({ route, navigation }) {
       const [sparksWithTypes, setSparksWithTypes] = React.useState([]);
       async function setupSparks()
       {
-        console.log("ProfileData", profileData);
         let startSparks = profileData?.['sparks'];
         let finalSparks = [
           {
@@ -294,9 +293,12 @@ export default function PSPersonal({ route, navigation }) {
     const [MyLocation, setMyLocation] = React.useState("Location is not set");
 
     async function setLocation() {
-      let location = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/location`);
-      if (location) {
-        setMyLocation(location);
+      let state = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/state`) || null;
+      let city = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/city`) || null;
+      let zip = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/zipCode`) || null;
+      if (state && city && zip) {
+        let locationString = `${city}, ${state} ${zip}`;
+        setMyLocation(locationString);
       }
     }
 
@@ -328,12 +330,16 @@ export default function PSPersonal({ route, navigation }) {
       }
     }
 
-    const [MyChurchLocation, setMyChurchLocation] = React.useState("Church Location is not set");
+    const [MyChurchLocation, setMyChurchLocation] = React.useState("This church location is not set");
 
     async function setChurchLocation() {
-      let churchLocation = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/churchStreetAddress`);
-      if (churchLocation) {
-        setMyChurchLocation(churchLocation);
+      let churchState = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/churchState`) || null;
+      let churchCity = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/churchCity`) || null;
+      let churchAddress = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/churchStreetAddress`) || null;
+      let churchZipCode = await FirebaseButler.fbGet(`Users/${selectedUserId}/info/churchZipCode`) || null;
+      if (churchState && churchCity && churchAddress && churchZipCode) {
+        let locationString = `${churchAddress} ${churchCity}, ${churchState} ${churchZipCode}`;
+        setMyChurchLocation(locationString);
       }
     }
 
@@ -393,7 +399,7 @@ export default function PSPersonal({ route, navigation }) {
             <Text style={profileStyles.nameText}>{MyName}</Text>
             <View style={[profileStyles.row2, {alignItems: "center", alignSelf: "center"}]}>
               <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
-              <Text>   {MyLocation}</Text>
+              <Text> {MyLocation} </Text>
             </View>
           </View>
           <View style={[profileStyles.row2, {justifyContent: 'space-evenly', marginLeft: 30, marginRight: 30, alignItems: 'center'}]}>
