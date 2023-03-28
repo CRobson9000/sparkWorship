@@ -4,6 +4,7 @@ import React, {useRef, useEffect} from 'react';
 import { FirebaseButler, Observable, TDO } from '../../components/classes';
 
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
+import { KeyboardView } from '../../components/components.js'
 import ProfileImage from '../../components/profileImage.js';
 
 export default function Survey ({ route, navigation }) {
@@ -30,7 +31,7 @@ export default function Survey ({ route, navigation }) {
             <Text style={styles.smallText}>Please provide feedback on the following spark leader/musician:</Text>
             <Text style={styles.nameText}>Austin Smith</Text>
         </View>
-        <ScrollView style={styles.content}>
+        <ScrollView contentContainerStyle = {{paddingBottom: "25%"}}>
             <Text style={[styles.smallText, {marginBottom: "1%", marginTop: "4%", alignSelf: "left"}]}>Based on your recent spark, please rate the above musician's performance in each of the following categories.</Text>
             <Text style={[styles.smallText, {marginTop: "0%", marginBottom: "0%"}]}>(1 = Strongly Disagree, 2 = Disagree, 3 = Neither Agree or Disagree, 4 = Agree, 5 = Strongly Agree)</Text>
             <Text style={styles.questionText}>This musician communicated well with the group.</Text>
@@ -94,8 +95,7 @@ export default function Survey ({ route, navigation }) {
                 maximumTrackTintColor="rgb(0, 97, 117)"/>
             <Text style={[styles.smallText, {marginTop: "2%", marginBottom: "0%"}]}>1                   2                   3                   4                  5</Text>
             <Text style={[styles.smallText, {alignSelf: "left"}]}>Please provide any additional comments in the space below.</Text> 
-            <TextInput style={styles.inputBox}/>
-            <Text style={styles.smallText}>Thank you for your honest feedback!</Text>
+            <Text style={[styles.smallText, {marginTop: "5%"}]}>Thank you for your honest feedback!</Text>
             <TouchableOpacity style={styles.submitButton}><Text style={styles.buttonText}>Submit</Text></TouchableOpacity>
         </ScrollView> 
     </View>
