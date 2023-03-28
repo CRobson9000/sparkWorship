@@ -689,10 +689,11 @@ export default function SparkCreation({ route, navigation }) {
         // <KeyboardView>
             <View style={styleSheet.MainContainer}>
                 <View style={styleSheet.topBorder}>
+                    <Image style={{height: 40, width: 40, left: "8%"}} source={require("../../../assets/Xicon.png")}></Image>
                     <Text style={styleSheet.titleText}>Spark Creation</Text>
-                    <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2, height: 20, borderRadius: 10, marginTop: "5%", alignSelf: "center"}} progress={progress}/>
+                    <ProgressBar color = {"rgb(0, 97, 117)"} style={{width: screenWidth/2, height: 23, borderRadius: 10, marginTop: "5%", alignSelf: "center", borderColor: "rgb(0, 97, 117)", borderWidth: 2, backgroundColor: "rgb(219, 233, 236)"}} progress={progress}/>
                 </View>
-                <View style = {{position: "absolute", paddingTop: "10%", top: "25%", height: "65%", width: "100%", backgroundColor: "white", justifyContent: "center"}}>
+                <View style = {{position: "absolute", paddingTop: "10%", top: "30%", height: "65%", width: "100%", backgroundColor: "white", justifyContent: "center"}}>
                     <Slider currentIndex = {currentIndex} screens = {myScreens} />
                 </View>
                 <View style={[styleSheet.bottomRow]}>
