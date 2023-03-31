@@ -50,6 +50,9 @@ export default function UserDashboard({ route, navigation }) {
           sparkObject['name'] = sparkInfo?.name;   // then add other info on the same level as TDO
           sparkObject['id'] = sparkId;
 
+          // add spark location
+          sparkObject['location'] = sparkInfo?.location || null;
+
           // set spark leader id
           sparkObject['leaderId'] = sparkData.roles.spark_leader;
           allSparks.push(sparkObject);
@@ -58,10 +61,14 @@ export default function UserDashboard({ route, navigation }) {
           let sparkTDO = sparkInfo?.times?.spark
           if (sparkTDO) {
             //reformat each the spark date to match the markedDates for the calendar element, then push them to local object
-            let dateString = `20${sparkTDO.TDO.year}-${sparkTDO.TDO.month}-${sparkTDO.TDO.day}`;
+            let day = sparkTDO.TDO.day;
+            let month = sparkTDO.TDO.month;
+            if (parseInt(day) < 10) day = `0${day}`;
+            if (parseInt(month) < 10) month = `0${month}`;
+            let dateString = `${sparkTDO.TDO.year}-${month}-${day}`;
             localMarkedDates[dateString] = {marked: true}
+            sparkObject['time'] = sparkTDO;
           }
-          // sparkObject['time'] = sparkTDO;
         }
       } 
 
@@ -75,15 +82,21 @@ export default function UserDashboard({ route, navigation }) {
   const renderSpark = (object) => {
     let item = object.item;
     //Date Time string formatting
-    // let sparkTimeObj = item.info?.times?.spark.TDO;
-    // let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
-    // let finalTime = sparkTDO.getFormattedTime();
-    // let finalDate = sparkTDO.getFormattedDateFormal();
-    // let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
+    let dateTimeString = "This spark has no time data"
+    if (item?.time) {
+        let sparkTimeObj = item.time.TDO;
+        let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
+        let finalTime = sparkTDO.getFormattedTime();
+        let finalDate = sparkTDO.getFormattedDateFormal();
+        dateTimeString = `${finalDate} at ${finalTime}`; 
+    }
 
     //Location formatting
-    // let locationObj = item.info.location;
-    // let locationString = `${locationObj?.address} ${locationObj?.city}, ${locationObj?.state} ${locationObj?.zip}`;
+    let locationString = "This spark has no location data";
+    if (item?.location) {
+        locationObj = item?.location;
+        locationString = `${locationObj?.address} ${locationObj?.city}, ${locationObj?.state} ${locationObj?.zip}`;
+    }
     
     return (
       <LinearGradient
@@ -177,7 +190,6 @@ export default function UserDashboard({ route, navigation }) {
 
 const dashboardStyles = StyleSheet.create({
   container: {
-    top: "-5%",
     width: "100%",
     height: "105%",
     justifyContent: "center",
@@ -201,10 +213,10 @@ const dashboardStyles = StyleSheet.create({
     width: "100%",
   },
   contentDashContainer: {
-    height: "40%",
+    height: "53%",
     width: "100%",
-    alignItems: "center"
-    // marginBottom: "5%"
+    alignItems: "center", 
+    backgroundColor: "red"
   }
 });
 

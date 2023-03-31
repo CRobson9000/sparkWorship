@@ -71,7 +71,7 @@ class TDO {
 
     getFormattedDateFormal(){
        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-       return `${months[this.TDO.month - 1]} ${this.TDO.day}, 20${this.TDO.year}`
+       return `${months[this.TDO.month - 1]} ${this.TDO.day}, ${this.TDO.year}`
     }
 
     getFormattedTime(){
