@@ -216,7 +216,6 @@ const dashboardStyles = StyleSheet.create({
     height: "53%",
     width: "100%",
     alignItems: "center", 
-    backgroundColor: "red"
   }
 });
 
