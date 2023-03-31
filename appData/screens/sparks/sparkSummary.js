@@ -1237,6 +1237,18 @@ export default function SparkSummary({ route, navigation }) {
       );
      }
 
+    const ReadTimesRoute = () => {
+      return(
+        <View style = {{flex: 1, alignItems: "flex-start"}}>
+          <Text style={{paddingLeft:"4%", paddingTop:"5%"}}>Times</Text>
+          <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"column", width:"100%"}}>
+            <Text style = {{paddingRight:"5%", fontFamily:"RNSMiles"}}>Publishing Time</Text>
+            <Text style = {{paddingRight:"5%", fontFamily:"RNSMiles"}}>Dude Guy</Text>
+          </View>
+        </View>
+      )
+    }
+
    
 
     const RequestsRoute = () => {
@@ -1745,7 +1757,7 @@ export default function SparkSummary({ route, navigation }) {
 
   const renderReadSceneSparkLeader = SceneMap({
       first: ReadLocationRoute,
-      second: TimesRoute,
+      second: ReadTimesRoute,
       third: ReadSetListRoute,
       fourth: VolunteersRoute,
       fifth: RequestsRoute
@@ -1760,7 +1772,7 @@ export default function SparkSummary({ route, navigation }) {
 
   const renderReadScene = SceneMap({
     first: ReadLocationRoute,
-    second: TimesRoute,
+    second: ReadTimesRoute,
     third: ReadSetListRoute,
     fourth: VolunteersRoute,
   });
