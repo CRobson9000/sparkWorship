@@ -15,7 +15,7 @@ const stylesPortrait = StyleSheet.create({
     },
     topBorder:
     {
-        height: "40%"
+        padding: "5%"
     },
     contentContainer:
     {

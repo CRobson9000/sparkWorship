@@ -48,6 +48,7 @@ export default function SparkSummary({ route, navigation }) {
   // Top Section Info
   const [sparkName, setSparkName] = React.useState(null);
   const [sparkLocationString, setSparkLocationString] = React.useState(null);
+  const [sparkTimeDateString, setSparkTimeDateString] = React.useState(null);
   const [sparkLeaderId, setSparkLeaderId] = React.useState(null);
   const [attending, setAttending] = React.useState(false);
   const [playing, setPlaying] = React.useState(false);
@@ -232,7 +233,11 @@ export default function SparkSummary({ route, navigation }) {
         globalLocationTitle.current = value?.locationTitle;
         globalGoogleMapsLink.current = value?.googleMapsLink;
         // set location string for top area
-        setSparkLocationString(`${value.address} ${value.city}, ${value.state}`) || "No location set";
+        let locationString = "There was no location data provided for this spark"
+        if (value.address && value.city && value.state) {
+          locationString = `${value.address} ${value.city}, ${value.state}` 
+        }
+        setSparkLocationString(locationString);        
       }
       else if (key == "songs") {
         globalSongs.current = value;  
@@ -241,6 +246,17 @@ export default function SparkSummary({ route, navigation }) {
       else if (key == "times") {
         for (const [timeDateType, timeDateValTDO] of Object.entries(value)) {
           let timeDateValObj = timeDateValTDO.TDO;
+
+          // set and create time string
+          let timeDateTDO = new TDO(0, 0, 0, 0, 0, 0, timeDateValObj);
+          let timeString = timeDateTDO.getFormattedTime();
+          let finalDateString = timeDateTDO.getFormattedDate();
+          let timeDateString = "There was no time data provided for this spark";
+          if (timeDateTDO) {
+            timeDateString = `${finalDateString} at ${timeString}`
+          }
+          setSparkTimeDateString(timeDateString);   
+
           let javascriptDate = new Date(timeDateValObj['year'], timeDateValObj['month'] - 1, timeDateValObj['day'], 0, 0, 0);
           let dateString = javascriptDate.toISOString();
           if (timeDateType == 'published') {
@@ -1825,8 +1841,8 @@ export default function SparkSummary({ route, navigation }) {
           <View style = {styles.row}>
             <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>{(sparkLeaderId != userId) ? sparkName : 'My Spark'}</Text>
           </View>
-          <View style={[styles.row, {marginLeft: "10%"}]}>
-            <View style={{marginLeft:"4%"}}>
+          <View style={[styles.row, {marginLeft: "5%"}]}>
+            <View style={{width: "30%", justifyContent: 'center', alignItems: 'center'}}>
               <ProfileImage 
                 ref = {profileImage} 
                 onTap = {() => navigation.navigate(Routes.publicProfile, {...props, selectedUserId: sparkLeaderId})}
@@ -1834,11 +1850,11 @@ export default function SparkSummary({ route, navigation }) {
                 userId = {null}
               />
             </View>
-            <View style={styles.column}>
-              <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13, marginRight: screenWidth/60}}>Date and Time</Text>
-              <View style={styles.row2}>
-                <Image style={{height: 20, width: 20, marginRight: "2%"}} source={require('../../../assets/locationpin.png')}></Image>
-                <Text style = {{flexWrap: "wrap", width: "75%", marginRight: "1%"}}>{sparkLocationString}</Text>
+            <View style={{width: "70%", padding: "2%", justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{fontSize: 20, fontWeight: '400'}}>{sparkTimeDateString}</Text>
+              <View style={{padding: "2%", flexDirection: 'row'}}>
+                <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
+                <Text style = {{width: "90%", padding: "2%", marginRight: "1%"}}>{sparkLocationString}</Text>
               </View>
             </View>
           </View>
@@ -1908,7 +1924,7 @@ const styles = StyleSheet.create({
   },
 
   topBorder:{
-    height: "35%",
+    padding: "1%",
     width: "100%",
     backgroundColor: "rgb(219, 233, 236)",
   },
@@ -1951,16 +1967,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     top: '25%',
     justifyContent: 'space-evenly'
-  },
-
-  row2: {
-    flexDirection: 'row',
-  },
-
-  column: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
   },
 
   profilePicture: {
