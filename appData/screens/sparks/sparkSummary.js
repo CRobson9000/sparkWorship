@@ -213,9 +213,12 @@ export default function SparkSummary({ route, navigation }) {
     update.current = {};
   }
 
+  const [editDisabled, setEditDisabled] = React.useState(false);
+
   async function getSparkData() {
     // setup info data
     let sparkData = await FirebaseButler.fbGet(`Sparks/${currentSparkId}`);
+    let sparkStatus = sparkData.status;
     let sparkInfoArray = Object.values(sparkData['info']);
     for (let i = 0; i < sparkInfoArray.length; i++) {
       let key = Object.keys(sparkData['info'])[i];
@@ -257,12 +260,20 @@ export default function SparkSummary({ route, navigation }) {
           }
           setSparkTimeDateString(timeDateString);   
 
-          let javascriptDate = new Date(timeDateValObj['year'], timeDateValObj['month'] - 1, timeDateValObj['day'], 0, 0, 0);
+          let javascriptDate = new Date(timeDateValObj['year'], timeDateValObj['month'] - 1, timeDateValObj['day'], timeDateValObj['hours'], timeDateValObj['minutes'], 0);
           let dateString = javascriptDate.toISOString();
           if (timeDateType == 'published') {
             globalPublishHours.current = timeDateValObj['hours'];
             globalPublishMinutes.current = timeDateValObj['minutes'];
             globalPublishDate.current = dateString
+
+            // disable the spark if the current date is greater than the published date
+            let currentDate = new Date();
+            let currMilli = currentDate.getTime();
+            let sparkMilli = javascriptDate.getTime();
+            if ((currMilli > sparkMilli && sparkStatus != 'renew') || status == 'published') {
+              setEditDisabled(true);  
+            }
           }
           else if (timeDateType == "rehearsal") {
             globalRehearsalHours.current = timeDateValObj['hours'];
@@ -1819,7 +1830,13 @@ export default function SparkSummary({ route, navigation }) {
       {/* Show "Edit Spark" button if the current user is the spark leader*/}
       {
         sparkLeaderId == userId &&
-        <TouchableOpacity style={profileStyles.constantButtons} onPress = { () => toggleReadWrite() }>
+        <TouchableOpacity 
+          style={[profileStyles.constantButtons, (editDisabled) ? {backgroundColor: 'grey'} : {backgroundColor: "rgb(0, 97, 117)"}]} 
+          onPress = { () => {
+            if (editDisabled == false) toggleReadWrite();
+            else console.log("Past publish date and time");
+          } 
+        }>
           <Text style={profileStyles.buttonText}> {(readMode) ? 'Edit Spark' : 'View Spark'} </Text>
         </TouchableOpacity> 
       }
