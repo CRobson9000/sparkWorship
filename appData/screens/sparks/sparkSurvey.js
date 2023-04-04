@@ -11,8 +11,6 @@ export default function Survey ({ route, navigation }) {
   let props = route.params;
   let userId = props?.userId;
 
-  
-
     //only run this method on the first render of the page
     //   useEffect(() => {
     //     const unsubscribe = navigation.addListener('focus', () => {

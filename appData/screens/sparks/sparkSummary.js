@@ -1287,21 +1287,41 @@ export default function SparkSummary({ route, navigation }) {
      }
 
     const ReadTimesRoute = () => {
+      let publishJavascriptDate = new Date(globalPublishDate.current);
+      let publishMonth = publishJavascriptDate.getMonth() + 1; 
+      let publishDay = publishJavascriptDate.getDate();
+      let publishYear = publishJavascriptDate.getFullYear();
+      let publishTDO = new TDO(globalPublishHours.current, globalPublishMinutes.current, 0, publishMonth, publishDay, publishYear);
+      let publishTimeDateString = `${publishTDO.getFormattedDate()} at ${publishTDO.getFormattedTime()}`;
+
+      let rehearsalJavascriptDate = new Date(globalRehearsalDate.current);
+      let rehearsalMonth = rehearsalJavascriptDate.getMonth() + 1; 
+      let rehearsalDay = rehearsalJavascriptDate.getDate();
+      let rehearsalYear = rehearsalJavascriptDate.getFullYear();
+      let rehearsalTDO = new TDO(globalRehearsalHours.current, globalRehearsalMinutes.current, 0, rehearsalMonth, rehearsalDay, rehearsalYear);
+      let rehearsalTimeDateString = `${rehearsalTDO.getFormattedDate()} at ${rehearsalTDO.getFormattedTime()}`;
+
+      let sparkJavascriptDate = new Date(globalSparkDate.current);
+      let sparkMonth = sparkJavascriptDate.getMonth() + 1; 
+      let sparkDay = sparkJavascriptDate.getDate();
+      let sparkYear = sparkJavascriptDate.getFullYear();
+      let sparkTDO = new TDO(globalSparkHours.current, globalSparkMinutes.current, 0, sparkMonth, sparkDay, sparkYear);
+      let sparkTimeDateString = `${sparkTDO.getFormattedDate()} at ${sparkTDO.getFormattedTime()}`;
       return(
         <View style = {{flex: 1, alignItems: "flex-start"}}>
           <Text style={{paddingLeft:"4%", paddingTop:"5%"}}>Times</Text>
           <View style = {{flex: 1, alignItems:"flex-start", flexDirection:"column", width:"100%"}}>
             <Text style = {{paddingHorizontal:"10%", fontFamily:"RNSMiles", paddingTop:"10%"}}>Publishing Time</Text>
             <View style = {{width:"100%", alignItems:"center", paddingBottom:"10%"}}>
-              <Text style = {{fontSize: screenWidth/16}}>MM/DD/YY at HH:MMXM</Text>
+              <Text style = {{fontSize: screenWidth/16}}>{publishTimeDateString}</Text>
             </View>
             <Text style = {{paddingLeft:"10%", fontFamily:"RNSMiles"}}>Rehearsal Time</Text>
             <View style = {{width:"100%", alignItems:"center", paddingBottom:"10%"}}>
-              <Text style = {{fontSize: screenWidth/16}}>MM/DD/YY at HH:MMXM</Text>
+              <Text style = {{fontSize: screenWidth/16}}>{rehearsalTimeDateString}</Text>
             </View>
             <Text style = {{paddingLeft:"10%", fontFamily:"RNSMiles"}}>Performance Time</Text>
             <View style = {{width:"100%", alignItems:"center", paddingBottom:"10%"}}>
-              <Text style = {{fontSize: screenWidth/16}}>MM/DD/YY at HH:MMXM</Text>
+              <Text style = {{fontSize: screenWidth/16}}>{sparkTimeDateString}</Text>
             </View>
           </View>
         </View>
