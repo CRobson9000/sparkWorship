@@ -46,11 +46,19 @@ function BottomTabNavigator( { route, navigation } ) {
         },
     
         header: ({navigation, route, options}) => {
+          function logout() {
+            navigation.reset({
+                index: 0,
+                routes: [{name: Routes.login}],
+            });
+            navigation.navigate(Routes.login);
+          }
+
           return (
             <View style = {[options.headerStyle]}>
               <Image style={{position: "absolute", height: 70, width: 220, left: "2%"}} source={require('../../../assets/logo2.png')}/>
               {/* <FeatherIcon icon="message-circle" size="24" style = {{position: "absolute", right: "5%"}} /> */}
-              <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}
+              <IconButton onPress = {() => logout()}
               icon = "logout" style = {{position: "absolute", right: "1%"}}/>
 
               <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}

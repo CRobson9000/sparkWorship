@@ -377,6 +377,19 @@ export default function PSPersonal({ route, navigation }) {
       }
     }
 
+    async function setupMessaging() {
+      // setup important variables
+      let peopleString = MyName;
+      let peopleLookup = {};
+      peopleLookup[selectedUserId] = true;
+      let context = {...props}
+
+      context['peopleLookup'] = peopleLookup;
+      context['peopleString'] = peopleString;
+
+      navigation.navigate(Routes.messaging, context);
+    }
+
     useEffect(() => {
       setupSelectedUserRole();
       setName();
@@ -405,7 +418,7 @@ export default function PSPersonal({ route, navigation }) {
           <View style={[profileStyles.row2, {justifyContent: 'space-evenly', marginLeft: 30, marginRight: 30, alignItems: 'center'}]}>
             <TouchableOpacity style={profileStyles.constantButtons} onPress = {() => logFriends}><Text style={profileStyles.buttonText}>Friends</Text></TouchableOpacity>
             <Image style={{height: 40, width:40}} source={require('../../../assets/addFriendIcon.png')}/>
-            <TouchableOpacity style={profileStyles.constantButtons}><Text style={profileStyles.buttonText}>Message</Text></TouchableOpacity>
+            <TouchableOpacity onPress = {() => setupMessaging()} style={profileStyles.constantButtons}><Text style={profileStyles.buttonText}>Message</Text></TouchableOpacity>
           </View>
         </View>
         <View style={{height: "100%", width: "100%"}}>
