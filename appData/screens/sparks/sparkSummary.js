@@ -281,6 +281,30 @@ export default function SparkSummary({ route, navigation }) {
             globalSparkHours.current = timeDateValObj['hours'];
             globalSparkMinutes.current = timeDateValObj['minutes'];
             globalSparkDate.current = dateString
+
+            let currDate = new Date();
+            // if (currDate.getTime() > javascriptDate.getTime()) {
+              let rolesRatingArray = []
+              for (let [role, roleData] of Object.entries(sparkData?.roles)) {
+                let roleObj = {};
+                if (role == 'spark_leader') {
+                  if (roleData != userId) continue;
+                  roleObj[role] = roleData;
+                  rolesRatingArray.push(roleObj);
+                  continue;
+                }
+                for (let [key, vals] of Object.entries(roleData)) {
+                  if (key == 'requests' || !vals.final) continue;
+                  let playerId = vals.final;
+                  if (playerId != userId) {
+                    roleObj[role] = playerId;
+                    rolesRatingArray.push(roleObj);
+                  }
+                  roleObj = {};
+                }
+              }
+              setShowRating(rolesRatingArray);
+            // }
           }
         }
       }
@@ -309,6 +333,7 @@ export default function SparkSummary({ route, navigation }) {
     }
   }
 
+  const [showRating, setShowRating] = React.useState(false);
   const [readMode, setReadMode] = React.useState(true);
   function toggleReadWrite() {
     setReadMode(!readMode);
@@ -1853,6 +1878,15 @@ export default function SparkSummary({ route, navigation }) {
       <View pointerEvents = {disable} style = {{height: "100%", width: "100%", opacity: contentOpacity}}>
         <View style={styles.topBorder}>
           <View style = {styles.row}>
+            {
+              showRating && 
+              <IconButton
+                style = {{left: "5%", top: "-30%", position: 'absolute'}}
+                onPress = {() => navigation.navigate(Routes.rating, {...props, people: showRating})} 
+                icon = {'account-star-outline'}
+                size = {40}
+              />
+            }
             <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>{(sparkLeaderId != userId) ? sparkName : 'My Spark'}</Text>
           </View>
           <View style={[styles.row, {marginLeft: "5%"}]}>
