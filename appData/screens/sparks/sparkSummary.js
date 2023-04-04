@@ -213,9 +213,12 @@ export default function SparkSummary({ route, navigation }) {
     update.current = {};
   }
 
+  const [editDisabled, setEditDisabled] = React.useState(false);
+
   async function getSparkData() {
     // setup info data
     let sparkData = await FirebaseButler.fbGet(`Sparks/${currentSparkId}`);
+    let sparkStatus = sparkData.status;
     let sparkInfoArray = Object.values(sparkData['info']);
     for (let i = 0; i < sparkInfoArray.length; i++) {
       let key = Object.keys(sparkData['info'])[i];
@@ -257,12 +260,17 @@ export default function SparkSummary({ route, navigation }) {
           }
           setSparkTimeDateString(timeDateString);   
 
-          let javascriptDate = new Date(timeDateValObj['year'], timeDateValObj['month'] - 1, timeDateValObj['day'], 0, 0, 0);
+          let javascriptDate = new Date(timeDateValObj['year'], timeDateValObj['month'] - 1, timeDateValObj['day'], timeDateValObj['hours'], timeDateValObj['minutes'], 0);
           let dateString = javascriptDate.toISOString();
           if (timeDateType == 'published') {
             globalPublishHours.current = timeDateValObj['hours'];
             globalPublishMinutes.current = timeDateValObj['minutes'];
             globalPublishDate.current = dateString
+
+            // disable the spark if the status is "published"
+            if (sparkStatus == 'published') {
+              setEditDisabled(true);  
+            }
           }
           else if (timeDateType == "rehearsal") {
             globalRehearsalHours.current = timeDateValObj['hours'];
@@ -273,6 +281,30 @@ export default function SparkSummary({ route, navigation }) {
             globalSparkHours.current = timeDateValObj['hours'];
             globalSparkMinutes.current = timeDateValObj['minutes'];
             globalSparkDate.current = dateString
+
+            let currDate = new Date();
+            // if (currDate.getTime() > javascriptDate.getTime()) {
+              let rolesRatingArray = []
+              for (let [role, roleData] of Object.entries(sparkData?.roles)) {
+                let roleObj = {};
+                if (role == 'spark_leader') {
+                  if (roleData != userId) continue;
+                  roleObj[role] = roleData;
+                  rolesRatingArray.push(roleObj);
+                  continue;
+                }
+                for (let [key, vals] of Object.entries(roleData)) {
+                  if (key == 'requests' || !vals.final) continue;
+                  let playerId = vals.final;
+                  if (playerId != userId) {
+                    roleObj[role] = playerId;
+                    rolesRatingArray.push(roleObj);
+                  }
+                  roleObj = {};
+                }
+              }
+              setShowRating(rolesRatingArray);
+            // }
           }
         }
       }
@@ -301,6 +333,7 @@ export default function SparkSummary({ route, navigation }) {
     }
   }
 
+  const [showRating, setShowRating] = React.useState(false);
   const [readMode, setReadMode] = React.useState(true);
   function toggleReadWrite() {
     setReadMode(!readMode);
@@ -1253,6 +1286,28 @@ export default function SparkSummary({ route, navigation }) {
       );
      }
 
+    const ReadTimesRoute = () => {
+      return(
+        <View style = {{flex: 1, alignItems: "flex-start"}}>
+          <Text style={{paddingLeft:"4%", paddingTop:"5%"}}>Times</Text>
+          <View style = {{flex: 1, alignItems:"flex-start", flexDirection:"column", width:"100%"}}>
+            <Text style = {{paddingHorizontal:"10%", fontFamily:"RNSMiles", paddingTop:"10%"}}>Publishing Time</Text>
+            <View style = {{width:"100%", alignItems:"center", paddingBottom:"10%"}}>
+              <Text style = {{fontSize: screenWidth/16}}>MM/DD/YY at HH:MMXM</Text>
+            </View>
+            <Text style = {{paddingLeft:"10%", fontFamily:"RNSMiles"}}>Rehearsal Time</Text>
+            <View style = {{width:"100%", alignItems:"center", paddingBottom:"10%"}}>
+              <Text style = {{fontSize: screenWidth/16}}>MM/DD/YY at HH:MMXM</Text>
+            </View>
+            <Text style = {{paddingLeft:"10%", fontFamily:"RNSMiles"}}>Performance Time</Text>
+            <View style = {{width:"100%", alignItems:"center", paddingBottom:"10%"}}>
+              <Text style = {{fontSize: screenWidth/16}}>MM/DD/YY at HH:MMXM</Text>
+            </View>
+          </View>
+        </View>
+      )
+    }
+
    
 
     const RequestsRoute = () => {
@@ -1605,12 +1660,15 @@ export default function SparkSummary({ route, navigation }) {
       }
 
       return (
-        <View style={[sparkViewStyles.sparkVerticalTest]}>
-          <FlatList
-            style = {{flex: 1}}
-            data = {volunteers}
-            renderItem = {renderVolunteer}
-          />
+        <View>
+          <Text style={{paddingLeft:"4%", paddingTop:"5%"}}>Volunteers</Text>
+          <View style={[sparkViewStyles.sparkVerticalTest]}>
+            <FlatList
+              style = {{flex: 1}}
+              data = {volunteers}
+              renderItem = {renderVolunteer}
+            />
+          </View>
         </View>
       );
     }
@@ -1761,7 +1819,7 @@ export default function SparkSummary({ route, navigation }) {
 
   const renderReadSceneSparkLeader = SceneMap({
       first: ReadLocationRoute,
-      second: TimesRoute,
+      second: ReadTimesRoute,
       third: ReadSetListRoute,
       fourth: VolunteersRoute,
       fifth: RequestsRoute
@@ -1776,7 +1834,7 @@ export default function SparkSummary({ route, navigation }) {
 
   const renderReadScene = SceneMap({
     first: ReadLocationRoute,
-    second: TimesRoute,
+    second: ReadTimesRoute,
     third: ReadSetListRoute,
     fourth: VolunteersRoute,
   });
@@ -1819,7 +1877,13 @@ export default function SparkSummary({ route, navigation }) {
       {/* Show "Edit Spark" button if the current user is the spark leader*/}
       {
         sparkLeaderId == userId &&
-        <TouchableOpacity style={profileStyles.constantButtons} onPress = { () => toggleReadWrite() }>
+        <TouchableOpacity 
+          style={[profileStyles.constantButtons, (editDisabled) ? {backgroundColor: 'grey'} : {backgroundColor: "rgb(0, 97, 117)"}]} 
+          onPress = { () => {
+            if (editDisabled == false) toggleReadWrite();
+            else console.log("Past publish date and time");
+          } 
+        }>
           <Text style={profileStyles.buttonText}> {(readMode) ? 'Edit Spark' : 'View Spark'} </Text>
         </TouchableOpacity> 
       }
@@ -1839,6 +1903,15 @@ export default function SparkSummary({ route, navigation }) {
       <View pointerEvents = {disable} style = {{height: "100%", width: "100%", opacity: contentOpacity}}>
         <View style={styles.topBorder}>
           <View style = {styles.row}>
+            {
+              showRating && 
+              <IconButton
+                style = {{left: "5%", top: "-30%", position: 'absolute'}}
+                onPress = {() => navigation.navigate(Routes.rating, {...props, people: showRating})} 
+                icon = {'account-star-outline'}
+                size = {40}
+              />
+            }
             <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>{(sparkLeaderId != userId) ? sparkName : 'My Spark'}</Text>
           </View>
           <View style={[styles.row, {marginLeft: "5%"}]}>

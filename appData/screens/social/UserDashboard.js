@@ -36,7 +36,7 @@ export default function UserDashboard({ route, navigation }) {
     let attendingSparksOBJs = await FirebaseButler.fbGet(`Users/${userId}/sparks/attending`) || {};
     let playingSparkOBJs = await FirebaseButler.fbGet(`Users/${userId}/sparks/playing`) || {}; 
     let sparksOBJs = {...attendingSparksOBJs, ...playingSparkOBJs};
-    
+
     if (Object.values(sparksOBJs).length > 0) {
       let sparkIds = Object.values(sparksOBJs);
       let localMarkedDates = {};
@@ -68,6 +68,48 @@ export default function UserDashboard({ route, navigation }) {
             let dateString = `${sparkTDO.TDO.year}-${month}-${day}`;
             localMarkedDates[dateString] = {marked: true}
             sparkObject['time'] = sparkTDO;
+          
+            // get published date to change spark from proposed to published
+            let timeDateValObj = sparkInfo?.times?.published.TDO;
+            let publishedTimeDate = new Date(timeDateValObj['year'], timeDateValObj['month'] - 1, timeDateValObj['day'], timeDateValObj['hours'], timeDateValObj['minutes'], 0);
+            let currTimeDate = new Date();
+            
+            /* Set status to published if the current date is passed the published date
+              The spark can only be published if:
+              - it's passed the publish time
+              - if all the roles have been filled
+              - if there's at least one song on the setlist
+            */
+            // all roles are filled
+            let allRolesFilled = true;
+            let sparkRoles = sparkData.roles;
+            for (let [roleName, roleData] of Object.entries(sparkRoles)) {
+              let roleNotFilled = false;
+              if (roleName != 'spark_leader') {
+                for (let [key, val] of Object.entries(roleData)) {
+                  if (key != 'request' && !val.final) {
+                    allRolesFilled = false;
+                    roleNotFilled = true;
+                    break;
+                  }
+                }
+              }
+              if (roleNotFilled) break;
+            }
+
+            // at least one song
+            let oneSong = sparkData?.info?.songs?.length != 0 || false;
+
+            if (currTimeDate.getTime() > publishedTimeDate.getTime()) {
+              const db = getDatabase();
+              const statusRef = ref(db, `Sparks/${sparkId}/status`);
+              if (oneSong && allRolesFilled) {  
+                await set(statusRef, 'published');
+              }
+              else {
+                await set(statusRef, 'renew');
+              }
+            }
           }
         }
       } 
