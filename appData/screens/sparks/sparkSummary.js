@@ -1290,9 +1290,19 @@ export default function SparkSummary({ route, navigation }) {
       return(
         <View style = {{flex: 1, alignItems: "flex-start"}}>
           <Text style={{paddingLeft:"4%", paddingTop:"5%"}}>Times</Text>
-          <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"column", width:"100%"}}>
-            <Text style = {{paddingRight:"5%", fontFamily:"RNSMiles"}}>Publishing Time</Text>
-            <Text style = {{paddingRight:"5%", fontFamily:"RNSMiles"}}>Dude Guy</Text>
+          <View style = {{flex: 1, alignItems:"flex-start", flexDirection:"column", width:"100%"}}>
+            <Text style = {{paddingHorizontal:"10%", fontFamily:"RNSMiles", paddingTop:"10%"}}>Publishing Time</Text>
+            <View style = {{width:"100%", alignItems:"center", paddingBottom:"10%"}}>
+              <Text style = {{fontSize: screenWidth/16}}>MM/DD/YY at HH:MMXM</Text>
+            </View>
+            <Text style = {{paddingLeft:"10%", fontFamily:"RNSMiles"}}>Rehearsal Time</Text>
+            <View style = {{width:"100%", alignItems:"center", paddingBottom:"10%"}}>
+              <Text style = {{fontSize: screenWidth/16}}>MM/DD/YY at HH:MMXM</Text>
+            </View>
+            <Text style = {{paddingLeft:"10%", fontFamily:"RNSMiles"}}>Performance Time</Text>
+            <View style = {{width:"100%", alignItems:"center", paddingBottom:"10%"}}>
+              <Text style = {{fontSize: screenWidth/16}}>MM/DD/YY at HH:MMXM</Text>
+            </View>
           </View>
         </View>
       )
@@ -1650,12 +1660,15 @@ export default function SparkSummary({ route, navigation }) {
       }
 
       return (
-        <View style={[sparkViewStyles.sparkVerticalTest]}>
-          <FlatList
-            style = {{flex: 1}}
-            data = {volunteers}
-            renderItem = {renderVolunteer}
-          />
+        <View>
+          <Text style={{paddingLeft:"4%", paddingTop:"5%"}}>Volunteers</Text>
+          <View style={[sparkViewStyles.sparkVerticalTest]}>
+            <FlatList
+              style = {{flex: 1}}
+              data = {volunteers}
+              renderItem = {renderVolunteer}
+            />
+          </View>
         </View>
       );
     }
