@@ -36,7 +36,7 @@ export default function UserDashboard({ route, navigation }) {
     let attendingSparksOBJs = await FirebaseButler.fbGet(`Users/${userId}/sparks/attending`) || {};
     let playingSparkOBJs = await FirebaseButler.fbGet(`Users/${userId}/sparks/playing`) || {}; 
     let sparksOBJs = {...attendingSparksOBJs, ...playingSparkOBJs};
-    
+
     if (Object.values(sparksOBJs).length > 0) {
       let sparkIds = Object.values(sparksOBJs);
       let localMarkedDates = {};
@@ -50,6 +50,9 @@ export default function UserDashboard({ route, navigation }) {
           sparkObject['name'] = sparkInfo?.name;   // then add other info on the same level as TDO
           sparkObject['id'] = sparkId;
 
+          // add spark location
+          sparkObject['location'] = sparkInfo?.location || null;
+
           // set spark leader id
           sparkObject['leaderId'] = sparkData.roles.spark_leader;
           allSparks.push(sparkObject);
@@ -58,10 +61,56 @@ export default function UserDashboard({ route, navigation }) {
           let sparkTDO = sparkInfo?.times?.spark
           if (sparkTDO) {
             //reformat each the spark date to match the markedDates for the calendar element, then push them to local object
-            let dateString = `20${sparkTDO.TDO.year}-${sparkTDO.TDO.month}-${sparkTDO.TDO.day}`;
+            let day = sparkTDO.TDO.day;
+            let month = sparkTDO.TDO.month;
+            if (parseInt(day) < 10) day = `0${day}`;
+            if (parseInt(month) < 10) month = `0${month}`;
+            let dateString = `${sparkTDO.TDO.year}-${month}-${day}`;
             localMarkedDates[dateString] = {marked: true}
+            sparkObject['time'] = sparkTDO;
+          
+            // get published date to change spark from proposed to published
+            let timeDateValObj = sparkInfo?.times?.published.TDO;
+            let publishedTimeDate = new Date(timeDateValObj['year'], timeDateValObj['month'] - 1, timeDateValObj['day'], timeDateValObj['hours'], timeDateValObj['minutes'], 0);
+            let currTimeDate = new Date();
+            
+            /* Set status to published if the current date is passed the published date
+              The spark can only be published if:
+              - it's passed the publish time
+              - if all the roles have been filled
+              - if there's at least one song on the setlist
+            */
+            // all roles are filled
+            let allRolesFilled = true;
+            let sparkRoles = sparkData.roles;
+            for (let [roleName, roleData] of Object.entries(sparkRoles)) {
+              let roleNotFilled = false;
+              if (roleName != 'spark_leader') {
+                for (let [key, val] of Object.entries(roleData)) {
+                  if (key != 'request' && !val.final) {
+                    allRolesFilled = false;
+                    roleNotFilled = true;
+                    break;
+                  }
+                }
+              }
+              if (roleNotFilled) break;
+            }
+
+            // at least one song
+            let oneSong = sparkData?.info?.songs?.length != 0 || false;
+
+            if (currTimeDate.getTime() > publishedTimeDate.getTime()) {
+              const db = getDatabase();
+              const statusRef = ref(db, `Sparks/${sparkId}/status`);
+              if (oneSong && allRolesFilled) {  
+                await set(statusRef, 'published');
+              }
+              else {
+                await set(statusRef, 'renew');
+              }
+            }
           }
-          // sparkObject['time'] = sparkTDO;
         }
       } 
 
@@ -75,15 +124,21 @@ export default function UserDashboard({ route, navigation }) {
   const renderSpark = (object) => {
     let item = object.item;
     //Date Time string formatting
-    // let sparkTimeObj = item.info?.times?.spark.TDO;
-    // let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
-    // let finalTime = sparkTDO.getFormattedTime();
-    // let finalDate = sparkTDO.getFormattedDateFormal();
-    // let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
+    let dateTimeString = "This spark has no time data"
+    if (item?.time) {
+        let sparkTimeObj = item.time.TDO;
+        let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
+        let finalTime = sparkTDO.getFormattedTime();
+        let finalDate = sparkTDO.getFormattedDateFormal();
+        dateTimeString = `${finalDate} at ${finalTime}`; 
+    }
 
     //Location formatting
-    // let locationObj = item.info.location;
-    // let locationString = `${locationObj?.address} ${locationObj?.city}, ${locationObj?.state} ${locationObj?.zip}`;
+    let locationString = "This spark has no location data";
+    if (item?.location) {
+        locationObj = item?.location;
+        locationString = `${locationObj?.address} ${locationObj?.city}, ${locationObj?.state} ${locationObj?.zip}`;
+    }
     
     return (
       <LinearGradient
@@ -200,7 +255,6 @@ export default function UserDashboard({ route, navigation }) {
 
 const dashboardStyles = StyleSheet.create({
   container: {
-    top: "-5%",
     width: "100%",
     height: "105%",
     justifyContent: "center",
@@ -224,10 +278,9 @@ const dashboardStyles = StyleSheet.create({
     width: "100%",
   },
   contentDashContainer: {
-    height: "40%",
+    height: "53%",
     width: "100%",
-    alignItems: "center"
-    // marginBottom: "5%"
+    alignItems: "center", 
   }
 });
 

@@ -17,13 +17,8 @@ const screenHeight = Dimensions.get('window').height;
 export default function SparkView({ route, navigation }) {
     let sparkMilage = 5;
     let props = route.params;
-    let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3"
-
-    const userLocation = {
-        city: "Mechanicsburg",
-        state: "Pennsylvania",
-        zip: 17055
-    };
+    let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+    let userRole = props?.role;
 
     const [sparks, setSparks] = React.useState({});
     const [sparksToShow, setSparksToShow] = React.useState(null);
@@ -31,26 +26,39 @@ export default function SparkView({ route, navigation }) {
     //spark code
     const renderSpark = (object) => {
         let item = object.item;
+        let sparkStartGradientColor = '#FFE5B4' 
         if (item.info) {
+            let sparkStatus = item.status;
+            // if the status is proposed, grey it out a bit.  If it's published, make it normal (orange to blue)
+            if (sparkStatus == 'proposed' || sparkStatus == 'renew') {
+                sparkStartGradientColor = '#DBE9EC';
+            }
+            
             //Date Time string formatting
-            // let sparkTimeObj = item.info?.times?.spark.TDO;
-            // let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
-            // let finalTime = sparkTDO.getFormattedTime();
-            // let finalDate = sparkTDO.getFormattedDateFormal();
-            // let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
+            let dateTimeString = "This spark has no time data"
+            if (item?.info?.times?.spark?.TDO) {
+                let sparkTimeObj = item.info?.times?.spark?.TDO;
+                let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
+                let finalTime = sparkTDO.getFormattedTime();
+                let finalDate = sparkTDO.getFormattedDateFormal();
+                dateTimeString = `${finalDate} at ${finalTime}`; 
+            }
             let sparkId = Object.keys(sparks)[object.index];
             let leaderId = item.roles.spark_leader;
 
             //Location formatting
-            let locationObj = item.info.location;
-            let locationString = `${locationObj?.address} ${locationObj?.city}, ${locationObj?.state} ${locationObj?.zip}`;
+            let locationString = "This spark has no location data";
+            if (item?.info?.location) {
+                locationObj = item.info.location;
+                locationString = `${locationObj?.address} ${locationObj?.city}, ${locationObj?.state} ${locationObj?.zip}`;
+            }
             
             return (
                 <TouchableOpacity onPress = {() => navigation.navigate(Routes.sparkSummary, {...props, currentSparkId: sparkId})} 
                     style={[sparkViewStyles.boxOne]}
                 >
                     <LinearGradient
-                        colors={['#FFE5B4', '#DBE9EC']}
+                        colors={[sparkStartGradientColor, '#DBE9EC']}
                         style={sparkViewStyles.container}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}  >
@@ -63,11 +71,11 @@ export default function SparkView({ route, navigation }) {
                                 <View style={sparkViewStyles.informationBox}>
                                     <View style={{position: "relative", flexDirection: "row", width: "30%", alignItems: "center"}}>
                                     <Image style={{height: 20, width: 20, position: "relative", /*left: "10%"*/}} source={require('../../../assets/locationpin.png')}></Image>
-                                        <Text>Ephrata, PA</Text>
+                                        <Text>{locationString}</Text>
                                     </View>
                                     <View style={sparkViewStyles.verticalLine}></View>
                                     <View style={{position: "relative", width: "30%", alignItems: "center"}}>
-                                        <Text>April 28, 2023 @ 8 p.m.</Text>
+                                        <Text>{dateTimeString}</Text>
                                     </View>
                                 </View>
                         </View>
@@ -208,7 +216,15 @@ export default function SparkView({ route, navigation }) {
 
     async function getSparks() {
         let fbSparks = await FirebaseButler.fbGet(`Sparks`);
-        delete fbSparks.id;
+
+        // if the role is an attender, only show published sparks
+        if (userRole == 'attendee') {
+            for (let [key, sparkData] of Object.entries(fbSparks)) {
+                // delete proposed and renewed sparks from the local list
+                if (sparkData.status != 'published') delete fbSparks[key];
+            }
+        }
+
         setSparks(fbSparks);
         setSparksToShow(Object.values(fbSparks));
     }

@@ -48,6 +48,7 @@ export default function SparkSummary({ route, navigation }) {
   // Top Section Info
   const [sparkName, setSparkName] = React.useState(null);
   const [sparkLocationString, setSparkLocationString] = React.useState(null);
+  const [sparkTimeDateString, setSparkTimeDateString] = React.useState(null);
   const [sparkLeaderId, setSparkLeaderId] = React.useState(null);
   const [attending, setAttending] = React.useState(false);
   const [playing, setPlaying] = React.useState(false);
@@ -212,9 +213,12 @@ export default function SparkSummary({ route, navigation }) {
     update.current = {};
   }
 
+  const [editDisabled, setEditDisabled] = React.useState(false);
+
   async function getSparkData() {
     // setup info data
     let sparkData = await FirebaseButler.fbGet(`Sparks/${currentSparkId}`);
+    let sparkStatus = sparkData.status;
     let sparkInfoArray = Object.values(sparkData['info']);
     for (let i = 0; i < sparkInfoArray.length; i++) {
       let key = Object.keys(sparkData['info'])[i];
@@ -232,7 +236,11 @@ export default function SparkSummary({ route, navigation }) {
         globalLocationTitle.current = value?.locationTitle;
         globalGoogleMapsLink.current = value?.googleMapsLink;
         // set location string for top area
-        setSparkLocationString(`${value.address} ${value.city}, ${value.state}`) || "No location set";
+        let locationString = "There was no location data provided for this spark"
+        if (value.address && value.city && value.state) {
+          locationString = `${value.address} ${value.city}, ${value.state}` 
+        }
+        setSparkLocationString(locationString);        
       }
       else if (key == "songs") {
         globalSongs.current = value;  
@@ -241,12 +249,28 @@ export default function SparkSummary({ route, navigation }) {
       else if (key == "times") {
         for (const [timeDateType, timeDateValTDO] of Object.entries(value)) {
           let timeDateValObj = timeDateValTDO.TDO;
-          let javascriptDate = new Date(timeDateValObj['year'], timeDateValObj['month'] - 1, timeDateValObj['day'], 0, 0, 0);
+
+          // set and create time string
+          let timeDateTDO = new TDO(0, 0, 0, 0, 0, 0, timeDateValObj);
+          let timeString = timeDateTDO.getFormattedTime();
+          let finalDateString = timeDateTDO.getFormattedDate();
+          let timeDateString = "There was no time data provided for this spark";
+          if (timeDateTDO) {
+            timeDateString = `${finalDateString} at ${timeString}`
+          }
+          setSparkTimeDateString(timeDateString);   
+
+          let javascriptDate = new Date(timeDateValObj['year'], timeDateValObj['month'] - 1, timeDateValObj['day'], timeDateValObj['hours'], timeDateValObj['minutes'], 0);
           let dateString = javascriptDate.toISOString();
           if (timeDateType == 'published') {
             globalPublishHours.current = timeDateValObj['hours'];
             globalPublishMinutes.current = timeDateValObj['minutes'];
             globalPublishDate.current = dateString
+
+            // disable the spark if the status is "published"
+            if (sparkStatus == 'published') {
+              setEditDisabled(true);  
+            }
           }
           else if (timeDateType == "rehearsal") {
             globalRehearsalHours.current = timeDateValObj['hours'];
@@ -257,6 +281,30 @@ export default function SparkSummary({ route, navigation }) {
             globalSparkHours.current = timeDateValObj['hours'];
             globalSparkMinutes.current = timeDateValObj['minutes'];
             globalSparkDate.current = dateString
+
+            let currDate = new Date();
+            // if (currDate.getTime() > javascriptDate.getTime()) {
+              let rolesRatingArray = []
+              for (let [role, roleData] of Object.entries(sparkData?.roles)) {
+                let roleObj = {};
+                if (role == 'spark_leader') {
+                  if (roleData != userId) continue;
+                  roleObj[role] = roleData;
+                  rolesRatingArray.push(roleObj);
+                  continue;
+                }
+                for (let [key, vals] of Object.entries(roleData)) {
+                  if (key == 'requests' || !vals.final) continue;
+                  let playerId = vals.final;
+                  if (playerId != userId) {
+                    roleObj[role] = playerId;
+                    rolesRatingArray.push(roleObj);
+                  }
+                  roleObj = {};
+                }
+              }
+              setShowRating(rolesRatingArray);
+            // }
           }
         }
       }
@@ -285,6 +333,7 @@ export default function SparkSummary({ route, navigation }) {
     }
   }
 
+  const [showRating, setShowRating] = React.useState(false);
   const [readMode, setReadMode] = React.useState(true);
   function toggleReadWrite() {
     setReadMode(!readMode);
@@ -1237,6 +1286,28 @@ export default function SparkSummary({ route, navigation }) {
       );
      }
 
+    const ReadTimesRoute = () => {
+      return(
+        <View style = {{flex: 1, alignItems: "flex-start"}}>
+          <Text style={{paddingLeft:"4%", paddingTop:"5%"}}>Times</Text>
+          <View style = {{flex: 1, alignItems:"flex-start", flexDirection:"column", width:"100%"}}>
+            <Text style = {{paddingHorizontal:"10%", fontFamily:"RNSMiles", paddingTop:"10%"}}>Publishing Time</Text>
+            <View style = {{width:"100%", alignItems:"center", paddingBottom:"10%"}}>
+              <Text style = {{fontSize: screenWidth/16}}>MM/DD/YY at HH:MMXM</Text>
+            </View>
+            <Text style = {{paddingLeft:"10%", fontFamily:"RNSMiles"}}>Rehearsal Time</Text>
+            <View style = {{width:"100%", alignItems:"center", paddingBottom:"10%"}}>
+              <Text style = {{fontSize: screenWidth/16}}>MM/DD/YY at HH:MMXM</Text>
+            </View>
+            <Text style = {{paddingLeft:"10%", fontFamily:"RNSMiles"}}>Performance Time</Text>
+            <View style = {{width:"100%", alignItems:"center", paddingBottom:"10%"}}>
+              <Text style = {{fontSize: screenWidth/16}}>MM/DD/YY at HH:MMXM</Text>
+            </View>
+          </View>
+        </View>
+      )
+    }
+
    
 
     const RequestsRoute = () => {
@@ -1589,12 +1660,15 @@ export default function SparkSummary({ route, navigation }) {
       }
 
       return (
-        <View style={[sparkViewStyles.sparkVerticalTest]}>
-          <FlatList
-            style = {{flex: 1}}
-            data = {volunteers}
-            renderItem = {renderVolunteer}
-          />
+        <View>
+          <Text style={{paddingLeft:"4%", paddingTop:"5%"}}>Volunteers</Text>
+          <View style={[sparkViewStyles.sparkVerticalTest]}>
+            <FlatList
+              style = {{flex: 1}}
+              data = {volunteers}
+              renderItem = {renderVolunteer}
+            />
+          </View>
         </View>
       );
     }
@@ -1745,7 +1819,7 @@ export default function SparkSummary({ route, navigation }) {
 
   const renderReadSceneSparkLeader = SceneMap({
       first: ReadLocationRoute,
-      second: TimesRoute,
+      second: ReadTimesRoute,
       third: ReadSetListRoute,
       fourth: VolunteersRoute,
       fifth: RequestsRoute
@@ -1760,7 +1834,7 @@ export default function SparkSummary({ route, navigation }) {
 
   const renderReadScene = SceneMap({
     first: ReadLocationRoute,
-    second: TimesRoute,
+    second: ReadTimesRoute,
     third: ReadSetListRoute,
     fourth: VolunteersRoute,
   });
@@ -1803,7 +1877,13 @@ export default function SparkSummary({ route, navigation }) {
       {/* Show "Edit Spark" button if the current user is the spark leader*/}
       {
         sparkLeaderId == userId &&
-        <TouchableOpacity style={profileStyles.constantButtons} onPress = { () => toggleReadWrite() }>
+        <TouchableOpacity 
+          style={[profileStyles.constantButtons, (editDisabled) ? {backgroundColor: 'grey'} : {backgroundColor: "rgb(0, 97, 117)"}]} 
+          onPress = { () => {
+            if (editDisabled == false) toggleReadWrite();
+            else console.log("Past publish date and time");
+          } 
+        }>
           <Text style={profileStyles.buttonText}> {(readMode) ? 'Edit Spark' : 'View Spark'} </Text>
         </TouchableOpacity> 
       }
@@ -1823,10 +1903,19 @@ export default function SparkSummary({ route, navigation }) {
       <View pointerEvents = {disable} style = {{height: "100%", width: "100%", opacity: contentOpacity}}>
         <View style={styles.topBorder}>
           <View style = {styles.row}>
+            {
+              showRating && 
+              <IconButton
+                style = {{left: "5%", top: "-30%", position: 'absolute'}}
+                onPress = {() => navigation.navigate(Routes.rating, {...props, people: showRating})} 
+                icon = {'account-star-outline'}
+                size = {40}
+              />
+            }
             <Text style={{fontSize: 25, fontWeight: '500', marginBottom: 10, color: "#006175"}}>{(sparkLeaderId != userId) ? sparkName : 'My Spark'}</Text>
           </View>
-          <View style={[styles.row, {marginLeft: "10%"}]}>
-            <View style={{marginLeft:"4%"}}>
+          <View style={[styles.row, {marginLeft: "5%"}]}>
+            <View style={{width: "30%", justifyContent: 'center', alignItems: 'center'}}>
               <ProfileImage 
                 ref = {profileImage} 
                 onTap = {() => navigation.navigate(Routes.publicProfile, {...props, selectedUserId: sparkLeaderId})}
@@ -1834,11 +1923,11 @@ export default function SparkSummary({ route, navigation }) {
                 userId = {null}
               />
             </View>
-            <View style={styles.column}>
-              <Text style={{fontSize: 20, fontWeight: '400', marginBottom: 13, marginRight: screenWidth/60}}>Date and Time</Text>
-              <View style={styles.row2}>
-                <Image style={{height: 20, width: 20, marginRight: "2%"}} source={require('../../../assets/locationpin.png')}></Image>
-                <Text style = {{flexWrap: "wrap", width: "75%", marginRight: "1%"}}>{sparkLocationString}</Text>
+            <View style={{width: "70%", padding: "2%", justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{fontSize: 20, fontWeight: '400'}}>{sparkTimeDateString}</Text>
+              <View style={{padding: "2%", flexDirection: 'row'}}>
+                <Image style={{height: 20, width: 20}} source={require('../../../assets/locationpin.png')}></Image>
+                <Text style = {{width: "90%", padding: "2%", marginRight: "1%"}}>{sparkLocationString}</Text>
               </View>
             </View>
           </View>
@@ -1908,7 +1997,7 @@ const styles = StyleSheet.create({
   },
 
   topBorder:{
-    height: "35%",
+    padding: "1%",
     width: "100%",
     backgroundColor: "rgb(219, 233, 236)",
   },
@@ -1951,16 +2040,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     top: '25%',
     justifyContent: 'space-evenly'
-  },
-
-  row2: {
-    flexDirection: 'row',
-  },
-
-  column: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
   },
 
   profilePicture: {
