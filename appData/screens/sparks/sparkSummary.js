@@ -664,14 +664,14 @@ export default function SparkSummary({ route, navigation }) {
       return (
         <KeyboardView backgroundColor = {"rgb(219, 233, 236)"} style = {{height: "100%", width: "100%"}}> 
           <ScrollView contentContainerStyle = {{margin: "5%", paddingBottom: "30%"}}>
-            <Text> Attachment Name </Text>
+            <Text style={{fontSize: 13, marginLeft: "5%", marginBottom: "1%"}}>Attachment Name</Text>
             <TextInput 
               value = {attachmentName} 
               placeholder = {attachmentName}
               style = {[styles.dialogBoxInputs, {height: "10%"}]} 
               onChangeText = {(text) => setAttachmentName(text)}
             />  
-            <Text style = {{fontSize: 12, margin: "5%"}}> Type </Text>
+            <Text style = {{fontSize: 13, marginLeft: "5%", marginTop: "5%", marginBottom: "3%"}}>Type</Text>
             <Dropdown
               style={styles.dialogDropDown} 
               data={["Lyrics", "Note", "Chord Chart", "Music"]} 
@@ -683,16 +683,16 @@ export default function SparkSummary({ route, navigation }) {
               value = {type}
             />
 
-            <Text style = {{fontSize: 12, margin: "5%"}}> Upload a File </Text>
+            <Text style = {{fontSize: 13, marginTop: "6%", marginLeft: "5%", marginBottom: "5%"}}>Upload a File</Text>
             <View style = {{width: "100%", height: "20%", alignItems: "center"}}>
               <TouchableHighlight onPress = {() => uploadFile()} style = {styles.uploadButtonDialog}>
-                  <Text> Choose a file </Text>
+                  <Text style={{color: "white"}}> Select File </Text>
               </TouchableHighlight> 
             </View>
-            <Text style = {{flexWrap: "wrap", fontSize: 15, margin: "2%"}}> {`File Name: ${(fileName) ? fileName : "You have not choosen a file"}`} </Text>
-            <Text style = {{width: "100%", textAlign: "center", fontSize: 20, margin: "5%"}}> Or </Text>
+            <Text style = {{flexWrap: "wrap", fontSize: 13, marginLeft: "5%"}}> {`File Name: ${(fileName) ? fileName : "You have not choosen a file"}`} </Text>
+            <Text style = {{width: "100%", textAlign: "center", fontSize: 20, marginTop: "10%", marginBottom: "10%"}}> OR </Text>
 
-            <Text style = {{fontSize: 12, margin: "5%"}}> Input a Link </Text>
+            <Text style = {{fontSize: 13, marginLeft: "6%", marginBottom: "2%"}}>Input a Link</Text>
             <TextInput 
               value = {link} 
               placeholder = {link}
@@ -705,7 +705,7 @@ export default function SparkSummary({ route, navigation }) {
             <TouchableOpacity style={[styles.dialogButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress = {() => addAttachment(props.songKey)}>
               <Text style={styles.buttonText}>Add</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.dialogButton, {backgroundColor: "red"}]} onPress = {() => closeDialog(addAttachmentDialog.current)}>
+            <TouchableOpacity style={[styles.dialogButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress = {() => closeDialog(addAttachmentDialog.current)}>
               <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
@@ -729,7 +729,7 @@ export default function SparkSummary({ route, navigation }) {
       return (
         <KeyboardView backgroundColor = {"rgb(219, 233, 236)"} style = {{height: "100%", width: "100%"}}> 
           <ScrollView contentContainerStyle = {{margin: "5%", paddingBottom: "20%"}}>
-            <Text> Song Name </Text>
+            <Text>Song Name</Text>
             <TextInput 
               value = {songName} 
               placeholder = {songName}
@@ -1916,7 +1916,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2905B",
     borderRadius: 10,
     height: "10%",
-    width: "30%"
+    width: "95%%", 
+    alignSelf: "center"
   },
 
   attachment: {
@@ -1946,20 +1947,18 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: "#F2905B",
     borderRadius: 10,
-    width: "100%",
+    width: "95%",
     height: "25%",
     alignSelf: "center",
-    margin: "4%", 
-    padding: "3%",
+    marginTop: "3%",
     fontSize: 12
   },
 
   uploadButtonDialog: {
-    backgroundColor: "#F2905B",
+    backgroundColor: "rgb(0, 97, 117)",
     borderRadius: 10,
-    padding: "5%",
-    alignSelf: "center",
     padding: "3%",
+    alignSelf: "center",
     fontSize: 12
   },
 
