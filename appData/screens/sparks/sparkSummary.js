@@ -267,11 +267,8 @@ export default function SparkSummary({ route, navigation }) {
             globalPublishMinutes.current = timeDateValObj['minutes'];
             globalPublishDate.current = dateString
 
-            // disable the spark if the current date is greater than the published date
-            let currentDate = new Date();
-            let currMilli = currentDate.getTime();
-            let sparkMilli = javascriptDate.getTime();
-            if ((currMilli > sparkMilli && sparkStatus != 'renew') || status == 'published') {
+            // disable the spark if the status is "published"
+            if (sparkStatus == 'published') {
               setEditDisabled(true);  
             }
           }

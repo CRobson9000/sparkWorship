@@ -17,13 +17,8 @@ const screenHeight = Dimensions.get('window').height;
 export default function SparkView({ route, navigation }) {
     let sparkMilage = 5;
     let props = route.params;
-    let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3"
-
-    const userLocation = {
-        city: "Mechanicsburg",
-        state: "Pennsylvania",
-        zip: 17055
-    };
+    let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
+    let userRole = props?.role;
 
     const [sparks, setSparks] = React.useState({});
     const [sparksToShow, setSparksToShow] = React.useState(null);
@@ -31,7 +26,14 @@ export default function SparkView({ route, navigation }) {
     //spark code
     const renderSpark = (object) => {
         let item = object.item;
+        let sparkStartGradientColor = '#FFE5B4' 
         if (item.info) {
+            let sparkStatus = item.status;
+            // if the status is proposed, grey it out a bit.  If it's published, make it normal (orange to blue)
+            if (sparkStatus == 'proposed' || sparkStatus == 'renew') {
+                sparkStartGradientColor = '#DBE9EC';
+            }
+            
             //Date Time string formatting
             let dateTimeString = "This spark has no time data"
             if (item?.info?.times?.spark?.TDO) {
@@ -56,7 +58,7 @@ export default function SparkView({ route, navigation }) {
                     style={[sparkViewStyles.boxOne]}
                 >
                     <LinearGradient
-                        colors={['#FFE5B4', '#DBE9EC']}
+                        colors={[sparkStartGradientColor, '#DBE9EC']}
                         style={sparkViewStyles.container}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}  >
@@ -214,7 +216,15 @@ export default function SparkView({ route, navigation }) {
 
     async function getSparks() {
         let fbSparks = await FirebaseButler.fbGet(`Sparks`);
-        delete fbSparks.id;
+
+        // if the role is an attender, only show published sparks
+        if (userRole == 'attendee') {
+            for (let [key, sparkData] of Object.entries(fbSparks)) {
+                // delete proposed and renewed sparks from the local list
+                if (sparkData.status != 'published') delete fbSparks[key];
+            }
+        }
+
         setSparks(fbSparks);
         setSparksToShow(Object.values(fbSparks));
     }
