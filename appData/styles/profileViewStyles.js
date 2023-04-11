@@ -26,7 +26,8 @@ const profileStyles = StyleSheet.create({
     fontWeight: '500', 
     marginBottom: "3%", 
     marginTop: "4%", 
-    alignSelf: "center"
+    alignSelf: "center",
+    fontFamily: "RNSMiles"
   },
 
   titleText: {
@@ -55,24 +56,24 @@ const profileStyles = StyleSheet.create({
   },
 
   // Text for information on the Church page
-    churchText: {
+  churchText: {
     alignSelf: "center", 
     marginTop: "5%",
     textAlign: 'center'
   }, 
 
   // Text for all buttons
-    buttonText: {
+  buttonText: {
     color: "white",
     fontSize: 12,
   },
 
   // Buttons within the top border
-    constantButtons:{
+  constantButtons:{
     backgroundColor: "rgb(0, 97, 117)",
     justifyContent: "center",
     alignItems: "center",
-    height: "42%",
+    height: "45%",
     width: "35%",
     marginTop: "2%",
     borderRadius: 10
@@ -84,21 +85,20 @@ const profileStyles = StyleSheet.create({
   },
 
   // Column for Profile Pictures, Name and Location
-    column1: {
+  column1: {
     flexDirection: 'column',
     marginTop: "3%"
   },
 
   accordian: {
     backgroundColor: '#F2905B',
-    margin: "2%",
-    borderRadius: 10,
-    flexDirection: "row",
-    alignItems: 'center'
+    width: "95%",
+    alignSelf: "center",
+    borderRadius: 10 
   },
 
   // The orange box that holds the social media logo and the user's handle
-    socialsBox: {
+  socialsBox: {
     backgroundColor: "#F2905B",
     borderRadius: 10,
     width: "85%",
@@ -110,7 +110,7 @@ const profileStyles = StyleSheet.create({
   },
 
   // Formatting for the social media logos on the socials page
-    socialsLogo: {
+  socialsLogo: {
     height: 40,
     width: 40,
     marginLeft: "5%",
@@ -118,10 +118,12 @@ const profileStyles = StyleSheet.create({
   },
 
   listItemContainer: {
-    backgroundColor: "white",
     backgroundColor: "#F9CBB1",
-    width: "85%",
-    marginLeft: "7%"
+    paddingBottom: "2%",
+    width: "90%",
+    alignSelf: "center",
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10
   },
 
   listItemHeader: {
@@ -130,7 +132,8 @@ const profileStyles = StyleSheet.create({
   },
 
   contentText: {
-    flexWrap: "wrap"
+    flexWrap: "wrap", 
+
   },
 
   listItemContent: {
@@ -138,7 +141,7 @@ const profileStyles = StyleSheet.create({
   },
 
   // Instrument text
-    headerText: {
+  headerText: {
     color: "black",
     justifyContent: "center",
     alignItems: "center",
@@ -150,9 +153,11 @@ const profileStyles = StyleSheet.create({
   },
 
   // Text for General Experience, Worship Experience, and Additional Notes
-    accordionHeaderText: {
+  accordionHeaderText: {
     fontSize: 15,
-    fontFamily: "RNSMiles"
+    fontFamily: "RNSMiles",
+    marginLeft: "3%",
+    marginTop: "3%"
   }
 
 });

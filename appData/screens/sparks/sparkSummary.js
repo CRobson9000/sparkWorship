@@ -760,20 +760,20 @@ export default function SparkSummary({ route, navigation }) {
       }
 
       return (
-        <KeyboardView backgroundColor = {"rgb(219, 233, 236)"} style = {{height: "100%", width: "100%"}}> 
+        <KeyboardView backgroundColor = {"rgb(219, 233, 236)"} style = {{height: "50%", width: "100%"}}> 
           <ScrollView contentContainerStyle = {{margin: "5%", paddingBottom: "20%"}}>
-            <Text>Song Name</Text>
+            <Text style={{fontSize: 13, marginLeft: "5%", marginTop: "5%", marginBottom: "1%"}}>Song Name</Text>
             <TextInput 
               value = {songName} 
               placeholder = {songName}
-              style = {styles.dialogBoxInputs} 
+              style = {[styles.dialogBoxInputs, {height: "30%", marginBottom: "3%", paddingLeft: "3%"}]} 
               onChangeText = {(text) => setSongName(text)}
             />  
-            <Text> Song Key </Text>
+            <Text style={{fontSize: 13, marginLeft: "5%", marginTop: "5%", marginBottom: "1%"}}>Song Key</Text>
             <TextInput 
               value = {key} 
               placeholder = {key}
-              style = {styles.dialogBoxInputs} 
+              style = {[styles.dialogBoxInputs, {height: "30%", paddingLeft: "3%"}]} 
               onChangeText = {(text) => setKey(text)}
             />   
           </ScrollView>  
@@ -781,7 +781,7 @@ export default function SparkSummary({ route, navigation }) {
             <TouchableOpacity style={[styles.dialogButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress = {() => addSong()}>
               <Text style={styles.buttonText}>Add</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.dialogButton, {backgroundColor: "red"}]} onPress = {() => closeDialog(addSongDialog.current)}>
+            <TouchableOpacity style={[styles.dialogButton, {backgroundColor: "rgb(0, 97, 117)"}]} onPress = {() => closeDialog(addSongDialog.current)}>
               <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
           </View>

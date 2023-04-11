@@ -325,7 +325,7 @@ export default function ProfileScreen({route, navigation}) {
                     renderItem={renderDropDownItem}
                     onChange = {(value) => setGender(value)}
                     placeholder={gender}
-                    placeholderStyle = {{fontWieight: 1, fontSize: 12}}
+                    placeholderStyle = {{fontWieight: 1, fontSize: 13}}
                     value={gender}
                     maxHeight = {"40%"}
                     itemTextStyle = {{fontSize: 2}}
@@ -338,8 +338,8 @@ export default function ProfileScreen({route, navigation}) {
                   <Input start = {inputs?.birthday?.getVal()} inputStyle = {styleSheet.birthdayInputBox} func = {(val) => inputs.birthday.setVal(val)}></Input>
               </View>
           </View>
-          <Text style={styleSheet.text1}> Street Address (Optional)</Text>
-          <Input start = {inputs?.streetAddress?.getVal()} inputStyle = {styleSheet.inputBox} func = {(val) => inputs.streetAddress.setVal(val)}/>
+          <Text style={styleSheet.text1}>Street Address (Optional)</Text>
+          <Input start = {inputs?.streetAddress?.getVal()} inputStyle = {[styleSheet.inputBox, {marginBottom: "2%"}]} func = {(val) => inputs.streetAddress.setVal(val)}/>
           <View style={[styleSheet.row2]}>
               <View style={styleSheet.column2}>
                   <Text style={styleSheet.text3}>City</Text>

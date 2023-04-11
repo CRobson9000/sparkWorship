@@ -58,7 +58,7 @@ const styleSheet = StyleSheet.create({
     // Reset Password and Authentication buttons
     screen2Buttons: {
       width: "85%",
-      backgroundColor: "rgb(0, 97, 117)",
+      backgroundColor: "rgb(0, 97, 117)", 
       justifyContent: "center",
       alignSelf: "center",
       alignItems: "center",
@@ -133,6 +133,7 @@ const styleSheet = StyleSheet.create({
       paddingLeft: "5%",
       height: "100%",
       width: "100%",
+      fontSize: 13
     },
   
     // Column for Gender and Birthday
@@ -166,13 +167,12 @@ const styleSheet = StyleSheet.create({
       borderRadius: 10,
       height: "25%",
       paddingLeft: "10%",
-      fontSize: 12
+      fontSize: 13
     },
   
     // Column for City, State and Zip Code
     column2 : {
       flexDirection: "column",
-      paddingTop: "2%",
       paddingBottom: "2%",
       width: "30%"
     },
@@ -180,21 +180,21 @@ const styleSheet = StyleSheet.create({
     // Labels for all input boxes except gender, birthday, city, state, zip code
     text1: {
       paddingBottom: "2%",
-      fontSize: 15,
-      marginLeft: "5%",
+      fontSize: 13,
+      marginLeft: "9%",
     },
   
     // Label for gender and birthday
     text2: {
       paddingBottom: "5%",
-      fontSize: 15,
+      fontSize: 13,
       left: "4%"
     },
   
     // Label for City, State and Zip Code
     text3: {
-      paddingBottom: "6%",
-      fontSize: 15,
+      marginBottom: "6%",
+      fontSize: 13,
       left: "10%"
     },
 
@@ -213,8 +213,8 @@ const styleSheet = StyleSheet.create({
       height: "8%",
       alignSelf: "center",
       marginBottom: "4%", 
-      padding: 10,
-      fontSize: 12
+      padding: "3%",
+      fontSize: 13
     },
   
     // Text for all buttons

@@ -30,16 +30,15 @@ export default function PSPersonal({ route, navigation }) {
     const MusicRoute = () => {
       function instrumentRender(object) {
         return(
-          <View style={[{margin: "5%"}]}>
+          <View style={[{marginLeft: "5%", marginRight: "5%", marginTop: "5%"}]}>
             <Collapse style={{flex: 1}}>
-              <CollapseHeader style = {[accordianStyles.accordian, {padding: "5%"}]}>
+              <CollapseHeader style = {[profileStyles.accordian, {padding: "5%"}]}>
                 <Text style = {{fontSize: 15}}>{object.item.instrumentName}</Text>
-                <List.Icon style = {{position: "absolute", top: "90%", right: "10%"}} color = {"gray"} icon = {"chevron-down"}/>
-                {/* <Text style={{color:"white", fontSize:20, paddingVertical:"2%"}}>Key: {object.item.key}</Text> */}
+                <List.Icon style = {{position: "absolute", top: "90%", right: "7%"}} color = {"gray"} icon = {"chevron-down"}/>
               </CollapseHeader>
-              <CollapseBody style={[accordianStyles.listItemContainer, {flex: 1}]}>
+              <CollapseBody style={[profileStyles.listItemContainer, {flex: 1}]}>
                 <View style={profileStyles.listItemHeader}>
-                  <Text style={[profileStyles.accordionHeaderText]}> General Experience </Text>
+                  <Text style={[profileStyles.accordionHeaderText]}>General Experience</Text>
                 </View>
                 <View style={profileStyles.listItemContent}>
                   <Text style={profileStyles.contentText}>
@@ -47,7 +46,7 @@ export default function PSPersonal({ route, navigation }) {
                   </Text>
                 </View>
                 <View style={profileStyles.listItemHeader}>
-                  <Text style={[profileStyles.accordionHeaderText]}> Worship Experience </Text>
+                  <Text style={[profileStyles.accordionHeaderText]}>Worship Experience</Text>
                 </View>
                 <View style={profileStyles.listItemContent}>
                   <Text style={profileStyles.contentText}>
@@ -55,7 +54,7 @@ export default function PSPersonal({ route, navigation }) {
                   </Text>
                 </View>
                 <View style={profileStyles.listItemHeader}>
-                  <Text style={[profileStyles.accordionHeaderText]}> Additional Notes </Text>
+                  <Text style={[profileStyles.accordionHeaderText]}>Additional Notes</Text>
                 </View>
                 <View style={profileStyles.listItemContent}>
                   <Text style={profileStyles.contentText}>
@@ -65,46 +64,6 @@ export default function PSPersonal({ route, navigation }) {
               </CollapseBody>
             </Collapse>
           </View>
-          // <List.Accordion
-          //   title={object.item.instrumentName}
-          //   style = {profileStyles.accordian}
-          //   titleStyle = {profileStyles.headerText}
-          // >
-          //   <View style = {{flex: 1, padding: "2%"}}> 
-          //     <View style={profileStyles.listItemContainer}>
-          //       <View style={profileStyles.listItemHeader}>
-          //         <Text style={[profileStyles.accordionHeaderText]}> General Experience </Text>
-          //       </View>
-          //       <View style={profileStyles.listItemContent}>
-          //         <Text style={profileStyles.contentText}>
-          //           {object.item.generalExperience}
-          //         </Text>
-          //       </View>
-          //     </View>
-
-          //     <View style={profileStyles.listItemContainer}>
-          //       <View style={profileStyles.listItemHeader}>
-          //         <Text style={[profileStyles.accordionHeaderText]}> Worship Experience </Text>
-          //       </View>
-          //       <View style={profileStyles.listItemContent}>
-          //         <Text style={profileStyles.contentText}>
-          //           {object.item.worshipExperience}
-          //         </Text>
-          //       </View>
-          //     </View>
-
-          //     <View style={[profileStyles.listItemContainer, {borderBottomLeftRadius: 10, borderBottomRightRadius: 10}]}>
-          //       <View style={profileStyles.listItemHeader}>
-          //         <Text style={[profileStyles.accordionHeaderText]}> Additional Notes </Text>
-          //       </View>
-          //       <View style={profileStyles.listItemContent}>
-          //         <Text style={profileStyles.contentText}>
-          //           {object.item.additionalNotes}
-          //         </Text>
-          //       </View>
-          //     </View>
-          //   </View>   
-          // </List.Accordion>
         );
       }
       return( 
@@ -327,19 +286,4 @@ export default function PSPersonal({ route, navigation }) {
       );
 }
 
-const accordianStyles = StyleSheet.create({
-  accordian: {
-    backgroundColor: '#F2905B',
-    margin: "2%",
-    marginBottom: 0,
-    borderRadius: 10 
-  },
-  listItemContainer: {
-    backgroundColor: "white",
-    backgroundColor: "#F9CBB1",
-    paddingBottom: "2%",
-    width: "85%",
-    marginLeft: "7%"
-  }
-})
 
