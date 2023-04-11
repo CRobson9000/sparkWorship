@@ -90,11 +90,14 @@ export default function SparkView({ route, navigation }) {
         let roleKey = role.split(' ').join('_');
         roleKey = roleKey.toLowerCase();
         let roles = spark['roles']?.[roleKey];
-        let rolesArray = Object.values(roles);
-        // filter out the "request" attribute in roles (because it doesn't have a 'final' attribute0)
-        let finalRoles = rolesArray.filter((currRole) => currRole.final !== undefined);
-        //return true or false based on whether the role is filled or not
-        if (finalRoles.length != 0 && finalRoles.some((currRole) => currRole.final.length == 0)) return true;
+        if (roles) {
+            let rolesArray = Object.values(roles);
+            // filter out the "request" attribute in roles (because it doesn't have a 'final' attribute0)
+            let finalRoles = rolesArray.filter((currRole) => currRole.final !== undefined);
+            //return true or false based on whether the role is filled or not
+            if (finalRoles.length != 0 && finalRoles.some((currRole) => currRole.final.length == 0)) return true;
+            else return false;
+        }
         else return false;
     }
     
@@ -106,8 +109,8 @@ export default function SparkView({ route, navigation }) {
         let userCity = await FirebaseButler.fbGet(`Users/${userId}/info/city`) || null;
         if (userState && userCity) {
             for (let spark of inputSparks) {    
-                let sparkCity = spark.info?.location.city;
-                let sparkState = spark.info?.location.state;
+                let sparkCity = spark.info?.location?.city;
+                let sparkState = spark.info?.location?.state;
                 
                 // get distance data
                 var axios = require('axios');

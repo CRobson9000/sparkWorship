@@ -7,6 +7,7 @@ import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 import { KeyboardView } from '../../components/components.js'
 import ProfileImage from '../../components/profileImage.js';
 import { IconButton } from 'react-native-paper';
+import Routes from '../Navigation/constants/Routes.js';
 
 export default function Survey ({ route, navigation }) {
   let props = route.params;
@@ -172,7 +173,7 @@ export default function Survey ({ route, navigation }) {
             />
             <Text style={[styles.smallText, {marginTop: "2%", marginBottom: "0%"}]}>1                   2                   3                   4                  5</Text>
             <Text style={[styles.smallText, {marginTop: "10%", marginBottom: "7%"}]}>Thank you for your honest feedback!</Text>
-            <TouchableOpacity style={styles.submitButton}><Text style={styles.buttonText}>Submit</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.submitButton} onPress = {() => navigation.navigate("Navigator", props)}><Text style={styles.buttonText}>Submit</Text></TouchableOpacity>
         </ScrollView> 
     </View>
 )}
