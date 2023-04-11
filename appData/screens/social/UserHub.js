@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, StyleSheet, Dimensions, Image } from 'react-native';
+import { Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ScrollView, StyleSheet, Dimensions, Image } from 'react-native';
 import React, { useEffect } from 'react';
 import { useDeviceOrientation } from '@react-native-community/hooks';
 // import { LinearGradient } from 'expo-linear-gradient';
@@ -31,37 +31,81 @@ export default function UserHub({ route, navigation }) {
     let item = object.item.info;
     let musicianId = object.item.id;
     if (item) {
-      //Location formatting
-      let locationString = `${item.city}, ${item.state} ${item.zipCode}`;
+      // Icon mapping
+      let iconMapping = {
+        "Piano": "piano",
+        "Bass" : "guitar-pick",
+        "Acoustic guitar": "guitar-acoustic",
+        "Electric guitar": "guitar-electric",
+        "Drums": "alpha-d-circle",
+        "Vocalist": "microphone-variant"
+      }
+
+      let finalInstrumentIcons = [];
+      let instruments = item?.instruments || [];
+      for (let instrument of instruments) {
+        let instrumentName = instrument.instrumentName;
+        let icon = iconMapping[instrumentName];
+        finalInstrumentIcons.push({name: instrumentName, icon});
+      }
+
+      const renderIconList = (object) => {
+        let instrument = object.item;
+        return (
+          <View style = {{alignItems: "center", padding: "2%"}}>
+            <IconButton
+              size = {20}
+              icon = {instrument.icon}
+            />
+            <Text style = {{fontSize: 10}}>{instrument.name}</Text>
+          </View>
+        )
+      }
+      
+      // Location formatting
+      let address = item?.address || '';
+      let state = item?.state;
+      let city = item?.city;
+      let zip = item?.zipCode;
+      let locationString = "This user has no location data";
+      if (city && state && zip) locationString = `${address} ${city}, ${state} ${zip}`;
       return (
-          <TouchableOpacity onPress = {() => navigation.navigate(Routes.publicProfile, {...props, selectedUserId: musicianId})} style={[musicianStyles.boxOne]}>
-              <LinearGradient
-                        colors={['#FFE5B4', '#DBE9EC']}
-                        style={musicianStyles.container}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 1 }}>
-                  <View style={{width: "100%", paddingBottom: "10%", alignItems:"center", flexDirection: "column", justifyContent: "center"}}>
-                  
+        <View style={[musicianStyles.boxOne]}>  
+          <LinearGradient
+            colors={['#FFE5B4', '#DBE9EC']}
+            style={musicianStyles.container}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+              <View style={{width: "100%", paddingBottom: "10%", alignItems:"center", flexDirection: "column", justifyContent: "center"}}>
+                  <View style = {{flexDirection: 'row', width: '100%', alignItems: "center"}}>
+                    <TouchableOpacity onPress = {() => navigation.navigate(Routes.publicProfile, {...props, selectedUserId: musicianId})} style={{padding: '2%', width: '100%', alignItems: 'center'}}>
                       <View style={{padding: "2%", margin: "5%"}}>
                           <ProfileImage userId = {musicianId} size = {"medium"}/>
                       </View>
                       <Text style={[musicianStyles.boxText, musicianStyles.topText]}> {item.name || "No Name"} </Text>
-                      {/* <Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>Featuring Billy Joel</Text> */}
-                      {/*<Text style={[sparkViewStyles.boxText, sparkViewStyles.notTopText]}>{locationString}</Text>  */}
-                      <View style={musicianStyles.informationBox}>
-                          <View style={{position: "relative", flexDirection: "row", width: "30%", alignItems: "center"}}>
-                          <Image style={{height: 20, width: 20, position: "relative", /*left: "10%"*/}} source={require('../../../assets/locationpin.png')}></Image>
-                            <Text>Ephrata, PA</Text>
-                          </View>
-                          <View style={musicianStyles.verticalLine}></View>
-                          <View style={{position: "relative", width: "30%", alignItems: "center"}}>
-                          <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}
-                            icon = "piano"/>
-                          </View>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={musicianStyles.informationBox}>
+                      <View style={{position: "relative", flexDirection: "row", width: "30%", alignItems: "center"}}>
+                        <Image style={{height: 20, width: 20, position: "relative"}} source={require('../../../assets/locationpin.png')}></Image>
+                        <Text>{locationString}</Text>
+                      </View>
+                      <View style={musicianStyles.verticalLine}></View>
+                      <View style={{position: "relative", flexDirection: "row", width: "35%"}}>
+                        <ScrollView>
+                          <FlatList
+                            data = {finalInstrumentIcons}
+                            horizontal = {true}
+                            style = {{flex: 1}}
+                            renderItem = {renderIconList} 
+                          />
+                        </ScrollView>
                       </View>
                   </View>
-              </LinearGradient>
-          </TouchableOpacity>
+              </View>
+          </LinearGradient>
+        </View>
       )
     }
   }
