@@ -11,6 +11,9 @@ import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react
 
 import ProfileImage from '../../components/profileImage.js';
 import { profileStyles } from '../../styles/profileViewStyles';
+import {LinearGradient} from 'expo-linear-gradient';
+
+
 
 const screenWidth = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -108,14 +111,61 @@ export default function PSPersonal({ route, navigation }) {
           //Location formatting
           // let locationObj = item.info.location;
           // let locationString = `${locationObj?.address} ${locationObj?.city}, ${locationObj?.state} ${locationObj?.zip}`;
-          
+          // <LinearGradient
+          //               colors={['#FFE5B4', '#DBE9EC']}
+          //               style={sparkViewStyles.container}
+          //               start={{ x: 0, y: 0 }}
+          //               end={{ x: 1, y: 1 }}  >
+
+          //     <View style={{width: "100%", paddingBottom: "10%", alignItems:"center", flexDirection: "column", justifyContent: "center"}}>
+          //                       <View style={{padding: "2%", margin: "5%"}}>
+          //                            <ProfileImage userId = {item.leaderId} size = {"medium"}/>
+          //                       </View>
+          //                       <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name} </Text>
+          //                       <View style={sparkViewStyles.informationBox}>
+          //                           <View style={{position: "relative", flexDirection: "row", width: "30%", alignItems: "center"}}>
+          //                           <Image style={{height: 20, width: 20, position: "relative", /*left: "10%"*/}} source={require('../../../assets/locationpin.png')}></Image>
+          //                               <Text>{item.locationString}</Text>
+          //                           </View>
+          //                           <View style={sparkViewStyles.verticalLine}></View>
+          //                           <View style={{position: "relative", width: "30%", alignItems: "center"}}>
+          //                               <Text>{item.dateTimeString}</Text>
+          //                           </View>
+          //                       </View>
+          //     </View>
           <TouchableOpacity 
             onPress = {() => navigation.navigate(Routes.sparkSummary, {...props, currentSparkId: item.id})} 
             style={[sparkViewStyles.boxOne]}
           >
-            <ProfileImage userId = {item.leaderId} size = {"medium"}/>
-            <Text style={sparkViewStyles.boxText}> {item.name} </Text>
-            <Text style={{left: "30%"}}> More</Text>
+
+                <LinearGradient
+                        colors={['#FFE5B4', '#DBE9EC']}
+                        style={sparkViewStyles.container}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}  >
+
+                      <View style={{width: "100%", paddingBottom: "10%", alignItems:"center", flexDirection: "column", justifyContent: "center"}}>
+                          <View style={{padding: "2%", margin: "5%"}}>
+                            <ProfileImage userId = {item.leaderId} size = {"medium"}/>
+                          </View>
+                          <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name} </Text>
+                            <View style={sparkViewStyles.informationBox}>
+                              <View style={{position: "relative", flexDirection: "row", width: "30%", alignItems: "center"}}>
+                                <Image style={{height: 20, width: 20, position: "relative", right: "100%"}} source={require('../../../assets/locationpin.png')}></Image>
+                                    <Text>{item.locationString}</Text>
+                                    <Text>Ephrata, PA</Text>
+                              </View>
+                            {/* <View style={sparkViewStyles.verticalLine}></View> */}
+                            <View style={{position: "relative", /*width: "30%",*/ alignItems: "center"}}>
+                                <Text>{item.dateTimeString}</Text>
+                                <Text>April 24, 2023</Text>
+                            </View>
+                          </View>
+                        </View>
+              </LinearGradient>
+            {/* <ProfileImage userId = {item.leaderId} size = {"medium"}/> */}
+            {/* <Text style={sparkViewStyles.boxText}> {item.name} </Text>
+            <Text style={{left: "30%"}}> More</Text> */}
           </TouchableOpacity> 
         );            
       }
@@ -452,20 +502,50 @@ const accordianStyles = StyleSheet.create({
 
 // Note this will be removed when I (Colin) pull the sparks out into their own component
 const sparkViewStyles = StyleSheet.create({
+  // boxOne:
+  // {
+  //   backgroundColor: "#DBE9EC",
+  //   padding: "3%",
+  //   borderRadius: 30,
+  //   flexDirection: "column",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   margin: "5%"
+  // },
   boxOne:
-  {
-    backgroundColor: "#DBE9EC",
-    padding: "3%",
+    {
+        // backgroundColor: "#FFE5B4",
+        flex: 1,
+        // padding: "5%",
+        borderRadius: 30,
+        flexDirection: "row",
+        // justifyContent: "space-between",
+        alignItems: "center",
+        margin: "5%"
+    },
+  container: {
+    flex: 1,
+    alignItems: 'center',
     borderRadius: 30,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    margin: "5%"
+    justifyContent: 'center',
   },
+  // boxText:{
+  //   padding: "5%",
+  //   fontSize: height/70,
+  //   fontFamily: "RNSMiles",
+  //   fontWeight: "bold"
+  // }
   boxText:{
-    padding: "5%",
-    fontSize: height/70,
-    fontFamily: "RNSMiles",
-    fontWeight: "bold"
+    marginBottom: "2%",
+    padding: "2%",
+    fontSize: height/70
+  },
+  verticalLine: {
+    height: '30%',
+    width: 2,
+    backgroundColor: '#909090',
+    alignItems: "center",
+    position: "relative",
+    // right: "52%"
   }
 });

@@ -16,6 +16,7 @@ import { Calendar } from 'react-native-calendars';
 // Linear Gradient Import
 import {LinearGradient} from 'expo-linear-gradient';
 
+
 //import for database stuff
 import { getDatabase, ref, set, get, push, onValue } from 'firebase/database';
 
@@ -143,7 +144,7 @@ export default function UserDashboard({ route, navigation }) {
     return (
       <LinearGradient
                         colors={['#FFE5B4', '#DBE9EC']}
-                        style={sparkViewStyles.container}
+                        style={dashboardStyles.container2}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}  >
 
@@ -151,13 +152,13 @@ export default function UserDashboard({ route, navigation }) {
                                 <View style={{padding: "2%", margin: "5%"}}>
                                      <ProfileImage userId = {item.leaderId} size = {"medium"}/>
                                 </View>
-                                <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name} </Text>
-                                <View style={sparkViewStyles.informationBox}>
+                                <Text style={[dashboardStyles.boxText, dashboardStyles.topText]}> {item?.info?.name} </Text>
+                                <View style={dashboardStyles.informationBox}>
                                     <View style={{position: "relative", flexDirection: "row", width: "30%", alignItems: "center"}}>
                                     <Image style={{height: 20, width: 20, position: "relative", /*left: "10%"*/}} source={require('../../../assets/locationpin.png')}></Image>
                                         <Text>Ephrata, PA</Text>
                                     </View>
-                                    <View style={sparkViewStyles.verticalLine}></View>
+                                    <View style={dashboardStyles.verticalLine}></View>
                                     <View style={{position: "relative", width: "30%", alignItems: "center"}}>
                                         <Text>April 28, 2023 @ 8 p.m.</Text>
                                     </View>
@@ -266,6 +267,9 @@ const dashboardStyles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 30,
     justifyContent: 'center',
+    margin: '2%',
+    // width: '80%',
+    // padding: '2%',
   },
   dashboardHeader: {
     height: "7%",
@@ -277,6 +281,42 @@ const dashboardStyles = StyleSheet.create({
     height: "40%",
     width: "100%",
   },
+  // veryTopBox:{
+  //   marginTop: "5%",
+  // },
+
+  boxText:{
+    // marginBottom: "2%",
+    // padding: "2%",
+    fontSize: screenHeight/70
+  },
+  
+  topText:{
+    // fontSize: 12
+    fontFamily: "RNSMiles",
+    fontWeight: "bold",
+    color: "#e56a17",
+    fontSize: 20
+    },
+
+    informationBox:
+    {
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        // paddingTop: "2%",
+        // paddingBottom: "2%",
+        width: "100%",
+    },
+
+    verticalLine: {
+      height: '90%',
+      width: 2,
+      backgroundColor: '#909090',
+      alignItems: "center",
+      position: "relative",
+    },
+    
   contentDashContainer: {
     height: "53%",
     width: "100%",

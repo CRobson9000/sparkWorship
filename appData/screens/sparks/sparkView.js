@@ -397,22 +397,6 @@ const sparkViewStyles = StyleSheet.create({
         borderRadius: 30,
         justifyContent: 'center',
       },
-    // boxOne:
-    // {
-    //     backgroundColor: "#DBE9EC",
-    //     padding: "3%",
-    //     borderRadius: 30,
-    //     flexDirection: "column",
-    //     justifyContent: "center",
-    //     alignItems: "center",
-    //     margin: "5%"
-    // },
-    // boxText:{
-    //     padding: "5%",
-    //     fontSize: screenHeight/70,
-    //     fontFamily: "RNSMiles",
-    //     fontWeight: "bold"
-    // },
 
     boxOne:
     {

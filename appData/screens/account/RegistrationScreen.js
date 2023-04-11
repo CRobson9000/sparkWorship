@@ -1,9 +1,14 @@
-import { Image, StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
+import { Image, StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Alert, Modal, Pressable } from 'react-native';
 import React, { useRef } from 'react';
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, sendEmailVerification } from "@firebase/auth";
 
 //import statements for styles
 import { stylesPortrait } from "../../styles/portrait";
+
+import { IconButton } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Ionicons';
+
+// import {Alert, Modal, Pressable} from 'react-native';
 
 // import { stylesLandscape } from "./styles/landscape.js";
 import { Dimensions, TouchableHighlight } from 'react-native';
@@ -27,6 +32,9 @@ export default function RegistrationScreen({ navigation }) {
   /*------------------------------------------------*/
   /*----------BACK-END APP CODE ----------*/
   /*------------------------------------------------*/
+
+  const [modalVisible, setModalVisible] = React.useState(false);
+
   const [role, setRole] = React.useState("Select a role");
   let name = "";
   let email = "";
@@ -256,7 +264,61 @@ export default function RegistrationScreen({ navigation }) {
             />
             <Input placeHolderText={"First and Last Name"} secure={false} func= {(val) => name = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
             <Input placeHolderText={"Email"} secure={false} func= {(val) => email = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+            <View style={regStyles.centeredView}>
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                  Alert.alert('Modal has been closed.');
+                  setModalVisible(!modalVisible);
+                }}>
+                <View style={regStyles.centeredView}>
+                  <View style={regStyles.modalView}>
+                    <Text style={regStyles.modalText}> You can always change your username later!</Text>
+                    <Pressable
+                      style={[regStyles.button, regStyles.buttonClose]}
+                      onPress={() => setModalVisible(!modalVisible)}>
+                      <Text style={regStyles.textStyle}>Exit</Text>
+                    </Pressable>
+                  </View>
+                </View>
+              </Modal>
+              <Pressable
+                style={[regStyles.button, regStyles.buttonOpen]}
+                onPress={() => setModalVisible(true)}>
+                <Text style={regStyles.textStyle}>i</Text>
+              </Pressable>
+          </View>
             <Input placeHolderText={"Username"} secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
+            <View style={regStyles.centeredView}>
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                  Alert.alert('Modal has been closed.');
+                  setModalVisible(!modalVisible);
+                }}>
+                <View style={regStyles.centeredView}>
+                  <View style={regStyles.modalView}>
+                    <Text style={regStyles.modalText}> Your password must be at least 8 characters long.
+                                                      Your password must contain at least one uppercase letter, one lowercase letter, and one number.
+                                                      Your password must not contain your username or any personal information.</Text>
+                    <Pressable
+                      style={[regStyles.button, regStyles.buttonClose]}
+                      onPress={() => setModalVisible(!modalVisible)}>
+                      <Text style={regStyles.textStyle}>Exit</Text>
+                    </Pressable>
+                  </View>
+                </View>
+              </Modal>
+              <Pressable
+                style={[regStyles.button, regStyles.buttonOpen]}
+                onPress={() => setModalVisible(true)}>
+                <Text style={regStyles.textStyle}>i</Text>
+              </Pressable>
+          </View>
             <Input placeHolderText={"Password"} secure={false} func={(val) => password = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
             <Input placeHolderText={"Confirm Password"} secure={false} func={(val) => confirmPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
             <TouchableOpacity onPress = {() => {signUp(navigation)}} style={stylesPortrait.button}>
@@ -280,6 +342,50 @@ const regStyles = StyleSheet.create({
     height: "10%",
     marginBottom: "4%",
     left: "25%"
+},
+
+centeredView: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'left',
+  left: "10%",
+  marginBottom: "2%",
+},
+modalView: {
+  margin: 20,
+  backgroundColor: 'white',
+  borderRadius: 20,
+  padding: 35,
+  alignItems: 'center',
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 4,
+  elevation: 5,
+},
+button: {
+  borderRadius: 20,
+  padding: 10,
+  elevation: 2,
+},
+buttonOpen: {
+  backgroundColor: '#DBE9EC',
+},
+buttonClose: {
+  backgroundColor: '#2196F3',
+},
+textStyle: {
+  color: '#006175',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  fontSize: '9'
+},
+modalText: {
+  marginBottom: 15,
+  textAlign: 'center',
 },
 });
 
