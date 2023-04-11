@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, Fl
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { List, IconButton } from 'react-native-paper';
 import Routes from '../Navigation/constants/Routes';
-import { FirebaseButler, PushNotify } from '../../components/classes';
+import { FirebaseButler, PushNotify, TDO } from '../../components/classes';
 import { getDatabase, ref, set, get, push } from 'firebase/database';
 import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storageRef } from '../../../config/additionalMethods';
@@ -53,14 +53,18 @@ export default function PSPersonal({ route, navigation }) {
         for (let id of playingSparks) {
           let leaderId = await FirebaseButler.fbGet(`Sparks/${id}/roles/spark_leader`);
           let name = await FirebaseButler.fbGet(`Sparks/${id}/info/name`);
-          finalSparks[0].sparks.push({name, leaderId, id})
+          let location = await FirebaseButler.fbGet(`Sparks/${id}/info/location`);
+          let time = await FirebaseButler.fbGet(`Sparks/${id}/info/times/spark`);
+          finalSparks[0].sparks.push({name, leaderId, id, time, location})
         }
 
         let attendingSparks = Object.values(startSparks?.attending || []);
         for (let id in attendingSparks) {
           let leaderId = await FirebaseButler.fbGet(`Sparks/${id}/roles/spark_leader`);
           let name = await FirebaseButler.fbGet(`Sparks/${id}/info/name`);
-          finalSparks[1].sparks.push({name, leaderId, id})
+          let location = await FirebaseButler.fbGet(`Sparks/${id}/info/location`);
+          let time = await FirebaseButler.fbGet(`Sparks/${id}/info/times/spark`);
+          finalSparks[1].sparks.push({name, leaderId, id, location, time})
         }
 
         setSparksWithTypes([...finalSparks]);
@@ -100,72 +104,50 @@ export default function PSPersonal({ route, navigation }) {
       }
       const renderSpark = (object) => {
         let item = object.item;
+        //Date Time string formatting
+        let dateTimeString = "This spark has no time data"
+        if (item?.time?.TDO) {
+            let sparkTimeObj = item.time.TDO;
+            let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
+            let finalTime = sparkTDO.getFormattedTime();
+            let finalDate = sparkTDO.getFormattedDateFormal();
+            dateTimeString = `${finalDate} at ${finalTime}`; 
+        }
+
+        //Location formatting
+        let locationString = "This spark has no location data";
+        if (item?.location) {
+            locationObj = item?.location;
+            locationString = `${locationObj?.address} ${locationObj?.city}, ${locationObj?.state} ${locationObj?.zip}`;
+        }
         return (
-          //Date Time string formatting
-          // let sparkTimeObj = item.info?.times?.spark.TDO;
-          // let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
-          // let finalTime = sparkTDO.getFormattedTime();
-          // let finalDate = sparkTDO.getFormattedDateFormal();
-          // let finalDateTime = `Starting at ${finalTime} on ${finalDate}`; 
-
-          //Location formatting
-          // let locationObj = item.info.location;
-          // let locationString = `${locationObj?.address} ${locationObj?.city}, ${locationObj?.state} ${locationObj?.zip}`;
-          // <LinearGradient
-          //               colors={['#FFE5B4', '#DBE9EC']}
-          //               style={sparkViewStyles.container}
-          //               start={{ x: 0, y: 0 }}
-          //               end={{ x: 1, y: 1 }}  >
-
-          //     <View style={{width: "100%", paddingBottom: "10%", alignItems:"center", flexDirection: "column", justifyContent: "center"}}>
-          //                       <View style={{padding: "2%", margin: "5%"}}>
-          //                            <ProfileImage userId = {item.leaderId} size = {"medium"}/>
-          //                       </View>
-          //                       <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name} </Text>
-          //                       <View style={sparkViewStyles.informationBox}>
-          //                           <View style={{position: "relative", flexDirection: "row", width: "30%", alignItems: "center"}}>
-          //                           <Image style={{height: 20, width: 20, position: "relative", /*left: "10%"*/}} source={require('../../../assets/locationpin.png')}></Image>
-          //                               <Text>{item.locationString}</Text>
-          //                           </View>
-          //                           <View style={sparkViewStyles.verticalLine}></View>
-          //                           <View style={{position: "relative", width: "30%", alignItems: "center"}}>
-          //                               <Text>{item.dateTimeString}</Text>
-          //                           </View>
-          //                       </View>
-          //     </View>
           <TouchableOpacity 
             onPress = {() => navigation.navigate(Routes.sparkSummary, {...props, currentSparkId: item.id})} 
             style={[sparkViewStyles.boxOne]}
           >
-
-                <LinearGradient
-                        colors={['#FFE5B4', '#DBE9EC']}
-                        style={sparkViewStyles.container}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 1 }}  >
-
-                      <View style={{width: "100%", paddingBottom: "10%", alignItems:"center", flexDirection: "column", justifyContent: "center"}}>
-                          <View style={{padding: "2%", margin: "5%"}}>
-                            <ProfileImage userId = {item.leaderId} size = {"medium"}/>
-                          </View>
-                          <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.info?.name} </Text>
-                            <View style={sparkViewStyles.informationBox}>
-                              <View style={{position: "relative", flexDirection: "row", width: "30%", alignItems: "center"}}>
-                                <Image style={{height: 20, width: 20, position: "relative", right: "100%"}} source={require('../../../assets/locationpin.png')}></Image>
-                                    <Text>{item.locationString}</Text>
-                                    <Text>Ephrata, PA</Text>
-                              </View>
-                            {/* <View style={sparkViewStyles.verticalLine}></View> */}
-                            <View style={{position: "relative", /*width: "30%",*/ alignItems: "center"}}>
-                                <Text>{item.dateTimeString}</Text>
-                                <Text>April 24, 2023</Text>
-                            </View>
-                          </View>
-                        </View>
-              </LinearGradient>
-            {/* <ProfileImage userId = {item.leaderId} size = {"medium"}/> */}
-            {/* <Text style={sparkViewStyles.boxText}> {item.name} </Text>
-            <Text style={{left: "30%"}}> More</Text> */}
+            <LinearGradient
+              colors={['#FFE5B4', '#DBE9EC']}
+              style={sparkViewStyles.container}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}  
+            >
+              <View style={{width: "100%", paddingBottom: "10%", alignItems:"center", flexDirection: "column", justifyContent: "center"}}>
+                <View style={{marginTop: "5%"}}>
+                  <ProfileImage userId = {item.leaderId} size = {"medium"}/>
+                </View>
+                <Text style={[sparkViewStyles.boxText, sparkViewStyles.topText]}> {item?.name} </Text>
+                <View style={sparkViewStyles.informationBox}>
+                  <View style={{position: "relative", flexDirection: "row", width: "30%", alignItems: "center"}}>
+                    <Image style={{height: 20, width: 20, margin: "2%", position: "relative"}} source={require('../../../assets/locationpin.png')}></Image>
+                    <Text>{locationString}</Text>
+                  </View>
+                  <View style={sparkViewStyles.verticalLine}></View>
+                  <View style={{position: "relative", width: "30%", alignItems: "center"}}>
+                    <Text>{dateTimeString}</Text>
+                  </View>
+                </View>
+              </View>
+            </LinearGradient>
           </TouchableOpacity> 
         );            
       }
@@ -502,42 +484,41 @@ const accordianStyles = StyleSheet.create({
 
 // Note this will be removed when I (Colin) pull the sparks out into their own component
 const sparkViewStyles = StyleSheet.create({
-  // boxOne:
-  // {
-  //   backgroundColor: "#DBE9EC",
-  //   padding: "3%",
-  //   borderRadius: 30,
-  //   flexDirection: "column",
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   margin: "5%"
-  // },
+  informationBox:
+  {
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      alignItems: "center",
+      paddingTop: "2%",
+      paddingBottom: "2%",
+      width: "100%",
+  },
   boxOne:
-    {
-        // backgroundColor: "#FFE5B4",
-        flex: 1,
-        // padding: "5%",
-        borderRadius: 30,
-        flexDirection: "row",
-        // justifyContent: "space-between",
-        alignItems: "center",
-        margin: "5%"
-    },
+  {
+      // backgroundColor: "#FFE5B4",
+      flex: 1,
+      // padding: "5%",
+      borderRadius: 30,
+      flexDirection: "row",
+      // justifyContent: "space-between",
+      alignItems: "center",
+      margin: "5%"
+  },
   container: {
     flex: 1,
     alignItems: 'center',
     borderRadius: 30,
     justifyContent: 'center',
   },
-  // boxText:{
-  //   padding: "5%",
-  //   fontSize: height/70,
-  //   fontFamily: "RNSMiles",
-  //   fontWeight: "bold"
-  // }
+  topText:{
+    fontFamily: "RNSMiles",
+    fontWeight: "bold",
+    color: "#e56a17",
+    fontSize: 20
+  },
   boxText:{
     marginBottom: "2%",
-    padding: "2%",
+    padding: "5%",
     fontSize: height/70
   },
   verticalLine: {

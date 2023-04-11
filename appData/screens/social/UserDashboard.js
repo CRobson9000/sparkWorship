@@ -143,48 +143,28 @@ export default function UserDashboard({ route, navigation }) {
     
     return (
       <LinearGradient
-                        colors={['#FFE5B4', '#DBE9EC']}
-                        style={dashboardStyles.container2}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 1 }}  >
+        colors={['#FFE5B4', '#DBE9EC']}
+        style={dashboardStyles.container2}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}  >
 
-                        <View style={{width: "100%", paddingBottom: "10%", alignItems:"center", flexDirection: "column", justifyContent: "center"}}>
-                                <View style={{padding: "2%", margin: "5%"}}>
-                                     <ProfileImage userId = {item.leaderId} size = {"medium"}/>
-                                </View>
-                                <Text style={[dashboardStyles.boxText, dashboardStyles.topText]}> {item?.info?.name} </Text>
-                                <View style={dashboardStyles.informationBox}>
-                                    <View style={{position: "relative", flexDirection: "row", width: "30%", alignItems: "center"}}>
-                                    <Image style={{height: 20, width: 20, position: "relative", /*left: "10%"*/}} source={require('../../../assets/locationpin.png')}></Image>
-                                        <Text>Ephrata, PA</Text>
-                                    </View>
-                                    <View style={dashboardStyles.verticalLine}></View>
-                                    <View style={{position: "relative", width: "30%", alignItems: "center"}}>
-                                        <Text>April 28, 2023 @ 8 p.m.</Text>
-                                    </View>
-                                </View>
-                        </View>
-                    </LinearGradient>
-      // <LinearGradient
-      //                   colors={['#FFE5B4', '#DBE9EC']}
-      //                   style={sparkViewStyles.boxOne}
-      //                   start={{ x: 0, y: 0 }}
-      //                   end={{ x: 1, y: 1 }}  >
-      // <TouchableOpacity 
-      //   onPress = {() => navigation.navigate(Routes.sparkSummary, {...props, currentSparkId: item.id})} 
-      //   style={[sparkViewStyles.boxOne]}
-      // >
-      //   {/* <LinearGradient
-      //                   colors={['#FFE5B4', '#DBE9EC']}
-      //                   style={sparkViewStyles.boxOne}
-      //                   start={{ x: 0, y: 0 }}
-      //                   end={{ x: 1, y: 1 }}  > */}
-      //   <ProfileImage userId = {item.leaderId} size = {"medium"}/>
-      //   <Text style={sparkViewStyles.boxText}> {item.name} </Text>
-      //   <Text style={{left: "30%"}}> More</Text>
-      //   {/* </LinearGradient> */}
-      // </TouchableOpacity>
-      // </LinearGradient>
+        <View style={{width: "100%", paddingBottom: "10%", alignItems:"center", flexDirection: "column", justifyContent: "center"}}>
+          <View style={{marginTop: "5%"}}>
+            <ProfileImage userId = {item.leaderId} size = {"medium"}/>
+          </View>
+          <Text style={[dashboardStyles.boxText, dashboardStyles.topText]}> {item?.name} </Text>
+          <View style={dashboardStyles.informationBox}>
+              <View style={{position: "relative", flexDirection: "row", width: "30%", alignItems: "center"}}>
+              <Image style={{height: 20, width: 20, position: "relative", /*left: "10%"*/}} source={require('../../../assets/locationpin.png')}></Image>
+                  <Text>{locationString}</Text>
+              </View>
+              <View style={dashboardStyles.verticalLine}></View>
+              <View style={{position: "relative", width: "30%", alignItems: "center"}}>
+                  <Text>{dateTimeString}</Text>
+              </View>
+          </View>
+        </View>
+      </LinearGradient>
     );  
   }
 
@@ -214,50 +194,48 @@ export default function UserDashboard({ route, navigation }) {
   }, [])  
 
   return (
-    <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
-      <View style={dashboardStyles.container}>
-        <View style = {dashboardStyles.dashboardHeader}>
-          <Text style={stylesPortrait.topText}> Your Sparks </Text>
-        </View>
-
-        <View style = {dashboardStyles.calendar}>
-          <Calendar 
-              theme={{
-                'stylesheet.day.basic':{
-                  'base':{
-                    height: 25
-                  }
-                },
-                backgroundColor: "#FFFFFF",
-                textDayFontSize: 15,
-                textMonthFontSize: 15,
-                textDayHeaderFontSize: 15,
-                selectedDayBackgroundColor: 'red',
-                selectedDayTextColor: 'green'
-              }}
-
-              markedDates={markedDates}
-              onDayPress={day => showDay(day)}
-            />
-        </View>
-
-        {/* Container for everything below the logo */}
-        <View style={dashboardStyles.contentDashContainer}>
-          <FlatList
-            data={sparkData}
-            renderItem={renderSpark}
-            style={{height: "100%", width: "90%"}}
-          />
-        </View>
+    <View style={dashboardStyles.container}>
+      <View style = {dashboardStyles.dashboardHeader}>
+        <Text style={stylesPortrait.topText}> Your Sparks </Text>
       </View>
-    </TouchableWithoutFeedback>
+
+      <View style = {dashboardStyles.calendar}>
+        <Calendar 
+            theme={{
+              'stylesheet.day.basic':{
+                'base':{
+                  height: 25
+                }
+              },
+              backgroundColor: "#FFFFFF",
+              textDayFontSize: 15,
+              textMonthFontSize: 15,
+              textDayHeaderFontSize: 15,
+              selectedDayBackgroundColor: 'red',
+              selectedDayTextColor: 'green'
+            }}
+
+            markedDates={markedDates}
+            onDayPress={day => showDay(day)}
+          />
+      </View>
+
+      {/* Container for everything below the logo */}
+      <View style={dashboardStyles.contentDashContainer}>
+        <FlatList
+          data={sparkData}
+          renderItem={renderSpark}
+          style={{flex: 1, marginTop: '10%', marginLeft: '10%', marginRight: '10%'}}
+        />
+      </View>
+    </View>
   );
 }
 
 const dashboardStyles = StyleSheet.create({
   container: {
     width: "100%",
-    height: "105%",
+    height: "100%",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white"
@@ -280,14 +258,11 @@ const dashboardStyles = StyleSheet.create({
   calendar: {
     height: "40%",
     width: "100%",
+    marginBottom: "5%"
   },
-  // veryTopBox:{
-  //   marginTop: "5%",
-  // },
 
   boxText:{
-    // marginBottom: "2%",
-    // padding: "2%",
+    padding: "5%",
     fontSize: screenHeight/70
   },
   
@@ -297,29 +272,28 @@ const dashboardStyles = StyleSheet.create({
     fontWeight: "bold",
     color: "#e56a17",
     fontSize: 20
-    },
+  },
 
-    informationBox:
-    {
-        flexDirection: "row",
-        justifyContent: "space-evenly",
-        alignItems: "center",
-        // paddingTop: "2%",
-        // paddingBottom: "2%",
-        width: "100%",
-    },
-
-    verticalLine: {
-      height: '90%',
-      width: 2,
-      backgroundColor: '#909090',
+  informationBox:
+  {
+      flexDirection: "row",
+      justifyContent: "space-evenly",
       alignItems: "center",
-      position: "relative",
-    },
+      width: "100%",
+  },
+
+  verticalLine: {
+    height: '90%',
+    width: 2,
+    backgroundColor: '#909090',
+    alignItems: "center",
+    position: "relative",
+  },
     
   contentDashContainer: {
-    height: "53%",
+    height: "48%",
     width: "100%",
+    marginBottom: "5%",
     alignItems: "center", 
   }
 });
