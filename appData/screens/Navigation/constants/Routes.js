@@ -3,7 +3,6 @@ let Routes={
     login: 'LoginScreen',
     registration: 'Registration',
     userDashboard: 'User Dashboard',
-    forgotPassword: 'Forgot Password',
     //hostingDashboard: 'HostingDashboard',
     userHub: 'User Hub',
     sparkView: 'Spark View',
@@ -15,6 +14,7 @@ let Routes={
     sparkSummary: 'Spark Summary',
     chatList: 'chatList',
     sparkSurvey: 'Spark Survey',
+    searchBar: 'searchBar',
 
     //testing routes
     // myTest: "My Test", 

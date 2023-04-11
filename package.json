@@ -41,6 +41,7 @@
     "react": "18.2.0",
     "react-bootstrap": "^2.6.0",
     "react-dom": "18.2.0",
+    "react-modal": "^3.16.1",
     "react-native": "0.71.6",
     "react-native-calendars": "^1.1289.0",
     "react-native-date-picker": "^4.2.9",
