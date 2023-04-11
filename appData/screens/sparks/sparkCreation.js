@@ -1,13 +1,13 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity, TextInput, FlatList, Dimensions } from 'react-native';
 import React, {useRef, useEffect} from 'react';
-import { IconButton, ProgressBar } from 'react-native-paper';
+import { IconButton, ProgressBar, Provider } from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
 
 import { TimePickerModal, DatePickerModal } from 'react-native-paper-dates';
 
 import { styleSheet } from "../../styles/sparkCreationStyles";
 
-import { Input, Slider, KeyboardView } from '../../components/components';
+import { Input, Slider, KeyboardView, Toast } from '../../components/components';
 import { Observable, TDO, FirebaseButler } from '../../components/classes';
 import { getDatabase, ref, set, get, push } from 'firebase/database';
 
@@ -24,6 +24,8 @@ export default function SparkCreation({ route, navigation }) {
     let userId = props?.userId || "pgFfrUx2ryd7h7iE00fD09RAJyG3";
     let update = useRef({});
     let rolesArray = useRef([]);
+
+    const toastRef = useRef(null);
 
     // -------------------
     // Saving Inputs code
@@ -683,6 +685,10 @@ export default function SparkCreation({ route, navigation }) {
     //since the update object's value is maintained regardless of rerender, update each individual obervable object with the value it was before
     updateToStart();
 
+    //useEffect(()=>{
+    //    toastRef.current.showToast("Hello World");
+    //})
+
     //------------------------------
     // Front End Code
     //------------------------------
@@ -700,6 +706,9 @@ export default function SparkCreation({ route, navigation }) {
                     <TouchableOpacity style={styleSheet.constantButtons} onPress = {() => setCurrentIndex(currentIndex - 1)}><Text style={styleSheet.buttonText}>Previous</Text></TouchableOpacity>
                     <TouchableOpacity style={styleSheet.constantButtons} onPress = {() => (currentIndex == myScreens.length - 1) ? sendPayload() : setCurrentIndex(currentIndex + 1)}><Text style={styleSheet.buttonText}>{(currentIndex == myScreens.length - 1) ? "Submit" : "Next"}</Text></TouchableOpacity>
                 </View>
+            {/* <Provider>
+                <Toast ref = {toastRef}/>
+            </Provider> */}
             </View>  
         // </KeyboardView>
     );
