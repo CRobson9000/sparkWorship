@@ -289,7 +289,10 @@ export default function SparkSummary({ route, navigation }) {
                 let roleObj = {};
                 if (role == 'spark_leader') {
                   if (roleData != userId) continue;
-                  roleObj[role] = roleData;
+                  let userName = await FirebaseButler.fbGet(`Users/${roleData}/info/name`);
+                  roleObj['name'] = userName;
+                  roleObj['id'] = roleData;
+                  roleObj['role'] = role;
                   rolesRatingArray.push(roleObj);
                   continue;
                 }
@@ -297,7 +300,10 @@ export default function SparkSummary({ route, navigation }) {
                   if (key == 'requests' || !vals.final) continue;
                   let playerId = vals.final;
                   if (playerId != userId) {
-                    roleObj[role] = playerId;
+                    let userName = await FirebaseButler.fbGet(`Users/${playerId}/info/name`);
+                    roleObj['name'] = userName;
+                    roleObj['id'] = playerId;
+                    roleObj['role'] = role;
                     rolesRatingArray.push(roleObj);
                   }
                   roleObj = {};
@@ -1927,7 +1933,7 @@ export default function SparkSummary({ route, navigation }) {
               showRating && 
               <IconButton
                 style = {{left: "5%", top: "-30%", position: 'absolute'}}
-                onPress = {() => navigation.navigate(Routes.rating, {...props, people: showRating})} 
+                onPress = {() => navigation.navigate(Routes.sparkSurvey, {...props, people: showRating})} 
                 icon = {'account-star-outline'}
                 size = {40}
               />
