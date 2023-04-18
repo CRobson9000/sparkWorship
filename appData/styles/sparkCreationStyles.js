@@ -75,7 +75,7 @@ const styleSheet = StyleSheet.create({
       justifyContent: "space-evenly",
       height: "10%",
       width: '100%',
-      bottom: "3%"
+      bottom: 0
     },
 
     // Text for all buttons

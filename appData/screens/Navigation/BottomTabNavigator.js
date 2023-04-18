@@ -62,10 +62,9 @@ function BottomTabNavigator( { route, navigation } ) {
               icon = "logout" style = {{position: "absolute", right: "1%"}}/>
 
               <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}
-                icon = "message-outline" style = {{position: "absolute", right: "18%"}}/>
+                icon = "message-outline" style = {{position: "absolute", right: "11%"}}/>
 
-              <IconButton onPress = {() => navigation.navigate(Routes.chatList, route.params)}
-              icon = "feature-search-outline" style = {{position: "absolute", right: "9%"}}/>
+              
               </View>
             // iconName = focused ? 'ios-chatbubble-outline' : 'ios-chatbubble-outline';
           );

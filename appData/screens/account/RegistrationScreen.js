@@ -15,6 +15,7 @@ import { Dimensions, TouchableHighlight } from 'react-native';
 
 //import components
 import { Input, Toast, KeyboardView } from '../../components/components.js';
+import { FirebaseButler } from '../../components/classes.js';
 import Routes from '../Navigation/constants/Routes';
 
 //database processing import statements
@@ -52,9 +53,11 @@ export default function RegistrationScreen({ navigation }) {
       // if () location is valid
       createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
           const user = userCredential.user;
+          let myRole = role;
+          if (role == 'musician') myRole = 'instrumentalist'
           createUserSpace(user.uid).then(() => {
             registerForPushNotificationsAsync(user.uid);
-            emailVerify(user).then(() => navigation.navigate("Navigator", {userId: user.uid}))
+            emailVerify(user).then(() => navigation.navigate("Navigator", {userId: user.uid, role: myRole}))
           })
       }).catch((error) => {
         const errorMessage = error.message;
@@ -123,13 +126,17 @@ export default function RegistrationScreen({ navigation }) {
   }
 
   async function createUserSpace(uid) {
+    let myRole = role;
+    if (role == 'musician') {
+      myRole = 'instrumentalist';
+    }
     //create space in the database to store this user's information
     const db = getDatabase();
 
     const reference = ref(db, `Users/${uid}`);
     await set(reference, {
         loggedIn: true,
-        role: role
+        role: myRole
     });
 
     const infoReference = ref(db, `Users/${uid}/info`);
@@ -138,6 +145,19 @@ export default function RegistrationScreen({ navigation }) {
       email: email, 
       username: username
     });
+
+    // if the user is a musician, add them to the musicians list 
+    if (role == 'musician') {
+      // get musicians list
+      let musicians = await FirebaseButler.fbGet('Musicians');
+  
+      // add the current user to the list
+      musicians.push(uid);
+
+      // update the list in firebase with the local list
+      const musicianRef = ref(db, `Musicians`);
+      await set(musicianRef, musicians);
+    }
   }
 
   const renderDropDownItem = (item) => {
@@ -251,7 +271,7 @@ export default function RegistrationScreen({ navigation }) {
           <ScrollView contentContainerStyle = {{paddingBottom: "20%"}}>
             <Dropdown
                 style = {regStyles.dropDown}
-                data = {["instrumentalist", "attendee"]}
+                data = {["musician", "attendee"]}
                 dropdownPosition = {"top"}
                 search = {false}
                 maxHeight = {"40%"}
@@ -265,59 +285,41 @@ export default function RegistrationScreen({ navigation }) {
             <Input placeHolderText={"First and Last Name"} secure={false} func= {(val) => name = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
             <Input placeHolderText={"Email"} secure={false} func= {(val) => email = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
             <View style={regStyles.centeredView}>
-              <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                  Alert.alert('Modal has been closed.');
-                  setModalVisible(!modalVisible);
-                }}>
-                <View style={regStyles.centeredView}>
-                  <View style={regStyles.modalView}>
-                    <Text style={regStyles.modalText}> You can always change your username later!</Text>
-                    <Pressable
-                      style={[regStyles.button, regStyles.buttonClose]}
-                      onPress={() => setModalVisible(!modalVisible)}>
-                      <Text style={regStyles.textStyle}>Exit</Text>
-                    </Pressable>
-                  </View>
-                </View>
-              </Modal>
-              <Pressable
+          </View>
+            {/* <TouchableHighlight
                 style={[regStyles.button, regStyles.buttonOpen]}
                 onPress={() => setModalVisible(true)}>
                 <Text style={regStyles.textStyle}>i</Text>
-              </Pressable>
-          </View>
+              </TouchableHighlight> */}
             <Input placeHolderText={"Username"} secure={false} func= {(val) => username = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
             <View style={regStyles.centeredView}>
-              <Modal
+              {/* <Modal
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => {
-                  Alert.alert('Modal has been closed.');
                   setModalVisible(!modalVisible);
                 }}>
                 <View style={regStyles.centeredView}>
                   <View style={regStyles.modalView}>
-                    <Text style={regStyles.modalText}> Your password must be at least 8 characters long.
-                                                      Your password must contain at least one uppercase letter, one lowercase letter, and one number.
-                                                      Your password must not contain your username or any personal information.</Text>
+                    <Text style={regStyles.modalText}> 
+                    Your password must be at least 8 characters long.
+                    Your password must contain at least one uppercase letter, one lowercase letter, and one number.
+                    Your password must not contain your username or any personal information.</Text>
                     <Pressable
                       style={[regStyles.button, regStyles.buttonClose]}
-                      onPress={() => setModalVisible(!modalVisible)}>
+                      onPress={() => setModalVisible(!modalVisible)}
+                    >
                       <Text style={regStyles.textStyle}>Exit</Text>
                     </Pressable>
                   </View>
                 </View>
               </Modal>
-              <Pressable
+              <TouchableHighlight
                 style={[regStyles.button, regStyles.buttonOpen]}
                 onPress={() => setModalVisible(true)}>
                 <Text style={regStyles.textStyle}>i</Text>
-              </Pressable>
+              </TouchableHighlight> */}
           </View>
             <Input placeHolderText={"Password"} secure={false} func={(val) => password = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
             <Input placeHolderText={"Confirm Password"} secure={false} func={(val) => confirmPassword = val} inputStyle={[stylesPortrait.inputBox/*, stylesPortrait.centerText*/]}/>
@@ -347,7 +349,7 @@ const regStyles = StyleSheet.create({
 centeredView: {
   flex: 1,
   justifyContent: 'center',
-  alignItems: 'left',
+  alignItems: 'flex-start',
   left: "10%",
   marginBottom: "2%",
 },
@@ -357,19 +359,19 @@ modalView: {
   borderRadius: 20,
   padding: 35,
   alignItems: 'center',
-  shadowColor: '#000',
-  shadowOffset: {
-    width: 0,
-    height: 2,
-  },
-  shadowOpacity: 0.25,
-  shadowRadius: 4,
-  elevation: 5,
+  // shadowColor: '#000',
+  // shadowOffset: {
+  //   width: 0,
+  //   height: 2,
+  // },
+  // shadowOpacity: 0.25,
+  // shadowRadius: 4,
+  // elevation: 5,
 },
 button: {
   borderRadius: 20,
   padding: 10,
-  elevation: 2,
+  // elevation: 2,
 },
 buttonOpen: {
   backgroundColor: '#DBE9EC',
@@ -381,7 +383,7 @@ textStyle: {
   color: '#006175',
   fontWeight: 'bold',
   textAlign: 'center',
-  fontSize: '9'
+  fontSize: 9
 },
 modalText: {
   marginBottom: 15,

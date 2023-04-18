@@ -118,9 +118,9 @@ export default function SparkCreation({ route, navigation }) {
             const cityReference = ref(db, `Sparks/${sparkId}/info/location/city`);
             set(cityReference, update["city"]);
         }
-        if (update["state"]) {
+        if (globalUserState.current) {
             const stateReference = ref(db, `Sparks/${sparkId}/info/location/state`);
-            set(stateReference, globalUserState);
+            set(stateReference, globalUserState.current);
         }
         if (update["zip"]) {
             const zipReference = ref(db, `Sparks/${sparkId}/info/location/zip`);
@@ -188,6 +188,10 @@ export default function SparkCreation({ route, navigation }) {
         // get spark leader's name        
         let sparkLeaderName = await FirebaseButler.fbGet(`Users/${userId}/info/name`);
         await set(sparkNameRef, `${sparkLeaderName}'s Spark`);
+
+        // add spark to list of sparks they're playing for
+        const playingForSparks = ref(db, `Users/${userId}/sparks/playing`);
+        await push(playingForSparks, sparkId);
 
         navigation.navigate(Routes.sparkSummary, {...props, currentSparkId: sparkId});
     }
@@ -472,7 +476,7 @@ export default function SparkCreation({ route, navigation }) {
           </View>
           <View style = {{flex: 1, alignItems:"center", alignContent:"center", justifyContent:"center", flexDirection:"row", width:"100%"}}>
             <Text style = {{paddingRight:"2.5%", fontFamily:"RNSMiles"}}>
-              Performance Time
+              Spark Time
             </Text>
             <View style={{width:"25%"}}>
             <TouchableOpacity 
@@ -499,7 +503,7 @@ export default function SparkCreation({ route, navigation }) {
                     setSparkDateVisible(true)
                 }}
             >
-            <Text style={[styleSheet.buttonText]}>Date</Text>
+                <Text style={[styleSheet.buttonText]}>Date</Text>
             </TouchableOpacity>
             <DatePickerModal
                 locale="en"
@@ -651,7 +655,7 @@ export default function SparkCreation({ route, navigation }) {
 
     // sets up the list of screens to be displayed by the slider
     let myScreens = [
-        <Screen1 />, <Screen2 />, <Screen3 />, <Screen4 /> 
+        <Screen1 />, <Screen2 />, <Screen3 /> 
     ];
 
     //sets the current index, which determines which phase the user is on
@@ -668,7 +672,7 @@ export default function SparkCreation({ route, navigation }) {
     }
 
     useEffect(() => {
-        let currentProgress = (currentIndex + 1) / (4.0 * 2);
+        let currentProgress = (currentIndex + 1) / (3.0 * 2);
         setProgress(currentProgress);
     }, [currentIndex])
 

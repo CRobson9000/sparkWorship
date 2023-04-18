@@ -59,19 +59,21 @@ export default function UserDashboard({ route, navigation }) {
           allSparks.push(sparkObject);
   
           // set times on calendar and for sparks array
-          let sparkTDO = sparkInfo?.times?.spark
+          let sparkTDO = sparkInfo?.times?.spark["TDO"]
           if (sparkTDO) {
             //reformat each the spark date to match the markedDates for the calendar element, then push them to local object
-            let day = sparkTDO.TDO.day;
-            let month = sparkTDO.TDO.month;
+            let day = sparkTDO.day;
+            let month = sparkTDO.month;
+            let year = sparkTDO.year;
             if (parseInt(day) < 10) day = `0${day}`;
             if (parseInt(month) < 10) month = `0${month}`;
-            let dateString = `${sparkTDO.TDO.year}-${month}-${day}`;
+            let dateString = `${year}-${month}-${day}`;
             localMarkedDates[dateString] = {marked: true}
             sparkObject['time'] = sparkTDO;
           
             // get published date to change spark from proposed to published
             let timeDateValObj = sparkInfo?.times?.published.TDO;
+
             let publishedTimeDate = new Date(timeDateValObj['year'], timeDateValObj['month'] - 1, timeDateValObj['day'], timeDateValObj['hours'], timeDateValObj['minutes'], 0);
             let currTimeDate = new Date();
             
@@ -124,11 +126,13 @@ export default function UserDashboard({ route, navigation }) {
 
   const renderSpark = (object) => {
     let item = object.item;
+
     //Date Time string formatting
     let dateTimeString = "This spark has no time data"
     if (item?.time) {
-        let sparkTimeObj = item.time.TDO;
+        let sparkTimeObj = item.time;
         let sparkTDO = new TDO(0, 0, 0, 0, 0, 0, sparkTimeObj);
+        console.log("SPark TDO", sparkTDO);
         let finalTime = sparkTDO.getFormattedTime();
         let finalDate = sparkTDO.getFormattedDateFormal();
         dateTimeString = `${finalDate} at ${finalTime}`; 
