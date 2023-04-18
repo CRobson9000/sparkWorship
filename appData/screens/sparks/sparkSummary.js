@@ -2015,7 +2015,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2905B",
     borderRadius: 10,
     height: "10%",
-    width: "95%%", 
+    width: "95%", 
     alignSelf: "center"
   },
 
@@ -2043,7 +2043,8 @@ const styles = StyleSheet.create({
 
   dialogBoxInputs: {
     flexWrap: "wrap",
-    flexGrow: 1,
+    // flexGrow: 1,
+    flex: 1,
     backgroundColor: "#F2905B",
     borderRadius: 10,
     width: "95%",
